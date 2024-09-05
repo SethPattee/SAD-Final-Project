@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTesting", "WPFTesting\WPFTesting.csproj", "{FAB0EB5B-5295-4F35-B0BD-1CC9EA8BAC1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFTesting", "WPFTesting\WPFTesting.csproj", "{FAB0EB5B-5295-4F35-B0BD-1CC9EA8BAC1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0423694-A798-4FA6-A723-C0CF00E879D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
