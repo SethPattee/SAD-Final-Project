@@ -76,13 +76,13 @@ namespace YourNamespace
                 {
                     if (connection.StartBox == this)
                     {
-                        line.X1 = Canvas.GetLeft(this) + this.Width / 2;
-                        line.Y1 = Canvas.GetTop(this) + this.Height / 2;
+                        line.X1 = Canvas.GetLeft(this);
+                        line.Y1 = Canvas.GetTop(this);
                     }
                     else if (connection.EndBox == this)
                     {
-                        line.X2 = Canvas.GetLeft(this) + this.Width / 2;
-                        line.Y2 = Canvas.GetTop(this) + this.Height / 2;
+                        line.X2 = Canvas.GetLeft(this);
+                        line.Y2 = Canvas.GetTop(this);
                     }
                 }
             }

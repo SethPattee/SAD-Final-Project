@@ -41,10 +41,16 @@ namespace YourNamespace
             // Create the line and set its initial coordinates
             Line line = new Line
             {
-                X1 = Canvas.GetLeft(box1) + box1.Width / 2,
-                Y1 = Canvas.GetTop(box1) + box1.Height / 2,
-                X2 = Canvas.GetLeft(box2) + box2.Width / 2,
-                Y2 = Canvas.GetTop(box2) + box2.Height / 2,
+                //Generated to find the center of the box for the line.
+                //X1 = Canvas.GetLeft(box1) + box1.Width / 2,
+                //Y1 = Canvas.GetTop(box1) + box1.Height / 2,
+                //X2 = Canvas.GetLeft(box2) + box2.Width / 2,
+                //Y2 = Canvas.GetTop(box2) + box2.Height / 2,
+                X1 = Canvas.GetLeft(box1),
+                Y1 = Canvas.GetTop(box1) ,
+                X2 = Canvas.GetLeft(box2),
+                Y2 = Canvas.GetTop(box2) ,
+
                 Stroke = System.Windows.Media.Brushes.Black,
                 StrokeThickness = 2
             };
