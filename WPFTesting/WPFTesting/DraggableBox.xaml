@@ -17,10 +17,22 @@
 
             <TextBlock Text="Box" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Border>
+        
 
         <!-- Thumb for resizing the box -->
-        <Thumb x:Name="ResizeThumb" Width="10" Height="10" 
-               HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-               DragDelta="ResizeThumb_DragDelta" Cursor="SizeNWSE"/>
+        <Thumb x:Name="ResizeThumb" Width="10" Height="10" DragDelta="ResizeThumb_DragDelta" 
+       Cursor="SizeNWSE" Margin="0,0,3,3" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Thumb.Template>
+                <ControlTemplate TargetType="Thumb">
+                    <Border Background="{Binding Background, ElementName=boxBorder}" 
+                    BorderBrush="{Binding BorderBrush, ElementName=boxBorder}" BorderThickness="0,0,1,1" 
+                    CornerRadius="1" Opacity="0.8">
+                        <Grid />
+                    </Border>
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>
+
+
     </Grid>
 </UserControl>
