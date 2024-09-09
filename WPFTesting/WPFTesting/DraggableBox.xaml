@@ -4,7 +4,7 @@
              Width="100" Height="50">
     <Grid>
         <!-- Border with ContextMenu -->
-        <Border Background="LightBlue" BorderBrush="Black" BorderThickness="1"
+        <Border x:Name="boxBorder" Background="LightBlue" BorderBrush="Black" BorderThickness="1"
                 MouseDown="Box_MouseDown" MouseMove="Box_MouseMove" MouseUp="Box_MouseUp">
 
             <!-- ContextMenu attached to the Border -->

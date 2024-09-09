@@ -111,9 +111,17 @@ namespace YourNamespace
             byte g = (byte)random.Next(256);
             byte b = (byte)random.Next(256);
 
-            // Change the background color of the box to a random color
-            (this.Content as Border).Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+            // Change the background color of the boxBorder to a random color
+            boxBorder.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+            random = new Random();
+            r = (byte)random.Next(256);
+            g = (byte)random.Next(256);
+            b = (byte)random.Next(256);
+
+            boxBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(r, g, b));
+
         }
+
     }
 
     // This class holds the start and end connections for a line
