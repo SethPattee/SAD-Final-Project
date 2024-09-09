@@ -4,6 +4,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using WPFTesting.Shapes;
 
 namespace YourNamespace
 {
@@ -14,9 +15,11 @@ namespace YourNamespace
 
         // Store the lines this box is connected to
         public List<Line> ConnectedLines { get; private set; } = new List<Line>();
+        public BoxValues Values { get; private set; }
 
-        public DraggableBox()
+        public DraggableBox(int x, int y, string title)
         {
+            this.Values = new BoxValues() { xPosition = x, yPosition = y, Title = title, Items = new()};
             InitializeComponent();
         }
 

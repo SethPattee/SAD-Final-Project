@@ -1,11 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using WPFTesting.Shapes;
 
 namespace YourNamespace
 {
     public partial class MainWindow : Window
     {
+        private List<DraggableBox> boxes = new List<DraggableBox>();
         public MainWindow()
         {
             InitializeComponent();
@@ -15,22 +17,18 @@ namespace YourNamespace
         private void AddDraggableBoxes()
         {
             // Create instances of the draggable boxes
-            DraggableBox box1 = new DraggableBox();
-            DraggableBox box2 = new DraggableBox();
-
-            // Add the boxes to the canvas
-            InfiniteCanvas.Children.Add(box1);
-            InfiniteCanvas.Children.Add(box2);
-
-            // Set initial positions for the boxes
-            Canvas.SetLeft(box1, 100);
-            Canvas.SetTop(box1, 100);
-
-            Canvas.SetLeft(box2, 300);
-            Canvas.SetTop(box2, 300);
+            DraggableBox box1 = new DraggableBox(200,150,"title 1");
+            DraggableBox box2 = new DraggableBox(150,200,"title 2");
+            boxes.Add(box1);
+            boxes.Add(box2);
+            foreach (var box in boxes) {
+                InfiniteCanvas.Children.Add(box);  
+                Canvas.SetLeft(box, box.Values.xPosition);
+                Canvas.SetTop(box, box.Values.yPosition);
+            }
 
             // Create a line to connect the two boxes
-            Line line = CreateLineBetweenBoxes(box1, box2);
+            Line line = CreateLineBetweenBoxes(boxes[0], boxes[1]);
 
             // Add the line to the canvas
             InfiniteCanvas.Children.Add(line);
@@ -41,11 +39,6 @@ namespace YourNamespace
             // Create the line and set its initial coordinates
             Line line = new Line
             {
-                //Generated to find the center of the box for the line.
-                //X1 = Canvas.GetLeft(box1) + box1.Width / 2,
-                //Y1 = Canvas.GetTop(box1) + box1.Height / 2,
-                //X2 = Canvas.GetLeft(box2) + box2.Width / 2,
-                //Y2 = Canvas.GetTop(box2) + box2.Height / 2,
                 X1 = Canvas.GetLeft(box1),
                 Y1 = Canvas.GetTop(box1) ,
                 X2 = Canvas.GetLeft(box2),
@@ -81,11 +74,11 @@ namespace YourNamespace
         private void AddNewBox()
         {
             // Create a new DraggableBox instance
-            DraggableBox newBox = new DraggableBox();
+            DraggableBox newBox = new DraggableBox(100,100,"new Box");
 
             // Set a default position for the new box (you can adjust this)
-            Canvas.SetLeft(newBox, 100); // Position the box at x = 100
-            Canvas.SetTop(newBox, 100);  // Position the box at y = 100
+            Canvas.SetLeft(newBox, newBox.Values.xPosition); // Position the box at x = 100
+            Canvas.SetTop(newBox, newBox.Values.yPosition);  // Position the box at y = 100
 
             // Optionally, set a size for the new box
             newBox.Width = 100;
