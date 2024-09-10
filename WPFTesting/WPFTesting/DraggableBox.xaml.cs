@@ -12,6 +12,7 @@ namespace YourNamespace
     {
         private bool isDragging = false;
         private Point clickPosition;
+        public event EventHandler BoxChanged;
 
         // Store the lines this box is connected to
         public List<Line> ConnectedLines { get; private set; } = new List<Line>();
@@ -46,6 +47,7 @@ namespace YourNamespace
 
                     // Update the position of the connected lines
                     UpdateConnectedLines();
+                    BoxChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -68,6 +70,7 @@ namespace YourNamespace
 
             // Update the position of the connected lines
             UpdateConnectedLines();
+            BoxChanged?.Invoke(this, EventArgs.Empty);
         }
 
         // Update the positions of all connected lines
@@ -122,6 +125,7 @@ namespace YourNamespace
             b = (byte)random.Next(256);
 
             boxBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(r, g, b));
+            BoxChanged?.Invoke(this, EventArgs.Empty);
 
         }
 
