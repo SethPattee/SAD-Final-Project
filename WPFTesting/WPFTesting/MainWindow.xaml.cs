@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
@@ -6,10 +7,15 @@ namespace YourNamespace
 {
     public partial class MainWindow : Window
     {
+        private ObservableCollection<string> boxList = new ObservableCollection<string>();
+        public event EventHandler BoxChanged;
+
         public MainWindow()
         {
             InitializeComponent();
             AddDraggableBoxes();
+            BoxList.ItemsSource = boxList;
+
         }
 
         private void AddDraggableBoxes()
@@ -25,7 +31,6 @@ namespace YourNamespace
             // Set initial positions for the boxes
             Canvas.SetLeft(box1, 100);
             Canvas.SetTop(box1, 100);
-
             Canvas.SetLeft(box2, 300);
             Canvas.SetTop(box2, 300);
 
@@ -34,7 +39,19 @@ namespace YourNamespace
 
             // Add the line to the canvas
             InfiniteCanvas.Children.Add(line);
+
+            // Add boxes to the tracker
+            AddBoxToTracker(box1);
+            AddBoxToTracker(box2);
+
+            // Attach event handlers for box selection
+            box1.MouseDown += Box_MouseDown;
+            box2.MouseDown += Box_MouseDown;
+
+            box1.BoxChanged += Box_Changed;
+            box2.BoxChanged += Box_Changed;
         }
+
 
         private Line CreateLineBetweenBoxes(DraggableBox box1, DraggableBox box2)
         {
@@ -80,19 +97,61 @@ namespace YourNamespace
         // Method to add a new DraggableBox to the canvas
         private void AddNewBox()
         {
-            // Create a new DraggableBox instance
             DraggableBox newBox = new DraggableBox();
-
-            // Set a default position for the new box (you can adjust this)
-            Canvas.SetLeft(newBox, 100); // Position the box at x = 100
-            Canvas.SetTop(newBox, 100);  // Position the box at y = 100
-
-            // Optionally, set a size for the new box
+            Canvas.SetLeft(newBox, 100);
+            Canvas.SetTop(newBox, 100);
             newBox.Width = 100;
             newBox.Height = 50;
-
-            // Add the new box to the canvas
             InfiniteCanvas.Children.Add(newBox);
+
+            // Add the new box to the tracker
+            AddBoxToTracker(newBox);
+
+            // Attach event handler for box selection
+            newBox.MouseDown += Box_MouseDown;
+            newBox.BoxChanged += Box_Changed;
+        }
+        private void AddBoxToTracker(DraggableBox box)
+        {
+            string boxInfo = $"Box {boxList.Count + 1}: ({Canvas.GetLeft(box)}, {Canvas.GetTop(box)})";
+            boxList.Add(boxInfo);
+        }
+
+        private void UpdateBoxTracker()
+        {
+            boxList.Clear();
+            foreach (UIElement element in InfiniteCanvas.Children)
+            {
+                if (element is DraggableBox box)
+                {
+                    string boxInfo = $"Box {boxList.Count + 1}: ({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})";
+                    boxList.Add(boxInfo);
+                }
+            }
+        }
+
+        private void Box_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is DraggableBox selectedBox)
+            {
+                UpdateSelectedBoxDetails(selectedBox);
+            }
+        }
+
+        private void UpdateSelectedBoxDetails(DraggableBox box)
+        {
+            SelectedBoxDetails.Text = $"Position: ({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})\n" +
+                                      $"Size: {box.Width:F0}x{box.Height:F0}\n" +
+                                      $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}";
+        }
+
+        private void Box_Changed(object sender, EventArgs e)
+        {
+            UpdateBoxTracker();
+            if (sender is DraggableBox changedBox)
+            {
+                UpdateSelectedBoxDetails(changedBox);
+            }
         }
     }
 }
