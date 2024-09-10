@@ -8,28 +8,44 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Tool Ribbon -->
+        <Border Grid.Row="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,1" BorderBrush="Gray" Margin="0,0,0,0">
+            <StackPanel x:Name="ToolRibbon" Orientation="Horizontal" Background="WhiteSmoke">
+                <Button x:Name="FileButton" Width="28" Height="20" Content="File" Margin="6,0,0,0"/>
+                <Button x:Name="EditButton" Width="28" Height="20" Content="Edit" Margin="6,0,0,0"/>
+            </StackPanel>
+        </Border>
 
         <!-- Left Sidebar -->
-        <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="0,0,1,0">
+        <Border Grid.Column="0" Grid.Row="1" BorderBrush="Gray" BorderThickness="0,0,1,0">
+
             <StackPanel x:Name="LeftSidebar">
                 <TextBlock Text="Box Details" FontWeight="Bold" Margin="10"/>
                 <TextBlock x:Name="SelectedBoxDetails" Margin="10"/>
             </StackPanel>
         </Border>
 
+        <Border  Grid.Column="1" Grid.Row="1" BorderBrush="Gray" BorderThickness="0,0,0,0">
         <!-- Main Canvas Area -->
-        <Grid Grid.Column="1">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <Canvas x:Name="InfiniteCanvas" Width="10000" Height="10000" Background="LightGray">
-                    <!-- Boxes and lines will be added here dynamically -->
-                </Canvas>
-            </ScrollViewer>
-            <Button Content="Add Box" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                    Width="100" Height="30" Margin="10" Click="AddBox_Click"/>
-        </Grid>
+            <Grid>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Canvas x:Name="InfiniteCanvas" Width="10000" Height="10000" Background="LightGray">
+                        <!-- Boxes and lines will be added here dynamically -->
+                    </Canvas>
+                </ScrollViewer>
+                <Button Content="Add Box" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                        Width="100" Height="30" Margin="10" Click="AddBox_Click"/>
+            </Grid>
+        </Border>
 
         <!-- Right Sidebar -->
-        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1,0,0,0">
+       <Border Grid.Column="2" Grid.Row="1" BorderBrush="Gray" BorderThickness="1,0,0,0">
+
             <StackPanel x:Name="RightSidebar">
                 <TextBlock Text="Box Tracker" FontWeight="Bold" Margin="10"/>
                 <ItemsControl x:Name="BoxList">
