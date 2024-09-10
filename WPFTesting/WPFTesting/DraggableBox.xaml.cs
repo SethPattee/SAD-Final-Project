@@ -16,10 +16,20 @@ namespace YourNamespace
 
         // Store the lines this box is connected to
         public List<Line> ConnectedLines { get; private set; } = new List<Line>();
+        public List<string> items = new List<string>();
 
         public DraggableBox()
         {
             InitializeComponent();
+            this.BoxTitle.Text = "Box Title";
+            items.Add("line 1");
+            items.Add("line 2");
+            this.ItemsList.ItemsSource = items;
+        }
+
+        public void Set_Title(string title)
+        {
+            this.BoxTitle.Text = title;
         }
 
         private void Box_MouseDown(object sender, MouseButtonEventArgs e)

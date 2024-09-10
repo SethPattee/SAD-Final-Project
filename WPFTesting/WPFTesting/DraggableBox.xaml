@@ -14,8 +14,27 @@
                     <MenuItem Header="Change Color" Click="ChangeColor_Click"/>
                 </ContextMenu>
             </Border.ContextMenu>
+            <Grid>
+                <!-- Define rows to position elements -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border BorderBrush="Black" BorderThickness="0,0,0,1" Padding="0">
+                    <TextBlock x:Name="BoxTitle" Text="Box" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Margin="10,0,10,0"/>
+                </Border>
 
-            <TextBlock Text="Box" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <ItemsControl x:Name="ItemsList" Grid.Row="1">
+                    <!-- Define an ItemTemplate to display each TextBlock -->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Margin="5"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </Grid>
         </Border>
         
 
