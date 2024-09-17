@@ -2,54 +2,64 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using WPFTesting.Data;
+using WPFTesting.Shapes;
+using WPFTesting.ViewModel;
 
 namespace YourNamespace
 {
     public partial class MainWindow : Window
     {
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
+        private BoxViewModel _viewModel;
+
         public event EventHandler BoxChanged;
 
         public MainWindow()
         {
             InitializeComponent();
-            AddDraggableBoxes();
+            _viewModel = new BoxViewModel(new BoxDataProvider());
+            DataContext = _viewModel;
+            Loaded += BoxView_Loaded;
             BoxList.ItemsSource = boxList;
+            Initialize();
+        }
+        private async void Initialize()
+        {
+            await _viewModel.LoadAsync();
+            AddDraggableBoxes();
+        }
 
+        private async void BoxView_Loaded(object sender, RoutedEventArgs e)
+        {
+            await _viewModel.LoadAsync();
         }
 
         private void AddDraggableBoxes()
         {
-            // Create instances of the draggable boxes
-            DraggableBox box1 = new DraggableBox();
-            DraggableBox box2 = new DraggableBox();
+            List<DraggableBox> draggableBoxes = new List<DraggableBox>();
+            foreach (var box in _viewModel.Boxes) {
+                DraggableBox dBox = new DraggableBox(box);
+                InfiniteCanvas.Children.Add(dBox);
+                Canvas.SetLeft(dBox, box.xPosition);
+                Canvas.SetTop(dBox, box.yPosition);
+                AddBoxToTracker(dBox);
 
-            // Add the boxes to the canvas
-            InfiniteCanvas.Children.Add(box1);
-            InfiniteCanvas.Children.Add(box2);
+                // Attach event handlers
+                dBox.MouseDown += Box_MouseDown;
+                dBox.BoxChanged += Box_Changed;
 
-            // Set initial positions for the boxes
-            Canvas.SetLeft(box1, 100);
-            Canvas.SetTop(box1, 100);
-            Canvas.SetLeft(box2, 300);
-            Canvas.SetTop(box2, 300);
+                draggableBoxes.Add(dBox);
+            }
 
-            // Create a line to connect the two boxes
-            Line line = CreateLineBetweenBoxes(box1, box2);
+            if (draggableBoxes.Count > 1)
+            {
+                // Create a line to connect the two boxes
+                Line line = CreateLineBetweenBoxes(draggableBoxes[0], draggableBoxes[1]);
 
-            // Add the line to the canvas
-            InfiniteCanvas.Children.Add(line);
-
-            // Add boxes to the tracker
-            AddBoxToTracker(box1);
-            AddBoxToTracker(box2);
-
-            // Attach event handlers for box selection
-            box1.MouseDown += Box_MouseDown;
-            box2.MouseDown += Box_MouseDown;
-
-            box1.BoxChanged += Box_Changed;
-            box2.BoxChanged += Box_Changed;
+                // Add the line to the canvas
+                InfiniteCanvas.Children.Add(line);
+            }
         }
 
 
@@ -97,9 +107,10 @@ namespace YourNamespace
         // Method to add a new DraggableBox to the canvas
         private void AddNewBox()
         {
-            DraggableBox newBox = new DraggableBox();
-            Canvas.SetLeft(newBox, 100);
-            Canvas.SetTop(newBox, 100);
+            BoxValues b = new BoxValues() { xPosition = 50, yPosition = 50, Title="new Box", Items = new List<string> { "item 1"} };
+            DraggableBox newBox = new DraggableBox(b);
+            Canvas.SetLeft(newBox, b.xPosition);
+            Canvas.SetTop(newBox, b.yPosition);
             newBox.Width = 100;
             newBox.Height = 50;
             InfiniteCanvas.Children.Add(newBox);
