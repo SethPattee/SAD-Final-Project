@@ -17,6 +17,7 @@ namespace YourNamespace
         // Store the lines this box is connected to
         public List<Line> ConnectedLines { get; private set; } = new List<Line>();
         public List<string> items = new List<string>();
+        
 
         public DraggableBox()
         {

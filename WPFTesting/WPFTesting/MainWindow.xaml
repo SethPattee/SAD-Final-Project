@@ -1,8 +1,9 @@
 ﻿<Window x:Class="YourNamespace.MainWindow"
+        x:Name="YourMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Draggable Boxes" Height="450" Width="1000">
-    <Grid>
+    <Grid PreviewMouseDown="ToolRibbon_PreviewMouseDown">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
@@ -16,14 +17,14 @@
         <!-- Tool Ribbon -->
         <Border Grid.Row="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,1" BorderBrush="Gray" Margin="0,0,0,0">
             <StackPanel x:Name="ToolRibbon" Orientation="Horizontal" Background="WhiteSmoke">
-                <ToggleButton x:Name="FileButton" Width="28" Height="20" Margin="6,0,0,0">
+                <ToggleButton x:Name="FileButton" Width="28" Height="20" Margin="6,0,0,0" PreviewMouseDown="ToolRibbon_PreviewMouseDown">
                     <TextBlock>
                         <Run Text="File"></Run>
                     </TextBlock>
                 </ToggleButton>
                   
                   <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" Width="60">
-                    <Border BorderThickness="1">
+                    <Border BorderThickness="0">
                       <StackPanel>
                         <Button x:Name="FileMenu_New" Content="New" Background="WhiteSmoke"/>
                         <Button x:Name="FileMenu_Open" Content="Open" Background="WhiteSmoke"/>
@@ -31,7 +32,8 @@
                       </StackPanel>
                     </Border>
                   </Popup>
-                <ToggleButton x:Name="EditButton" Width="28" Height="20" Margin="6,0,0,0">
+                
+                <ToggleButton x:Name="EditButton" Width="28" Height="20" Margin="6,0,0,0" PreviewMouseDown="ToolRibbon_PreviewMouseDown">
                     <TextBlock>
                         <Run Text="Edit" />
                     </TextBlock>

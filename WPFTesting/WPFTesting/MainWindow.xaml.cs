@@ -9,6 +9,8 @@ namespace YourNamespace
     {
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
         public event EventHandler BoxChanged;
+        private bool IsFileChecked = false;
+        private bool IsEditChecked = false;
 
         public MainWindow()
         {
@@ -93,6 +95,24 @@ namespace YourNamespace
         {
             AddNewBox();
         }
+
+        //private void ToolRibbon_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //{
+        //    if(sender is Button FileButton) {
+        //        IsFileChecked = true;
+        //        IsEditChecked = false;
+        //    }
+        //    if(sender is Button EditButton)
+        //    {
+        //        IsFileChecked = false;
+        //        IsEditChecked = true;
+        //    }
+        //    else
+        //    {
+        //        IsFileChecked = false;
+        //        IsEditChecked = false;
+        //    }
+        //}
 
         // Method to add a new DraggableBox to the canvas
         private void AddNewBox()
