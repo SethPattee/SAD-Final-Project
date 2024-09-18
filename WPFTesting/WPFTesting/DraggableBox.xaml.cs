@@ -18,12 +18,11 @@ namespace YourNamespace
         public List<Line> ConnectedLines { get; private set; } = new List<Line>();
         public List<string> items = new List<string>();
 
-        public DraggableBox()
+        public DraggableBox(BoxValues box)
         {
             InitializeComponent();
-            this.BoxTitle.Text = "Box Title";
-            items.Add("line 1");
-            items.Add("line 2");
+            this.BoxTitle.Text = box.Title;
+            items = box?.Items ?? new List<string> { "is Empty"};
             this.ItemsList.ItemsSource = items;
         }
 
