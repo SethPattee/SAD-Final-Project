@@ -15,15 +15,15 @@ namespace YourNamespace
         public event EventHandler BoxChanged;
 
         // Store the lines this box is connected to
-        public List<Line> ConnectedLines { get; private set; } = new List<Line>();
-        public List<string> items = new List<string>();
+        public List<BoxConnection> Connections { get; private set; } = new List<BoxConnection>();
+        public List<string> Items { get; private set; } = new List<string>();
 
         public DraggableBox(BoxValues box)
         {
             InitializeComponent();
             this.BoxTitle.Text = box.Title;
-            items = box?.Items ?? new List<string> { "is Empty"};
-            this.ItemsList.ItemsSource = items;
+            Items = box?.Items ?? new List<string> { "is Empty" };
+            this.ItemsList.ItemsSource = Items;
         }
 
         public void Set_Title(string title)
@@ -81,40 +81,72 @@ namespace YourNamespace
         }
 
         // Update the positions of all connected lines
-        private void UpdateConnectedLines()
-        {
-            foreach (var line in ConnectedLines)
-            {
-                if (line.Tag is LineConnection connection)
-                {
-                    if (connection.StartBox == this)
-                    {
-                        line.X1 = Canvas.GetLeft(this);
-                        line.Y1 = Canvas.GetTop(this);
-                    }
-                    else if (connection.EndBox == this)
-                    {
-                        line.X2 = Canvas.GetLeft(this);
-                        line.Y2 = Canvas.GetTop(this);
-                    }
-                }
-            }
-        }
+        //private void UpdateConnectedLines()
+        //{
+        //    foreach (var line in ConnectedLines)
+        //    {
+        //        if (line.Tag is LineConnection connection)
+        //        {
+        //            if (connection.StartBox == this)
+        //            {
+        //                line.X1 = Canvas.GetLeft(this);
+        //                line.Y1 = Canvas.GetTop(this);
+        //            }
+        //            else if (connection.EndBox == this)
+        //            {
+        //                line.X2 = Canvas.GetLeft(this);
+        //                line.Y2 = Canvas.GetTop(this);
+        //            }
+        //        }
+        //    }
+        //}
 
         // Event handler for the "Delete Box" menu item
         private void DeleteBox_Click(object sender, RoutedEventArgs e)
         {
             var canvas = this.Parent as Canvas;
-
-            // Remove connected lines from the canvas
-            foreach (var line in ConnectedLines)
+            if (canvas == null)
             {
-                canvas.Children.Remove(line);
+                return; // Exit if the parent is not a Canvas
             }
+
+            // Remove connected lines from the canvas and update connected boxes
+            foreach (var connection in Connections.ToList()) // Use ToList() to avoid modifying the collection during iteration
+            {
+                if (connection?.ConnectionLine == null || connection.ConnectedBox == null)
+                {
+                    continue;
+                }
+
+                // Remove the line from the canvas
+                canvas.Children.Remove(connection.ConnectionLine);
+
+                // Remove this box from the connected box's connections
+                connection.ConnectedBox.RemoveConnection(this);
+            }
+
+            // Clear this box's connections
+            Connections.Clear();
 
             // Remove the box itself from the canvas
             canvas.Children.Remove(this);
+
+            // Notify the parent window to update its box tracker
+            if (Window.GetWindow(this) is MainWindow mainWindow)
+            {
+                mainWindow.UpdateBoxTracker();
+            }
         }
+
+        // Make sure you have this method in your DraggableBox class
+        //public void RemoveConnection(DraggableBox boxToRemove)
+        //{
+        //    var connectionToRemove = Connections.FirstOrDefault(c => c.ConnectedBox == boxToRemove);
+        //    if (connectionToRemove != null)
+        //    {
+        //        Connections.Remove(connectionToRemove);
+        //    }
+        //}
 
         // Event handler for the "Change Color" menu item
         private void ChangeColor_Click(object sender, RoutedEventArgs e)
@@ -136,12 +168,83 @@ namespace YourNamespace
 
         }
 
+        // Method to add a connection
+        public void AddConnection(DraggableBox connectedBox, Line connectionLine)
+        {
+            var connection = new BoxConnection
+            {
+                ConnectedBox = connectedBox,
+                ConnectionLine = connectionLine
+            };
+            Connections.Add(connection);
+            UpdateConnectedLines();
+        }
+
+        // Method to remove a connection
+        public void RemoveConnection(DraggableBox connectedBox)
+        {
+            var connectionToRemove = Connections.Find(c => c.ConnectedBox == connectedBox);
+            if (connectionToRemove != null)
+            {
+                Connections.Remove(connectionToRemove);
+                var canvas = this.Parent as Canvas;
+                canvas?.Children.Remove(connectionToRemove.ConnectionLine);
+            }
+        }
+
+        private void UpdateConnectedLines()
+        {
+            foreach (var connection in Connections)
+            {
+                var line = connection.ConnectionLine;
+                var connectedBox = connection.ConnectedBox;
+
+                Point startPoint = this.TranslatePoint(new Point(this.ActualWidth / 2, this.ActualHeight / 2), this.Parent as UIElement);
+                Point endPoint = connectedBox.TranslatePoint(new Point(connectedBox.ActualWidth / 2, connectedBox.ActualHeight / 2), this.Parent as UIElement);
+
+                line.X1 = startPoint.X;
+                line.Y1 = startPoint.Y;
+                line.X2 = endPoint.X;
+                line.Y2 = endPoint.Y;
+            }
+        }
+
+        public List<BoxProperties> GetConnectedBoxProperties()
+        {
+            var properties = new List<BoxProperties>();
+            foreach (var connection in Connections)
+            {
+                properties.Add(new BoxProperties
+                {
+                    Title = connection.ConnectedBox.BoxTitle.Text,
+                    Items = new List<string>(connection.ConnectedBox.Items),
+                    ConnectedBoxes = connection.ConnectedBox.Connections.Count
+                });
+            }
+            return properties;
+        }
+
+        // ... (keep existing methods like DeleteBox_Click and ChangeColor_Click)
+
+        // Override OnRender to update connected lines when the box is redrawn
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+            UpdateConnectedLines();
+        }
+
     }
 
-    // This class holds the start and end connections for a line
-    public class LineConnection
+    public class BoxConnection
     {
-        public DraggableBox StartBox { get; set; }
-        public DraggableBox EndBox { get; set; }
+        public DraggableBox ConnectedBox { get; set; }
+        public Line ConnectionLine { get; set; }
+    }
+
+    public class BoxProperties
+    {
+        public string Title { get; set; }
+        public List<string> Items { get; set; }
+        public int ConnectedBoxes { get; set; }
     }
 }
