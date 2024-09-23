@@ -14,16 +14,17 @@
 - Box properties.
 ### Sprint 2
 - Lines creatable.
-- Efficiency computation across a single connected network.
+- Single Supply Chain can be made
 
 ## V2 -November 11-
 ### Sprint 3
 - File functions (New, Save, Load).
-- Split-path efficiency detection.
+- Efficiency computation across a single connected network.
 
 ### User Testing 1
 
 ### Sprint 4
+- Split-path efficiency detection.
 - "Most Efficient Path" highlighted in UI.
 - Improved Details and Network menu look.
 
