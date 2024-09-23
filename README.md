@@ -5,9 +5,8 @@
 
 *Metrics to Find Effectiveness*
 
-Write requirements for what we need before we do the test projects.
-
-Every feature listed must be completed by the version date.
+* Write requirements for what we need before we do the test projects.
+* Every feature listed must be completed by the version date.
 
 ## V1: -September 30-
 ### Sprint 1
