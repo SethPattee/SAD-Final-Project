@@ -5,7 +5,7 @@
 
 **Metrics to Find Effectiveness**
 
-* Write requirements for what we need before we do the test projects.
+* Manage User Stories before each sprint.
 * Every feature listed must be completed by the version date.
 
 ## V1: -September 30-
