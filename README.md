@@ -1,9 +1,7 @@
-**What We Need**
-* Drop down window
-* Another box spawing
-* Box Color
-* Animation?
-* 
+**Next in Pipeline**
+* Box Color Widget
+* Line creation
+* Supplier units 
 
 *Metrics to Find Effectiveness*
 Write requirements for what we need before we do the test projects. 
