@@ -5,28 +5,32 @@
 * Animation?
 * 
 
-*Metrics to Find Effectifness*
+*Metrics to Find Effectiveness*
 Write requirements for what we need before we do the test projects. 
 
 
-## V1
-- Lines working
-- Box properties
-- Tests started
-- 1 efficancy detection across 3 boxes 2 lines
+## V1: -Sep 30-
+- Lines working.
+- Box properties.
+- Tests started.
+- Efficiency computation across a single connected network.
 
-## V2
-- Save diagram
-- 2 extra efficancy detections (which route is faster)
+## V2 -Nov 11-
+- File functions (New, Save, Load).
+- Split-path efficiency detection.
+- "Most Efficient Path" highlighted in UI.
+- Improved Details and Network menu look.
 
-
-## V3
-- Dectecting failure
-  - How long can it funciton for with the failure?
-  - How does it affect the end product?
-## V4 
-- UI looking nice, and has good polish
+## V3 -Jan 13-
+- Supply buffer incorporated in network nodes.
+- Failure metric and disabled connections incorporated in efficiency calculation.
+  - How long can the supply chain function with a failure?
+  - How does a given failure rate affect downstream operations.
+  
+## V4 -Feb 17-
+- GUI refinements.
+- Under-the-hood Quality of Life additions.
 
 ## 5 week buffer April and May
-- leave enough time so that it is ready for releace.
-- if it is perfect, add some fun features. 
+- leave enough time so that it is ready for release.
+- Add stretch goal features. 
