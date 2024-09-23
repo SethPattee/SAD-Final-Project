@@ -9,7 +9,7 @@
 * Every feature listed must be completed by the version date.
 
 ## V1: -September 30-
-### ✅Sprint 1
+### Sprint 1 ✅
 - Tests started.
 - Box properties.
 ### Sprint 2
