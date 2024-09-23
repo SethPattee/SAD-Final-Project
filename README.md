@@ -10,10 +10,10 @@ Write requirements for what we need before we do the test projects.
 
 ## V1: -September 30-
 ### Sprint 1
-- Lines working.
+- Tests started.
 - Box properties.
 ### Sprint 2
-- Tests started.
+- Lines creatable.
 - Efficiency computation across a single connected network.
 
 ## V2 -November 11-
