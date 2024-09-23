@@ -50,8 +50,8 @@ Write requirements for what we need before we do the test projects.
 
 ## V5 -March 31-
 - "Professionalization" requirements.
-- Handle Unknown Requirements.
+- Handle unknown and late-development requirements.
 
-## 5 week buffer April and May
-- leave enough time so that it is ready for release.
-- Add stretch goal features. 
+## 5 week buffer inside April and May
+- Ensure production is ready for release and deliverable.
+- Add stretch goal features with remaining time. 
