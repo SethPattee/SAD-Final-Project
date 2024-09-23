@@ -14,7 +14,7 @@
 - Box properties.
 ### Sprint 2
 - Lines creatable.
-- Single Supply Chain can be made
+- Single Supply Chain can be made.
 
 ## V2 -November 11-
 ### Sprint 3
