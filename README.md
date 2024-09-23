@@ -1,7 +1,7 @@
 **Next in Pipeline**
-* Box Color Widget
-* Line creation
-* Supplier units 
+* Box color picker
+* Shipment line creation
+* Supplier box & shipment line units 
 
 *Metrics to Find Effectiveness*
 
