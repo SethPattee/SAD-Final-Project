@@ -11,7 +11,7 @@
 ## V1: -September 30-
 ### Sprint 1 ✅
 - Tests started.
-- Major qualities of boxes developed.
+- Boxes qualities.
 ### Sprint 2
 - Lines creatable.
 - Single Supply Chain can be made.
