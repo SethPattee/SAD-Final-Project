@@ -12,13 +12,14 @@ using WPFTesting.Shapes;
 using WPFTesting.ViewModel;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using WPFTesting.Models;
 
 namespace YourNamespace
 {
     public partial class MainWindow : Window
     {
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
-        private BoxViewModel _viewModel;
+        private SupplierViewModel _viewModel;
         private bool isRemovingConnection = false;
         private DraggableBox selectedBoxForRemoval = null;
         private Popup connectionSelectionPopup;
@@ -30,7 +31,7 @@ namespace YourNamespace
         public MainWindow()
         {
             InitializeComponent();
-            _viewModel = new BoxViewModel(new BoxDataProvider());
+            _viewModel = new SupplierViewModel(new BoxDataProvider());
             DataContext = _viewModel;
             Loaded += BoxView_Loaded;
             BoxList.ItemsSource = boxList;
@@ -132,7 +133,19 @@ namespace YourNamespace
 
         private void AddNewBox()
         {
-            BoxValues b = new BoxValues() { xPosition = 50, yPosition = 50, Title = "New Box", Items = new List<string> { "item 1" } };
+            BoxValues b = new BoxValues() { xPosition = 50,
+                                            yPosition = 50,
+                                            supplier = new Supplier
+                                            {
+                                                Name = "New Box",
+                                                Products = {
+                                                new Product
+                                                {
+                                                    Quantity = 1,
+                                                    ProductName = "joke"
+                                                }
+                                                }
+                                            } };
             DraggableBox newBox = new DraggableBox(b);
             Canvas.SetLeft(newBox, b.xPosition);
             Canvas.SetTop(newBox, b.yPosition);

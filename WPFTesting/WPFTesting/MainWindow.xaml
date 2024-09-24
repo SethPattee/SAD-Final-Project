@@ -74,7 +74,7 @@
                 <ItemsControl x:Name="BoxList">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" Margin="5"/>
+                            <TextBlock Text="{Binding }" Margin="5"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

@@ -146,7 +146,7 @@
                         <!-- Define an ItemTemplate to display each TextBlock -->
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding}" Margin="5"/>
+                                <TextBlock Text="{Binding}" DataContext="{Binding }" Margin="5"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

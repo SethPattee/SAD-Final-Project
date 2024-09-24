@@ -4,10 +4,10 @@ using WPFTesting.Shapes;
 
 namespace WPFTesting.ViewModel;
 
-public class BoxViewModel
+public class SupplierViewModel
 {
     private IBoxDataProvider _boxProvider;
-    public BoxViewModel(IBoxDataProvider boxProvider)
+    public SupplierViewModel(IBoxDataProvider boxProvider)
     {
         _boxProvider = boxProvider;
     }

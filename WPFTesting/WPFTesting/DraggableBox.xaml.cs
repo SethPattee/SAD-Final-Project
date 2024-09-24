@@ -4,6 +4,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using WPFTesting.Models;
 using WPFTesting.Shapes;
 
 namespace YourNamespace
@@ -21,8 +22,14 @@ namespace YourNamespace
         public DraggableBox(BoxValues box)
         {
             InitializeComponent();
-            this.BoxTitle.Text = box.Title;
-            Items = box?.Items ?? new List<string> { "is Empty" };
+            this.BoxTitle.Text = box.supplier.Name;
+            
+            if(box != null)
+                foreach(Product p in box.supplier.Products)
+                {
+                    Items.Add($"{p.Quantity}{p.Units ?? ""} {p.ProductName}");
+                }
+
             this.ItemsList.ItemsSource = Items;
         }
 
