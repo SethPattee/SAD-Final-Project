@@ -10,9 +10,8 @@ using System.Windows.Shapes;
 using WPFTesting.Data;
 using WPFTesting.Shapes;
 using WPFTesting.ViewModel;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
 using WPFTesting.Models;
+using WPFTesting;
 
 namespace YourNamespace
 {
@@ -55,7 +54,7 @@ namespace YourNamespace
             foreach (var box in _viewModel.Boxes)
             {
                 DraggableBox dBox = new DraggableBox(box);
-                InfiniteCanvas.Children.Add(dBox);
+                DiagramCanvas.Children.Add(dBox);
                 Canvas.SetLeft(dBox, box.xPosition);
                 Canvas.SetTop(dBox, box.yPosition);
                 AddBoxToTracker(dBox);
@@ -66,10 +65,18 @@ namespace YourNamespace
                 draggableBoxes.Add(dBox);
             }
 
+            AddShippingLine();
+
             for (int i = 0; i < draggableBoxes.Count - 1; i++)
             {
                 CreateConnectionBetweenBoxes(draggableBoxes[i], draggableBoxes[i + 1]);
             }
+        }
+
+        private void AddShippingLine()
+        {
+            ShippingLine ourLine = new ShippingLine();
+            DiagramCanvas.Children.Add(ourLine);
         }
 
         private void CreateConnectionBetweenBoxes(DraggableBox box1, DraggableBox box2)
@@ -85,7 +92,7 @@ namespace YourNamespace
                 StrokeThickness = 2
             };
 
-            InfiniteCanvas.Children.Add(line);
+            DiagramCanvas.Children.Add(line);
 
             box1.AddConnection(box2, line);
             box2.AddConnection(box1, line);
@@ -110,8 +117,8 @@ namespace YourNamespace
 
         private void UpdateLinePosition(Line line, DraggableBox box1, DraggableBox box2)
         {
-            Point startPoint = box1.TranslatePoint(new Point(box1.ActualWidth / 2, box1.ActualHeight / 2), InfiniteCanvas);
-            Point endPoint = box2.TranslatePoint(new Point(box2.ActualWidth / 2, box2.ActualHeight / 2), InfiniteCanvas);
+            Point startPoint = box1.TranslatePoint(new Point(box1.ActualWidth / 2, box1.ActualHeight / 2), DiagramCanvas);
+            Point endPoint = box2.TranslatePoint(new Point(box2.ActualWidth / 2, box2.ActualHeight / 2), DiagramCanvas);
 
             line.X1 = startPoint.X;
             line.Y1 = startPoint.Y;
@@ -144,7 +151,7 @@ namespace YourNamespace
             Canvas.SetTop(newBox, b.yPosition);
             newBox.Width = 100;
             newBox.Height = 50;
-            InfiniteCanvas.Children.Add(newBox);
+            DiagramCanvas.Children.Add(newBox);
 
             AddBoxToTracker(newBox);
 
@@ -161,7 +168,7 @@ namespace YourNamespace
         public void UpdateBoxTracker()
         {
             boxList.Clear();
-            foreach (UIElement element in InfiniteCanvas.Children)
+            foreach (UIElement element in DiagramCanvas.Children)
             {
                 if (element is DraggableBox box)
                 {
@@ -306,7 +313,7 @@ namespace YourNamespace
             box.RemoveConnection(connectionToRemove.ConnectedBox);
             connectionToRemove.ConnectedBox.RemoveConnection(box);
 
-            InfiniteCanvas.Children.Remove(connectionToRemove.ConnectionLine);
+            DiagramCanvas.Children.Remove(connectionToRemove.ConnectionLine);
 
             connectionSelectionPopup.IsOpen = false;
 

@@ -12,17 +12,32 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using YourNamespace;
 
-namespace WPFTesting
+namespace WPFTesting;
+
+/// <summary>
+/// Interaction logic for _.xaml
+/// </summary>
+public partial class ShippingLine : UserControl
 {
-    /// <summary>
-    /// Interaction logic for _.xaml
-    /// </summary>
-    public partial class ShippingLine : UserControl
+    public ShippingLine()
     {
-        public ShippingLine()
+        InitializeComponent();
+        ourShippingLine.X1 = 100;
+        ourShippingLine.X2 = 300;
+        ourShippingLine.Y1 = 50;
+        ourShippingLine.Y2 = 25;
+    }
+
+    private void DeleteShipLine_Click(object sender, RoutedEventArgs e)
+    {
+        var canvas = this.Parent as Canvas;
+        if (canvas == null)
         {
-            InitializeComponent();
+            return;
         }
+
+        canvas.Children.Remove(this);
     }
 }
