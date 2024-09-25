@@ -59,7 +59,6 @@ namespace YourNamespace
                     Canvas.SetLeft(this, left);
                     Canvas.SetTop(this, top);
 
-                    // Update the position of the connected lines
                     UpdateConnectedLines();
                     BoxChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -72,17 +71,14 @@ namespace YourNamespace
             (sender as UIElement).ReleaseMouseCapture();
         }
 
-        // Resizing logic for resizing the box
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             double newWidth = this.Width + e.HorizontalChange;
             double newHeight = this.Height + e.VerticalChange;
 
-            // Set minimum size to prevent resizing too small
             if (newWidth >= 50) this.Width = newWidth;
             if (newHeight >= 30) this.Height = newHeight;
 
-            // Update the position of the connected lines
             UpdateConnectedLines();
             BoxChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -108,37 +104,30 @@ namespace YourNamespace
         //    }
         //}
 
-        // Event handler for the "Delete Box" menu item
         private void DeleteBox_Click(object sender, RoutedEventArgs e)
         {
             var canvas = this.Parent as Canvas;
             if (canvas == null)
             {
-                return; // Exit if the parent is not a Canvas
+                return; 
             }
 
-            // Remove connected lines from the canvas and update connected boxes
-            foreach (var connection in Connections.ToList()) // Use ToList() to avoid modifying the collection during iteration
+            foreach (var connection in Connections.ToList())
             {
                 if (connection?.ConnectionLine == null || connection.ConnectedBox == null)
                 {
                     continue;
                 }
 
-                // Remove the line from the canvas
                 canvas.Children.Remove(connection.ConnectionLine);
 
-                // Remove this box from the connected box's connections
                 connection.ConnectedBox.RemoveConnection(this);
             }
 
-            // Clear this box's connections
             Connections.Clear();
 
-            // Remove the box itself from the canvas
             canvas.Children.Remove(this);
 
-            // Notify the parent window to update its box tracker
             if (Window.GetWindow(this) is MainWindow mainWindow)
             {
                 mainWindow.UpdateBoxTracker();
@@ -155,7 +144,6 @@ namespace YourNamespace
         //    }
         //}
 
-        // Event handler for the "Change Color" menu item
         private void ChangeColor_Click(object sender, RoutedEventArgs e)
         {
             var random = new Random();
@@ -163,7 +151,6 @@ namespace YourNamespace
             byte g = (byte)random.Next(256);
             byte b = (byte)random.Next(256);
 
-            // Change the background color of the boxBorder to a random color
             boxBorder.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
             random = new Random();
             r = (byte)random.Next(256);
@@ -175,7 +162,6 @@ namespace YourNamespace
 
         }
 
-        // Method to add a connection
         public void AddConnection(DraggableBox connectedBox, Line connectionLine)
         {
             var connection = new BoxConnection
@@ -187,7 +173,6 @@ namespace YourNamespace
             UpdateConnectedLines();
         }
 
-        // Method to remove a connection
         public void RemoveConnection(DraggableBox connectedBox)
         {
             var connectionToRemove = Connections.Find(c => c.ConnectedBox == connectedBox);
@@ -230,8 +215,6 @@ namespace YourNamespace
             }
             return properties;
         }
-
-        // ... (keep existing methods like DeleteBox_Click and ChangeColor_Click)
 
         // Override OnRender to update connected lines when the box is redrawn
         protected override void OnRender(DrawingContext drawingContext)

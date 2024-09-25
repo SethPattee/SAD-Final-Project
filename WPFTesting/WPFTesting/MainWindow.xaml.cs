@@ -60,14 +60,12 @@ namespace YourNamespace
                 Canvas.SetTop(dBox, box.yPosition);
                 AddBoxToTracker(dBox);
 
-                // Attach event handlers
                 dBox.MouseDown += Box_MouseDown;
                 dBox.BoxChanged += Box_Changed;
 
                 draggableBoxes.Add(dBox);
             }
 
-            // Create connections between boxes (for demonstration, connecting consecutive boxes)
             for (int i = 0; i < draggableBoxes.Count - 1; i++)
             {
                 CreateConnectionBetweenBoxes(draggableBoxes[i], draggableBoxes[i + 1]);
@@ -87,14 +85,11 @@ namespace YourNamespace
                 StrokeThickness = 2
             };
 
-            // Add the line to the canvas
             InfiniteCanvas.Children.Add(line);
 
-            // Add the connection to both boxes
             box1.AddConnection(box2, line);
             box2.AddConnection(box1, line);
 
-            // Update the line position
             UpdateLinePosition(line, box1, box2);
             UpdateSelectedBoxDetails(box1);
         }
@@ -107,10 +102,8 @@ namespace YourNamespace
                 firstSelectedBox = null;
                 SelectedBoxDetails.Text = "Select the first box to connect";
 
-                // Change cursor to indicate selection mode
                 Mouse.OverrideCursor = Cursors.Hand;
 
-                // Disable the Add Connection button while in selection mode
                 (sender as Button).IsEnabled = false;
             }
         }
@@ -191,22 +184,18 @@ namespace YourNamespace
                 {
                     if (firstSelectedBox == null)
                     {
-                        // First box selection
                         firstSelectedBox = selectedBox;
                         SelectedBoxDetails.Text = "Select the second box to connect";
                     }
                     else if (firstSelectedBox != selectedBox)
                     {
-                        // Second box selection - create the connection
                         CreateConnectionBetweenBoxes(firstSelectedBox, selectedBox);
 
-                        // Reset connection creation mode
                         isAddingConnection = false;
                         firstSelectedBox = null;
                         SelectedBoxDetails.Text = "Connection created";
                         Mouse.OverrideCursor = null;
 
-                        // Re-enable the Add Connection button
                         var addConnectionButton = FindName("AddConnectionButton") as Button;
                         if (addConnectionButton != null)
                         {
@@ -220,7 +209,6 @@ namespace YourNamespace
                 }
                 else
                 {
-                    // Normal box selection behavior
                     UpdateSelectedBoxDetails(selectedBox);
                 }
             }
@@ -233,7 +221,6 @@ namespace YourNamespace
                                       $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}\n" +
                                       $"Connected Boxes: {box.Connections.Count}";
 
-            // Display properties of connected boxes
             var connectedProperties = box.GetConnectedBoxProperties();
             foreach (var prop in connectedProperties)
             {
@@ -250,7 +237,6 @@ namespace YourNamespace
             {
                 UpdateSelectedBoxDetails(changedBox);
 
-                // Update all connected lines
                 foreach (var connection in changedBox.Connections)
                 {
                     UpdateLinePosition(connection.ConnectionLine, changedBox, connection.ConnectedBox);
@@ -265,10 +251,8 @@ namespace YourNamespace
                 selectedBoxForRemoval = null;
                 SelectedBoxDetails.Text = "Select a box to remove a connection from";
 
-                // Change cursor to indicate selection mode
                 Mouse.OverrideCursor = Cursors.Hand;
 
-                // Disable the Remove Connection button while in selection mode
                 (sender as Button).IsEnabled = false;
             }
         }
@@ -319,17 +303,13 @@ namespace YourNamespace
 
         private void RemoveSelectedConnection(DraggableBox box, BoxConnection connectionToRemove)
         {
-            // Remove the connection from both boxes
             box.RemoveConnection(connectionToRemove.ConnectedBox);
             connectionToRemove.ConnectedBox.RemoveConnection(box);
 
-            // Remove the line from the canvas
             InfiniteCanvas.Children.Remove(connectionToRemove.ConnectionLine);
 
-            // Close the popup
             connectionSelectionPopup.IsOpen = false;
 
-            // Update UI
             SelectedBoxDetails.Text = "Connection removed";
             UpdateSelectedBoxDetails(box);
 
@@ -342,7 +322,6 @@ namespace YourNamespace
             selectedBoxForRemoval = null;
             Mouse.OverrideCursor = null;
 
-            // Re-enable the Remove Connection button
             var removeConnectionButton = FindName("RemoveConnectionButton") as Button;
             if (removeConnectionButton != null)
             {
