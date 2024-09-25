@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using WPFTesting.Models;
 using WPFTesting.Shapes;
+using WPFTesting.ViewShared;
 
 namespace YourNamespace
 {
@@ -15,7 +16,6 @@ namespace YourNamespace
         private Point clickPosition;
         public event EventHandler BoxChanged;
 
-        // Store the lines this box is connected to
         public List<BoxConnection> Connections { get; private set; } = new List<BoxConnection>();
         public List<string> Items { get; private set; } = new List<string>();
 
@@ -225,16 +225,11 @@ namespace YourNamespace
 
     }
 
-    public class BoxConnection
+    public class BoxConnection : BoxConnectionBase
     {
-        public DraggableBox ConnectedBox { get; set; }
-        public Line ConnectionLine { get; set; }
     }
 
-    public class BoxProperties
+    public class BoxProperties : BoxPropertiesBase
     {
-        public string Title { get; set; }
-        public List<string> Items { get; set; }
-        public int ConnectedBoxes { get; set; }
     }
 }
