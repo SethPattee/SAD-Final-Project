@@ -25,10 +25,15 @@ namespace YourNamespace
         private bool isAddingConnection = false;
         private DraggableBox firstSelectedBox = null;
 
+        private BoxToCanvasEvent btcEvent = new BoxToCanvasEvent();
+        private List<DraggableBox> SupplierList = new List<DraggableBox>();
+        private List<ShippingLine> ShipmentList = new List<ShippingLine>();
+
         public event EventHandler BoxChanged;
 
         public MainWindow()
         {
+            //btcEvent.BoxClicked += StartConnection;
             InitializeComponent();
             _viewModel = new SupplierViewModel(new BoxDataProvider());
             DataContext = _viewModel;
@@ -61,11 +66,14 @@ namespace YourNamespace
 
                 dBox.MouseDown += Box_MouseDown;
                 dBox.BoxChanged += Box_Changed;
+                dBox.RadialClicked += StartConnection;
+
+                //AssignRadialEvents(ref dBox);
 
                 draggableBoxes.Add(dBox);
             }
 
-            AddShippingLine();
+            AddShippingLine(draggableBoxes[0]);
 
             for (int i = 0; i < draggableBoxes.Count - 1; i++)
             {
@@ -73,9 +81,22 @@ namespace YourNamespace
             }
         }
 
-        private void AddShippingLine()
+        private void AssignRadialEvents(ref DraggableBox dBox)
+        {
+            dBox.NW_Radial.MouseUp += StartConnection_MouseUp;
+            dBox.N_Radial.MouseUp += StartConnection_MouseUp;
+            dBox.NE_Radial.MouseUp += StartConnection_MouseUp;
+            dBox.SE_Radial.MouseUp += StartConnection_MouseUp;
+            dBox.SW_Radial.MouseUp += StartConnection_MouseUp;
+            dBox.S_Radial.MouseUp += StartConnection_MouseUp;
+            dBox.E_Radial.MouseUp += StartConnection_MouseUp;
+            dBox.W_Radial.MouseUp += StartConnection_MouseUp;
+        }
+
+        private void AddShippingLine(DraggableBox box)
         {
             ShippingLine ourLine = new ShippingLine();
+            ourLine.ourShippingLine.X1 = 
             DiagramCanvas.Children.Add(ourLine);
         }
 
@@ -157,6 +178,7 @@ namespace YourNamespace
 
             newBox.MouseDown += Box_MouseDown;
             newBox.BoxChanged += Box_Changed;
+            newBox.RadialClicked += StartConnection;
         }
 
         private void AddBoxToTracker(DraggableBox box)
@@ -176,6 +198,27 @@ namespace YourNamespace
                     boxList.Add(boxInfo);
                 }
             }
+        }
+
+        private void StartConnection(object sender, EventArgs e)
+        {
+            if(sender is DraggableBox lineTarget)
+            {
+                ShippingLine shippingLine = new ShippingLine();
+                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget);
+                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget);
+                shippingLine.ourShippingLine.X2 = 500;
+                shippingLine.ourShippingLine.Y2 = 500;
+                shippingLine.ourShippingLine.StrokeThickness = 10;
+                shippingLine.ourShippingLine.Width = 30;
+                shippingLine.ourShippingLine.Stroke = new SolidColorBrush(Colors.Red);
+
+            }
+        }
+
+        private void StartConnection_MouseUp(object sender, EventArgs e)
+        {
+            AddNewBox();
         }
 
         private void Box_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

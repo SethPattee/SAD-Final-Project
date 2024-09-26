@@ -21,13 +21,16 @@ namespace WPFTesting;
 /// </summary>
 public partial class ShippingLine : UserControl
 {
+    
     public ShippingLine()
     {
         InitializeComponent();
-        ourShippingLine.X1 = 100;
-        ourShippingLine.X2 = 300;
-        ourShippingLine.Y1 = 50;
-        ourShippingLine.Y2 = 25;
+    }
+
+    public ShippingLine(DraggableBox supplier1, DraggableBox supplier2)
+    {
+        InitializeComponent();
+       
     }
 
     private void DeleteShipLine_Click(object sender, RoutedEventArgs e)

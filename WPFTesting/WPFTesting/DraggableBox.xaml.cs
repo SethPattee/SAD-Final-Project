@@ -15,6 +15,8 @@ namespace YourNamespace
         private bool isDragging = false;
         private Point clickPosition;
         public event EventHandler BoxChanged;
+        public event EventHandler RadialClicked;
+         
 
         public List<BoxConnection> Connections { get; private set; } = new List<BoxConnection>();
         public List<string> Items { get; private set; } = new List<string>();
@@ -43,6 +45,19 @@ namespace YourNamespace
             isDragging = true;
             clickPosition = e.GetPosition(this);
             (sender as UIElement).CaptureMouse();
+        }
+
+        //private void StartConnection_MouseUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    if(sender is DraggableBox)
+        //    {
+        //        RadialClicked?.Invoke(this, (DraggableBox)sender);
+        //    }
+        //}
+
+        private void SenseThisRadial(object sender, RoutedEventArgs e)
+        {
+            RadialClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void Box_MouseMove(object sender, MouseEventArgs e)
@@ -222,7 +237,6 @@ namespace YourNamespace
             base.OnRender(drawingContext);
             UpdateConnectedLines();
         }
-
     }
 
     public class BoxConnection : BoxConnectionBase
