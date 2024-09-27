@@ -12,7 +12,7 @@
                 <MenuItem Header="Delete Shipping Line" Click="DeleteShipLine_Click"/>
             </ContextMenu>
         </Grid.ContextMenu>
-        <Line Stroke="Aqua" x:Name="ourShippingLine" X1="17" X2="400" Y1="17" Y2="400" >
+        <Line Stroke="Aqua" x:Name="ourShippingLine" >
             
         </Line>
     </Grid>
