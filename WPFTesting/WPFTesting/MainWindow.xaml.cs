@@ -26,6 +26,7 @@ namespace YourNamespace
         private bool isAddingConnection = false;
         private DraggableBox firstSelectedBox = null;
         private bool MouseIsCaptured = false;
+        private bool IsDestinationSearching = false;
         private ShippingLine? targetShipment = null;
         private List<DraggableBox> SupplierList = new List<DraggableBox>();
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
@@ -208,7 +209,7 @@ namespace YourNamespace
 
         private void StartConnection_Click(object sender, EventArgs e)
         {
-            if(sender is DraggableBox lineTarget)
+            if(sender is DraggableBox lineTarget && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
 
@@ -220,11 +221,11 @@ namespace YourNamespace
                 Point mousepos = Mouse.GetPosition(DiagramCanvas);
                 MouseIsCaptured = true;
 
-                targetShipment = shippingLine;
                 shippingLine.ourShippingLine.X2 = mousepos.X;
                 shippingLine.ourShippingLine.Y2 = mousepos.Y;
                 shippingLine.ourShippingLine.StrokeThickness = 10;
                 shippingLine.ourShippingLine.Stroke = new SolidColorBrush(Colors.Red);
+                targetShipment = shippingLine;
                 DiagramCanvas.Children.Add(shippingLine);
             }
         }
@@ -234,6 +235,11 @@ namespace YourNamespace
             if(MouseIsCaptured && targetShipment is not null)
             {
                 Point mousepos = e.GetPosition(this);
+
+                DiagramCanvas.Children.Remove(targetShipment);
+                targetShipment.ourShippingLine.X2 = mousepos.X;
+                targetShipment.ourShippingLine.Y2 = mousepos.Y;
+                DiagramCanvas.Children.Add(targetShipment);
             }
         }
 
@@ -288,7 +294,7 @@ namespace YourNamespace
 
         private void FinishConnection_Click(object sender, EventArgs e)
         {
-            if(sender is DraggableBox lineTarget && MouseIsCaptured && targetShipment is not null)
+            if(sender is DraggableBox lineTarget && MouseIsCaptured && IsDestinationSearching)
             {
                 Point pos = GetLineOffset(lineTarget);
 
@@ -296,11 +302,17 @@ namespace YourNamespace
                 targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget)+pos.Y;
                 ReleaseMouseCapture();
                 MouseIsCaptured = false;
+                IsDestinationSearching = false;
             }
-            else if(sender is not null && sender is not DraggableBox) { }
+            else if(sender is not null && sender is not DraggableBox && IsDestinationSearching)
             {
                 DiagramCanvas.Children.Remove(targetShipment);
                 targetShipment = null;
+                IsDestinationSearching=false;
+            }
+            else
+            {
+                IsDestinationSearching = true;
             }
         }
 
