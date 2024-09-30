@@ -12,6 +12,7 @@ using WPFTesting.Shapes;
 using WPFTesting.ViewModel;
 using WPFTesting.Models;
 using WPFTesting;
+using System.Windows.Documents;
 
 namespace YourNamespace
 {
@@ -21,15 +22,16 @@ namespace YourNamespace
         private SupplierViewModel _viewModel;
         private bool isRemovingConnection = false;
         private DraggableBox selectedBoxForRemoval = null;
-        private Popup connectionSelectionPopup;
+        private Popup? connectionSelectionPopup;
         private bool isAddingConnection = false;
         private DraggableBox firstSelectedBox = null;
-
-        private BoxToCanvasEvent btcEvent = new BoxToCanvasEvent();
+        private bool MouseIsCaptured = false;
+        private ShippingLine? targetShipment = null;
         private List<DraggableBox> SupplierList = new List<DraggableBox>();
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
 
-        public event EventHandler BoxChanged;
+        public event EventHandler? BoxChanged;
+        public event EventHandler? LineChanged;
 
         public MainWindow()
         {
@@ -66,9 +68,9 @@ namespace YourNamespace
 
                 dBox.MouseDown += Box_MouseDown;
                 dBox.BoxChanged += Box_Changed;
-                dBox.RadialClicked += StartConnection;
+                dBox.RadialClicked += StartConnection_Click;
+                dBox.RadialClicked += FinishConnection_Click;
 
-                //AssignRadialEvents(ref dBox);
 
                 draggableBoxes.Add(dBox);
             }
@@ -81,17 +83,17 @@ namespace YourNamespace
             }
         }
 
-        private void AssignRadialEvents(ref DraggableBox dBox)
-        {
-            dBox.NW_Radial.MouseUp += StartConnection_MouseUp;
-            dBox.N_Radial.MouseUp += StartConnection_MouseUp;
-            dBox.NE_Radial.MouseUp += StartConnection_MouseUp;
-            dBox.SE_Radial.MouseUp += StartConnection_MouseUp;
-            dBox.SW_Radial.MouseUp += StartConnection_MouseUp;
-            dBox.S_Radial.MouseUp += StartConnection_MouseUp;
-            dBox.E_Radial.MouseUp += StartConnection_MouseUp;
-            dBox.W_Radial.MouseUp += StartConnection_MouseUp;
-        }
+        //private void AssignRadialEvents(ref DraggableBox dBox)
+        //{
+        //    dBox.NW_Radial.MouseDown += StartConnection_Click;
+        //    dBox.N_Radial.MouseDown += StartConnection_Click;
+        //    dBox.NE_Radial.MouseDown += StartConnection_Click;
+        //    dBox.SE_Radial.MouseDown += StartConnection_Click;
+        //    dBox.SW_Radial.MouseDown += StartConnection_Click;
+        //    dBox.S_Radial.MouseDown += StartConnection_Click;
+        //    dBox.E_Radial.MouseDown += StartConnection_Click;
+        //    dBox.W_Radial.MouseDown += StartConnection_Click;
+        //}
 
         private void AddShippingLine(DraggableBox box)
         {
@@ -172,13 +174,17 @@ namespace YourNamespace
             Canvas.SetTop(newBox, b.yPosition);
             newBox.Width = 100;
             newBox.Height = 50;
-            DiagramCanvas.Children.Add(newBox);
+            
 
             AddBoxToTracker(newBox);
 
             newBox.MouseDown += Box_MouseDown;
             newBox.BoxChanged += Box_Changed;
-            newBox.RadialClicked += StartConnection;
+            newBox.RadialClicked += StartConnection_Click;
+            newBox.RadialClicked += FinishConnection_Click;
+
+            SupplierList.Add(newBox);
+            DiagramCanvas.Children.Add(newBox);
         }
 
         private void AddBoxToTracker(DraggableBox box)
@@ -200,25 +206,102 @@ namespace YourNamespace
             }
         }
 
-        private void StartConnection(object sender, EventArgs e)
+        private void StartConnection_Click(object sender, EventArgs e)
         {
             if(sender is DraggableBox lineTarget)
             {
                 ShippingLine shippingLine = new ShippingLine();
-                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget);
-                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget);
-                shippingLine.ourShippingLine.X2 = 500;
-                shippingLine.ourShippingLine.Y2 = 500;
-                shippingLine.ourShippingLine.StrokeThickness = 10;
-                shippingLine.ourShippingLine.Width = 30;
-                shippingLine.ourShippingLine.Stroke = new SolidColorBrush(Colors.Red);
 
+                Point pos = GetLineOffset(lineTarget);
+
+                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget)+pos.X;
+                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget)+pos.Y;
+                CaptureMouse();
+                Point mousepos = Mouse.GetPosition(DiagramCanvas);
+                MouseIsCaptured = true;
+
+                targetShipment = shippingLine;
+                shippingLine.ourShippingLine.X2 = mousepos.X;
+                shippingLine.ourShippingLine.Y2 = mousepos.Y;
+                shippingLine.ourShippingLine.StrokeThickness = 10;
+                shippingLine.ourShippingLine.Stroke = new SolidColorBrush(Colors.Red);
+                DiagramCanvas.Children.Add(shippingLine);
             }
         }
 
-        private void StartConnection_MouseUp(object sender, EventArgs e)
+        private void MoveConnection_MouseMove(object sender, MouseEventArgs e)
         {
-            AddNewBox();
+            if(MouseIsCaptured && targetShipment is not null)
+            {
+                Point mousepos = e.GetPosition(this);
+            }
+        }
+
+        private Point GetLineOffset(DraggableBox lineTarget)
+        {
+            double lineXOffset = 0;
+            double lineYOffset = 0;
+            switch (lineTarget.CornerClicked.ToLower())
+            {
+                case "n_radial":
+                    {
+                        lineXOffset = lineTarget.Width / 2;
+                        break;
+                    }
+                case "ne_radial":
+                    {
+                        lineXOffset = lineTarget.Width;
+                        break;
+                    }
+                case "e_radial":
+                    {
+                        lineXOffset = lineTarget.Width;
+                        lineXOffset = lineTarget.Height / 2;
+                        break;
+                    }
+                case "se_radial":
+                    {
+                        lineXOffset = lineTarget.Width;
+                        lineXOffset = lineTarget.Height;
+                        break;
+                    }
+                case "s_radial":
+                    {
+                        lineXOffset = lineTarget.Width / 2;
+                        lineYOffset = lineTarget.Height;
+                        break;
+                    }
+                case "sw_radial":
+                    {
+                        lineYOffset = lineTarget.Height;
+                        break;
+                    }
+                case "w_radial":
+                    {
+                        lineYOffset = lineTarget.Height / 2;
+                        break;
+                    }
+            }
+
+            return new Point(lineXOffset, lineYOffset);
+        }
+
+        private void FinishConnection_Click(object sender, EventArgs e)
+        {
+            if(sender is DraggableBox lineTarget && MouseIsCaptured && targetShipment is not null)
+            {
+                Point pos = GetLineOffset(lineTarget);
+
+                targetShipment.ourShippingLine.X2 = Canvas.GetLeft(lineTarget)+pos.X;
+                targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget)+pos.Y;
+                ReleaseMouseCapture();
+                MouseIsCaptured = false;
+            }
+            else if(sender is not null && sender is not DraggableBox) { }
+            {
+                DiagramCanvas.Children.Remove(targetShipment);
+                targetShipment = null;
+            }
         }
 
         private void Box_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

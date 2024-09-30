@@ -58,7 +58,8 @@
             <!-- Main Canvas Area -->
             <Grid>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <Canvas x:Name="DiagramCanvas" Width="10000" Height="10000" Background="LightGray">
+                    <Canvas x:Name="DiagramCanvas" Width="10000" Height="10000" Background="LightGray"
+                            MouseMove="MoveConnection_MouseMove">
                         <!-- Boxes and lines will be added here dynamically -->
                     </Canvas>
                 </ScrollViewer>

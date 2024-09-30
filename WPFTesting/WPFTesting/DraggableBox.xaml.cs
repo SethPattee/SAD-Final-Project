@@ -16,7 +16,8 @@ namespace YourNamespace
         private Point clickPosition;
         public event EventHandler BoxChanged;
         public event EventHandler RadialClicked;
-         
+
+        public string CornerClicked = "Center"; 
 
         public List<BoxConnection> Connections { get; private set; } = new List<BoxConnection>();
         public List<string> Items { get; private set; } = new List<string>();
@@ -57,7 +58,10 @@ namespace YourNamespace
 
         private void SenseThisRadial(object sender, RoutedEventArgs e)
         {
+            Button b = (Button)sender;
+            this.CornerClicked = b.Name;
             RadialClicked?.Invoke(this, EventArgs.Empty);
+            this.CornerClicked = "Center";
         }
 
         private void Box_MouseMove(object sender, MouseEventArgs e)

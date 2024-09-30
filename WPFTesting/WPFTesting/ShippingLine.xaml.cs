@@ -21,26 +21,16 @@ namespace WPFTesting;
 /// </summary>
 public partial class ShippingLine : UserControl
 {
+    public string CardinalJoint = "Center";
     
+
     public ShippingLine()
     {
         InitializeComponent();
         this.ourShippingLine.X1 = 17;
         this.ourShippingLine.Y1 = 17;
         this.ourShippingLine.X2 = 170;
-        this.ourShippingLine.Y2 = 1700;
-        this.ourShippingLine.Stroke = new SolidColorBrush(Color.FromRgb(255,0,0));
-    }
-
-    public ShippingLine(DraggableBox supplier1, DraggableBox supplier2)
-    {
-        InitializeComponent();
-
-        this.ourShippingLine.X1 = supplier1.ActualWidth;
-        this.ourShippingLine.Y1 = supplier1.ActualHeight;
-        this.ourShippingLine.X2 = supplier2.ActualWidth;
-        this.ourShippingLine.Y2 = supplier2.ActualHeight;
-
+        this.ourShippingLine.Y2 = 170;
     }
 
     private void DeleteShipLine_Click(object sender, RoutedEventArgs e)
