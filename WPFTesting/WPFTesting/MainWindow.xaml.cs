@@ -217,7 +217,8 @@ namespace YourNamespace
 
                 shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget)+pos.X;
                 shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget)+pos.Y;
-                CaptureMouse();
+                //CaptureMouse();
+                System.Diagnostics.Debug.WriteLine("StartConnection_Click after Capture Mouse");
                 Point mousepos = Mouse.GetPosition(DiagramCanvas);
                 MouseIsCaptured = true;
 
@@ -237,8 +238,11 @@ namespace YourNamespace
                 Point mousepos = e.GetPosition(this);
 
                 DiagramCanvas.Children.Remove(targetShipment);
-                targetShipment.ourShippingLine.X2 = mousepos.X;
-                targetShipment.ourShippingLine.Y2 = mousepos.Y;
+                double xWidth = MainGrid.ColumnDefinitions.First().ActualWidth;
+                //System.Diagnostics.Debug.WriteLine(xWidth);
+                //targetShipment.ourShippingLine.X2 = mousepos.X - xWidth;
+                targetShipment.ourShippingLine.X2 = mousepos.X - 255;
+                targetShipment.ourShippingLine.Y2 = mousepos.Y - 37;
                 DiagramCanvas.Children.Add(targetShipment);
             }
         }
@@ -300,7 +304,7 @@ namespace YourNamespace
 
                 targetShipment.ourShippingLine.X2 = Canvas.GetLeft(lineTarget)+pos.X;
                 targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget)+pos.Y;
-                ReleaseMouseCapture();
+                //ReleaseMouseCapture();
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
             }
