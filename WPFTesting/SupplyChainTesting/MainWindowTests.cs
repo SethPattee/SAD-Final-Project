@@ -8,9 +8,11 @@ namespace SupplyChainTesting
         }
 
         [Test]
-        public void Test1()
+        public void Test_MainWindow_GetLineOffset_ReturnsCorrectPoint()
         {
-            Assert.Pass();
+            
+
+
         }
     }
 }

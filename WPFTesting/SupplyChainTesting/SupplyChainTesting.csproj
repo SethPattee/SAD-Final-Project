@@ -15,10 +15,8 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="NUnit.Analyzers" Version="3.6.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\WPFTesting\WPFTesting.csproj" />
+    <PackageReference Include="SpecFlow" Version="3.9.74" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
   </ItemGroup>
 
 </Project>
