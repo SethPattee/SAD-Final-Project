@@ -226,8 +226,9 @@ namespace YourNamespace
                 shippingLine.ourShippingLine.Y2 = mousepos.Y;
                 shippingLine.ourShippingLine.StrokeThickness = 10;
                 shippingLine.ourShippingLine.Stroke = new SolidColorBrush(Colors.Red);
+                Panel.SetZIndex(shippingLine, -1);
                 targetShipment = shippingLine;
-                DiagramCanvas.Children.Add(shippingLine);
+                DiagramCanvas.Children.Insert(0, shippingLine);
             }
         }
 

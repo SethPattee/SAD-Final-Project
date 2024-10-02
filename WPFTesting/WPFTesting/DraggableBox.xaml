@@ -86,7 +86,7 @@
             Panel.ZIndex="1"
             Visibility="Visible"
             >
-            <Button Opacity="0" Margin="-4,-4,-2,-2" Click="SenseThisRadial" Name="S_Radial" />
+            <Button Opacity="0" Margin="-4,-4,-2,-2" PreviewMouseDown="SenseThisRadial" Name="S_Radial" />
         </Border>
         <Border BorderBrush="Gray"
             BorderThickness="1"
