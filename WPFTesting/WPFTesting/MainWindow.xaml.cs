@@ -76,25 +76,11 @@ namespace YourNamespace
                 draggableBoxes.Add(dBox);
             }
 
-            AddShippingLine(draggableBoxes[0]);
-
             for (int i = 0; i < draggableBoxes.Count - 1; i++)
             {
                 CreateConnectionBetweenBoxes(draggableBoxes[i], draggableBoxes[i + 1]);
             }
         }
-
-        //private void AssignRadialEvents(ref DraggableBox dBox)
-        //{
-        //    dBox.NW_Radial.MouseDown += StartConnection_Click;
-        //    dBox.N_Radial.MouseDown += StartConnection_Click;
-        //    dBox.NE_Radial.MouseDown += StartConnection_Click;
-        //    dBox.SE_Radial.MouseDown += StartConnection_Click;
-        //    dBox.SW_Radial.MouseDown += StartConnection_Click;
-        //    dBox.S_Radial.MouseDown += StartConnection_Click;
-        //    dBox.E_Radial.MouseDown += StartConnection_Click;
-        //    dBox.W_Radial.MouseDown += StartConnection_Click;
-        //}
 
         private void AddShippingLine(DraggableBox box)
         {
@@ -273,7 +259,7 @@ namespace YourNamespace
                 case "se_radial":
                     {
                         lineXOffset = lineTarget.Width;
-                        lineXOffset = lineTarget.Height;
+                        lineYOffset = lineTarget.Height;
                         break;
                     }
                 case "s_radial":
