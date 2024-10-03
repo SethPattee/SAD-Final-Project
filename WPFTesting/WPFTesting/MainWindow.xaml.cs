@@ -227,9 +227,9 @@ namespace YourNamespace
                 DiagramCanvas.Children.Remove(targetShipment);
                 double xWidth = MainGrid.ColumnDefinitions.First().ActualWidth;
                 //System.Diagnostics.Debug.WriteLine(xWidth);
-                //targetShipment.ourShippingLine.X2 = mousepos.X - xWidth;
-                targetShipment.ourShippingLine.X2 = mousepos.X - 255;
-                targetShipment.ourShippingLine.Y2 = mousepos.Y - 37;
+                targetShipment.ourShippingLine.X2 = mousepos.X - xWidth;
+                //targetShipment.ourShippingLine.X2 = mousepos.X - 255;
+                targetShipment.ourShippingLine.Y2 = mousepos.Y - 32;
                 DiagramCanvas.Children.Add(targetShipment);
             }
         }
