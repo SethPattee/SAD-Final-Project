@@ -18,20 +18,35 @@ namespace SpecFlowSupplyChain.MainWindowTest.StepDefinitions
         }
 
         [Given("a standard box is generated")]
-        public void GivenAStandardBoxIsGenerated(int number)
+        public void GivenAStandardBoxIsGenerated()
         {
-            //TODO: implement arrange (precondition) logic
-            // For storing and retrieving scenario-specific data see https://go.specflow.org/doc-sharingdata
-            // To use the multiline text or the table argument of the scenario,
-            // additional string/Table parameters can be defined on the step definition
-            // method. 
             TestMainWindow testWindow = new TestMainWindow();
-            BoxValues boxValues = new BoxValues();
-            DraggableBox db = new DraggableBox(boxValues);
+            TestDraggableBox db = new TestDraggableBox();
             db.Name = "goodbox";
-            db.CornerClicked = "NE_Radial";
 
             _scenarioContext.Add("Window", testWindow);
+            _scenarioContext.Add("Box", db);
+        }
+
+        [Given("a box with height (.*) and width (.*) is generated")]
+        public void WhenABoxWithWidthHeightIsGenerated(double height, double width)
+        {
+            TestMainWindow testWindow = new TestMainWindow();
+            TestDraggableBox db = new TestDraggableBox();
+            db.Name = "bigbox";
+            db.Height= height;
+            db.Width = width;
+
+            _scenarioContext.Add("Window", testWindow);
+            _scenarioContext.Add("Box", db);
+        }
+
+        [Given("the box's (.*) button is clicked")]
+        public void WhenTheBoxCornerIsClicked(string corner)
+        {
+            var db = _scenarioContext.Get<TestDraggableBox>("Box");
+            _scenarioContext.Remove("Box");
+            db.CornerClicked = corner;
             _scenarioContext.Add("Box", db);
         }
 
@@ -39,7 +54,7 @@ namespace SpecFlowSupplyChain.MainWindowTest.StepDefinitions
         public void WhenThePointForTheLineIsComputed()
         {
             var testWindow = _scenarioContext.Get<TestMainWindow>("Window");
-            var db =_scenarioContext.Get<DraggableBox>("Box");
+            var db =_scenarioContext.Get<TestDraggableBox>("Box");
 
             Point actualpoint = testWindow.GetLineOffset(db);
 
