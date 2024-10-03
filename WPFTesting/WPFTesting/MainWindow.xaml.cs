@@ -30,6 +30,7 @@ namespace YourNamespace
         private ShippingLine? targetShipment = null;
         private List<DraggableBox> SupplierList = new List<DraggableBox>();
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
+        private List<ConnectionLineTag> connectionsList = new List<ConnectionLineTag>();
 
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
@@ -82,13 +83,6 @@ namespace YourNamespace
             }
         }
 
-        private void AddShippingLine(DraggableBox box)
-        {
-            ShippingLine ourLine = new ShippingLine();
-            ourLine.ourShippingLine.X1 = 
-            DiagramCanvas.Children.Add(ourLine);
-        }
-
         private void CreateConnectionBetweenBoxes(DraggableBox box1, DraggableBox box2)
         {
             if (box1.Connections.Any(c => c.ConnectedBox == box2) || box2.Connections.Any(c => c.ConnectedBox == box1))
@@ -109,20 +103,6 @@ namespace YourNamespace
 
             UpdateLinePosition(line, box1, box2);
             UpdateSelectedBoxDetails(box1);
-        }
-
-        private void AddConnection_Click(object sender, RoutedEventArgs e)
-        {
-            if (!isAddingConnection)
-            {
-                isAddingConnection = true;
-                firstSelectedBox = null;
-                SelectedBoxDetails.Text = "Select the first box to connect";
-
-                Mouse.OverrideCursor = Cursors.Hand;
-
-                (sender as Button).IsEnabled = false;
-            }
         }
 
         private void UpdateLinePosition(Line line, DraggableBox box1, DraggableBox box2)
@@ -227,11 +207,10 @@ namespace YourNamespace
                 Point mousepos = e.GetPosition(this);
 
                 DiagramCanvas.Children.Remove(targetShipment);
-                double xWidth = MainGrid.ColumnDefinitions.First().ActualWidth;
+                Point p1 = DiagramCanvas.TransformToAncestor(this).Transform(new Point(0, 0));
                 //System.Diagnostics.Debug.WriteLine(xWidth);
-                targetShipment.ourShippingLine.X2 = mousepos.X - xWidth;
-                //targetShipment.ourShippingLine.X2 = mousepos.X - 255;
-                targetShipment.ourShippingLine.Y2 = mousepos.Y - 32;
+                targetShipment.ourShippingLine.X2 = mousepos.X - p1.X;
+                targetShipment.ourShippingLine.Y2 = mousepos.Y - p1.Y;
                 DiagramCanvas.Children.Add(targetShipment);
             }
         }
@@ -379,19 +358,6 @@ namespace YourNamespace
                 {
                     UpdateLinePosition(connection.ConnectionLine, changedBox, connection.ConnectedBox);
                 }
-            }
-        }
-        private void RemoveConnection_Click(object sender, RoutedEventArgs e)
-        {
-            if (!isRemovingConnection)
-            {
-                isRemovingConnection = true;
-                selectedBoxForRemoval = null;
-                SelectedBoxDetails.Text = "Select a box to remove a connection from";
-
-                Mouse.OverrideCursor = Cursors.Hand;
-
-                (sender as Button).IsEnabled = false;
             }
         }
 

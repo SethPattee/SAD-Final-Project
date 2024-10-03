@@ -36,10 +36,10 @@ namespace YourNamespace
             this.ItemsList.ItemsSource = Items;
         }
 
-        public void Set_Title(string title)
-        {
-            this.BoxTitle.Text = title;
-        }
+        //public void Set_Title(string title)
+        //{
+        //    this.BoxTitle.Text = title;
+        //}
 
         private void Box_MouseDown(object sender, MouseButtonEventArgs e)
         {
