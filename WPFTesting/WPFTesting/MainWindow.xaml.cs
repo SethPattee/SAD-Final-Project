@@ -143,19 +143,21 @@ namespace YourNamespace
 
         private void AddNewBox()
         {
-            BoxValues b = new BoxValues() { xPosition = 50,
-                                            yPosition = 50,
-                                            supplier = new Supplier
-                                            {
-                                                Name = "New Box",
-                                                Products = {
-                                                new Product
-                                                {
-                                                    Quantity = 1,
-                                                    ProductName = "joke"
-                                                }
-                                                }
-                                            } };
+            BoxValues b = new BoxValues() { 
+                xPosition = 50,
+                yPosition = 50,
+                supplier = new Supplier
+                {
+                    Name = "New Box",
+                    Products = {
+                    new Product
+                    {
+                        Quantity = 1,
+                        ProductName = "joke"
+                    }
+                    }
+                } 
+            };
             DraggableBox newBox = new DraggableBox(b);
             Canvas.SetLeft(newBox, b.xPosition);
             Canvas.SetTop(newBox, b.yPosition);
