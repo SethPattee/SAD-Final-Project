@@ -8,9 +8,9 @@ using YourNamespace;
 
 namespace SpecFlowSupplyChain.MainWindow.Test_Classes
 {
-    public class TestMainWindow : YourNamespace.MainWindow
+    public class TestMainWindow
     {
-        public Point GetLineOffset(DraggableBox lineTarget)
+        public Point GetLineOffset(TestDraggableBox lineTarget)
         {
             double lineXOffset = 0;
             double lineYOffset = 0;
