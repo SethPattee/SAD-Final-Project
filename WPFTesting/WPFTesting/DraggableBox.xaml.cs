@@ -36,10 +36,10 @@ namespace YourNamespace
             this.ItemsList.ItemsSource = Items;
         }
 
-        public void Set_Title(string title)
-        {
-            this.BoxTitle.Text = title;
-        }
+        //public void Set_Title(string title)
+        //{
+        //    this.BoxTitle.Text = title;
+        //}
 
         private void Box_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -47,14 +47,6 @@ namespace YourNamespace
             clickPosition = e.GetPosition(this);
             (sender as UIElement).CaptureMouse();
         }
-
-        //private void StartConnection_MouseUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    if(sender is DraggableBox)
-        //    {
-        //        RadialClicked?.Invoke(this, (DraggableBox)sender);
-        //    }
-        //}
 
         private void SenseThisRadial(object sender, RoutedEventArgs e)
         {
@@ -102,27 +94,6 @@ namespace YourNamespace
             BoxChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        // Update the positions of all connected lines
-        //private void UpdateConnectedLines()
-        //{
-        //    foreach (var line in ConnectedLines)
-        //    {
-        //        if (line.Tag is LineConnection connection)
-        //        {
-        //            if (connection.StartBox == this)
-        //            {
-        //                line.X1 = Canvas.GetLeft(this);
-        //                line.Y1 = Canvas.GetTop(this);
-        //            }
-        //            else if (connection.EndBox == this)
-        //            {
-        //                line.X2 = Canvas.GetLeft(this);
-        //                line.Y2 = Canvas.GetTop(this);
-        //            }
-        //        }
-        //    }
-        //}
-
         private void DeleteBox_Click(object sender, RoutedEventArgs e)
         {
             var canvas = this.Parent as Canvas;
@@ -152,16 +123,6 @@ namespace YourNamespace
                 mainWindow.UpdateBoxTracker();
             }
         }
-
-        // Make sure you have this method in your DraggableBox class
-        //public void RemoveConnection(DraggableBox boxToRemove)
-        //{
-        //    var connectionToRemove = Connections.FirstOrDefault(c => c.ConnectedBox == boxToRemove);
-        //    if (connectionToRemove != null)
-        //    {
-        //        Connections.Remove(connectionToRemove);
-        //    }
-        //}
 
         private void ChangeColor_Click(object sender, RoutedEventArgs e)
         {
@@ -235,7 +196,6 @@ namespace YourNamespace
             return properties;
         }
 
-        // Override OnRender to update connected lines when the box is redrawn
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
