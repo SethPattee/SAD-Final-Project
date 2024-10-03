@@ -64,7 +64,7 @@ namespace YourNamespace
             this.CornerClicked = "Center";
         }
 
-        private void Box_MouseMove(object sender, MouseEventArgs e)
+        private void Box_MouseMove(object sender, MouseEventArgs e) // Marked for Change
         {
             if (isDragging)
             {
@@ -181,7 +181,7 @@ namespace YourNamespace
 
         }
 
-        public void AddConnection(DraggableBox connectedBox, Line connectionLine)
+        public void AddConnection(DraggableBox connectedBox, Line connectionLine) // Marked for death
         {
             var connection = new BoxConnection
             {
@@ -192,7 +192,7 @@ namespace YourNamespace
             UpdateConnectedLines();
         }
 
-        public void RemoveConnection(DraggableBox connectedBox)
+        public void RemoveConnection(DraggableBox connectedBox) //Marked for death
         {
             var connectionToRemove = Connections.Find(c => c.ConnectedBox == connectedBox);
             if (connectionToRemove != null)
@@ -203,7 +203,7 @@ namespace YourNamespace
             }
         }
 
-        private void UpdateConnectedLines()
+        private void UpdateConnectedLines() // Marked for Death
         {
             foreach (var connection in Connections)
             {
