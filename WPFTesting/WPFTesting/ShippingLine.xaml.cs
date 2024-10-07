@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFTesting.Shapes;
 using YourNamespace;
 
 namespace WPFTesting;
@@ -22,16 +23,18 @@ namespace WPFTesting;
 public partial class ShippingLine : UserControl
 {
     public string CardinalJoint = "Center";
-    
+    public DraggableBox FromSupplier { get; set; }
+    public DraggableBox ToSupplier { get; set; }
+
+    public string FromJoiningBoxCorner { get; set; }
+    public string ToJoiningBoxCorner { get; set; }
+
 
     public ShippingLine()
     {
         InitializeComponent();
-        this.ourShippingLine.X1 = 17;
-        this.ourShippingLine.Y1 = 17;
-        this.ourShippingLine.X2 = 170;
-        this.ourShippingLine.Y2 = 170;
     }
+    
 
     private void DeleteShipLine_Click(object sender, RoutedEventArgs e)
     {
