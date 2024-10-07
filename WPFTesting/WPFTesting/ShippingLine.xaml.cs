@@ -21,16 +21,27 @@ namespace WPFTesting;
 /// </summary>
 public partial class ShippingLine : UserControl
 {
-    public string CardinalJoint = "Center";
-    
 
-    public ShippingLine()
+    public string CardinalJoint = "Center";
+    public string Label { get; set; }
+    public List<ShippingDetails> ShippingDetails { get; set; }
+    public Guid Id { get; private set; }
+
+
+    public ShippingLine(Guid? id = null)
     {
         InitializeComponent();
+        ShippingDetails = new List<ShippingDetails>();
+        Id = id ?? Guid.NewGuid();
         this.ourShippingLine.X1 = 17;
         this.ourShippingLine.Y1 = 17;
         this.ourShippingLine.X2 = 170;
         this.ourShippingLine.Y2 = 170;
+    }
+
+    public void AddShippingDetail(ShippingDetails detail)
+    {
+        ShippingDetails.Add(detail);
     }
 
     private void DeleteShipLine_Click(object sender, RoutedEventArgs e)
@@ -43,4 +54,23 @@ public partial class ShippingLine : UserControl
 
         canvas.Children.Remove(this);
     }
+
+    
 }
+public class ShippingDetails
+{
+    public string Item { get; set; }
+    public double Weight { get; set; }
+    public int Quantity { get; set; }
+    public string Type { get; set; }
+
+    public ShippingDetails(string item, double weight, int quantity, string type)
+    {
+        Item = item;
+        Weight = weight;
+        Quantity = quantity;
+        Type = type;
+    }
+}
+
+
