@@ -30,14 +30,12 @@ namespace YourNamespace
         private ShippingLine? targetShipment = null;
         private List<DraggableBox> SupplierList = new List<DraggableBox>();
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
-        private List<ConnectionLineTag> connectionsList = new List<ConnectionLineTag>();
 
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
 
         public MainWindow()
         {
-            //btcEvent.BoxClicked += StartConnection;
             InitializeComponent();
             _viewModel = new SupplierViewModel(new BoxDataProvider());
             DataContext = _viewModel;
@@ -76,34 +74,7 @@ namespace YourNamespace
 
                 draggableBoxes.Add(dBox);
             }
-
-            //for (int i = 0; i < draggableBoxes.Count - 1; i++)
-            //{
-            //    CreateConnectionBetweenBoxes(draggableBoxes[i], draggableBoxes[i + 1]);
-            //}
         }
-
-        //private void CreateConnectionBetweenBoxes(DraggableBox box1, DraggableBox box2)
-        //{
-        //    if (box1.Connections.Any(c => c.ConnectedBox == box2) || box2.Connections.Any(c => c.ConnectedBox == box1))
-        //    {
-        //        SelectedBoxDetails.Text = "Connection already exists between these boxes.";
-        //        return;
-        //    }
-        //    Line line = new Line
-        //    {
-        //        Stroke = System.Windows.Media.Brushes.Black,
-        //        StrokeThickness = 2
-        //    };
-
-        //    DiagramCanvas.Children.Add(line);
-
-        //    box1.AddConnection(box2, line);
-        //    box2.AddConnection(box1, line);
-
-        //   // UpdateLinePosition(line, box1, box2);
-        //    UpdateSelectedBoxDetails(box1);
-        //}
 
         private void UpdateLinePosition(ShippingLine line1, DraggableBox box1, DraggableBox box2)
         {
@@ -317,8 +288,6 @@ namespace YourNamespace
                     }
                     else if (firstSelectedBox != selectedBox)
                     {
-                        //CreateConnectionBetweenBoxes(firstSelectedBox, selectedBox);
-
                         isAddingConnection = false;
                         firstSelectedBox = null;
                         SelectedBoxDetails.Text = "Connection created";
@@ -365,10 +334,6 @@ namespace YourNamespace
             {
                 UpdateSelectedBoxDetails(changedBox);
 
-                //foreach (var connection in changedBox.Connections)
-                //{
-                //    UpdateLinePosition(connection.ConnectionLine, changedBox, connection.ConnectedBox);
-                //}
                 foreach (ShippingLine sl in ShipmentList)
                 {
                     UpdateLinePosition(sl, sl.FromSupplier, sl.ToSupplier);
