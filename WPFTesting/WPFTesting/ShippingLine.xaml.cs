@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFTesting.Shapes;
 using YourNamespace;
 
 namespace WPFTesting;
@@ -26,6 +27,11 @@ public partial class ShippingLine : UserControl
     public string Label { get; set; }
     public List<ShippingDetails> ShippingDetails { get; set; }
     public Guid Id { get; private set; }
+    public DraggableBox FromSupplier { get; set; }
+    public DraggableBox ToSupplier { get; set; }
+    public string FromJoiningBoxCorner { get; set; }
+    public string ToJoiningBoxCorner { get; set; }
+
 
 
     public ShippingLine(Guid? id = null)
@@ -40,6 +46,7 @@ public partial class ShippingLine : UserControl
         this.ourShippingLine.X2 = 170;
         this.ourShippingLine.Y2 = 170;
     }
+    
 
     public void AddShippingDetail(ShippingDetails detail)
     {

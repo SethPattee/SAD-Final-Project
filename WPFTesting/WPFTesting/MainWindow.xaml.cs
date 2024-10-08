@@ -30,14 +30,12 @@ namespace YourNamespace
         private ShippingLine? targetShipment = null;
         private List<DraggableBox> SupplierList = new List<DraggableBox>();
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
-        private List<ConnectionLineTag> connectionsList = new List<ConnectionLineTag>();
 
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
 
         public MainWindow()
         {
-            //btcEvent.BoxClicked += StartConnection;
             InitializeComponent();
             _viewModel = new SupplierViewModel(new BoxDataProvider());
             DataContext = _viewModel;
@@ -76,44 +74,22 @@ namespace YourNamespace
 
                 draggableBoxes.Add(dBox);
             }
-
-            for (int i = 0; i < draggableBoxes.Count - 1; i++)
-            {
-                CreateConnectionBetweenBoxes(draggableBoxes[i], draggableBoxes[i + 1]);
-            }
         }
 
-        private void CreateConnectionBetweenBoxes(DraggableBox box1, DraggableBox box2)
+        private void UpdateLinePosition(ShippingLine line1, DraggableBox box1, DraggableBox box2)
         {
-            if (box1.Connections.Any(c => c.ConnectedBox == box2) || box2.Connections.Any(c => c.ConnectedBox == box1))
-            {
-                SelectedBoxDetails.Text = "Connection already exists between these boxes.";
-                return;
-            }
-            Line line = new Line
-            {
-                Stroke = System.Windows.Media.Brushes.Black,
-                StrokeThickness = 2
-            };
+            box1.CornerClicked = line1.FromJoiningBoxCorner;
+            box2.CornerClicked = line1.ToJoiningBoxCorner;
+            Point offset1 = GetLineOffset(box1);
+            Point offset2 = GetLineOffset(box2);
 
-            DiagramCanvas.Children.Add(line);
-
-            box1.AddConnection(box2, line);
-            box2.AddConnection(box1, line);
-
-            UpdateLinePosition(line, box1, box2);
-            UpdateSelectedBoxDetails(box1);
-        }
-
-        private void UpdateLinePosition(Line line, DraggableBox box1, DraggableBox box2)
-        {
-            Point startPoint = box1.TranslatePoint(new Point(box1.ActualWidth / 2, box1.ActualHeight / 2), DiagramCanvas);
-            Point endPoint = box2.TranslatePoint(new Point(box2.ActualWidth / 2, box2.ActualHeight / 2), DiagramCanvas);
-
-            line.X1 = startPoint.X;
-            line.Y1 = startPoint.Y;
-            line.X2 = endPoint.X;
-            line.Y2 = endPoint.Y;
+            Point startPoint = box1.TranslatePoint(new Point(offset1.X, offset1.Y), DiagramCanvas);
+            Point endPoint = box2.TranslatePoint(new Point(offset2.X, offset2.Y), DiagramCanvas);
+            
+            line1.ourShippingLine.X1 = startPoint.X;
+            line1.ourShippingLine.X2 = endPoint.X;
+            line1.ourShippingLine.Y1 = startPoint.Y;
+            line1.ourShippingLine.Y2 = endPoint.Y;
         }
 
         private void AddBox_Click(object sender, RoutedEventArgs e)
@@ -180,6 +156,8 @@ namespace YourNamespace
             if(sender is DraggableBox lineTarget && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
+                shippingLine.FromSupplier = lineTarget;
+                shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
 
                 Point pos = GetLineOffset(lineTarget);
 
@@ -234,7 +212,7 @@ namespace YourNamespace
                 case "e_radial":
                     {
                         lineXOffset = lineTarget.Width;
-                        lineXOffset = lineTarget.Height / 2;
+                        lineYOffset = lineTarget.Height / 2;
                         break;
                     }
                 case "se_radial":
@@ -270,11 +248,15 @@ namespace YourNamespace
             {
                 Point pos = GetLineOffset(lineTarget);
 
+                targetShipment.ToSupplier = lineTarget;
+                targetShipment.ToJoiningBoxCorner = lineTarget.CornerClicked;
+
                 targetShipment.ourShippingLine.X2 = Canvas.GetLeft(lineTarget)+pos.X;
                 targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget)+pos.Y;
                 //ReleaseMouseCapture();
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
+                ShipmentList.Add(targetShipment);
             }
             else if(sender is not null && sender is not DraggableBox && IsDestinationSearching)
             {
@@ -306,8 +288,6 @@ namespace YourNamespace
                     }
                     else if (firstSelectedBox != selectedBox)
                     {
-                        CreateConnectionBetweenBoxes(firstSelectedBox, selectedBox);
-
                         isAddingConnection = false;
                         firstSelectedBox = null;
                         SelectedBoxDetails.Text = "Connection created";
@@ -354,9 +334,9 @@ namespace YourNamespace
             {
                 UpdateSelectedBoxDetails(changedBox);
 
-                foreach (var connection in changedBox.Connections)
+                foreach (ShippingLine sl in ShipmentList)
                 {
-                    UpdateLinePosition(connection.ConnectionLine, changedBox, connection.ConnectedBox);
+                    UpdateLinePosition(sl, sl.FromSupplier, sl.ToSupplier);
                 }
             }
         }
