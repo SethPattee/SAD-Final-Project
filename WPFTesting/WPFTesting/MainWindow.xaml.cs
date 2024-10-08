@@ -212,7 +212,7 @@ namespace YourNamespace
                 case "e_radial":
                     {
                         lineXOffset = lineTarget.Width;
-                        lineXOffset = lineTarget.Height / 2;
+                        lineYOffset = lineTarget.Height / 2;
                         break;
                     }
                 case "se_radial":
