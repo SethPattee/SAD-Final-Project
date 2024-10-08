@@ -31,8 +31,10 @@ public partial class ShippingLine : UserControl
     public ShippingLine(Guid? id = null)
     {
         InitializeComponent();
+        DataContext = this;
         ShippingDetails = new List<ShippingDetails>();
         Id = id ?? Guid.NewGuid();
+        this.Label = "This is a lable";
         this.ourShippingLine.X1 = 17;
         this.ourShippingLine.Y1 = 17;
         this.ourShippingLine.X2 = 170;
@@ -59,10 +61,10 @@ public partial class ShippingLine : UserControl
 }
 public class ShippingDetails
 {
-    public string Item { get; set; }
-    public double Weight { get; set; }
-    public int Quantity { get; set; }
-    public string Type { get; set; }
+    public string? Item { get; set; }
+    public double? Weight { get; set; }
+    public int? Quantity { get; set; }
+    public string? Type { get; set; }
 
     public ShippingDetails(string item, double weight, int quantity, string type)
     {
