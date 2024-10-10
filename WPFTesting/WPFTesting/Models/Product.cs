@@ -11,5 +11,6 @@ namespace WPFTesting.Models
         public float Quantity { get; set; }
         public string ProductName { get; set; } = "";
         public string Units { get; set; } = "";
+        public decimal Price { get; set; }
     }
 }

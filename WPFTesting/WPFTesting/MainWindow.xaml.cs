@@ -13,13 +13,14 @@ using WPFTesting.ViewModel;
 using WPFTesting.Models;
 using WPFTesting;
 using System.Windows.Documents;
+using System.Windows.Data;
 
 namespace YourNamespace
 {
     public partial class MainWindow : Window
     {
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
-        private SupplierViewModel _viewModel;
+        private SupplyChainViewModel _viewModel;
         private bool isRemovingConnection = false;
         private DraggableBox selectedBoxForRemoval = null;
         private Popup? connectionSelectionPopup;
@@ -28,8 +29,8 @@ namespace YourNamespace
         private bool MouseIsCaptured = false;
         private bool IsDestinationSearching = false;
         private ShippingLine? targetShipment = null;
-        private List<DraggableBox> SupplierList = new List<DraggableBox>();
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
+
 
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
@@ -37,11 +38,11 @@ namespace YourNamespace
         public MainWindow()
         {
             InitializeComponent();
-            _viewModel = new SupplierViewModel(new BoxDataProvider());
+            _viewModel = new SupplyChainViewModel(new BoxDataProvider());
+            Initialize();
             DataContext = _viewModel;
             Loaded += BoxView_Loaded;
             BoxList.ItemsSource = boxList;
-            Initialize();
         }
 
         private async void Initialize()
@@ -57,22 +58,20 @@ namespace YourNamespace
 
         private void AddDraggableBoxes()
         {
-            List<DraggableBox> draggableBoxes = new List<DraggableBox>();
-            foreach (var box in _viewModel.Boxes)
+            foreach (var box in _viewModel.SupplierList)
             {
                 DraggableBox dBox = new DraggableBox(box);
-                DiagramCanvas.Children.Add(dBox);
                 Canvas.SetLeft(dBox, box.xPosition);
                 Canvas.SetTop(dBox, box.yPosition);
-                AddBoxToTracker(dBox);
 
                 dBox.MouseDown += Box_MouseDown;
                 dBox.BoxChanged += Box_Changed;
                 dBox.RadialClicked += StartConnection_Click;
                 dBox.RadialClicked += FinishConnection_Click;
+                
+                AddBoxToTracker(dBox);
 
-
-                draggableBoxes.Add(dBox);
+                DiagramCanvas.Children.Add(dBox);
             }
         }
 
@@ -104,6 +103,7 @@ namespace YourNamespace
                 yPosition = 50,
                 supplier = new Supplier
                 {
+                    Id = Guid.NewGuid(),
                     Name = "New Box",
                     Products = {
                     new Product
@@ -119,22 +119,20 @@ namespace YourNamespace
             Canvas.SetTop(newBox, b.yPosition);
             newBox.Width = 100;
             newBox.Height = 50;
-            
-
-            AddBoxToTracker(newBox);
-
             newBox.MouseDown += Box_MouseDown;
             newBox.BoxChanged += Box_Changed;
             newBox.RadialClicked += StartConnection_Click;
             newBox.RadialClicked += FinishConnection_Click;
 
-            SupplierList.Add(newBox);
+            AddBoxToTracker(newBox);
+
+            _viewModel.AddSupplierToChain(b);
             DiagramCanvas.Children.Add(newBox);
         }
 
         private void AddBoxToTracker(DraggableBox box)
         {
-            string boxInfo = $"Box {boxList.Count + 1}: ({Canvas.GetLeft(box)}, {Canvas.GetTop(box)})";
+            string boxInfo = $"Box {box.Name}: ({Canvas.GetLeft(box)}, {Canvas.GetTop(box)})";
             boxList.Add(boxInfo);
         }
 
@@ -313,18 +311,13 @@ namespace YourNamespace
 
         private void UpdateSelectedBoxDetails(DraggableBox box)
         {
+            Guid boxId;
+            Guid.TryParse(box.Name, out boxId);
             SelectedBoxDetails.Text = $"Position: ({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})\n" +
                                       $"Size: {box.Width:F0}x{box.Height:F0}\n" +
                                       $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}\n" +
-                                      $"Connected Boxes: {box.Connections.Count}";
+                                      $"Connected suppliers:{_viewModel.SupplierList.SingleOrDefault(a => a.supplier.Id == boxId)}";
 
-            var connectedProperties = box.GetConnectedBoxProperties();
-            foreach (var prop in connectedProperties)
-            {
-                SelectedBoxDetails.Text += $"\nConnected Box: {prop.Title}\n" +
-                                           $"  Items: {string.Join(", ", prop.Items)}\n" +
-                                           $"  Connected Boxes: {prop.ConnectedBoxes}";
-            }
         }
 
         private void Box_Changed(object sender, EventArgs e)
@@ -343,61 +336,45 @@ namespace YourNamespace
 
         private void ShowConnectionSelectionPopup(DraggableBox box)
         {
-            if (box.Connections.Count == 0)
-            {
-                SelectedBoxDetails.Text = "This box has no connections to remove.";
-                ResetRemoveConnectionState();
-                return;
-            }
+            //if (box.Connections.Count == 0)
+            //{
+            //    SelectedBoxDetails.Text = "This box has no connections to remove.";
+            //    ResetRemoveConnectionState();
+            //    return;
+            //}
 
-            connectionSelectionPopup = new Popup
-            {
-                IsOpen = true,
-                StaysOpen = false,
-                PlacementTarget = this,
-                Placement = PlacementMode.Center
-            };
+            //connectionSelectionPopup = new Popup
+            //{
+            //    IsOpen = true,
+            //    StaysOpen = false,
+            //    PlacementTarget = this,
+            //    Placement = PlacementMode.Center
+            //};
 
-            var border = new Border
-            {
-                Background = Brushes.White,
-                BorderBrush = Brushes.Black,
-                BorderThickness = new Thickness(1),
-                Padding = new Thickness(5)
-            };
+            //var border = new Border
+            //{
+            //    Background = Brushes.White,
+            //    BorderBrush = Brushes.Black,
+            //    BorderThickness = new Thickness(1),
+            //    Padding = new Thickness(5)
+            //};
 
-            var stackPanel = new StackPanel();
+            //var stackPanel = new StackPanel();
 
-            foreach (var connection in box.Connections)
-            {
-                var button = new Button
-                {
-                    Content = $"Connection to {connection.ConnectedBox.BoxTitle.Text}",
-                    Margin = new Thickness(5),
-                    Padding = new Thickness(5)
-                };
-                button.Click += (sender, e) => RemoveSelectedConnection(box, connection);
-                stackPanel.Children.Add(button);
-            }
+            //foreach (var connection in box.Connections)
+            //{
+            //    var button = new Button
+            //    {
+            //        Content = $"Connection to {connection.ConnectedBox.BoxTitle.Text}",
+            //        Margin = new Thickness(5),
+            //        Padding = new Thickness(5)
+            //    };
+            //    button.Click += (sender, e) => RemoveSelectedConnection(box, connection);
+            //    stackPanel.Children.Add(button);
+            //}
 
-            border.Child = stackPanel;
-            connectionSelectionPopup.Child = border;
-        }
-
-
-        private void RemoveSelectedConnection(DraggableBox box, BoxConnection connectionToRemove)
-        {
-            box.RemoveConnection(connectionToRemove.ConnectedBox);
-            connectionToRemove.ConnectedBox.RemoveConnection(box);
-
-            DiagramCanvas.Children.Remove(connectionToRemove.ConnectionLine);
-
-            connectionSelectionPopup.IsOpen = false;
-
-            SelectedBoxDetails.Text = "Connection removed";
-            UpdateSelectedBoxDetails(box);
-
-            ResetRemoveConnectionState();
+            //border.Child = stackPanel;
+            //connectionSelectionPopup.Child = border;
         }
 
         private void ResetRemoveConnectionState()

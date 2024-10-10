@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -6,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using WPFTesting.Models;
 using WPFTesting.Shapes;
+using WPFTesting.ViewModel;
 using WPFTesting.ViewShared;
 
 namespace YourNamespace
@@ -14,26 +16,35 @@ namespace YourNamespace
     {
         private bool isDragging = false;
         private Point clickPosition;
-        public event EventHandler BoxChanged;
-        public event EventHandler RadialClicked;
+        private BoxValues supplierValues;
+        public event EventHandler? BoxChanged;
+        public event EventHandler? RadialClicked;
+        public event EventHandler? BoxDeleted;
+        public event PropertyChangedEventHandler PropertyChanged;
+        public double X { get; set; }
+        public double Y { get; set; }
 
         public string CornerClicked = "Center"; 
 
-        public List<BoxConnection> Connections { get; private set; } = new List<BoxConnection>();
-        public List<string> Items { get; private set; } = new List<string>();
 
-        public DraggableBox(BoxValues box)
+        public DraggableBox(BoxValues supplierValues)
         {
             InitializeComponent();
-            this.BoxTitle.Text = box.supplier.Name;
-            
-            if(box != null)
-                foreach(Product p in box.supplier.Products)
-                {
-                    Items.Add($"{p.Quantity}{p.Units ?? ""} {p.ProductName}");
-                }
+            this.supplierValues = supplierValues;
+            //this.BoxTitle.Text = supplierValues.supplier.Name;
+            X = supplierValues.xPosition;
+            Y = supplierValues.yPosition;   
+            //add products
+            foreach(var x in supplierValues.supplier.Products)
+            {
+                this.ItemsList.Items.Add(x.ProductName);
+                //UIElement u = (UI;
+                //u.Pname=x.ProductName;
+                ;//?????HEBER
+                //ProductList.Items.Add(x);
 
-            this.ItemsList.ItemsSource = Items;
+            }
+            
         }
 
         //public void Set_Title(string title)
@@ -70,7 +81,6 @@ namespace YourNamespace
                     Canvas.SetLeft(this, left);
                     Canvas.SetTop(this, top);
 
-                    UpdateConnectedLines();
                     BoxChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
@@ -90,7 +100,6 @@ namespace YourNamespace
             if (newWidth >= 50) this.Width = newWidth;
             if (newHeight >= 30) this.Height = newHeight;
 
-            UpdateConnectedLines();
             BoxChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -101,20 +110,6 @@ namespace YourNamespace
             {
                 return; 
             }
-
-            foreach (var connection in Connections.ToList())
-            {
-                if (connection?.ConnectionLine == null || connection.ConnectedBox == null)
-                {
-                    continue;
-                }
-
-                canvas.Children.Remove(connection.ConnectionLine);
-
-                connection.ConnectedBox.RemoveConnection(this);
-            }
-
-            Connections.Clear();
 
             canvas.Children.Remove(this);
 
@@ -142,64 +137,9 @@ namespace YourNamespace
 
         }
 
-        public void AddConnection(DraggableBox connectedBox, Line connectionLine) // Marked for death
-        {
-            var connection = new BoxConnection
-            {
-                ConnectedBox = connectedBox,
-                ConnectionLine = connectionLine
-            };
-            Connections.Add(connection);
-            UpdateConnectedLines();
-        }
-
-        public void RemoveConnection(DraggableBox connectedBox) //Marked for death
-        {
-            var connectionToRemove = Connections.Find(c => c.ConnectedBox == connectedBox);
-            if (connectionToRemove != null)
-            {
-                Connections.Remove(connectionToRemove);
-                var canvas = this.Parent as Canvas;
-                canvas?.Children.Remove(connectionToRemove.ConnectionLine);
-            }
-        }
-
-        private void UpdateConnectedLines() // Marked for Death
-        {
-            foreach (var connection in Connections)
-            {
-                var line = connection.ConnectionLine;
-                var connectedBox = connection.ConnectedBox;
-
-                Point startPoint = this.TranslatePoint(new Point(this.ActualWidth / 2, this.ActualHeight / 2), this.Parent as UIElement);
-                Point endPoint = connectedBox.TranslatePoint(new Point(connectedBox.ActualWidth / 2, connectedBox.ActualHeight / 2), this.Parent as UIElement);
-
-                line.X1 = startPoint.X;
-                line.Y1 = startPoint.Y;
-                line.X2 = endPoint.X;
-                line.Y2 = endPoint.Y;
-            }
-        }
-
-        public List<BoxProperties> GetConnectedBoxProperties()
-        {
-            var properties = new List<BoxProperties>();
-            foreach (var connection in Connections)
-            {
-                properties.Add(new BoxProperties
-                {
-                    Title = connection.ConnectedBox.BoxTitle.Text,
-                    Items = new List<string>(connection.ConnectedBox.Items),
-                    ConnectedBoxes = connection.ConnectedBox.Connections.Count
-                });
-            }
-            return properties;
-        }
-
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-            UpdateConnectedLines();
         }
     }
 
