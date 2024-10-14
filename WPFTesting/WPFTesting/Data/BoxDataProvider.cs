@@ -20,7 +20,7 @@ public class BoxDataProvider : IBoxDataProvider
                 supplier = new Supplier()
                 {
 
-                    Name="Box-Title",
+                    Name="Supplier1",
                 },
                 xPosition=140,
                 yPosition=140
