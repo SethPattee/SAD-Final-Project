@@ -7,7 +7,7 @@ using WPFTesting.Shapes;
 
 namespace WPFTesting.Data;
 
-public interface IBoxDataProvider
+public interface IInitializedDataProvider
 {
-    Task<IEnumerable<BoxValues>?> GetBoxValuesAsync();
+    Task<IEnumerable<SupplierUIValues>?> GetBoxValuesAsync();
 }

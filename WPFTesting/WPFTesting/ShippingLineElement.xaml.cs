@@ -27,8 +27,8 @@ public partial class ShippingLine : UserControl
     public string Label { get; set; }
     public List<ShippingDetails> ShippingDetails { get; set; }
     public Guid Id { get; private set; }
-    public DraggableBox FromSupplier { get; set; }
-    public DraggableBox ToSupplier { get; set; }
+    public SupplierElement FromSupplier { get; set; }
+    public SupplierElement ToSupplier { get; set; }
     public string FromJoiningBoxCorner { get; set; }
     public string ToJoiningBoxCorner { get; set; }
 

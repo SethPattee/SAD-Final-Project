@@ -9,14 +9,14 @@ using WPFTesting.Models;
 namespace WPFTesting.Data;
 
 
-public class BoxDataProvider : IBoxDataProvider
+public class InitializedDataProvider : IInitializedDataProvider
 {
-    public async Task<IEnumerable<BoxValues>?> GetBoxValuesAsync()
+    public async Task<IEnumerable<SupplierUIValues>?> GetBoxValuesAsync()
     {
         await Task.Delay(0);
-        return new List<BoxValues>
+        return new List<SupplierUIValues>
         {
-            new BoxValues { 
+            new SupplierUIValues { 
                 supplier = new Supplier()
                 {
 
@@ -25,7 +25,7 @@ public class BoxDataProvider : IBoxDataProvider
                 xPosition=140,
                 yPosition=140
             },
-            new BoxValues
+            new SupplierUIValues
             {
                 supplier = new Supplier()
                 {
@@ -35,7 +35,7 @@ public class BoxDataProvider : IBoxDataProvider
                 xPosition=280,
                 yPosition=280
             },
-            new BoxValues
+            new SupplierUIValues
             {
                 supplier = new Supplier()
                 {

@@ -22,10 +22,10 @@ namespace YourNamespace
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
         private SupplyChainViewModel _viewModel;
         private bool isRemovingConnection = false;
-        private DraggableBox selectedBoxForRemoval = null;
+        private SupplierElement selectedBoxForRemoval = null;
         private Popup? connectionSelectionPopup;
         private bool isAddingConnection = false;
-        private DraggableBox firstSelectedBox = null;
+        private SupplierElement firstSelectedBox = null;
         private bool MouseIsCaptured = false;
         private bool IsDestinationSearching = false;
         private ShippingLine? targetShipment = null;
@@ -38,7 +38,7 @@ namespace YourNamespace
         public MainWindow()
         {
             InitializeComponent();
-            _viewModel = new SupplyChainViewModel(new BoxDataProvider());
+            _viewModel = new SupplyChainViewModel(new InitializedDataProvider());
             Initialize();
             DataContext = _viewModel;
             Loaded += BoxView_Loaded;
@@ -60,7 +60,7 @@ namespace YourNamespace
         {
             foreach (var box in _viewModel.SupplierList)
             {
-                DraggableBox dBox = new DraggableBox(box);
+                SupplierElement dBox = new SupplierElement(box);
                 Canvas.SetLeft(dBox, box.xPosition);
                 Canvas.SetTop(dBox, box.yPosition);
 
@@ -75,7 +75,7 @@ namespace YourNamespace
             }
         }
 
-        private void UpdateLinePosition(ShippingLine line1, DraggableBox box1, DraggableBox box2)
+        private void UpdateLinePosition(ShippingLine line1, SupplierElement box1, SupplierElement box2)
         {
             box1.CornerClicked = line1.FromJoiningBoxCorner;
             box2.CornerClicked = line1.ToJoiningBoxCorner;
@@ -98,7 +98,7 @@ namespace YourNamespace
 
         private void AddNewBox()
         {
-            BoxValues b = new BoxValues() { 
+            SupplierUIValues b = new SupplierUIValues() { 
                 xPosition = 50,
                 yPosition = 50,
                 supplier = new Supplier
@@ -114,7 +114,7 @@ namespace YourNamespace
                     }
                 } 
             };
-            DraggableBox newBox = new DraggableBox(b);
+            SupplierElement newBox = new SupplierElement(b);
             Canvas.SetLeft(newBox, b.xPosition);
             Canvas.SetTop(newBox, b.yPosition);
             newBox.Width = 100;
@@ -130,7 +130,7 @@ namespace YourNamespace
             DiagramCanvas.Children.Add(newBox);
         }
 
-        private void AddBoxToTracker(DraggableBox box)
+        private void AddBoxToTracker(SupplierElement box)
         {
             string boxInfo = $"Box {box.Name}: ({Canvas.GetLeft(box)}, {Canvas.GetTop(box)})";
             boxList.Add(boxInfo);
@@ -141,7 +141,7 @@ namespace YourNamespace
             boxList.Clear();
             foreach (UIElement element in DiagramCanvas.Children)
             {
-                if (element is DraggableBox box)
+                if (element is SupplierElement box)
                 {
                     string boxInfo = $"Box {boxList.Count + 1}: ({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})";
                     boxList.Add(boxInfo);
@@ -151,7 +151,7 @@ namespace YourNamespace
 
         private void StartConnection_Click(object sender, EventArgs e)
         {
-            if(sender is DraggableBox lineTarget && MouseIsCaptured == false)
+            if(sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
                 shippingLine.FromSupplier = lineTarget;
@@ -191,7 +191,7 @@ namespace YourNamespace
             }
         }
 
-        private Point GetLineOffset(DraggableBox lineTarget)
+        private Point GetLineOffset(SupplierElement lineTarget)
         {
             double lineXOffset = 0;
             double lineYOffset = 0;
@@ -242,7 +242,7 @@ namespace YourNamespace
 
         private void FinishConnection_Click(object sender, EventArgs e)
         {
-            if(sender is DraggableBox lineTarget && MouseIsCaptured && IsDestinationSearching)
+            if(sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
             {
                 Point pos = GetLineOffset(lineTarget);
 
@@ -256,7 +256,7 @@ namespace YourNamespace
                 IsDestinationSearching = false;
                 ShipmentList.Add(targetShipment);
             }
-            else if(sender is not null && sender is not DraggableBox && IsDestinationSearching)
+            else if(sender is not null && sender is not SupplierElement && IsDestinationSearching)
             {
                 DiagramCanvas.Children.Remove(targetShipment);
                 targetShipment = null;
@@ -270,7 +270,7 @@ namespace YourNamespace
 
         private void Box_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (sender is DraggableBox selectedBox)
+            if (sender is SupplierElement selectedBox)
             {
                 if (isRemovingConnection)
                 {
@@ -309,21 +309,21 @@ namespace YourNamespace
             }
         }
 
-        private void UpdateSelectedBoxDetails(DraggableBox box)
+        private void UpdateSelectedBoxDetails(SupplierElement box)
         {
             Guid boxId;
             Guid.TryParse(box.Name, out boxId);
             SelectedBoxDetails.Text = $"Position: ({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})\n" +
                                       $"Size: {box.Width:F0}x{box.Height:F0}\n" +
                                       $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}\n" +
-                                      $"Connected suppliers:{_viewModel.SupplierList.SingleOrDefault(a => a.supplier.Id == boxId)}";
-
+                                      $"Connected suppliers:";
+            // {_viewModel.SupplierList.SingleOrDefault(a => a.supplier.Id == boxId)}
         }
 
         private void Box_Changed(object sender, EventArgs e)
         {
             UpdateBoxTracker();
-            if (sender is DraggableBox changedBox)
+            if (sender is SupplierElement changedBox)
             {
                 UpdateSelectedBoxDetails(changedBox);
 
@@ -334,7 +334,7 @@ namespace YourNamespace
             }
         }
 
-        private void ShowConnectionSelectionPopup(DraggableBox box)
+        private void ShowConnectionSelectionPopup(SupplierElement box)
         {
             //if (box.Connections.Count == 0)
             //{

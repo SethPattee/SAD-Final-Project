@@ -12,28 +12,35 @@ using WPFTesting.ViewShared;
 
 namespace YourNamespace
 {
-    public partial class DraggableBox : UserControl
+    public partial class SupplierElement : UserControl
     {
         private bool isDragging = false;
         private Point clickPosition;
-        private BoxValues supplierValues;
+        public SupplierUIValues supplierValues = new SupplierUIValues()
+        {
+            supplier = new Supplier()
+        }; // Temporary replacement until we get MVVM data binding in place
         public event EventHandler? BoxChanged;
         public event EventHandler? RadialClicked;
         public event EventHandler? BoxDeleted;
         public event PropertyChangedEventHandler PropertyChanged;
+        public List<Product> Products {  get; set; } = new List<Product>();
         public double X { get; set; }
         public double Y { get; set; }
 
         public string CornerClicked = "Center"; 
 
 
-        public DraggableBox(BoxValues supplierValues)
+        public SupplierElement(SupplierUIValues supplierValues)
         {
             InitializeComponent();
             this.supplierValues = supplierValues;
             //this.BoxTitle.Text = supplierValues.supplier.Name;
             X = supplierValues.xPosition;
-            Y = supplierValues.yPosition;   
+            Y = supplierValues.yPosition;
+            this.supplierValues.supplier = supplierValues.supplier;
+            if (this.supplierValues.supplier.Name == "" || this.supplierValues.supplier.Name == null)
+                this.supplierValues.supplier.Name = "New Supplier";
             //add products
             foreach(var x in supplierValues.supplier.Products)
             {

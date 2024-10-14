@@ -10,25 +10,26 @@ namespace WPFTesting.ViewModel;
 
 public class SupplyChainViewModel : INotifyPropertyChanged
 {
-    private IBoxDataProvider _boxProvider;
-    public event PropertyChangedEventHandler PropertyChanged;
-    public ObservableCollection<BoxValues> SupplierList = new ObservableCollection<BoxValues>();
+    private IInitializedDataProvider _boxProvider;
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public ObservableCollection<SupplierUIValues> SupplierList = new ObservableCollection<SupplierUIValues>();
     public List<string> ShipmentList = new List<string>(); //Replace string with Shipment model when shipment model done
 
-    public SupplyChainViewModel(IBoxDataProvider boxProvider)
+    public SupplyChainViewModel(IInitializedDataProvider boxProvider)
     {
         _boxProvider = boxProvider;
     }
 
     protected void OnPropertyChanged(string name = null)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        if(name is not null)
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
 
     public async Task LoadAsync()
     {
-        //if (Boxes.Any()) return; //don't overide any existing data
+        //if (Boxes.Any()) return; //don't override any existing data
 
         var boxes = await _boxProvider.GetBoxValuesAsync();
         if (boxes is not null)
@@ -41,13 +42,13 @@ public class SupplyChainViewModel : INotifyPropertyChanged
 
     }
 
-    public void AddSupplierToChain(BoxValues supplier)
+    public void AddSupplierToChain(SupplierUIValues supplier)
     {
         SupplierList.Add(supplier);
         OnPropertyChanged("SupplierList");
     }
 
-    public async Task CalculateSupplyChainOutputAsync()
+    public void CalculateSupplyChainOutputAsync()
     {
         
     }

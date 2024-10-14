@@ -5,7 +5,7 @@ namespace WPFTesting.ViewShared
 {
     public class BoxConnectionBase
     {
-        public DraggableBox ConnectedBox { get; set; }
+        public SupplierElement ConnectedBox { get; set; }
         public Line ConnectionLine { get; set; }
     }
 }
