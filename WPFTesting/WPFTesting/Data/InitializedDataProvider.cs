@@ -16,11 +16,24 @@ public class InitializedDataProvider : IInitializedDataProvider
         await Task.Delay(0);
         return new List<SupplierUIValues>
         {
-            new SupplierUIValues { 
+            new SupplierUIValues {
                 supplier = new Supplier()
-                {
+                { Products =
+                    {
+                        new Product()
+                        {
+                            Quantity=20,
+                            ProductName="Drill Bit"
+                        },
+                        new Product()
+                        {
+                            Quantity=10,
+                            ProductName="Saw Blade 2-pack",
+                            Units="kg"
+                        }
+                    },
 
-                    Name="Supplier1",
+                    Name="Supplier Bob",
                 },
                 xPosition=140,
                 yPosition=140
@@ -28,7 +41,19 @@ public class InitializedDataProvider : IInitializedDataProvider
             new SupplierUIValues
             {
                 supplier = new Supplier()
-                {
+                { Products =
+                    {
+                        new Product()
+                        {
+                            Quantity = 1,
+                            ProductName = "computer"
+                        },
+                        new Product()
+                        {
+                            Quantity=1,
+                            ProductName="AV Cable"
+                        },                        
+                    },
 
                     Name="my company",
                 },
