@@ -14,7 +14,7 @@
 - Box properties.
 ### Sprint 2
 - Lines creatable.
-- Efficiency computation across a single connected network.
+- Efficiency computation across a single connected network. **Edit
 
 ## V2 -November 11-
 ### Sprint 3
