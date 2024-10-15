@@ -13,7 +13,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     private IInitializedDataProvider _boxProvider;
     public event PropertyChangedEventHandler? PropertyChanged;
     public ObservableCollection<SupplierUIValues> SupplierList = new ObservableCollection<SupplierUIValues>();
-    public List<string> ShipmentList = new List<string>(); //Replace string with Shipment model when shipment model done
+    public List<Shippment> ShipmentList = new List<Shippment>();
 
     public SupplyChainViewModel(IInitializedDataProvider boxProvider)
     {
