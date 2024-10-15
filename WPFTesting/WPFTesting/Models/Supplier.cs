@@ -17,7 +17,7 @@ namespace WPFTesting.Models
             set
             {
                 _name = value;
-                OnPropertyChanged(Name);
+                OnPropertyChanged(nameof(_name));
             }
         
         }
@@ -25,7 +25,7 @@ namespace WPFTesting.Models
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged(string name = null)
+        protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

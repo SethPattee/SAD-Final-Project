@@ -44,7 +44,7 @@ namespace YourNamespace
             //add products
             foreach(var x in supplierValues.supplier.Products)
             {
-                this.ItemsList.Items.Add(x.ProductName);
+                this.ItemsList.Items.Add(x);
                 //UIElement u = (UI;
                 //u.Pname=x.ProductName;
                 ;//?????HEBER

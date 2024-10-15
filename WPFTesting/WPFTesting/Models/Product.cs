@@ -1,16 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WPFTesting.Models
 {
-    public class Product
+    public class Product : INotifyPropertyChanged
     {
-        public float Quantity { get; set; }
-        public string ProductName { get; set; } = "";
-        public string Units { get; set; } = "";
-        public decimal Price { get; set; }
+        private float _quantity;
+
+        private Decimal _price;
+        private string _name = "";
+        private string _units = "";
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public float Quantity
+        {
+            get => _quantity; 
+            set
+            {
+                _quantity = value; OnPropertyChanged(nameof(Quantity));
+            }
+        }
+        public string ProductName
+        {
+            get => _name;
+            set
+            {
+                _name = value; OnPropertyChanged(nameof(ProductName));
+            }
+        }
+        public string Units
+        {
+            get => _units;
+            set { _units = value; OnPropertyChanged(nameof(Units)); }
+        }
+        public decimal Price
+        {
+            get => _price;
+            set { _price = value; OnPropertyChanged(nameof(Price)); }
+        }
+
     }
 }
