@@ -323,11 +323,23 @@ namespace YourNamespace
             PositionTextBox.Text = $"({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})";
             SizeTextBox.Text = $"{box.Width:F0}x{box.Height:F0}";
             ColorTextBox.Text = $"{(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}";
+            TitleTextBox.Text = $"{box.BoxTitle.Text}" ;
             // {_viewModel.SupplierList.SingleOrDefault(a => a.supplier.Id == boxId)}
         }
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             SupplierElement box = selectedElement;
+
+            string title = TitleTextBox.Text.Trim();
+            if (title.Length > 0)
+            {
+                box.BoxTitle.Text = title;
+                this.Title = title;  
+            }
+            else
+            {
+                MessageBox.Show("Invalid Title. Please enter a Title.");
+            }
 
             //Edit Locaiton
             string[] positionParts = PositionTextBox.Text.Trim('(', ')').Split(',');
@@ -348,8 +360,38 @@ namespace YourNamespace
                 box.Width = width;
                 box.Height = height;
             }
-            //box.supplierValues.supplier.Products //for each product.
-            //
+
+            // Edit Product
+            foreach (Product product in box.supplierValues.supplier.Products)
+            {
+
+                // Update ProductName
+                product.ProductName = ProductNameTextBox.Text.Trim();
+
+                // Update Quantity
+                if (float.TryParse(QuantityTextBox.Text, out float quantity))
+                {
+                    product.Quantity = quantity;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid quantity. Please enter a valid number.");
+                }
+
+                // Update Units
+                product.Units = UnitsTextBox.Text.Trim();
+
+                // Update Price
+                if (decimal.TryParse(PriceTextBox.Text, out decimal price))
+                {
+                    product.Price = price;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid price. Please enter a valid number.");
+                }
+            }
+
             // Edit Color
             var colorInput = ColorTextBox.Text.Trim();
             try
