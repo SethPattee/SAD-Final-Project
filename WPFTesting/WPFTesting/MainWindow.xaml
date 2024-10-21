@@ -51,6 +51,19 @@
             <StackPanel x:Name="LeftSidebar">
                 <TextBlock Text="Box Details" FontWeight="Bold" Margin="10"/>
                 <TextBlock x:Name="SelectedBoxDetails" Margin="10" TextWrapping="Wrap"/>
+
+                <TextBlock Text="Position:" />
+                <TextBox x:Name="PositionTextBox" />
+
+                <TextBlock Text="Size:" />
+                <TextBox x:Name="SizeTextBox"  />
+
+                <TextBlock Text="Color:" />
+                <TextBox x:Name="ColorTextBox"  />
+
+                <TextBlock Text="Connected Suppliers:" />
+                <TextBox x:Name="SuppliersTextBox" />
+                <Button Content="Edit" Click="EditButton_Click" />
             </StackPanel>
         </Border>
 

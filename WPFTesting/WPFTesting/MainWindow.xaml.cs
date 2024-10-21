@@ -30,6 +30,7 @@ namespace YourNamespace
         private bool IsDestinationSearching = false;
         private ShippingLine? targetShipment = null;
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
+        private SupplierElement selectedElement = null;
 
 
         public event EventHandler? BoxChanged;
@@ -312,12 +313,55 @@ namespace YourNamespace
         private void UpdateSelectedBoxDetails(SupplierElement box)
         {
             Guid boxId;
+            selectedElement = box;
             Guid.TryParse(box.Name, out boxId);
             SelectedBoxDetails.Text = $"Position: ({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})\n" +
                                       $"Size: {box.Width:F0}x{box.Height:F0}\n" +
                                       $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}\n" +
                                       $"Connected suppliers:";
+
+            PositionTextBox.Text = $"({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})";
+            SizeTextBox.Text = $"{box.Width:F0}x{box.Height:F0}";
+            ColorTextBox.Text = $"{(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}";
             // {_viewModel.SupplierList.SingleOrDefault(a => a.supplier.Id == boxId)}
+        }
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            SupplierElement box = selectedElement;
+
+            //Edit Locaiton
+            string[] positionParts = PositionTextBox.Text.Trim('(', ')').Split(',');
+            if (positionParts.Length == 2 &&
+                double.TryParse(positionParts[0], out double left) &&
+                double.TryParse(positionParts[1], out double top))
+            {
+                Canvas.SetLeft(box, left);
+                Canvas.SetTop(box, top);
+            }
+
+            // Edit Size
+            string[] sizeParts = SizeTextBox.Text.Split('x');
+            if (sizeParts.Length == 2 &&
+                double.TryParse(sizeParts[0], out double width) &&
+                double.TryParse(sizeParts[1], out double height))
+            {
+                box.Width = width;
+                box.Height = height;
+            }
+            //box.supplierValues.supplier.Products //for each product.
+            //
+            // Edit Color
+            var colorInput = ColorTextBox.Text.Trim();
+            try
+            {
+                var newColor = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(colorInput);
+                box.boxBorder.Background = new System.Windows.Media.SolidColorBrush(newColor);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Invalid color format. Please enter a valid color (e.g., #FF0000 or Red).");
+            }
+
         }
 
         private void Box_Changed(object sender, EventArgs e)
