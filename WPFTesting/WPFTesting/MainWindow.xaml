@@ -66,7 +66,21 @@
 
                 <TextBlock Text="Connected Suppliers:" />
                 <TextBox x:Name="SuppliersTextBox" />
-                
+
+                <TextBlock Text="Products:" />
+                <ListView x:Name="ProductsListView" SelectionChanged="ProductsListView_SelectionChanged">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding ProductName}" />
+                            <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
+                            <GridViewColumn Header="Units" DisplayMemberBinding="{Binding Units}" />
+                            <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <!-- TextBoxes for Editing Selected Product -->
+                <TextBlock Text="Edit Selected Product:" />
                 <TextBlock Text="Product Name:" />
                 <TextBox x:Name="ProductNameTextBox" />
 

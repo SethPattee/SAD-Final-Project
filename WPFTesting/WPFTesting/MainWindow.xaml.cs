@@ -31,6 +31,7 @@ namespace YourNamespace
         private ShippingLine? targetShipment = null;
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
         private SupplierElement selectedElement = null;
+        private Product selectedProduct;
 
 
         public event EventHandler? BoxChanged;
@@ -360,18 +361,17 @@ namespace YourNamespace
                 box.Width = width;
                 box.Height = height;
             }
-
+            box.supplierValues.supplier.Products
             // Edit Product
-            foreach (Product product in box.supplierValues.supplier.Products)
+            if (selectedProduct != null)
             {
-
                 // Update ProductName
-                product.ProductName = ProductNameTextBox.Text.Trim();
+                selectedProduct.ProductName = ProductNameTextBox.Text.Trim();
 
                 // Update Quantity
                 if (float.TryParse(QuantityTextBox.Text, out float quantity))
                 {
-                    product.Quantity = quantity;
+                    selectedProduct.Quantity = quantity;
                 }
                 else
                 {
@@ -379,12 +379,12 @@ namespace YourNamespace
                 }
 
                 // Update Units
-                product.Units = UnitsTextBox.Text.Trim();
+                selectedProduct.Units = UnitsTextBox.Text.Trim();
 
                 // Update Price
                 if (decimal.TryParse(PriceTextBox.Text, out decimal price))
                 {
-                    product.Price = price;
+                    selectedProduct.Price = price;
                 }
                 else
                 {
@@ -405,7 +405,17 @@ namespace YourNamespace
             }
 
         }
-
+        private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ProductsListView.SelectedItem is Product product)
+            {
+                selectedProduct = product;
+                ProductNameTextBox.Text = product.ProductName;
+                QuantityTextBox.Text = product.Quantity.ToString();
+                UnitsTextBox.Text = product.Units;
+                PriceTextBox.Text = product.Price.ToString();
+            }
+        }
         private void Box_Changed(object sender, EventArgs e)
         {
             UpdateBoxTracker();
