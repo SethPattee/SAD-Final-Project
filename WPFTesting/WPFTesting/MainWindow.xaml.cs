@@ -319,6 +319,8 @@ namespace YourNamespace
 
         private void Box_Changed(object sender, EventArgs e)
         {
+            //this gets called every time you hover over the element after selecting it...
+            //Even when you select another... they both call this on hover
             UpdateBoxTracker();
             if (sender is SupplierElement changedBox)
             {
@@ -329,6 +331,7 @@ namespace YourNamespace
                     UpdateLinePosition(sl, sl.FromSupplier, sl.ToSupplier);
                 }
             }
+            //_viewModel.SupplierList = _viewModel.SupplierList;
         }
 
         private void ShowConnectionSelectionPopup(SupplierElement box)

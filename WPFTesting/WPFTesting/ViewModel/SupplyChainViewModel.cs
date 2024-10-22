@@ -12,7 +12,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
 {
     private IInitializedDataProvider _boxProvider;
     public event PropertyChangedEventHandler? PropertyChanged;
-    public ObservableCollection<SupplierUIValues> SupplierList = new ObservableCollection<SupplierUIValues>();
+    private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
     public List<Shippment> ShipmentList = new List<Shippment>();
     public string ShortestPath;
 
@@ -21,11 +21,26 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         _boxProvider = boxProvider;
     }
 
+    public ObservableCollection<SupplierUIValues> SupplierList
+    {
+        get => _supplierList;
+        set
+        {
+            _supplierList = value;
+            OnPropertyChanged(nameof(SupplierList));
+        }
+    }
+
     protected void OnPropertyChanged(string name = null)
     {
         if(name is not null)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            _boxProvider.SaveSupplierInfoAsync(SupplierList);
+        }
     }
+
+
 
 
     public async Task LoadAsync()
@@ -46,7 +61,6 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     public void AddSupplierToChain(SupplierUIValues supplier)
     {
         SupplierList.Add(supplier);
-        _boxProvider.SaveSupplierInfoAsync(SupplierList);
         OnPropertyChanged(nameof(SupplierList));
     }
 
