@@ -324,25 +324,37 @@ namespace YourNamespace
             PositionTextBox.Text = $"({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})";
             SizeTextBox.Text = $"{box.Width:F0}x{box.Height:F0}";
             ColorTextBox.Text = $"{(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}";
-            TitleTextBox.Text = $"{box.BoxTitle.Text}" ;
-            // {_viewModel.SupplierList.SingleOrDefault(a => a.supplier.Id == boxId)}
+            TitleTextBox.Text = $"{box.BoxTitle.Text}";
+
+            // Populate the ProductsListView with products from the box
+            if (box.supplierValues?.supplier?.Products != null)
+            {
+                ProductsListView.ItemsSource = box.supplierValues.supplier.Products;
+            }
+            else
+            {
+                ProductsListView.ItemsSource = null;
+            }
         }
+
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             SupplierElement box = selectedElement;
 
+            // Edit Box title
             string title = TitleTextBox.Text.Trim();
             if (title.Length > 0)
             {
                 box.BoxTitle.Text = title;
-                this.Title = title;  
+                this.Title = title;
             }
-            else
-            {
-                MessageBox.Show("Invalid Title. Please enter a Title.");
-            }
+            //else
+            //{
+            //    MessageBox.Show("Invalid Title. Please enter a Title.");
+            //    return;
+            //}
 
-            //Edit Locaiton
+            // Edit Box position
             string[] positionParts = PositionTextBox.Text.Trim('(', ')').Split(',');
             if (positionParts.Length == 2 &&
                 double.TryParse(positionParts[0], out double left) &&
@@ -352,7 +364,7 @@ namespace YourNamespace
                 Canvas.SetTop(box, top);
             }
 
-            // Edit Size
+            // Edit Box size
             string[] sizeParts = SizeTextBox.Text.Split('x');
             if (sizeParts.Length == 2 &&
                 double.TryParse(sizeParts[0], out double width) &&
@@ -361,7 +373,7 @@ namespace YourNamespace
                 box.Width = width;
                 box.Height = height;
             }
-            box.supplierValues.supplier.Products
+
             // Edit Product
             if (selectedProduct != null)
             {
@@ -376,6 +388,7 @@ namespace YourNamespace
                 else
                 {
                     MessageBox.Show("Invalid quantity. Please enter a valid number.");
+                    return;
                 }
 
                 // Update Units
@@ -389,10 +402,11 @@ namespace YourNamespace
                 else
                 {
                     MessageBox.Show("Invalid price. Please enter a valid number.");
+                    return;
                 }
             }
 
-            // Edit Color
+            // Edit Box color
             var colorInput = ColorTextBox.Text.Trim();
             try
             {
@@ -403,17 +417,18 @@ namespace YourNamespace
             {
                 MessageBox.Show("Invalid color format. Please enter a valid color (e.g., #FF0000 or Red).");
             }
-
         }
+
         private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ProductsListView.SelectedItem is Product product)
+            selectedProduct = (Product)ProductsListView.SelectedItem;
+
+            if (selectedProduct != null)
             {
-                selectedProduct = product;
-                ProductNameTextBox.Text = product.ProductName;
-                QuantityTextBox.Text = product.Quantity.ToString();
-                UnitsTextBox.Text = product.Units;
-                PriceTextBox.Text = product.Price.ToString();
+                ProductNameTextBox.Text = selectedProduct.ProductName;
+                QuantityTextBox.Text = selectedProduct.Quantity.ToString();
+                UnitsTextBox.Text = selectedProduct.Units;
+                PriceTextBox.Text = selectedProduct.Price.ToString();
             }
         }
         private void Box_Changed(object sender, EventArgs e)
