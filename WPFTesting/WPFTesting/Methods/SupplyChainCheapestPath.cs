@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using WPFTesting.Models;
 
-namespace WPFTesting.ViewModel
+namespace WPFTesting.Methods
 {
-    public class SupplyChainCheapestPath
+    public static class SupplyChainCheapestPath
     {
-        public List<string> CalculateSupplyChainOutputAsync(List<Shippment> s, List<Supplier> p)
+        public static List<string> CalculateSupplyChainOutputAsync(List<Shipment> s, List<Supplier> p)
         {
             List<string> CheapestPaths = new List<string>();
             List<Supplier> SupplierRoots;
@@ -27,19 +27,19 @@ namespace WPFTesting.ViewModel
             return CheapestPaths;
         }
 
-        public List<Supplier> FindRootSuppliers(List<Shippment> s, List<Supplier> p)
+        public static List<Supplier> FindRootSuppliers(List<Shipment> s, List<Supplier> p)
         {
             List<Supplier> SupplierRoots = new List<Supplier>();
             foreach (Supplier testsupp in p) // Node to test against
             {
                 bool supplierisasourceflag = false;
                 bool supplierisdestflag = false;
-                foreach (Shippment testnode in s) // connection being checked. 
+                foreach (Shipment testnode in s) // connection being checked. 
                 {
                     // If a node is ever a recipient, it is not a root.
-                    if (testsupp == testnode.Supplier)
+                    if (testsupp == testnode.Sender)
                         supplierisasourceflag = true;
-                    if (testsupp == testnode.Reciever)
+                    if (testsupp == testnode.Receiver)
                         supplierisdestflag = true;
                 }
 
@@ -52,19 +52,19 @@ namespace WPFTesting.ViewModel
             return SupplierRoots;
         }
 
-        public List<Supplier> FindLeafSuppliers(List<Shippment> s, List<Supplier> p)
+        public static List<Supplier> FindLeafSuppliers(List<Shipment> s, List<Supplier> p)
         {
             List<Supplier> SupplierRoots = new List<Supplier>();
             foreach (Supplier testsupp in p) // Node to test against
             {
                 bool supplierisasourceflag = false;
                 bool supplierisdestflag = false;
-                foreach (Shippment testnode in s) // connection being checked. 
+                foreach (Shipment testnode in s) // connection being checked. 
                 {
                     // If a node is ever a recipient, it is not a root.
-                    if (testsupp == testnode.Supplier)
+                    if (testsupp.Id == testnode.Sender.Id)
                         supplierisasourceflag = true;
-                    if (testsupp == testnode.Reciever)
+                    if (testsupp.Id == testnode.Receiver.Id)
                         supplierisdestflag = true;
                 }
 
@@ -77,7 +77,7 @@ namespace WPFTesting.ViewModel
             return SupplierRoots;
         }
 
-        public string DijkstraSupplyChain(List<Shippment> s, Supplier Source, Supplier Destination)
+        public static string DijkstraSupplyChain(List<Shipment> s, Supplier Source, Supplier Destination)
         {
             return "";
         }
