@@ -1,0 +1,96 @@
+[
+  {
+    "xPosition": 140,
+    "yPosition": 140,
+    "supplier": {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "Name": "Supplier Bob",
+      "Products": [
+        {
+          "Quantity": 20,
+          "ProductName": "Drill Bit",
+          "Units": "",
+          "Price": 0
+        },
+        {
+          "Quantity": 10,
+          "ProductName": "Saw Blade 2-pack",
+          "Units": "kg",
+          "Price": 0
+        }
+      ]
+    }
+  },
+  {
+    "xPosition": 280,
+    "yPosition": 280,
+    "supplier": {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "Name": "my company",
+      "Products": [
+        {
+          "Quantity": 1,
+          "ProductName": "com",
+          "Units": "",
+          "Price": 0
+        },
+        {
+          "Quantity": 1,
+          "ProductName": "AV Cable",
+          "Units": "",
+          "Price": 0
+        }
+      ]
+    }
+  },
+  {
+    "xPosition": 50,
+    "yPosition": 320,
+    "supplier": {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "Name": "Lost Hardware",
+      "Products": [
+        {
+          "Quantity": 1,
+          "ProductName": "Hammer",
+          "Units": "",
+          "Price": 0
+        },
+        {
+          "Quantity": 1,
+          "ProductName": "10mm socket",
+          "Units": "",
+          "Price": 0
+        },
+        {
+          "Quantity": 20,
+          "ProductName": "screws",
+          "Units": "",
+          "Price": 0
+        },
+        {
+          "Quantity": 1000,
+          "ProductName": "sawdust",
+          "Units": "kg",
+          "Price": 0
+        }
+      ]
+    }
+  },
+  {
+    "xPosition": 50,
+    "yPosition": 50,
+    "supplier": {
+      "Id": "cc5c35e7-02b1-47a5-865e-23760b64e588",
+      "Name": "New Box",
+      "Products": [
+        {
+          "Quantity": 1,
+          "ProductName": "joke",
+          "Units": "",
+          "Price": 0
+        }
+      ]
+    }
+  }
+]

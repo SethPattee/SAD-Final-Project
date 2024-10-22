@@ -9,7 +9,7 @@ namespace WPFTesting.Models
 {
     public class Supplier : INotifyPropertyChanged
     {
-        private string _name;
+        private string _name ="";
         public Guid Id { get; set; }
         public string Name {
 

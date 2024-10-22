@@ -46,7 +46,8 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     public void AddSupplierToChain(SupplierUIValues supplier)
     {
         SupplierList.Add(supplier);
-        OnPropertyChanged("SupplierList");
+        _boxProvider.SaveSupplierInfoAsync(SupplierList);
+        OnPropertyChanged(nameof(SupplierList));
     }
 
 

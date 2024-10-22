@@ -40,8 +40,6 @@ namespace YourNamespace
             InitializeComponent();
             _viewModel = new SupplyChainViewModel(new InitializedDataProvider());
             Initialize();
-            DataContext = _viewModel;
-            Loaded += BoxView_Loaded;
             BoxList.ItemsSource = boxList;
         }
 
@@ -49,11 +47,6 @@ namespace YourNamespace
         {
             await _viewModel.LoadAsync();
             AddDraggableBoxes();
-        }
-
-        private async void BoxView_Loaded(object sender, RoutedEventArgs e)
-        {
-            await _viewModel.LoadAsync();
         }
 
         private void AddDraggableBoxes()
