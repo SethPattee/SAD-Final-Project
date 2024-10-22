@@ -8,6 +8,7 @@ using WPFTesting.Models;
 using System.Text.Json;
 using System.IO;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace WPFTesting.Data;
 
@@ -21,7 +22,12 @@ public class InitializedDataProvider : IInitializedDataProvider
         try
         {
             var jString = File.ReadAllText("Suppliers.json");
-            //_Suppliers = JsonConvert.DeserializeObject<IEnumerable<SupplierUIValues>>(jString);
+            if (jString == null || jString == "")
+            { _Suppliers = GenneratedFirstSuppliers.InitialSuppliers(); }
+            else
+            {
+                _Suppliers = JsonConvert.DeserializeObject<IEnumerable<SupplierUIValues>>(jString);
+            }
         }
         catch (Exception E) { Console.WriteLine(E); }
     }
@@ -40,7 +46,7 @@ public class InitializedDataProvider : IInitializedDataProvider
 
     public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
     {
-        var jString = JsonSerializer.Serialize(supplierUIValues);
+        var jString = System.Text.Json.JsonSerializer.Serialize(supplierUIValues);
         try
         {
             //TODO: NEED an environment variable that has the path, or be happy diving into the bin/debug/.... stuff every time. 

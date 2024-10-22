@@ -14,13 +14,14 @@ using WPFTesting.Models;
 using WPFTesting;
 using System.Windows.Documents;
 using System.Windows.Data;
+using System.Reflection;
 
 namespace YourNamespace
 {
     public partial class MainWindow : Window
     {
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
-        private SupplyChainViewModel _viewModel;
+        public SupplyChainViewModel _viewModel;
         private bool isRemovingConnection = false;
         private SupplierElement selectedBoxForRemoval = null;
         private Popup? connectionSelectionPopup;
@@ -61,7 +62,8 @@ namespace YourNamespace
                 dBox.BoxChanged += Box_Changed;
                 dBox.RadialClicked += StartConnection_Click;
                 dBox.RadialClicked += FinishConnection_Click;
-                
+                dBox.BoxDeleted += RemoveSupplier;
+
                 AddBoxToTracker(dBox);
 
                 DiagramCanvas.Children.Add(dBox);
@@ -77,7 +79,7 @@ namespace YourNamespace
 
             Point startPoint = box1.TranslatePoint(new Point(offset1.X, offset1.Y), DiagramCanvas);
             Point endPoint = box2.TranslatePoint(new Point(offset2.X, offset2.Y), DiagramCanvas);
-            
+
             line1.ourShippingLine.X1 = startPoint.X;
             line1.ourShippingLine.X2 = endPoint.X;
             line1.ourShippingLine.Y1 = startPoint.Y;
@@ -91,7 +93,8 @@ namespace YourNamespace
 
         private void AddNewBox()
         {
-            SupplierUIValues b = new SupplierUIValues() { 
+            SupplierUIValues b = new SupplierUIValues()
+            {
                 xPosition = 50,
                 yPosition = 50,
                 supplier = new Supplier
@@ -105,7 +108,7 @@ namespace YourNamespace
                         ProductName = "joke"
                     }
                     }
-                } 
+                }
             };
             SupplierElement newBox = new SupplierElement(b);
             Canvas.SetLeft(newBox, b.xPosition);
@@ -116,6 +119,7 @@ namespace YourNamespace
             newBox.BoxChanged += Box_Changed;
             newBox.RadialClicked += StartConnection_Click;
             newBox.RadialClicked += FinishConnection_Click;
+            newBox.BoxDeleted += RemoveSupplier;
 
             AddBoxToTracker(newBox);
 
@@ -144,7 +148,7 @@ namespace YourNamespace
 
         private void StartConnection_Click(object sender, EventArgs e)
         {
-            if(sender is SupplierElement lineTarget && MouseIsCaptured == false)
+            if (sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
                 shippingLine.FromSupplier = lineTarget;
@@ -152,8 +156,8 @@ namespace YourNamespace
 
                 Point pos = GetLineOffset(lineTarget);
 
-                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget)+pos.X;
-                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget)+pos.Y;
+                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget) + pos.X;
+                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget) + pos.Y;
                 //CaptureMouse();
                 System.Diagnostics.Debug.WriteLine("StartConnection_Click after Capture Mouse");
                 Point mousepos = Mouse.GetPosition(DiagramCanvas);
@@ -171,7 +175,7 @@ namespace YourNamespace
 
         private void MoveConnection_MouseMove(object sender, MouseEventArgs e)
         {
-            if(MouseIsCaptured && targetShipment is not null)
+            if (MouseIsCaptured && targetShipment is not null)
             {
                 Point mousepos = e.GetPosition(this);
 
@@ -235,25 +239,25 @@ namespace YourNamespace
 
         private void FinishConnection_Click(object sender, EventArgs e)
         {
-            if(sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
+            if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
             {
                 Point pos = GetLineOffset(lineTarget);
 
                 targetShipment.ToSupplier = lineTarget;
                 targetShipment.ToJoiningBoxCorner = lineTarget.CornerClicked;
 
-                targetShipment.ourShippingLine.X2 = Canvas.GetLeft(lineTarget)+pos.X;
-                targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget)+pos.Y;
+                targetShipment.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + pos.X;
+                targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + pos.Y;
                 //ReleaseMouseCapture();
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
                 ShipmentList.Add(targetShipment);
             }
-            else if(sender is not null && sender is not SupplierElement && IsDestinationSearching)
+            else if (sender is not null && sender is not SupplierElement && IsDestinationSearching)
             {
                 DiagramCanvas.Children.Remove(targetShipment);
                 targetShipment = null;
-                IsDestinationSearching=false;
+                IsDestinationSearching = false;
             }
             else
             {
@@ -381,6 +385,24 @@ namespace YourNamespace
             {
                 removeConnectionButton.IsEnabled = true;
             }
+        }
+
+        public void RemoveSupplier(object sender, EventArgs e)
+        {
+            if (sender is SupplierElement selectedBox)
+            {
+                Guid SupplierId = selectedBox.supplierValues.supplier.Id;
+                var supplier = _viewModel.SupplierList.FirstOrDefault(s => s.supplier.Id == SupplierId);
+                if (supplier != null)
+                {
+                    _viewModel.SupplierList.Remove(supplier);
+                }
+                else
+                {
+                    Console.WriteLine($"no supplier found to delete with guid {SupplierId}");
+                }
+            }
+
         }
     }
 }

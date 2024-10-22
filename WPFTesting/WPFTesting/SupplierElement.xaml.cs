@@ -119,7 +119,7 @@ namespace YourNamespace
             }
 
             canvas.Children.Remove(this);
-
+            BoxDeleted?.Invoke(this, EventArgs.Empty);
             if (Window.GetWindow(this) is MainWindow mainWindow)
             {
                 mainWindow.UpdateBoxTracker();
