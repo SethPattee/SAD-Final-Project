@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace WPFTesting.Models;
 
-public class Shippment : INotifyPropertyChanged
+public class Shipment : INotifyPropertyChanged
 {
     private List<Product> _products = new List<Product>();
-    private Supplier _supplier = new Supplier();
+    private Supplier _sender = new Supplier();
     private Supplier _reciever = new Supplier();
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -28,22 +28,22 @@ public class Shippment : INotifyPropertyChanged
         }
     }
 
-    public Supplier Supplier
+    public Supplier Sender
     {
-        get => _supplier;
+        get => _sender;
         set
         {
-            _supplier = value;
-            OnPropertyChanged(nameof(Supplier));
+            _sender = value;
+            OnPropertyChanged(nameof(Sender));
         }
     }
-    public Supplier Reciever
+    public Supplier Receiver
     {
         get => _reciever;
         set
         {
             _reciever = value;
-            OnPropertyChanged(nameof(Reciever));
+            OnPropertyChanged(nameof(Receiver));
         }
     }
 
