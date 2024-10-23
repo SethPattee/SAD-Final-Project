@@ -14,6 +14,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
     public List<Shippment> ShipmentList = new List<Shippment>();
+
     public string ShortestPath;
 
     public SupplyChainViewModel(IInitializedDataProvider boxProvider)

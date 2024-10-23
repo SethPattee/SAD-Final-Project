@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupplyChainTesting", "SupplyChainTesting\SupplyChainTesting.csproj", "{4942B160-C497-440B-8E57-157BFBCBCE88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlowSupplyChain.MainWindow", "SpecFlowSupplyChain.MainWindow\SpecFlowSupplyChain.MainWindow.csproj", "{443EAEA7-9A79-4BB6-9768-8C194336AF89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlowSupplyChain", "SpecFlowSupplyChain.MainWindow\SpecFlowSupplyChain.csproj", "{443EAEA7-9A79-4BB6-9768-8C194336AF89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
