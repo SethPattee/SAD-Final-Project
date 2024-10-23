@@ -27,7 +27,7 @@
                         <StackPanel>
                             <Button x:Name="FileMenu_New" Content="New" Background="WhiteSmoke"/>
                             <Button x:Name="FileMenu_Open" Content="Open" Background="WhiteSmoke"/>
-                            <Button x:Name="FileMenu_Save" Content="Save" Background="WhiteSmoke"/>
+                            <Button x:Name="FileMenu_Save" Content="Save" Background="WhiteSmoke" Click="Save_Click"/>
                         </StackPanel>
                     </Border>
                 </Popup>

@@ -5,95 +5,36 @@ using System.Text;
 using System.Threading.Tasks;
 using WPFTesting.Shapes;
 using WPFTesting.Models;
+using System.Text.Json;
+using System.IO;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace WPFTesting.Data;
 
 
 public class InitializedDataProvider : IInitializedDataProvider
 {
+    private IEnumerable<SupplierUIValues> _Suppliers;
+    public InitializedDataProvider()
+    {
+        _Suppliers = GenneratedFirstSuppliers.InitialSuppliers();
+        try
+        {
+            var jString = File.ReadAllText("Suppliers.json");
+            if (jString == null || jString == "")
+            { _Suppliers = GenneratedFirstSuppliers.InitialSuppliers(); }
+            else
+            {
+                _Suppliers = JsonConvert.DeserializeObject<IEnumerable<SupplierUIValues>>(jString);
+            }
+        }
+        catch (Exception E) { Console.WriteLine(E); }
+    }
     public async Task<IEnumerable<SupplierUIValues>?> GetBoxValuesAsync()
     {
         await Task.Delay(0);
-        return new List<SupplierUIValues>
-        {
-            new SupplierUIValues {
-                supplier = new Supplier()
-                { Products =
-                    {
-                        new Product()
-                        {
-                            Quantity=20,
-                            ProductName="Drill Bit"
-                        },
-                        new Product()
-                        {
-                            Quantity=10,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
-                        }
-                    },
-
-                    Name="Supplier Bob",
-                },
-                xPosition=140,
-                yPosition=140
-            },
-            new SupplierUIValues
-            {
-                supplier = new Supplier()
-                { Products =
-                    {
-                        new Product()
-                        {
-                            Quantity = 1,
-                            ProductName = "computer"
-                        },
-                        new Product()
-                        {
-                            Quantity=1,
-                            ProductName="AV Cable"
-                        },                        
-                    },
-
-                    Name="my company",
-                },
-                xPosition=280,
-                yPosition=280
-            },
-            new SupplierUIValues
-            {
-                supplier = new Supplier()
-                {
-                    Products =
-                    {
-                        new Product()
-                        {
-                            Quantity = 1,
-                            ProductName = "Hammer"
-                        },
-                        new Product()
-                        {
-                            Quantity=1,
-                            ProductName="10mm socket"
-                        },
-                        new Product()
-                        {
-                            Quantity=20,
-                            ProductName="screws"
-                        },
-                        new Product()
-                        {
-                            Quantity=1000,
-                            ProductName="sawdust",
-                            Units="kg"
-                        }
-                    },
-                    Name="Lost Hardware",
-                },
-                xPosition=50,
-                yPosition=320
-            }
-        };
+        return _Suppliers;
     }
 
     public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync()
@@ -103,5 +44,18 @@ public class InitializedDataProvider : IInitializedDataProvider
         return new List<Supplier> { };
     }
 
+    public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
+    {
+        var jString = System.Text.Json.JsonSerializer.Serialize(supplierUIValues);
+        try
+        {
+            //TODO: NEED an environment variable that has the path, or be happy diving into the bin/debug/.... stuff every time. 
+            // for now, it is saving down SAD-Final-Project\WPFTesting\WPFTesting\bin\Debug\net8.0-windows7.0\Suppliers.json
+            File.WriteAllText("Suppliers.json", jString);
+        }
+        catch (Exception ex) { 
+            Console.WriteLine(ex.Message);
+    }
 
+    }
 }

@@ -33,7 +33,16 @@ namespace WPFTesting.Models
             get => _name;
             set
             {
-                _name = value; OnPropertyChanged(nameof(ProductName));
+
+                if (value == "New New New")
+                {
+                    _name = "Wrong!!!!";
+                }
+                else
+                {
+                    _name = value;
+                }
+                OnPropertyChanged(nameof(ProductName));
             }
         }
         public string Units

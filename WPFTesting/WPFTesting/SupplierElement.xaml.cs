@@ -87,6 +87,8 @@ namespace YourNamespace
 
                     Canvas.SetLeft(this, left);
                     Canvas.SetTop(this, top);
+                    supplierValues.xPosition = (int)left;
+                    supplierValues.yPosition = (int)top;
 
                     BoxChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -119,7 +121,7 @@ namespace YourNamespace
             }
 
             canvas.Children.Remove(this);
-
+            BoxDeleted?.Invoke(this, EventArgs.Empty);
             if (Window.GetWindow(this) is MainWindow mainWindow)
             {
                 mainWindow.UpdateBoxTracker();
