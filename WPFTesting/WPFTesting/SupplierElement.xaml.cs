@@ -87,6 +87,8 @@ namespace YourNamespace
 
                     Canvas.SetLeft(this, left);
                     Canvas.SetTop(this, top);
+                    supplierValues.xPosition = (int)left;
+                    supplierValues.yPosition = (int)top;
 
                     BoxChanged?.Invoke(this, EventArgs.Empty);
                 }

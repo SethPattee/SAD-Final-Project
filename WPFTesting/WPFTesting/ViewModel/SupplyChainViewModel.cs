@@ -36,11 +36,13 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         if(name is not null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-            _boxProvider.SaveSupplierInfoAsync(SupplierList);
         }
     }
 
-
+    public void updateFileSave()
+    {
+        _boxProvider.SaveSupplierInfoAsync(SupplierList);
+    }
 
 
     public async Task LoadAsync()

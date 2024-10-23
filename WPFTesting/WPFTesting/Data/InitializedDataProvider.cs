@@ -50,12 +50,7 @@ public class InitializedDataProvider : IInitializedDataProvider
         try
         {
             //TODO: NEED an environment variable that has the path, or be happy diving into the bin/debug/.... stuff every time. 
-            //string relativePath = "Data//Suppliers.json";
-
-            //string s = AppDomain.CurrentDomain.BaseDirectory;
-            //string path = Environment.CurrentDirectory;
-            //string q = Path.GetFullPath(relativePath);
-            //string p = Path.GetDirectoryName("");
+            // for now, it is saving down SAD-Final-Project\WPFTesting\WPFTesting\bin\Debug\net8.0-windows7.0\Suppliers.json
             File.WriteAllText("Suppliers.json", jString);
         }
         catch (Exception ex) { 

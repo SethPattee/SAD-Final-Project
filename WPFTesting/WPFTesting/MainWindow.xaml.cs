@@ -59,7 +59,7 @@ namespace YourNamespace
                 Canvas.SetTop(dBox, box.yPosition);
 
                 dBox.MouseDown += Box_MouseDown;
-                dBox.BoxChanged += Box_Changed;
+                dBox.BoxChanged += Box_Position_Changed;
                 dBox.RadialClicked += StartConnection_Click;
                 dBox.RadialClicked += FinishConnection_Click;
                 dBox.BoxDeleted += RemoveSupplier;
@@ -68,6 +68,11 @@ namespace YourNamespace
 
                 DiagramCanvas.Children.Add(dBox);
             }
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.updateFileSave();
         }
 
         private void UpdateLinePosition(ShippingLine line1, SupplierElement box1, SupplierElement box2)
@@ -116,7 +121,7 @@ namespace YourNamespace
             newBox.Width = 100;
             newBox.Height = 50;
             newBox.MouseDown += Box_MouseDown;
-            newBox.BoxChanged += Box_Changed;
+            newBox.BoxChanged += Box_Position_Changed;
             newBox.RadialClicked += StartConnection_Click;
             newBox.RadialClicked += FinishConnection_Click;
             newBox.BoxDeleted += RemoveSupplier;
@@ -314,10 +319,9 @@ namespace YourNamespace
                                       $"Size: {box.Width:F0}x{box.Height:F0}\n" +
                                       $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}\n" +
                                       $"Connected suppliers:";
-            // {_viewModel.SupplierList.SingleOrDefault(a => a.supplier.Id == boxId)}
         }
 
-        private void Box_Changed(object sender, EventArgs e)
+        private void Box_Position_Changed(object sender, EventArgs e)
         {
             //this gets called every time you hover over the element after selecting it...
             //Even when you select another... they both call this on hover
@@ -331,7 +335,6 @@ namespace YourNamespace
                     UpdateLinePosition(sl, sl.FromSupplier, sl.ToSupplier);
                 }
             }
-            //_viewModel.SupplierList = _viewModel.SupplierList;
         }
 
         private void ShowConnectionSelectionPopup(SupplierElement box)
