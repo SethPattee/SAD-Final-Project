@@ -42,6 +42,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     public void updateFileSave()
     {
         _boxProvider.SaveSupplierInfoAsync(SupplierList);
+        //save the Shipping line here
     }
 
 
