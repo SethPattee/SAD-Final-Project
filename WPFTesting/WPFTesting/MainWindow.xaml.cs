@@ -322,10 +322,6 @@ namespace YourNamespace
                                       $"Size: {box.Width:F0}x{box.Height:F0}\n" +
                                       $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}\n" +
                                       $"Connected suppliers:";
-        }
-
-        private void Box_Position_Changed(object sender, EventArgs e)
-
             PositionTextBox.Text = $"({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})";
             SizeTextBox.Text = $"{box.Width:F0}x{box.Height:F0}";
             ColorTextBox.Text = $"{(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}";
@@ -340,6 +336,10 @@ namespace YourNamespace
             {
                 ProductsListView.ItemsSource = null;
             }
+        }
+
+        private void Box_Changed(object sender, EventArgs e)
+        { 
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
@@ -436,7 +436,7 @@ namespace YourNamespace
                 PriceTextBox.Text = selectedProduct.Price.ToString();
             }
         }
-        private void Box_Changed(object sender, EventArgs e)
+        private void Box_Position_Changed(object sender, EventArgs e)
         {
             //this gets called every time you hover over the element after selecting it...
             //Even when you select another... they both call this on hover
