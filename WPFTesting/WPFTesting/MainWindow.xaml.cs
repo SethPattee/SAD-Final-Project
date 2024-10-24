@@ -38,12 +38,14 @@ namespace YourNamespace
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
 
+
         public MainWindow()
         {
             InitializeComponent();
             _viewModel = new SupplyChainViewModel(new InitializedDataProvider());
             Initialize();
-            BoxList.ItemsSource = boxList;
+            //BoxList.ItemsSource = boxList;
+            sideBar.BoxList.ItemsSource = boxList;
         }
 
         private async void Initialize()
