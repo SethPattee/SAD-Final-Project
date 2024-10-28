@@ -51,6 +51,7 @@ namespace YourNamespace
                 //ProductList.Items.Add(x);
 
             }
+            DataContext = supplierValues;
             
         }
 

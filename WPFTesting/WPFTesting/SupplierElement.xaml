@@ -139,7 +139,7 @@
                     </Grid.RowDefinitions>
                     <Border BorderBrush="Black" BorderThickness="0,0,0,1" Padding="0">
                         <TextBox x:Name="BoxTitle" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                 Text="{Binding supplierValues.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                 Text="{Binding supplier.Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                         Margin="10,0,10,0"/>
                     </Border>
 
