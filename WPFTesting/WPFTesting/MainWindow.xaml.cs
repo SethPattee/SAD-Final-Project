@@ -44,7 +44,6 @@ namespace YourNamespace
             InitializeComponent();
             _viewModel = new SupplyChainViewModel(new InitializedDataProvider());
             Initialize();
-            //BoxList.ItemsSource = boxList;
             sideBar.BoxList.ItemsSource = boxList;
         }
 
