@@ -30,7 +30,7 @@ public class SupplierUIValues : INotifyPropertyChanged
             OnPropertyChanged(nameof(yPosition));
         }
     }
-    public Supplier supplier { get; set; } = new Supplier();
+    public IVendor supplier { get; set; } = new Supplier();
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged(string name)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WPFTesting.Models
 {
-    public class Supplier : INotifyPropertyChanged
+    public class Supplier : INotifyPropertyChanged, IVendor
     {
         private string _name ="";
         public Guid Id { get; set; }
