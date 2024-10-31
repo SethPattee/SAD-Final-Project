@@ -47,9 +47,9 @@ namespace YourNamespace
             sideBar.BoxList.ItemsSource = boxList;
         }
 
-        private async void Initialize()
+        private void Initialize()
         {
-            await _viewModel.LoadAsync();
+            _viewModel.Load();
             AddDraggableBoxes();
         }
 

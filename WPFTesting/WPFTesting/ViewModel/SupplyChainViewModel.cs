@@ -14,7 +14,15 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     private IInitializedDataProvider _boxProvider;
     public event PropertyChangedEventHandler? PropertyChanged;
     private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
-    public List<Shipment> ShipmentList = new List<Shipment>();
+    private List<Shipment> _shipmentList = new List<Shipment>();
+    public List<Shipment> ShipmentList {
+        get { return _shipmentList; }
+        set
+        {
+            _shipmentList = value;
+            OnPropertyChanged(nameof(ShipmentList));
+        }
+    }
 
     public string ShortestPath;
 
@@ -48,11 +56,11 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     }
 
 
-    public async Task LoadAsync()
+    public void Load()
     {
         //if (Boxes.Any()) return; //don't override any existing data
 
-        var boxes = await _boxProvider.GetBoxValuesAsync();
+        var boxes = _boxProvider.GetBoxValuesAsync();
         if (boxes is not null)
         {
             foreach (var box in boxes)
