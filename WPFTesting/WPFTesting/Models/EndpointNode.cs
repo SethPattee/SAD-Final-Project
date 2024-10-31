@@ -62,4 +62,14 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public void Receive(List<Product> prducts)
+    {
+        //add to our products by the quantity in incoming products
+    }
+
+    public void Process()
+    {
+        ProduceProduct();
+    }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using WPFTesting.Data;
@@ -13,7 +14,15 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     private IInitializedDataProvider _boxProvider;
     public event PropertyChangedEventHandler? PropertyChanged;
     private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
-    public List<Shipment> ShipmentList = new List<Shipment>();
+    private List<Shipment> _shipmentList = new List<Shipment>();
+    public List<Shipment> ShipmentList {
+        get { return _shipmentList; }
+        set
+        {
+            _shipmentList = value;
+            OnPropertyChanged(nameof(ShipmentList));
+        }
+    }
 
     public string ShortestPath;
 
@@ -47,11 +56,11 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     }
 
 
-    public async Task LoadAsync()
+    public void Load()
     {
         //if (Boxes.Any()) return; //don't override any existing data
 
-        var boxes = await _boxProvider.GetBoxValuesAsync();
+        var boxes = _boxProvider.GetBoxValuesAsync();
         if (boxes is not null)
         {
             foreach (var box in boxes)
@@ -68,6 +77,19 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(SupplierList));
     }
 
-
+    public void AdvanceTime()
+    {
+        foreach (Shipment delivery in ShipmentList)
+        {
+            //shippOrder
+            delivery.Sender.ShipOrder(delivery.Products);
+            //Receive 
+            delivery.Receiver.ShipOrder(delivery.Products);
+        }
+        foreach (var v in _supplierList)
+        {
+            v.supplier.Process();
+        }
+    }
 
 }

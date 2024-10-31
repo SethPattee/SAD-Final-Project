@@ -12,12 +12,12 @@ namespace WPFTesting.Methods
     {
         private List<List<Shipment>> ShipmentPaths = new List<List<Shipment>>();
 
-        public List<(string, decimal)> CalculateSupplyChainOutputAsync(List<Shipment> s, List<Supplier> p)
+        public List<(string, decimal)> CalculateSupplyChainOutputAsync(List<Shipment> s, List<IVendor> p)
         {
             List<(string,decimal)> CheapestPaths = new List<(string,decimal)>();
             List<List<Shipment>> ListOfPaths = new List<List<Shipment>>();
-            List<Supplier> SupplierRoots;
-            List<Supplier> SupplierLeaves;
+            List<IVendor> SupplierRoots;
+            List<IVendor> SupplierLeaves;
 
             if (s.Count > 0)
             {
@@ -41,9 +41,9 @@ namespace WPFTesting.Methods
             return CheapestPaths;
         }
 
-        public List<Supplier> FindRootSuppliers(List<Shipment> s, List<Supplier> p)
+        public List<IVendor> FindRootSuppliers(List<Shipment> s, List<IVendor> p)
         {
-            List<Supplier> SupplierRoots = new List<Supplier>();
+            List<IVendor> SupplierRoots = new List<IVendor>();
             foreach (Supplier testsupp in p) // Node to test against
             {
                 bool supplierisasourceflag = false;
@@ -66,9 +66,9 @@ namespace WPFTesting.Methods
             return SupplierRoots;
         }
 
-        public List<Supplier> FindLeafSuppliers(List<Shipment> s, List<Supplier> p)
+        public List<IVendor> FindLeafSuppliers(List<Shipment> s, List<IVendor> p)
         {
-            List<Supplier> SupplierRoots = new List<Supplier>();
+            List<IVendor> SupplierRoots = new List<IVendor>();
             foreach (Supplier testsupp in p) // Node to test against
             {
                 bool supplierisasourceflag = false;
@@ -91,7 +91,7 @@ namespace WPFTesting.Methods
             return SupplierRoots;
         }
 
-        public List<Shipment> FindSupplyChainPaths(List<Shipment> shipments, Supplier current, Supplier destination, bool isStart)
+        public List<Shipment> FindSupplyChainPaths(List<Shipment> shipments, IVendor current, IVendor destination, bool isStart)
         {
             List<Shipment> returnpath = new List<Shipment>();
             foreach (Shipment s in shipments)

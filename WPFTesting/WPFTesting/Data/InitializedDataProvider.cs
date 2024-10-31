@@ -31,17 +31,9 @@ public class InitializedDataProvider : IInitializedDataProvider
         }
         catch (Exception E) { Console.WriteLine(E); }
     }
-    public async Task<IEnumerable<SupplierUIValues>?> GetBoxValuesAsync()
+    public IEnumerable<SupplierUIValues> GetBoxValuesAsync()
     {
-        await Task.Delay(0);
         return _Suppliers;
-    }
-
-    public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync()
-    {
-        await Task.Delay(100);
-
-        return new List<Supplier> { };
     }
 
     public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)

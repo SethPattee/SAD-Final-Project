@@ -107,8 +107,19 @@
                         <!-- Boxes and lines will be added here dynamically -->
                     </Canvas>
                 </ScrollViewer>
-                <Button Content="Add Box" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                <Grid x:Name="FloatingButtons">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                <Button Grid.Column="0" Content="Add Box" HorizontalAlignment="Left" VerticalAlignment="Top" 
                         Width="100" Height="30" Margin="10" Click="AddBox_Click"/>
+                <Button Grid.Column="1" Content="Advance Time" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Width="Auto" Height="30" Margin="10" Click="AdvanceTime_Click"/>
+                </Grid>
             </Grid>
         </Border>
 
