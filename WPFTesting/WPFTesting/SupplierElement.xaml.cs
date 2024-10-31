@@ -28,7 +28,7 @@ namespace YourNamespace
         public double X { get; set; }
         public double Y { get; set; }
 
-        public string CornerClicked = "Center"; 
+        public string CornerClicked = "Center";
 
 
         public SupplierElement(SupplierUIValues supplierValues)
@@ -42,23 +42,12 @@ namespace YourNamespace
             if (this.supplierValues.supplier.Name == "" || this.supplierValues.supplier.Name == null)
                 this.supplierValues.supplier.Name = "New Supplier";
             //add products
-            foreach(var x in supplierValues.supplier.ProductInventory)
+            foreach (var x in supplierValues.supplier.ProductInventory)
             {
                 this.ItemsList.Items.Add(x);
-                //UIElement u = (UI;
-                //u.Pname=x.ProductName;
-                ;//?????HEBER
-                //ProductList.Items.Add(x);
-
             }
             DataContext = supplierValues;
-            
         }
-
-        //public void Set_Title(string title)
-        //{
-        //    this.BoxTitle.Text = title;
-        //}
 
         private void Box_MouseDown(object sender, MouseButtonEventArgs e)
         {
