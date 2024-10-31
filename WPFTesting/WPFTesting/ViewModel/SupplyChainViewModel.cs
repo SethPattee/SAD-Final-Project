@@ -76,6 +76,11 @@ public class SupplyChainViewModel : INotifyPropertyChanged
             //shippOrder
             delivery.Sender.ShipOrder(delivery.Products);
             //Receive 
+            delivery.Receiver.ShipOrder(delivery.Products);
+        }
+        foreach (var v in _supplierList)
+        {
+            v.supplier.Process();
         }
     }
 
