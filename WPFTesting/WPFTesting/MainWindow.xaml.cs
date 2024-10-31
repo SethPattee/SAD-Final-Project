@@ -109,7 +109,7 @@ namespace YourNamespace
                 {
                     Id = Guid.NewGuid(),
                     Name = "New Box",
-                    Products = {
+                    ProductInventory = {
                     new Product
                     {
                         Quantity = 1,
@@ -329,9 +329,9 @@ namespace YourNamespace
             TitleTextBox.Text = $"{box.BoxTitle.Text}";
 
             // Populate the ProductsListView with products from the box
-            if (box.supplierValues?.supplier?.Products != null)
+            if (box.supplierValues?.supplier?.ProductInventory != null)
             {
-                ProductsListView.ItemsSource = box.supplierValues.supplier.Products;
+                ProductsListView.ItemsSource = box.supplierValues.supplier.ProductInventory;
             }
             else
             {

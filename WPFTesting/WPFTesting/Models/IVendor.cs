@@ -10,5 +10,5 @@ public interface IVendor
 {
     string Name { get; set; }
     Guid Id { get; set; }
-    List<Product> Products { get; set; }
+    List<Product> ProductInventory { get; set; }
 }
