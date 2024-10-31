@@ -21,7 +21,7 @@ namespace WPFTesting.Models
             }
         
         }
-        public List<Product> Products { get; set; } = new List<Product>();
+        public List<Product> ProductInventory { get; set; } = new List<Product>();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

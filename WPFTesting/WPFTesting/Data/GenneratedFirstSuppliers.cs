@@ -16,7 +16,7 @@ internal static class GenneratedFirstSuppliers
         {
             new SupplierUIValues {
                 supplier = new Supplier()
-                { Products =
+                { ProductInventory =
                     {
                         new Product()
                         {
@@ -40,7 +40,7 @@ internal static class GenneratedFirstSuppliers
             new SupplierUIValues
             {
                 supplier = new Supplier()
-                { Products =
+                { ProductInventory =
                     {
                         new Product()
                         {
@@ -64,7 +64,7 @@ internal static class GenneratedFirstSuppliers
             {
                 supplier = new Supplier()
                 {
-                    Products =
+                    ProductInventory =
                     {
                         new Product()
                         {

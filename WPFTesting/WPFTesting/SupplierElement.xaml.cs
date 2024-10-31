@@ -42,7 +42,7 @@ namespace YourNamespace
             if (this.supplierValues.supplier.Name == "" || this.supplierValues.supplier.Name == null)
                 this.supplierValues.supplier.Name = "New Supplier";
             //add products
-            foreach(var x in supplierValues.supplier.Products)
+            foreach(var x in supplierValues.supplier.ProductInventory)
             {
                 this.ItemsList.Items.Add(x);
                 //UIElement u = (UI;
