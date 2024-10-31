@@ -529,7 +529,7 @@ namespace YourNamespace
 
         private void AdvanceTime_Click(object sender, EventArgs e)
         {
-            // call // _viewModel.AdvanceTime();
+            _viewModel.AdvanceTime();
         }
     }
 }

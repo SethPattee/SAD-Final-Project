@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using WPFTesting.Data;
@@ -68,6 +69,14 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(SupplierList));
     }
 
-
+    public void AdvanceTime()
+    {
+        foreach (Shipment delivery in ShipmentList)
+        {
+            //shippOrder
+            delivery.Sender.ShipOrder(delivery.Products);
+            //Receive 
+        }
+    }
 
 }

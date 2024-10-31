@@ -24,7 +24,7 @@ namespace SpecFlowSupplyChain.CheapestPath.StepDefinitions
         [Given("A (.*) company")]
         public void GivenACompany(string companyname)
         {
-            List<Supplier> companies = new List<Supplier>();
+            List<IVendor> companies = new List<IVendor>();
             if (!_scenariocontext.ContainsKey(SupplierList))
             {
                 companies.Add(new Supplier()
@@ -35,7 +35,7 @@ namespace SpecFlowSupplyChain.CheapestPath.StepDefinitions
             }
             else
             {
-                companies = _scenariocontext.Get<List<Supplier>>(SupplierList);
+                companies = _scenariocontext.Get<List<IVendor>>(SupplierList);
                 companies.Add(new Supplier() { 
                     Name = companyname,
                     Id = Guid.NewGuid()
@@ -49,7 +49,7 @@ namespace SpecFlowSupplyChain.CheapestPath.StepDefinitions
         [Given("The (.*) company sells to the (.*) company")]
         public void GivenACompanySellsToAnotherCompany(string companyname1, string companyname2)
         {
-            List<Supplier> companies = (List<Supplier>)_scenariocontext[SupplierList];
+            List<IVendor> companies = (List<IVendor>)_scenariocontext[SupplierList];
             if (!_scenariocontext.ContainsKey(ShipmentList))
             {
                 _scenariocontext.Add(ShipmentList, new List<Shipment>()
@@ -78,7 +78,7 @@ namespace SpecFlowSupplyChain.CheapestPath.StepDefinitions
         [Given("The (.*) company sells to the (.*) company for (.*)")]
         public void GivenACompanySellsWithPrice(string companyname1, string companyname2, Decimal price)
         {
-            List<Supplier> companies = (List<Supplier>)_scenariocontext[SupplierList];
+            List<IVendor> companies = (List<IVendor>)_scenariocontext[SupplierList];
             if (!_scenariocontext.ContainsKey(ShipmentList))
             {
                 _scenariocontext.Add(ShipmentList, new List<Shipment>()
@@ -122,8 +122,8 @@ namespace SpecFlowSupplyChain.CheapestPath.StepDefinitions
         {
             SupplyChainCheapestPath sp = _scenariocontext.Get<SupplyChainCheapestPath>("pathfinderobject");
             List<Shipment> shipments = _scenariocontext.Get<List<Shipment>>(ShipmentList);
-            List<Supplier> companies = _scenariocontext.Get<List<Supplier>>(SupplierList);
-            List<Supplier> leaves = sp.FindLeafSuppliers(shipments, companies);
+            List<IVendor> companies = _scenariocontext.Get<List<IVendor>>(SupplierList);
+            List<IVendor> leaves = sp.FindLeafSuppliers(shipments, companies);
             _scenariocontext.Add("leaves", leaves);
         }
 
@@ -132,8 +132,8 @@ namespace SpecFlowSupplyChain.CheapestPath.StepDefinitions
         {
             SupplyChainCheapestPath sp = _scenariocontext.Get<SupplyChainCheapestPath>("pathfinderobject");
             List<Shipment> shipments = _scenariocontext.Get<List<Shipment>>(ShipmentList);
-            List<Supplier> companies = _scenariocontext.Get<List<Supplier>>(SupplierList);
-            List<Supplier> roots = sp.FindRootSuppliers(shipments, companies);
+            List<IVendor> companies = _scenariocontext.Get<List<IVendor>>(SupplierList);
+            List<IVendor> roots = sp.FindRootSuppliers(shipments, companies);
             _scenariocontext.Add("roots", roots);
         }
 
@@ -142,14 +142,14 @@ namespace SpecFlowSupplyChain.CheapestPath.StepDefinitions
         {
             SupplyChainCheapestPath sp = _scenariocontext.Get<SupplyChainCheapestPath>("pathfinderobject");
             List<Shipment> shipments = _scenariocontext.Get<List<Shipment>>(ShipmentList);
-            List<Supplier> companies = _scenariocontext.Get<List<Supplier>>(SupplierList);
-            List<Supplier> roots = sp.FindRootSuppliers(shipments, companies);
-            List<Supplier> leaves = sp.FindRootSuppliers(shipments, companies);
+            List<IVendor> companies = _scenariocontext.Get<List<IVendor>>(SupplierList);
+            List<IVendor> roots = sp.FindRootSuppliers(shipments, companies);
+            List<IVendor> leaves = sp.FindRootSuppliers(shipments, companies);
             List<(string, decimal)> paths = new List<(string, decimal)>();
 
-            foreach (Supplier r in roots)
+            foreach (IVendor r in roots)
             {
-                foreach (Supplier l in leaves)
+                foreach (IVendor l in leaves)
                 {
                     sp.FindSupplyChainPaths(shipments, r, l, true);
                 }
@@ -162,14 +162,14 @@ namespace SpecFlowSupplyChain.CheapestPath.StepDefinitions
         [Then("The cheapest path list has (.*) leaves")]
         public void ThenTheCheapestPathHasXLeaves(int leafcount)
         {
-            List<Supplier> leaves = _scenariocontext.Get<List<Supplier>>("leaves");
+            List<IVendor> leaves = _scenariocontext.Get<List<IVendor>>("leaves");
             leaves.Count().Should().Be(leafcount);
         }
 
         [Then("The cheapest path list has (.*) roots")]
         public void ThenTheCheapestPathHasXRoots(int rootcount)
         {
-            List<Supplier> roots = _scenariocontext.Get<List<Supplier>>("roots");
+            List<IVendor> roots = _scenariocontext.Get<List<IVendor>>("roots");
             roots.Count().Should().Be(rootcount);
         }
 

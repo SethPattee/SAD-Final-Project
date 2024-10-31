@@ -25,6 +25,16 @@ namespace WPFTesting.Models
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public void Process()
+        {
+            // nothing yet
+        }
+
+        public void Receive(List<Product> prducts)
+        {
+            //add to our products by the quantity in incoming products
+        }
+
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
