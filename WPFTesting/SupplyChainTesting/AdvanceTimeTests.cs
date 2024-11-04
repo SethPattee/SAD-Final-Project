@@ -43,9 +43,11 @@ internal class AdvanceTimeTests
         model.ShipmentList.Add(s);
 
         model.AdvanceTime();
+        var giver = model.SupplierList[0].supplier.ProductInventory[0];
+        var reciver = model.SupplierList[1].supplier.ProductInventory[0];
         // supplier loses 10 
-        Assert.AreEqual(10, model.SupplierList[0].supplier.ProductInventory[0].Quantity);
+        Assert.AreEqual(10, giver.Quantity);
         // recever gains 10
-        Assert.AreEqual(30, model.SupplierList[1].supplier.ProductInventory[0].Quantity);
+        Assert.AreEqual(30, reciver.Quantity);
     }
 }

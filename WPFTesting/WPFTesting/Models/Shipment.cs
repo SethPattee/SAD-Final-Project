@@ -10,9 +10,14 @@ namespace WPFTesting.Models;
 public class Shipment : INotifyPropertyChanged
 {
     private List<Product> _products = new List<Product>();
-    private IVendor _sender = new Supplier();
-    private IVendor _reciever = new Supplier();
+    private IVendor _sender;
+    private IVendor _reciever;
     public event PropertyChangedEventHandler? PropertyChanged;
+    public Shipment()
+    {
+        _sender = new Supplier();
+        _reciever = new Supplier();
+    }
 
     protected void OnPropertyChanged(string PropertyName)
     {
