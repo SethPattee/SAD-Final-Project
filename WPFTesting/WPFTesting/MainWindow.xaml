@@ -104,6 +104,11 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <Canvas x:Name="DiagramCanvas" Width="10000" Height="10000" Background="LightGray"
                             MouseMove="MoveConnection_MouseMove">
+                        <Canvas.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="AddNewEndpoint" Click="AddEndpointEndpoint_Click"></MenuItem>
+                            </ContextMenu>
+                        </Canvas.ContextMenu>
                         <!-- Boxes and lines will be added here dynamically -->
                     </Canvas>
                 </ScrollViewer>
@@ -115,7 +120,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                <Button Grid.Column="0" Content="Add Box" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                <Button Grid.Column="0" Content="Add Supplier" HorizontalAlignment="Left" VerticalAlignment="Top" 
                         Width="100" Height="30" Margin="10" Click="AddBox_Click"/>
                 <Button Grid.Column="1" Content="Advance Time" HorizontalAlignment="Left" VerticalAlignment="Top"
                         Width="Auto" Height="30" Margin="10" Click="AdvanceTime_Click"/>

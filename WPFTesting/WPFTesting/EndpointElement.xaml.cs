@@ -34,5 +34,9 @@ namespace WPFTesting
             DataContext = endpointUIValues;
         }
 
+        public void ResizeGrip_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
