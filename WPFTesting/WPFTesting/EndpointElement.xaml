@@ -38,7 +38,7 @@
 
                                 </TextBlock>
                                 <ListView
-                                    ItemsSource="{Binding}"
+                                    ItemsSource="{Binding }"
                                     x:Name="ComponentsList"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="gray" BorderThickness="1 1 1 0">
                                     <ListView.ItemTemplate>
