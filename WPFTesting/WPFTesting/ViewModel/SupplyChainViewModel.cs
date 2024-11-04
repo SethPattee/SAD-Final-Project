@@ -15,6 +15,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
     private List<Shipment> _shipmentList = new List<Shipment>();
+    private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
     public List<Shipment> ShipmentList {
         get { return _shipmentList; }
         set
@@ -70,6 +71,11 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         }
 
     }
+    public void AddEndpointToChain(EndpointUIValues endpoint)
+    {
+        SupplierList.Add(endpoint);
+        OnPropertyChanged(nameof(SupplierList));
+    }
 
     public void AddSupplierToChain(SupplierUIValues supplier)
     {
@@ -81,10 +87,10 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     {
         foreach (Shipment delivery in ShipmentList)
         {
-            //shippOrder
+            //shipOrder
             delivery.Sender.ShipOrder(delivery.Products);
             //Receive 
-            delivery.Receiver.ShipOrder(delivery.Products);
+            delivery.Receiver.Receive(delivery.Products);
         }
         foreach (var v in _supplierList)
         {

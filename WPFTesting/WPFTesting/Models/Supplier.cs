@@ -30,9 +30,36 @@ namespace WPFTesting.Models
             // nothing yet
         }
 
-        public void Receive(List<Product> prducts)
+        public void Receive(List<Product> products)
         {
-            //add to our products by the quantity in incoming products
+            products.ForEach(p => { 
+                if (!ProductInventory.Contains(p))
+                {
+                    ProductInventory.Add(p);
+                }
+                else
+                {
+                    ProductInventory.Find(x => x.ProductName == p.ProductName).Price = p.Price;
+                }
+            });
+        }
+
+        public void ShipOrder(List<Product> products)
+        {
+            List<Product> OrderLine = new List<Product>();
+
+            products.ForEach(p => { 
+                if (ProductInventory.Contains(p))
+                {
+                    OrderLine.Add(p);
+                }
+                else
+                {
+                    p.Price = 0;
+                    p.Quantity = -1;
+                    OrderLine.Add(p);
+                }
+            });
         }
 
         protected void OnPropertyChanged(string name)

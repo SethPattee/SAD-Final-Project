@@ -11,6 +11,7 @@ namespace WPFTesting.Models;
 public class EndpointNode : IVendor, INotifyPropertyChanged
 {
     private string _name = "";
+    private Guid _id;
     private List<Product> _productInventory = new();
     private List<Product> _componentInventory = new();
     public EndpointNode()
@@ -23,7 +24,13 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             _name = value;
             OnPropertyChanged(nameof(Name));
         } }
-    public Guid Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public Guid Id 
+        { 
+            get => _id; 
+            set { 
+                _id = value; 
+                OnPropertyChanged(nameof(Id));
+        } }
     public List<Product> ProductInventory {
         get => _productInventory;
         set
@@ -63,9 +70,27 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public void Receive(List<Product> prducts)
+    public void Receive(List<Product> products)
     {
-        //add to our products by the quantity in incoming products
+        products.ForEach(p =>
+        {
+            ComponentInventory.ForEach(component =>
+            {
+                if (component.ProductName == p.ProductName)
+                {
+                    component.Quantity += p.Quantity;
+                }
+                else
+                {
+                    ComponentInventory.Add(p);
+                }
+            });
+        });
+    }
+
+    public void ShipOrder()
+    {
+
     }
 
     public void Process()
