@@ -99,8 +99,8 @@ namespace YourNamespace
             }
             else if (box2.GetType() == typeof(EndpointElement))
             {
-                endpoint = new Point(Canvas.GetLeft(((EndpointElement)box2).EndpointRadial) + ((EndpointElement)box2).EndpointRadial.ActualWidth,
-                    Canvas.GetTop(((EndpointElement)box2).EndpointRadial) + ((EndpointElement)box2).EndpointRadial.ActualHeight);
+                endpoint = new Point(Canvas.GetLeft(((EndpointElement)box2)) + ((EndpointElement)box2).EndpointRadial.ActualWidth,
+                    Canvas.GetTop(((EndpointElement)box2)) + ((EndpointElement)box2).EndpointRadial.ActualHeight);
 
             }
 
@@ -321,6 +321,7 @@ namespace YourNamespace
                 double senseY2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight / 2;
                 targetShipment.ourShippingLine.X2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth/2;
                 targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight/2;
+                targetShipment.Destination = lineTarget_endpoint;
 
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
@@ -603,6 +604,7 @@ namespace YourNamespace
             EndpointUIValues EUIV = new EndpointUIValues();
             EUIV.SetDefaultValues();
             EndpointElement element = new EndpointElement(EUIV);
+            
             element.RadialClicked += StartConnection_Click;
             element.RadialClicked += FinishConnection_Click;
             Canvas.SetLeft(element, EUIV.xPosition);

@@ -23,15 +23,14 @@ namespace WPFTesting
     /// </summary>
     public partial class EndpointElement : UserControl, INodeElement
     {
+        private Point clickPosition;
         public event EventHandler? RadialClicked;
 
-        private SupplierUIValues _nodeUIValues = new EndpointUIValues()
+        private SupplierUIValues _nodeUIValues = new EndpointUIValues();
 
         private bool isDragging = false;
-        private Point clickPosition;
-        {
-            Profit = (decimal)1000.00
-        };
+        private decimal Profit = (decimal)1000.00;
+        
         public SupplierUIValues nodeUIValues
         {
             get => _nodeUIValues;
@@ -88,8 +87,8 @@ namespace WPFTesting
 
                     Canvas.SetLeft(this, left);
                     Canvas.SetTop(this, top);
-                    EndpointUIValues.xPosition = (int)left;
-                    EndpointUIValues.yPosition = (int)top;
+                    _nodeUIValues.xPosition = (int)left;
+                    _nodeUIValues.yPosition = (int)top;
 
                     //BoxChanged?.Invoke(this, EventArgs.Empty); //pulled from supplierElement, do we need this event watched?
                 }
