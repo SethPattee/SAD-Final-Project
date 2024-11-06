@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFTesting.Components;
 using WPFTesting.Shapes;
 
 namespace WPFTesting
@@ -19,17 +20,27 @@ namespace WPFTesting
     /// <summary>
     /// Interaction logic for EndpointElement.xaml
     /// </summary>
-    public partial class EndpointElement : UserControl
+    public partial class EndpointElement : UserControl, INodeElement
     {
-        public EndpointUIValues EndpointUIValues = new EndpointUIValues()
+        public event EventHandler? RadialClicked;
+
+        private SupplierUIValues _nodeUIValues = new EndpointUIValues()
         {
             Profit = (decimal)1000.00
         };
+        public SupplierUIValues nodeUIValues
+        {
+            get => _nodeUIValues;
+            set {
+                _nodeUIValues = value;
+            }
+        }
+
         public EndpointElement(EndpointUIValues endpointUIValues)
         {
             InitializeComponent();
 
-            this.EndpointUIValues = endpointUIValues;
+            this._nodeUIValues = endpointUIValues;
 
             DataContext = endpointUIValues;
         }
@@ -37,6 +48,11 @@ namespace WPFTesting
         public void ResizeGrip_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        public void Click_SenseThisRadial(object sender, RoutedEventArgs e)
+        {
+            RadialClicked?.Invoke(this, e);
         }
     }
 }

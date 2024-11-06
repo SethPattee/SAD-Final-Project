@@ -19,7 +19,7 @@
         Panel.ZIndex="1"
         Visibility="Visible"
         >
-            <Button Opacity="0" Margin="-4,-4,-2,-2"/>
+            <Button Opacity="0" Margin="-4,-4,-2,-2" />
         </Border>
     </Grid>
 </UserControl>

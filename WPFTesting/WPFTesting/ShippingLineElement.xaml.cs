@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFTesting.Components;
+using WPFTesting.Models;
 using WPFTesting.Shapes;
 using YourNamespace;
 
@@ -27,8 +29,9 @@ public partial class ShippingLine : UserControl
     public string Label { get; set; }
     public List<ShippingDetails> ShippingDetails { get; set; }
     public Guid Id { get; private set; }
-    public SupplierElement FromSupplier { get; set; }
-    public SupplierElement ToSupplier { get; set; }
+    public Shipment ShipmentOrder { get; set; }
+    public INodeElement Source { get; set; }
+    public INodeElement Destination { get; set; }
     public string FromJoiningBoxCorner { get; set; }
     public string ToJoiningBoxCorner { get; set; }
 
@@ -37,6 +40,7 @@ public partial class ShippingLine : UserControl
     public ShippingLine(Guid? id = null)
     {
         InitializeComponent();
+        this.ShipmentOrder = new Shipment();
         DataContext = this;
         ShippingDetails = new List<ShippingDetails>();
         Id = id ?? Guid.NewGuid();
