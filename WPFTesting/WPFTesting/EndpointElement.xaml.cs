@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFTesting.Components;
 using WPFTesting.Models;
 using WPFTesting.Shapes;
 
@@ -20,19 +21,30 @@ namespace WPFTesting
     /// <summary>
     /// Interaction logic for EndpointElement.xaml
     /// </summary>
-    public partial class EndpointElement : UserControl
+    public partial class EndpointElement : UserControl, INodeElement
     {
+        public event EventHandler? RadialClicked;
+
+        private SupplierUIValues _nodeUIValues = new EndpointUIValues()
+
         private bool isDragging = false;
         private Point clickPosition;
-        public EndpointUIValues EndpointUIValues = new EndpointUIValues()
         {
             Profit = (decimal)1000.00
         };
+        public SupplierUIValues nodeUIValues
+        {
+            get => _nodeUIValues;
+            set {
+                _nodeUIValues = value;
+            }
+        }
+
         public EndpointElement(EndpointUIValues endpointUIValues)
         {
             InitializeComponent();
 
-            this.EndpointUIValues = endpointUIValues;
+            this._nodeUIValues = endpointUIValues;
             //add products
             foreach (var x in ((EndpointNode)endpointUIValues.supplier).ComponentInventory)
             {
@@ -43,7 +55,6 @@ namespace WPFTesting
                 this.ProductsList.Items.Add(x);
             }
 
-
             DataContext = endpointUIValues;
         }
 
@@ -51,6 +62,12 @@ namespace WPFTesting
         {
 
         }
+
+        public void Click_SenseThisRadial(object sender, RoutedEventArgs e)
+        {
+            RadialClicked?.Invoke(this, e);
+        }
+
         private void Box_MouseDown(object sender, MouseButtonEventArgs e)
         {
             isDragging = true;

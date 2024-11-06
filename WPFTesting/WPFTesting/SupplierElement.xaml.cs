@@ -5,6 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using WPFTesting.Components;
 using WPFTesting.Models;
 using WPFTesting.Shapes;
 using WPFTesting.ViewModel;
@@ -12,14 +13,22 @@ using WPFTesting.ViewShared;
 
 namespace YourNamespace
 {
-    public partial class SupplierElement : UserControl
+    public partial class SupplierElement : UserControl, INodeElement
     {
         private bool isDragging = false;
         private Point clickPosition;
-        public SupplierUIValues supplierValues = new SupplierUIValues()
+        private SupplierUIValues _nodeUIValues = new SupplierUIValues()
         {
             supplier = new Supplier()
         }; // Temporary replacement until we get MVVM data binding in place
+        public SupplierUIValues nodeUIValues
+        {
+            get => _nodeUIValues;
+            set
+            {
+                _nodeUIValues = value;
+            }
+        }
         public event EventHandler? BoxChanged;
         public event EventHandler? RadialClicked;
         public event EventHandler? BoxDeleted;
@@ -34,13 +43,13 @@ namespace YourNamespace
         public SupplierElement(SupplierUIValues supplierValues)
         {
             InitializeComponent();
-            this.supplierValues = supplierValues;
+            this._nodeUIValues = supplierValues;
             //this.BoxTitle.Text = supplierValues.supplier.Name;
             X = supplierValues.xPosition;
             Y = supplierValues.yPosition;
-            this.supplierValues.supplier = supplierValues.supplier;
-            if (this.supplierValues.supplier.Name == "" || this.supplierValues.supplier.Name == null)
-                this.supplierValues.supplier.Name = "New Supplier";
+            this._nodeUIValues.supplier = supplierValues.supplier;
+            if (this._nodeUIValues.supplier.Name == "" || this._nodeUIValues.supplier.Name == null)
+                this._nodeUIValues.supplier.Name = "New Supplier";
             //add products
             foreach (var x in supplierValues.supplier.ProductInventory)
             {
@@ -77,8 +86,8 @@ namespace YourNamespace
 
                     Canvas.SetLeft(this, left);
                     Canvas.SetTop(this, top);
-                    supplierValues.xPosition = (int)left;
-                    supplierValues.yPosition = (int)top;
+                    _nodeUIValues.xPosition = (int)left;
+                    _nodeUIValues.yPosition = (int)top;
 
                     BoxChanged?.Invoke(this, EventArgs.Empty);
                 }
