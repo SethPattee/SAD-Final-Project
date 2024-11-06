@@ -65,7 +65,7 @@ namespace YourNamespace
             (sender as UIElement).CaptureMouse();
         }
 
-        private void SenseThisRadial(object sender, RoutedEventArgs e)
+        private void Click_SenseThisRadial(object sender, RoutedEventArgs e)
         {
             Button b = (Button)sender;
             this.CornerClicked = b.Name;
