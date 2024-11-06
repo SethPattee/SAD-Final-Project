@@ -26,7 +26,7 @@ namespace WPFTesting
         }
         public UserControl1(string name, string newEvent) 
         {
-            
+
         }
     }
 }
