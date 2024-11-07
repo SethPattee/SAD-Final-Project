@@ -230,12 +230,12 @@ namespace YourNamespace
             {
                 Point mousepos = e.GetPosition(this);
 
-                DiagramCanvas.Children.Remove(targetShipment);
+                //DiagramCanvas.Children.Remove(targetShipment);
                 Point p1 = DiagramCanvas.TransformToAncestor(this).Transform(new Point(0, 0));
                 //System.Diagnostics.Debug.WriteLine(xWidth);
                 targetShipment.ourShippingLine.X2 = mousepos.X - p1.X;
                 targetShipment.ourShippingLine.Y2 = mousepos.Y - p1.Y;
-                DiagramCanvas.Children.Add(targetShipment);
+                //DiagramCanvas.Children.Add(targetShipment);
             }
         }
 
