@@ -311,7 +311,6 @@ namespace YourNamespace
                 //ReleaseMouseCapture();
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
-                _viewModel.SupplierList.Add(targetShipment.Source.nodeUIValues);
                 ShipmentList.Add(targetShipment);
             }
             else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
