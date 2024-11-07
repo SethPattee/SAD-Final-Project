@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Documents;
 using WPFTesting.Data;
 using WPFTesting.Models;
 using WPFTesting.Shapes;
@@ -16,7 +17,8 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
     private List<Shipment> _shipmentList = new List<Shipment>();
     private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
-    public List<Shipment> ShipmentList {
+    public List<Shipment> ShipmentList
+    {
         get { return _shipmentList; }
         set
         {
@@ -44,7 +46,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
 
     protected void OnPropertyChanged(string name = null)
     {
-        if(name is not null)
+        if (name is not null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
@@ -98,4 +100,15 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         }
     }
 
+    public Shipment ShippmentFirstSupplier(Supplier target)
+    {
+        Shipment targetShipment = new Shipment();
+        targetShipment.Sender = target;
+        targetShipment.Products.Clear();
+        Product toShip = target.ProductInventory.First();
+        targetShipment.Products.Add(new Product());
+        targetShipment.Products[0].ProductName = toShip.ProductName;
+        targetShipment.Products[0].Quantity = 5;
+        return targetShipment;
+    }
 }
