@@ -33,13 +33,14 @@ namespace WPFTesting.Models
         public void Receive(List<Product> products)
         {
             products.ForEach(p => { 
-                if (!ProductInventory.Contains(p))
+                if (ProductInventory.Find(x => x.ProductName == p.ProductName).ProductName == p.ProductName)
                 {
-                    ProductInventory.Add(p);
+                   
+                    ProductInventory.Find(x => x.ProductName == p.ProductName).Quantity += p.Quantity;
                 }
                 else
                 {
-                    ProductInventory.Find(x => x.ProductName == p.ProductName).Price = p.Price;
+                    ProductInventory.Add(p);
                 }
             });
         }
@@ -49,15 +50,16 @@ namespace WPFTesting.Models
             List<Product> OrderLine = new List<Product>();
 
             products.ForEach(p => { 
-                if (ProductInventory.Contains(p))
+                if (ProductInventory.Find(x => x.ProductName == p.ProductName).ProductName == p.ProductName)
                 {
                     OrderLine.Add(p);
+                    ProductInventory.Find(x => x.ProductName == p.ProductName).Quantity -= p.Quantity;
                 }
                 else
                 {
-                    p.Price = 0;
-                    p.Quantity = -1;
-                    OrderLine.Add(p);
+                    //p.Price = 0;
+                    //p.Quantity = -1;
+                    //OrderLine.Add(p);
                 }
             });
         }
