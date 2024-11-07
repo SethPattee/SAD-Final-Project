@@ -509,10 +509,18 @@ namespace YourNamespace
             //this gets called every time you hover over the element after selecting it...
             //Even when you select another... they both call this on hover
             UpdateBoxTracker();
-            if (sender is SupplierElement changedBox)
+            if (sender is SupplierElement changedbox)
             {
-                UpdateSelectedBoxDetails(changedBox);
+                
+                UpdateSelectedBoxDetails(changedbox);
 
+                foreach (ShippingLine sl in ShipmentList)
+                {
+                    UpdateLinePosition(sl, sl.Source, sl.Destination);
+                }
+            }
+            else if(sender is EndpointElement changedbox_e)
+            {
                 foreach (ShippingLine sl in ShipmentList)
                 {
                     UpdateLinePosition(sl, sl.Source, sl.Destination);
@@ -604,7 +612,8 @@ namespace YourNamespace
             EndpointUIValues EUIV = new EndpointUIValues();
             EUIV.SetDefaultValues();
             EndpointElement element = new EndpointElement(EUIV);
-            
+
+            element.ElementMoved += Box_Position_Changed;
             element.RadialClicked += StartConnection_Click;
             element.RadialClicked += FinishConnection_Click;
             Canvas.SetLeft(element, EUIV.xPosition);

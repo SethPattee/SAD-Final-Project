@@ -25,6 +25,7 @@ namespace WPFTesting
     {
         private Point clickPosition;
         public event EventHandler? RadialClicked;
+        public event EventHandler? ElementMoved;
 
         private SupplierUIValues _nodeUIValues = new EndpointUIValues();
 
@@ -90,7 +91,7 @@ namespace WPFTesting
                     _nodeUIValues.xPosition = (int)left;
                     _nodeUIValues.yPosition = (int)top;
 
-                    //BoxChanged?.Invoke(this, EventArgs.Empty); //pulled from supplierElement, do we need this event watched?
+                    ElementMoved?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
