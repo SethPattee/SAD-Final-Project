@@ -100,7 +100,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         }
     }
 
-    public Shipment ShippmentFirstSupplier(Supplier target)
+    public Shipment ShipmentFirstSuplier(Supplier target)
     {
         Shipment targetShipment = new Shipment();
         targetShipment.Sender = target;
