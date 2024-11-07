@@ -32,6 +32,7 @@ namespace YourNamespace
         private bool MouseIsCaptured = false;
         private bool IsDestinationSearching = false;
         private ShippingLine? targetShipment = null;
+        private Shipment? targetShipmentReal = null;
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
         private SupplierElement selectedElement = null;
         private Product selectedProduct;
@@ -191,6 +192,10 @@ namespace YourNamespace
 
                 shippingLine = AssignLineValues(mousepos, shippingLine);
                 targetShipment = shippingLine;
+                targetShipmentReal = new Shipment();
+                targetShipmentReal.Sender = lineTarget.nodeUIValues.supplier;
+                targetShipmentReal.Products.Add(lineTarget.nodeUIValues.supplier.ProductInventory.First());
+                targetShipmentReal.Products[0].Quantity = 5;
                 DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
             }
             if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured == false)
@@ -312,6 +317,9 @@ namespace YourNamespace
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
                 ShipmentList.Add(targetShipment);
+                targetShipmentReal.Receiver = lineTarget.nodeUIValues.supplier;
+                _viewModel.ShipmentList.Add(targetShipmentReal);
+                targetShipmentReal = null;
             }
             else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
             {
@@ -325,6 +333,10 @@ namespace YourNamespace
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
                 ShipmentList.Add(targetShipment);
+                //Shipment s = new Shipment();
+                //s.Sender = targetShipment.Source.nodeUIValues.supplier;
+                //s.Receiver = targetShipment.Source.nodeUIValues.supplier;
+                //_viewModel.ShipmentList.Add(targetShipment);
 
             }
             else if (sender is not null && sender is not SupplierElement && IsDestinationSearching)
