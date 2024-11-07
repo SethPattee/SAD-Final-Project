@@ -14,9 +14,12 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
     private Guid _id;
     private List<Product> _productInventory = new();
     private List<Product> _componentInventory = new();
+    private List<ComponentToProductTransformer> _productionList = new();
+    private List<Product> _deliveryrequirementslist = new();
+    private decimal _profit;
     public EndpointNode()
     {
-        
+        _profit = (decimal)1000.0;
     }
     public string Name { 
         get => _name; 
@@ -47,13 +50,53 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             OnPropertyChanged(nameof(ComponentInventory));
         }
     }
+    public List<ComponentToProductTransformer> ProductionList
+    {
+        get => _productionList;
+        set
+        {
+            _productionList = value;
+            OnPropertyChanged(nameof(ProductionList));
+        }
+    }
+    public List<Product> DeliveryRequirementsList
+    {
+        get => _deliveryrequirementslist;
+        set
+        {
+            _deliveryrequirementslist = value;
+            OnPropertyChanged(nameof(DeliveryRequirementsList));
+        }
+    }
+    public decimal Profit
+    {
+        get => _profit;
+        set
+        {
+            _profit = value;
+            OnPropertyChanged(nameof(Profit));
+        }
+    }
+
 
     public void ProduceProduct()
     {
-        foreach (var componet in _componentInventory)
+        _productionList.ForEach(pl =>
         {
-            componet.Quantity = componet.Quantity - 1;   
-        }
+            List<(int,float)> ComponentIndices = new List<(int,float)>();
+            pl.Components.ForEach(component =>
+            {
+                ComponentIndices.Add((_componentInventory.FindIndex(x => component.ProductName == x.ProductName && x.Quantity >= component.Quantity),
+                                    component.Quantity));
+            });
+            ComponentIndices.RemoveAll(i => i.Item1 < 0);
+            if (ComponentIndices.Count == pl.Components.Count)
+            {
+                ComponentIndices.ForEach(index => _componentInventory[index.Item1].Quantity -= index.Item2);
+                ProductInventory.FirstOrDefault(pibin => pibin.ProductName == pl.Product.ProductName).Quantity += pl.Product.Quantity;
+            }
+        });
+
         OnPropertyChanged(nameof(ComponentInventory));
         
         foreach (var product in _productInventory)
@@ -88,9 +131,22 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         });
     }
 
-    public void ShipOrder()
+    public List<Product> ShipOrder(List<Product> p)
     {
+        p.ForEach(pitem =>
+        {
+            var targetindex = ProductInventory.FindIndex(x => x.ProductName == pitem.ProductName);
+            if(ProductInventory[targetindex].Quantity - pitem.Quantity >= 0) {
+                ProductInventory[targetindex].Quantity -= pitem.Quantity;
+                Profit += (decimal)pitem.Quantity * ProductInventory[targetindex].Price;
+            } 
+            else {
+                Profit += (decimal)ProductInventory[targetindex].Quantity * ProductInventory[targetindex].Price;
+                ProductInventory[targetindex].Quantity = 0;
+            }
+        });
 
+        return _deliveryrequirementslist;
     }
 
     public void Process()

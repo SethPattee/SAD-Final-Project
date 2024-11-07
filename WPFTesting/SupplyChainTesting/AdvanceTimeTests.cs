@@ -56,4 +56,10 @@ internal class AdvanceTimeTests
         Assert.AreEqual(30, reciver_first_product.Quantity);
         Assert.AreEqual(15, reciver_second_product.Quantity);
     }
+
+    [Test]
+    public void EndpointNodeProcess()
+    {
+
+    }
 }
