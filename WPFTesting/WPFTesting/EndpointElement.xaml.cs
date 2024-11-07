@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPFTesting.Components;
+using WPFTesting.Models;
 using WPFTesting.Shapes;
 
 namespace WPFTesting
@@ -22,13 +23,15 @@ namespace WPFTesting
     /// </summary>
     public partial class EndpointElement : UserControl, INodeElement
     {
+        private Point clickPosition;
         public event EventHandler? RadialClicked;
         public event EventHandler? ElementMoved;
 
-        private SupplierUIValues _nodeUIValues = new EndpointUIValues()
-        {
-            Profit = (decimal)1000.00
-        };
+        private SupplierUIValues _nodeUIValues = new EndpointUIValues();
+
+        private bool isDragging = false;
+        private decimal Profit = (decimal)1000.00;
+        
         public SupplierUIValues nodeUIValues
         {
             get => _nodeUIValues;
@@ -42,6 +45,15 @@ namespace WPFTesting
             InitializeComponent();
 
             this._nodeUIValues = endpointUIValues;
+            //add products
+            foreach (var x in ((EndpointNode)endpointUIValues.supplier).ComponentInventory)
+            {
+                this.ComponentsList.Items.Add(x);
+            }
+            foreach (var x in ((EndpointNode)endpointUIValues.supplier).ProductInventory)
+            {
+                this.ProductsList.Items.Add(x);
+            }
 
             DataContext = endpointUIValues;
         }
@@ -83,8 +95,6 @@ namespace WPFTesting
                 }
             }
         }
-
-
 
         private void Box_MouseUp(object sender, MouseButtonEventArgs e)
         {

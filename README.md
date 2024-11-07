@@ -10,15 +10,15 @@
 
 ## V1: -September 30-
 ### Sprint 1
-- Tests started.
-- Box properties.
+- ✅Tests started.
+- ✅Box properties.
 ### Sprint 2
-- Lines creatable.
+- ✅Lines creatable.
 - Efficiency computation across a single connected network. **Edit
 
 ## V2 -November 11-
 ### Sprint 3
-- File functions (New, Save, Load).
+- ✅File functions (New, Save, Load).
 - Split-path efficiency detection.
 
 ### User Testing 1
