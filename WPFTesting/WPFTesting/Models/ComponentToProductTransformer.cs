@@ -16,7 +16,7 @@ namespace WPFTesting.Models
             set => _components = value;
         }
 
-        public Product Product
+        public Product ResultingProduct
         {
             get => _product ?? (new Product()
             {

@@ -30,7 +30,6 @@ namespace WPFTesting
         private SupplierUIValues _nodeUIValues = new EndpointUIValues();
 
         private bool isDragging = false;
-        private decimal Profit = (decimal)1000.00;
         
         public SupplierUIValues nodeUIValues
         {

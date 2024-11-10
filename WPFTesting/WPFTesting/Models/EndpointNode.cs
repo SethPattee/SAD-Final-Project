@@ -19,7 +19,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
     private decimal _profit;
     public EndpointNode()
     {
-        _profit = (decimal)1000.0;
+        _profit = (decimal)1234.0;
     }
     public string Name { 
         get => _name; 
@@ -81,28 +81,25 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
 
     public void ProduceProduct()
     {
+        //For every component set to make a given product:
         _productionList.ForEach(pl =>
         {
             List<(int,float)> ComponentIndices = new List<(int,float)>();
             pl.Components.ForEach(component =>
             {
-                ComponentIndices.Add((_componentInventory.FindIndex(x => component.ProductName == x.ProductName && x.Quantity >= component.Quantity),
-                                    component.Quantity));
+                ComponentIndices.Add((_componentInventory.FindIndex(x => 
+                                                                component.ProductName == x.ProductName && 
+                                                                x.Quantity >= component.Quantity), component.Quantity));
             });
             ComponentIndices.RemoveAll(i => i.Item1 < 0);
             if (ComponentIndices.Count == pl.Components.Count)
             {
                 ComponentIndices.ForEach(index => _componentInventory[index.Item1].Quantity -= index.Item2);
-                ProductInventory.FirstOrDefault(pibin => pibin.ProductName == pl.Product.ProductName).Quantity += pl.Product.Quantity;
+                ProductInventory.FirstOrDefault(pibin => pibin.ProductName == pl.ResultingProduct.ProductName).Quantity += pl.ResultingProduct.Quantity;
             }
         });
 
         OnPropertyChanged(nameof(ComponentInventory));
-        
-        foreach (var product in _productInventory)
-        {
-            product.Quantity = product.Quantity + 1; 
-        }
         OnPropertyChanged(nameof(ProductInventory));
     }
 
@@ -115,24 +112,37 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
 
     public void Receive(List<Product> products)
     {
+        List<Product> productsNotInComponentInventory = new List<Product>();
         products.ForEach(p =>
         {
-            ComponentInventory.ForEach(component =>
+            if(ComponentInventory.Count > 0)
+                foreach(var c in ComponentInventory)
+                {
+                    if(c.ProductName == p.ProductName)
+                    {
+                        c.Quantity += p.Quantity;
+                        Profit -= p.Price;
+                    }
+                    else
+                    {
+                        productsNotInComponentInventory.Add(p);
+                        Profit -= p.Price;
+                    }
+                }
+            else
             {
-                if (component.ProductName == p.ProductName)
-                {
-                    component.Quantity += p.Quantity;
-                }
-                else
-                {
-                    ComponentInventory.Add(p);
-                }
-            });
+                ComponentInventory.Add(p);
+                Profit -= p.Price;
+            }    
         });
+
+        if (productsNotInComponentInventory.Count > 0)
+            ComponentInventory.AddRange(productsNotInComponentInventory);
     }
 
     public List<Product> ShipOrder(List<Product> p)
     {
+
         p.ForEach(pitem =>
         {
             var targetindex = ProductInventory.FindIndex(x => x.ProductName == pitem.ProductName);
@@ -145,6 +155,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                 ProductInventory[targetindex].Quantity = 0;
             }
         });
+
 
         return _deliveryrequirementslist;
     }

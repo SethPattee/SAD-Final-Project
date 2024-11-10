@@ -44,6 +44,7 @@ namespace YourNamespace
         public MainWindow()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
             _viewModel = new SupplyChainViewModel(new InitializedDataProvider());
             Initialize();
             sideBar.BoxList.ItemsSource = boxList;
