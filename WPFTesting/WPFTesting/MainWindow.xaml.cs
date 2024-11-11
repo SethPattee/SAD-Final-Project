@@ -31,8 +31,9 @@ namespace YourNamespace
         private SupplierElement firstSelectedBox = null;
         private bool MouseIsCaptured = false;
         private bool IsDestinationSearching = false;
-        private ShippingLine? targetShipment = null;
-        private List<ShippingLine> ShipmentList = new List<ShippingLine>();
+        private ShipingLine? targetShipingLine = null;
+        private Shipment? targetShipment = null;
+        private List<ShipingLine> ShipmentList = new List<ShipingLine>();
         private SupplierElement selectedElement = null;
         private Product selectedProduct;
 
@@ -81,7 +82,7 @@ namespace YourNamespace
             _viewModel.updateFileSave();
         }
 
-        private void UpdateLinePosition(ShippingLine line1, INodeElement box1, INodeElement box2)
+        private void UpdateLinePosition(ShipingLine line1, INodeElement box1, INodeElement box2)
         {
             Point startpoint;
             Point endpoint;
@@ -176,7 +177,7 @@ namespace YourNamespace
         {
             if (sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
-                ShippingLine shippingLine = new ShippingLine();
+                ShipingLine shippingLine = new ShipingLine();
                 shippingLine.ShipmentOrder.Sender = lineTarget.nodeUIValues.supplier;
                 shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
                 shippingLine.Source = lineTarget;
@@ -191,12 +192,13 @@ namespace YourNamespace
                 MouseIsCaptured = true;
 
                 shippingLine = AssignLineValues(mousepos, shippingLine);
-                targetShipment = shippingLine;
+                targetShipingLine = shippingLine;
+                targetShipment = _viewModel.ShipmentFirstSuplier((Supplier)lineTarget.nodeUIValues.supplier);
                 DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
             }
             if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured == false)
             {
-                ShippingLine shippingLine = new ShippingLine();
+                ShipingLine shippingLine = new ShipingLine();
                 shippingLine.ShipmentOrder.Receiver = lineTarget_endpoint.nodeUIValues.supplier;
                 shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint.EndpointRadial);
                 shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint.EndpointRadial);
@@ -205,12 +207,12 @@ namespace YourNamespace
                 Point mousepos = Mouse.GetPosition(DiagramCanvas);
                 MouseIsCaptured = true;
                 shippingLine = AssignLineValues(mousepos, shippingLine);
-                targetShipment = shippingLine;
+                targetShipingLine = shippingLine;
                 DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
             }
         }
 
-        private ShippingLine AssignLineValues(Point position, ShippingLine shippingLine)
+        private ShipingLine AssignLineValues(Point position, ShipingLine shippingLine)
         {
             shippingLine.ourShippingLine.X2 = position.X;
             shippingLine.ourShippingLine.Y2 = position.Y;
@@ -227,16 +229,16 @@ namespace YourNamespace
 
         private void MoveConnection_MouseMove(object sender, MouseEventArgs e)
         {
-            if (MouseIsCaptured && targetShipment is not null)
+            if (MouseIsCaptured && targetShipingLine is not null)
             {
                 Point mousepos = e.GetPosition(this);
 
-                DiagramCanvas.Children.Remove(targetShipment);
+                //DiagramCanvas.Children.Remove(targetShipment);
                 Point p1 = DiagramCanvas.TransformToAncestor(this).Transform(new Point(0, 0));
                 //System.Diagnostics.Debug.WriteLine(xWidth);
-                targetShipment.ourShippingLine.X2 = mousepos.X - p1.X;
-                targetShipment.ourShippingLine.Y2 = mousepos.Y - p1.Y;
-                DiagramCanvas.Children.Add(targetShipment);
+                targetShipingLine.ourShippingLine.X2 = mousepos.X - p1.X;
+                targetShipingLine.ourShippingLine.Y2 = mousepos.Y - p1.Y;
+                //DiagramCanvas.Children.Add(targetShipment);
             }
         }
 
@@ -294,45 +296,51 @@ namespace YourNamespace
             if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
             {
                 Point pos = GetLineOffset(lineTarget);
-                if(targetShipment.ShipmentOrder.Receiver is not null && targetShipment.ShipmentOrder.Receiver.GetType() == typeof(EndpointNode))
+                if(targetShipingLine.ShipmentOrder.Receiver is not null && targetShipingLine.ShipmentOrder.Receiver.GetType() == typeof(EndpointNode))
                 {
-                    targetShipment.ShipmentOrder.Sender = lineTarget.nodeUIValues.supplier;
-                    targetShipment.Source = lineTarget;
+                    targetShipingLine.ShipmentOrder.Sender = lineTarget.nodeUIValues.supplier;
+                    targetShipingLine.Source = lineTarget;
                 }
                 else
                 {
-                    targetShipment.ShipmentOrder.Receiver = lineTarget.nodeUIValues.supplier;
-                    targetShipment.Destination = lineTarget;
+                    targetShipingLine.ShipmentOrder.Receiver = lineTarget.nodeUIValues.supplier;
+                    targetShipingLine.Destination = lineTarget;
                 }
 
-                targetShipment.ToJoiningBoxCorner = lineTarget.CornerClicked;
+                targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
 
-                targetShipment.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + pos.X;
-                targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + pos.Y;
+                targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + pos.X;
+                targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + pos.Y;
                 //ReleaseMouseCapture();
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
-                _viewModel.SupplierList.Add(targetShipment.Source.nodeUIValues);
-                ShipmentList.Add(targetShipment);
+                ShipmentList.Add(targetShipingLine);
+                targetShipment.Receiver = lineTarget.nodeUIValues.supplier;
+                _viewModel.ShipmentList.Add(targetShipment);
+                targetShipment = null;
             }
             else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
             {
-                targetShipment.ShipmentOrder.Receiver = lineTarget_endpoint.nodeUIValues.supplier;
+                targetShipingLine.ShipmentOrder.Receiver = lineTarget_endpoint.nodeUIValues.supplier;
                 double senseX2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth / 2;
                 double senseY2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight / 2;
-                targetShipment.ourShippingLine.X2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth/2;
-                targetShipment.ourShippingLine.Y2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight/2;
-                targetShipment.Destination = lineTarget_endpoint;
+                targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth/2;
+                targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight/2;
+                targetShipingLine.Destination = lineTarget_endpoint;
 
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
-                ShipmentList.Add(targetShipment);
+                ShipmentList.Add(targetShipingLine);
+                //Shipment s = new Shipment();
+                //s.Sender = targetShipment.Source.nodeUIValues.supplier;
+                //s.Receiver = targetShipment.Source.nodeUIValues.supplier;
+                //_viewModel.ShipmentList.Add(targetShipment);
 
             }
             else if (sender is not null && sender is not SupplierElement && IsDestinationSearching)
             {
-                DiagramCanvas.Children.Remove(targetShipment);
-                targetShipment = null;
+                DiagramCanvas.Children.Remove(targetShipingLine);
+                targetShipingLine = null;
                 IsDestinationSearching = false;
             }
             else
@@ -515,14 +523,14 @@ namespace YourNamespace
                 
                 UpdateSelectedBoxDetails(changedbox);
 
-                foreach (ShippingLine sl in ShipmentList)
+                foreach (ShipingLine sl in ShipmentList)
                 {
                     UpdateLinePosition(sl, sl.Source, sl.Destination);
                 }
             }
             else if(sender is EndpointElement changedbox_e)
             {
-                foreach (ShippingLine sl in ShipmentList)
+                foreach (ShipingLine sl in ShipmentList)
                 {
                     UpdateLinePosition(sl, sl.Source, sl.Destination);
                 }
