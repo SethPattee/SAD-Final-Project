@@ -33,7 +33,7 @@ namespace WPFTesting.Models
         public void Receive(List<Product> products)
         {
             products.ForEach(p => { 
-                if (ProductInventory.FirstOrDefault(x => x.ProductName == p.ProductName)?.ProductName == p.ProductName)
+                if (ProductInventory.Find(x => p is not null && x.ProductName == p.ProductName).ProductName == p.ProductName)
                 {
 
                     ProductInventory.FirstOrDefault(x => x.ProductName == p.ProductName).Quantity += p.Quantity;
@@ -45,15 +45,25 @@ namespace WPFTesting.Models
             });
         }
 
-        public void ShipOrder(List<Product> products)
+        public List<Product> ShipOrder(List<Product> products)
         {
             List<Product> OrderLine = new List<Product>();
 
             products.ForEach(p => { 
                 if (ProductInventory.FirstOrDefault(x => x.ProductName == p.ProductName)?.ProductName == p.ProductName)
                 {
-                    OrderLine.Add(p);
-                    ProductInventory.FirstOrDefault(x => x.ProductName == p.ProductName).Quantity -= p.Quantity;
+                    var targetIndex = ProductInventory.FindIndex(x => x.ProductName == p.ProductName);
+                    if (ProductInventory[targetIndex].Quantity-p.Quantity < 0)
+                    {
+                        OrderLine.Add(ProductInventory[targetIndex]);
+                        ProductInventory[targetIndex].Quantity = 0;
+                    }
+                    else
+                    {
+                        OrderLine.Add(p);
+                        ProductInventory[targetIndex].Quantity -= p.Quantity;
+                    }
+                    
                 }
                 else
                 {
@@ -61,8 +71,13 @@ namespace WPFTesting.Models
                     //p.Quantity = -1;
                     //OrderLine.Add(p);
                 }
+
             });
+            
+            return OrderLine;
         }
+
+
 
         protected void OnPropertyChanged(string name)
         {
