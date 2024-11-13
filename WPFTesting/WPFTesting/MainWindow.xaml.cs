@@ -590,15 +590,29 @@ namespace YourNamespace
 
         private void SetSelectedBoxDisplay(SupplierElement selectedBox)
         {
-            foreach (object Element in DiagramCanvas.Children) {
+            UnselectAllCanvisElements();
+            selectedBox.boxBorder.BorderThickness = new Thickness(3);
+            selectedBox.boxBorder.BorderBrush = Brushes.PaleVioletRed;
+        }
+
+        private void UnselectAllCanvisElements()
+        {
+            foreach (object Element in DiagramCanvas.Children)
+            {
                 if (Element is SupplierElement supplierElement)
                 {
                     supplierElement.boxBorder.BorderThickness = new Thickness(1);
                     supplierElement.boxBorder.BorderBrush = Brushes.Black;
                 }
+                else if (Element is EndpointElement endpointElement)
+                {
+                }
+                else if (Element is ShipingLine lineElement)
+                {
+                    lineElement.ourShippingLine.StrokeThickness = 3;
+                    lineElement.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
+                }
             }
-            selectedBox.boxBorder.BorderThickness = new Thickness(3);
-            selectedBox.boxBorder.BorderBrush = Brushes.PaleVioletRed;
         }
     }
 }
