@@ -122,7 +122,6 @@
             <Border x:Name="boxBorder" Background="LightBlue" BorderBrush="Black" BorderThickness="1"
                 MouseDown="Box_MouseDown" MouseMove="Box_MouseMove" MouseUp="Box_MouseUp"
                 >
-
                 <!-- ContextMenu attached to the Border -->
                 <Border.ContextMenu>
                     <ContextMenu>

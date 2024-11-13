@@ -33,7 +33,7 @@ namespace WPFTesting.Models
         public void Receive(List<Product> products)
         {
             products.ForEach(p => { 
-                if (ProductInventory.Find(x => p is not null && x.ProductName == p.ProductName).ProductName == p.ProductName)
+                if (ProductInventory.FirstOrDefault(x => p is not null && x.ProductName == p.ProductName).ProductName == p.ProductName)
                 {
 
                     ProductInventory.FirstOrDefault(x => x.ProductName == p.ProductName).Quantity += p.Quantity;

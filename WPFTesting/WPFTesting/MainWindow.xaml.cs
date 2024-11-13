@@ -353,10 +353,10 @@ namespace YourNamespace
         {
             if (sender is SupplierElement selectedBox)
             {
+                SetSelectedBoxDisplay(selectedBox);
                 if (isRemovingConnection)
                 {
                     selectedBoxForRemoval = selectedBox;
-                    ShowConnectionSelectionPopup(selectedBox);
                 }
                 else if (isAddingConnection)
                 {
@@ -537,49 +537,6 @@ namespace YourNamespace
             }
         }
 
-        private void ShowConnectionSelectionPopup(SupplierElement box)
-        {
-            //if (box.Connections.Count == 0)
-            //{
-            //    SelectedBoxDetails.Text = "This box has no connections to remove.";
-            //    ResetRemoveConnectionState();
-            //    return;
-            //}
-
-            //connectionSelectionPopup = new Popup
-            //{
-            //    IsOpen = true,
-            //    StaysOpen = false,
-            //    PlacementTarget = this,
-            //    Placement = PlacementMode.Center
-            //};
-
-            //var border = new Border
-            //{
-            //    Background = Brushes.White,
-            //    BorderBrush = Brushes.Black,
-            //    BorderThickness = new Thickness(1),
-            //    Padding = new Thickness(5)
-            //};
-
-            //var stackPanel = new StackPanel();
-
-            //foreach (var connection in box.Connections)
-            //{
-            //    var button = new Button
-            //    {
-            //        Content = $"Connection to {connection.ConnectedBox.BoxTitle.Text}",
-            //        Margin = new Thickness(5),
-            //        Padding = new Thickness(5)
-            //    };
-            //    button.Click += (sender, e) => RemoveSelectedConnection(box, connection);
-            //    stackPanel.Children.Add(button);
-            //}
-
-            //border.Child = stackPanel;
-            //connectionSelectionPopup.Child = border;
-        }
-
         private void ResetRemoveConnectionState()
         {
             isRemovingConnection = false;
@@ -629,6 +586,33 @@ namespace YourNamespace
             Canvas.SetTop(element, EUIV.yPosition);
             _viewModel.AddEndpointToChain(EUIV);
             DiagramCanvas.Children.Add(element);
+        }
+
+        private void SetSelectedBoxDisplay(SupplierElement selectedBox)
+        {
+            UnselectAllCanvisElements();
+            selectedBox.boxBorder.BorderThickness = new Thickness(3);
+            selectedBox.boxBorder.BorderBrush = Brushes.PaleVioletRed;
+        }
+
+        private void UnselectAllCanvisElements()
+        {
+            foreach (object Element in DiagramCanvas.Children)
+            {
+                if (Element is SupplierElement supplierElement)
+                {
+                    supplierElement.boxBorder.BorderThickness = new Thickness(1);
+                    supplierElement.boxBorder.BorderBrush = Brushes.Black;
+                }
+                else if (Element is EndpointElement endpointElement)
+                {
+                }
+                else if (Element is ShipingLine lineElement)
+                {
+                    lineElement.ourShippingLine.StrokeThickness = 3;
+                    lineElement.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
+                }
+            }
         }
     }
 }
