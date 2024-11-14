@@ -612,6 +612,8 @@ namespace YourNamespace
             UnselectAllCanvisElements();
             selectedBox.boxBorder.BorderThickness = new Thickness(3);
             selectedBox.boxBorder.BorderBrush = Brushes.PaleVioletRed;
+            LeftSidebarSupplier.Visibility = Visibility.Visible;
+
         }
 
         private void UnselectAllCanvisElements()
@@ -634,6 +636,8 @@ namespace YourNamespace
                     lineElement.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
                 }
             }
+            LeftSidebarEndpoint.Visibility = Visibility.Hidden;
+            LeftSidebarSupplier.Visibility = Visibility.Hidden;
         }
     }
 }
