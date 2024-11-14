@@ -22,7 +22,7 @@ namespace WPFTesting;
 /// <summary>
 /// Interaction logic for _.xaml
 /// </summary>
-public partial class ShipingLine : UserControl
+public partial class ShippingLine : UserControl
 {
 
     public string CardinalJoint = "Center";
@@ -37,7 +37,7 @@ public partial class ShipingLine : UserControl
 
 
 
-    public ShipingLine(Guid? id = null)
+    public ShippingLine(Guid? id = null)
     {
         InitializeComponent();
         this.ShipmentOrder = new Shipment();

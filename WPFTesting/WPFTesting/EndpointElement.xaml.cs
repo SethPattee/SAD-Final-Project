@@ -26,6 +26,7 @@ namespace WPFTesting
         private Point clickPosition;
         public event EventHandler? RadialClicked;
         public event EventHandler? ElementMoved;
+        public event EventHandler? ElementClicked;
 
         private SupplierUIValues _nodeUIValues = new EndpointUIValues();
 
@@ -72,6 +73,11 @@ namespace WPFTesting
             isDragging = true;
             clickPosition = e.GetPosition(this);
             (sender as UIElement).CaptureMouse();
+        }
+
+        public void Click_SelectElement(object sender, MouseButtonEventArgs e)
+        {
+            ElementClicked?.Invoke(this, e);
         }
 
         private void Box_MouseMove(object sender, MouseEventArgs e) // Marked for Change
