@@ -17,6 +17,7 @@ using System.Windows.Data;
 using System.Reflection;
 using WPFTesting.Components;
 using System.Net;
+using System.Xml.Linq;
 
 namespace YourNamespace
 {
@@ -592,6 +593,7 @@ namespace YourNamespace
 
         private void SelectEndpoint_Click(object sender, EventArgs e)
         {
+            UnselectAllCanvisElements();
             if(sender is EndpointElement element)
             {
                 element.ElementBorder.BorderThickness = new Thickness(4);
@@ -619,8 +621,10 @@ namespace YourNamespace
                 }
                 else if (Element is EndpointElement endpointElement)
                 {
+                    endpointElement.ElementBorder.BorderThickness = new Thickness(1);
+                    endpointElement.ElementBorder.BorderBrush = Brushes.Black;
                 }
-                else if (Element is ShipingLine lineElement)
+                else if (Element is ShippingLine lineElement)
                 {
                     lineElement.ourShippingLine.StrokeThickness = 3;
                     lineElement.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
