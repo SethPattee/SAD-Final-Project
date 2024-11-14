@@ -31,10 +31,10 @@ namespace YourNamespace
         private SupplierElement firstSelectedBox = null;
         private bool MouseIsCaptured = false;
         private bool IsDestinationSearching = false;
-        private ShipingLine? targetShipingLine = null;
+        private ShippingLine? targetShipingLine = null;
         private Shipment? targetShipment = null;
-        private List<ShipingLine> ShipmentList = new List<ShipingLine>();
-        private SupplierElement selectedElement = null;
+        private List<ShippingLine> ShipmentList = new List<ShippingLine>();
+        private (SupplierElement?,ShippingLine?,EndpointElement?) selectedElement = (null,null,null);
         private Product selectedProduct;
 
 
@@ -82,7 +82,7 @@ namespace YourNamespace
             _viewModel.updateFileSave();
         }
 
-        private void UpdateLinePosition(ShipingLine line1, INodeElement box1, INodeElement box2)
+        private void UpdateLinePosition(ShippingLine line1, INodeElement box1, INodeElement box2)
         {
             Point startpoint;
             Point endpoint;
@@ -177,7 +177,7 @@ namespace YourNamespace
         {
             if (sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
-                ShipingLine shippingLine = new ShipingLine();
+                ShippingLine shippingLine = new ShippingLine();
                 shippingLine.ShipmentOrder.Sender = lineTarget.nodeUIValues.supplier;
                 shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
                 shippingLine.Source = lineTarget;
@@ -198,10 +198,10 @@ namespace YourNamespace
             }
             if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured == false)
             {
-                ShipingLine shippingLine = new ShipingLine();
+                ShippingLine shippingLine = new ShippingLine();
                 shippingLine.ShipmentOrder.Receiver = lineTarget_endpoint.nodeUIValues.supplier;
-                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint.EndpointRadial);
-                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint.EndpointRadial);
+                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint);
+                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint);
                 shippingLine.Destination = lineTarget_endpoint;
                 LogEventMessage("StartConnection_Click after Capture Mouse");
                 Point mousepos = Mouse.GetPosition(DiagramCanvas);
@@ -212,7 +212,7 @@ namespace YourNamespace
             }
         }
 
-        private ShipingLine AssignLineValues(Point position, ShipingLine shippingLine)
+        private ShippingLine AssignLineValues(Point position, ShippingLine shippingLine)
         {
             shippingLine.ourShippingLine.X2 = position.X;
             shippingLine.ourShippingLine.Y2 = position.Y;
@@ -295,7 +295,7 @@ namespace YourNamespace
         {
             if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
             {
-                Point pos = GetLineOffset(lineTarget);
+                Point LineAnchorOffset = GetLineOffset(lineTarget);
                 if(targetShipingLine.ShipmentOrder.Receiver is not null && targetShipingLine.ShipmentOrder.Receiver.GetType() == typeof(EndpointNode))
                 {
                     targetShipingLine.ShipmentOrder.Sender = lineTarget.nodeUIValues.supplier;
@@ -309,8 +309,8 @@ namespace YourNamespace
 
                 targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
 
-                targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + pos.X;
-                targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + pos.Y;
+                targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + LineAnchorOffset.X;
+                targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + LineAnchorOffset.Y;
                 //ReleaseMouseCapture();
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
@@ -393,7 +393,7 @@ namespace YourNamespace
         private void UpdateSelectedBoxDetails(SupplierElement box)
         {
             Guid boxId;
-            selectedElement = box;
+            selectedElement.Item1 = box;
             Guid.TryParse(box.Name, out boxId);
             SelectedBoxDetails.Text = $"Position: ({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})\n" +
                                       $"Size: {box.Width:F0}x{box.Height:F0}\n" +
@@ -421,7 +421,7 @@ namespace YourNamespace
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            SupplierElement box = selectedElement;
+            SupplierElement box = selectedElement.Item1;
 
             // Edit Box title
             string title = TitleTextBox.Text.Trim();
@@ -523,14 +523,14 @@ namespace YourNamespace
                 
                 UpdateSelectedBoxDetails(changedbox);
 
-                foreach (ShipingLine sl in ShipmentList)
+                foreach (ShippingLine sl in ShipmentList)
                 {
                     UpdateLinePosition(sl, sl.Source, sl.Destination);
                 }
             }
             else if(sender is EndpointElement changedbox_e)
             {
-                foreach (ShipingLine sl in ShipmentList)
+                foreach (ShippingLine sl in ShipmentList)
                 {
                     UpdateLinePosition(sl, sl.Source, sl.Destination);
                 }
@@ -616,7 +616,7 @@ namespace YourNamespace
             _viewModel.AdvanceTime();
         }
 
-        private void AddEndpointEndpoint_Click(object sender, RoutedEventArgs e)
+        private void AddEndpointElement_Click(object sender, RoutedEventArgs e)
         {
             EndpointUIValues EUIV = new EndpointUIValues();
             EUIV.SetDefaultValues();
@@ -625,10 +625,24 @@ namespace YourNamespace
             element.ElementMoved += Box_Position_Changed;
             element.RadialClicked += StartConnection_Click;
             element.RadialClicked += FinishConnection_Click;
+            element.ElementClicked += SelectEndpoint_Click;
+            
             Canvas.SetLeft(element, EUIV.xPosition);
             Canvas.SetTop(element, EUIV.yPosition);
             _viewModel.AddEndpointToChain(EUIV);
             DiagramCanvas.Children.Add(element);
+        }
+
+        private void SelectEndpoint_Click(object sender, EventArgs e)
+        {
+            if(sender is EndpointElement element)
+            {
+                element.ElementBorder.BorderThickness = new Thickness(4);
+                element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
+                _viewModel.SelectedEndpoint = (EndpointUIValues)element.nodeUIValues;
+                _viewModel.SelectedShipment = null;
+                _viewModel.SelectedSupplier = null;
+            }
         }
     }
 }

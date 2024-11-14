@@ -17,6 +17,9 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
     private List<Shipment> _shipmentList = new List<Shipment>();
     private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
+    public EndpointUIValues? SelectedEndpoint;
+    public SupplierUIValues? SelectedSupplier;
+    public Shipment? SelectedShipment;
     public List<Shipment> ShipmentList
     {
         get { return _shipmentList; }
