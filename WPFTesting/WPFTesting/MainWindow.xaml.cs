@@ -89,14 +89,18 @@ namespace YourNamespace
             Point endpoint;
             if (box1.GetType() == typeof(SupplierElement))
             {
-                Point offset1 = GetLineOffset((SupplierElement)box1);
+                SupplierElement b1 = (SupplierElement)box1;
+                b1.CornerClicked = line1.FromJoiningBoxCorner;
+                Point offset1 = GetLineOffset(b1);
 
                 startpoint = ((SupplierElement)box1).TranslatePoint(new Point(offset1.X, offset1.Y), DiagramCanvas);
             }
 
             if (box2.GetType() == typeof(SupplierElement))
             {
-                Point offset2 = GetLineOffset((SupplierElement)box2);
+                SupplierElement b2 = (SupplierElement)box2;
+                b2.CornerClicked = line1.ToJoiningBoxCorner;
+                Point offset2 = GetLineOffset(b2);
 
                 endpoint = ((SupplierElement)box2).TranslatePoint(new Point(offset2.X, offset2.Y), DiagramCanvas);
             }
