@@ -34,8 +34,7 @@ internal static class GenneratedFirstSuppliers
                     Name="Supplier Bob",
                     Id = Guid.NewGuid()
                 },
-                xPosition=140,
-                yPosition=140
+                Position= new System.Drawing.Point(140,140),
             },
             new SupplierUIValues
             {
@@ -57,8 +56,7 @@ internal static class GenneratedFirstSuppliers
                     Name="my company",
                     Id = Guid.NewGuid()
                 },
-                xPosition=280,
-                yPosition=280
+                Position= new System.Drawing.Point(280,280),
             },
             new SupplierUIValues
             {
@@ -91,8 +89,7 @@ internal static class GenneratedFirstSuppliers
                     Name="Lost Hardware",
                     Id=Guid.NewGuid()
                 },
-                xPosition=50,
-                yPosition=320
+                Position= new System.Drawing.Point(50,320)
             }
         };
     }

@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFTesting"
              mc:Ignorable="d" 
-             d:DesignHeight="360" d:DesignWidth="560">
+             d:DesignHeight="360" d:DesignWidth="560"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Width="530" Height="330" MinWidth="400">
         <Border x:Name="ElementBorder"  BorderBrush="Gray" BorderThickness="1" MouseDown="Box_MouseDown" PreviewMouseDown="Click_SelectElement" MouseMove="Box_MouseMove" MouseUp="Box_MouseUp">
             <Grid>
@@ -15,7 +16,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="Gray" Background="white" Panel.ZIndex="1" Margin="-3 -8 0 0" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=ActualHeight}">
-                    <TextBox TextAlignment="Left" BorderBrush="white" BorderThickness="0" Margin="5 0 0 0" Text="{Binding supplier.Name,  Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                    <TextBox TextAlignment="Left" BorderBrush="white" BorderThickness="0" Margin="5 0 0 0" Text="{Binding supplier.Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                 </Border>
                 <Border BorderBrush="Gray"
                     BorderThickness="3"
@@ -53,7 +54,7 @@
 
                                 </TextBlock>
                                 <ListView
-                                    ItemsSource="{Binding }"
+                                    ItemsSource="{Binding _nodeUIValues.supplier.ComponentInventory}"
                                     x:Name="ComponentsList"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="gray" BorderThickness="1 1 1 0">
                                     <ListView.View>
@@ -89,7 +90,7 @@
 
                                 </TextBlock>
                                 <ListView
-                                    ItemsSource="{Binding}"
+                                    ItemsSource="{Binding _nodeUIValues.supplier.ProductInventory}"
                                     x:Name="ProductsList"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="Gray" BorderThickness="1 1 1 0">
                                     <ListView.View>
@@ -119,7 +120,7 @@
                         </Border>
                         <Border Grid.ColumnSpan="2" Grid.Row="2" BorderThickness="1" BorderBrush="Gray" Background="Gainsboro">
                             <Grid>
-                                <TextBlock x:Name="HoverLabel" Text="{Binding Profit, Mode=OneWay, StringFormat=$0}" HorizontalAlignment="Left" Margin="3 1 0 0" MaxWidth="250"></TextBlock>
+                                <TextBlock x:Name="HoverLabel" Text="{Binding _nodeUIValues.supplier.Profit, Mode=OneWay, StringFormat=$0}" HorizontalAlignment="Left" Margin="3 1 0 0" MaxWidth="250"></TextBlock>
                                 <Border BorderBrush="DimGray" Width="18" Height="18" BorderThickness="0 0 2 2" HorizontalAlignment="Right" Margin="0 0 2 0" CornerRadius="1">
                                     <Button MouseLeftButtonDown="ResizeGrip_MouseLeftButtonDown" BorderThickness="0">
                                         

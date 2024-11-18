@@ -21,7 +21,7 @@ namespace YourNamespace
         {
             supplier = new Supplier()
         }; // Temporary replacement until we get MVVM data binding in place
-        public SupplierUIValues nodeUIValues
+        public SupplierUIValues NodeUIValues
         {
             get => _nodeUIValues;
             set
@@ -45,8 +45,8 @@ namespace YourNamespace
             InitializeComponent();
             this._nodeUIValues = supplierValues;
             //this.BoxTitle.Text = supplierValues.supplier.Name;
-            X = supplierValues.xPosition;
-            Y = supplierValues.yPosition;
+            X = supplierValues.Position.X;
+            Y = supplierValues.Position.Y;
             this._nodeUIValues.supplier = supplierValues.supplier;
             if (this._nodeUIValues.supplier.Name == "" || this._nodeUIValues.supplier.Name == null)
                 this._nodeUIValues.supplier.Name = "New Supplier";
@@ -86,8 +86,7 @@ namespace YourNamespace
 
                     Canvas.SetLeft(this, left);
                     Canvas.SetTop(this, top);
-                    _nodeUIValues.xPosition = (int)left;
-                    _nodeUIValues.yPosition = (int)top;
+                    _nodeUIValues.Position = new System.Drawing.Point((int)left, (int)top);
 
                     BoxChanged?.Invoke(this, EventArgs.Empty);
                 }
