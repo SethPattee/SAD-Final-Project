@@ -158,7 +158,17 @@
                             </StackPanel>
                         </StackPanel>
                     </ItemsControl>-->
-                    <ListView
+                    <ListView ItemsSource="{Binding }" x:Name="ItemsList" Grid.Row="1">
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Product Information">
+                                <GridViewColumn DisplayMemberBinding="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Product" >
+                                </GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Quantity">
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <!--<ListView
                         ItemsSource="{Binding }"
                          x:Name="ItemsList"
                          Grid.Row="1"
@@ -175,8 +185,8 @@
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
-                    </ListView>
-
+                    </ListView>-->
+                   
                 </Grid>
             </Border>
 
