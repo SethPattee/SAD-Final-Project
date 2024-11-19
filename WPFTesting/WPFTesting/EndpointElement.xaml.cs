@@ -13,8 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPFTesting.Components;
+using WPFTesting.Data;
 using WPFTesting.Models;
 using WPFTesting.Shapes;
+using WPFTesting.ViewModel;
 
 namespace WPFTesting
 {
@@ -27,12 +29,13 @@ namespace WPFTesting
         public event EventHandler? RadialClicked;
         public event EventHandler? ElementMoved;
         public event EventHandler? ElementClicked;
+        public SupplyChainViewModel vm { get; set; }
 
         private SupplierUIValues _nodeUIValues = new EndpointUIValues();
 
         private bool isDragging = false;
         
-        public SupplierUIValues nodeUIValues
+        public SupplierUIValues NodeUIValues
         {
             get => _nodeUIValues;
             set {
@@ -43,7 +46,7 @@ namespace WPFTesting
         public EndpointElement(EndpointUIValues endpointUIValues)
         {
             InitializeComponent();
-
+            vm = new SupplyChainViewModel(new InitializedDataProvider());
             this._nodeUIValues = endpointUIValues;
             //add products
             foreach (var x in ((EndpointNode)endpointUIValues.supplier).ComponentInventory)
@@ -93,8 +96,7 @@ namespace WPFTesting
 
                     Canvas.SetLeft(this, left);
                     Canvas.SetTop(this, top);
-                    _nodeUIValues.xPosition = (int)left;
-                    _nodeUIValues.yPosition = (int)top;
+                    _nodeUIValues.Position = new System.Drawing.Point((int)left, (int)top);
 
                     ElementMoved?.Invoke(this, EventArgs.Empty);
                 }

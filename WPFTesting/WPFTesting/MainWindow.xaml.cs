@@ -24,7 +24,7 @@ namespace YourNamespace
     public partial class MainWindow : Window
     {
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
-        public SupplyChainViewModel _viewModel;
+        public SupplyChainViewModel ViewModel { get; set; }
         private bool isRemovingConnection = false;
         private SupplierElement selectedBoxForRemoval = null;
         private Popup? connectionSelectionPopup;
@@ -38,7 +38,6 @@ namespace YourNamespace
         private (SupplierElement?,ShippingLine?,EndpointElement?) selectedElement = (null,null,null);
         private Product selectedProduct;
 
-
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
 
@@ -47,24 +46,25 @@ namespace YourNamespace
         {
             InitializeComponent();
             WindowState = WindowState.Maximized;
-            _viewModel = new SupplyChainViewModel(new InitializedDataProvider());
+            ViewModel = new SupplyChainViewModel(new InitializedDataProvider());
+            DataContext = ViewModel;
             Initialize();
             sideBar.BoxList.ItemsSource = boxList;
         }
 
         private void Initialize()
         {
-            _viewModel.Load();
+            ViewModel.Load();
             AddDraggableBoxes();
         }
 
         private void AddDraggableBoxes()
         {
-            foreach (var box in _viewModel.SupplierList)
+            foreach (var box in ViewModel.SupplierList)
             {
                 SupplierElement dBox = new SupplierElement(box);
-                Canvas.SetLeft(dBox, box.xPosition);
-                Canvas.SetTop(dBox, box.yPosition);
+                Canvas.SetLeft(dBox, box.Position.X);
+                Canvas.SetTop(dBox, box.Position.Y);
 
                 dBox.MouseDown += Box_MouseDown;
                 dBox.BoxChanged += Box_Position_Changed;
@@ -80,7 +80,7 @@ namespace YourNamespace
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.updateFileSave();
+            ViewModel.updateFileSave();
         }
 
         private void UpdateLinePosition(ShippingLine line1, INodeElement box1, INodeElement box2)
@@ -127,8 +127,7 @@ namespace YourNamespace
         {
             SupplierUIValues b = new SupplierUIValues()
             {
-                xPosition = 50,
-                yPosition = 50,
+                Position = new System.Drawing.Point(50, 50),
                 supplier = new Supplier
                 {
                     Id = Guid.NewGuid(),
@@ -143,8 +142,8 @@ namespace YourNamespace
                 }
             };
             SupplierElement newBox = new SupplierElement(b);
-            Canvas.SetLeft(newBox, b.xPosition);
-            Canvas.SetTop(newBox, b.yPosition);
+            Canvas.SetLeft(newBox, b.Position.X);
+            Canvas.SetTop(newBox, b.Position.Y);
             newBox.Width = 100;
             newBox.Height = 50;
             newBox.MouseDown += Box_MouseDown;
@@ -155,7 +154,7 @@ namespace YourNamespace
 
             AddBoxToTracker(newBox);
 
-            _viewModel.AddSupplierToChain(b);
+            ViewModel.AddSupplierToChain(b);
             DiagramCanvas.Children.Add(newBox);
         }
 
@@ -183,7 +182,7 @@ namespace YourNamespace
             if (sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
-                shippingLine.ShipmentOrder.Sender = lineTarget.nodeUIValues.supplier;
+                shippingLine.ShipmentOrder.Sender = lineTarget.NodeUIValues.supplier;
                 shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
                 shippingLine.Source = lineTarget;
 
@@ -198,13 +197,13 @@ namespace YourNamespace
 
                 shippingLine = AssignLineValues(mousepos, shippingLine);
                 targetShipingLine = shippingLine;
-                targetShipment = _viewModel.ShipmentFirstSuplier((Supplier)lineTarget.nodeUIValues.supplier);
+                targetShipment = ViewModel.ShipmentFirstSuplier((Supplier)lineTarget.NodeUIValues.supplier);
                 DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
             }
             if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
-                shippingLine.ShipmentOrder.Receiver = lineTarget_endpoint.nodeUIValues.supplier;
+                shippingLine.ShipmentOrder.Receiver = lineTarget_endpoint.NodeUIValues.supplier;
                 shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint);
                 shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint);
                 shippingLine.Destination = lineTarget_endpoint;
@@ -303,12 +302,12 @@ namespace YourNamespace
                 Point LineAnchorOffset = GetLineOffset(lineTarget);
                 if(targetShipingLine.ShipmentOrder.Receiver is not null && targetShipingLine.ShipmentOrder.Receiver.GetType() == typeof(EndpointNode))
                 {
-                    targetShipingLine.ShipmentOrder.Sender = lineTarget.nodeUIValues.supplier;
+                    targetShipingLine.ShipmentOrder.Sender = lineTarget.NodeUIValues.supplier;
                     targetShipingLine.Source = lineTarget;
                 }
                 else
                 {
-                    targetShipingLine.ShipmentOrder.Receiver = lineTarget.nodeUIValues.supplier;
+                    targetShipingLine.ShipmentOrder.Receiver = lineTarget.NodeUIValues.supplier;
                     targetShipingLine.Destination = lineTarget;
                 }
 
@@ -320,13 +319,13 @@ namespace YourNamespace
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
                 ShipmentList.Add(targetShipingLine);
-                targetShipment.Receiver = lineTarget.nodeUIValues.supplier;
-                _viewModel.ShipmentList.Add(targetShipment);
+                targetShipment.Receiver = lineTarget.NodeUIValues.supplier;
+                ViewModel.ShipmentList.Add(targetShipment);
                 targetShipment = null;
             }
             else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
             {
-                targetShipingLine.ShipmentOrder.Receiver = lineTarget_endpoint.nodeUIValues.supplier;
+                targetShipingLine.ShipmentOrder.Receiver = lineTarget_endpoint.NodeUIValues.supplier;
                 double senseX2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth / 2;
                 double senseY2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight / 2;
                 targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth/2;
@@ -410,9 +409,9 @@ namespace YourNamespace
             TitleTextBox.Text = $"{box.BoxTitle.Text}";
 
             // Populate the ProductsListView with products from the box
-            if (box.nodeUIValues?.supplier?.ProductInventory != null)
+            if (box.NodeUIValues?.supplier?.ProductInventory != null)
             {
-                ProductsListView.ItemsSource = box.nodeUIValues.supplier.ProductInventory;
+                ProductsListView.ItemsSource = box.NodeUIValues.supplier.ProductInventory;
             }
             else
             {
@@ -559,11 +558,11 @@ namespace YourNamespace
         {
             if (sender is SupplierElement selectedBox)
             {
-                Guid SupplierId = selectedBox.nodeUIValues.supplier.Id;
-                var supplier = _viewModel.SupplierList.FirstOrDefault(s => s.supplier.Id == SupplierId);
+                Guid SupplierId = selectedBox.NodeUIValues.supplier.Id;
+                var supplier = ViewModel.SupplierList.FirstOrDefault(s => s.supplier.Id == SupplierId);
                 if (supplier != null)
                 {
-                    _viewModel.SupplierList.Remove(supplier);
+                    ViewModel.SupplierList.Remove(supplier);
                 }
                 else
                 {
@@ -575,7 +574,7 @@ namespace YourNamespace
 
         private void AdvanceTime_Click(object sender, EventArgs e)
         {
-            _viewModel.AdvanceTime();
+            ViewModel.AdvanceTime();
         }
 
         private void AddEndpointElement_Click(object sender, RoutedEventArgs e)
@@ -588,35 +587,38 @@ namespace YourNamespace
             element.RadialClicked += StartConnection_Click;
             element.RadialClicked += FinishConnection_Click;
             element.ElementClicked += SelectEndpoint_Click;
+            element.DataContext = ViewModel;
             
-            Canvas.SetLeft(element, EUIV.xPosition);
-            Canvas.SetTop(element, EUIV.yPosition);
-            _viewModel.AddEndpointToChain(EUIV);
+            Canvas.SetLeft(element, EUIV.Position.X);
+            Canvas.SetTop(element, EUIV.Position.Y);
+            ViewModel.AddEndpointToChain(EUIV);
             DiagramCanvas.Children.Add(element);
         }
 
         private void SelectEndpoint_Click(object sender, EventArgs e)
         {
-            UnselectAllCanvisElements();
+            UnselectAllCanvasElements();
             if(sender is EndpointElement element)
             {
+                
                 element.ElementBorder.BorderThickness = new Thickness(4);
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
-                _viewModel.SelectedEndpoint = (EndpointUIValues)element.nodeUIValues;
-                _viewModel.SelectedShipment = null;
-                _viewModel.SelectedSupplier = null;
+                ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;
+                LeftSidebarEndpoint.Visibility = Visibility.Visible;
+                LeftSidebarSupplier.Visibility = Visibility.Hidden;
+
              }
          }
         private void SetSelectedBoxDisplay(SupplierElement selectedBox)
         {
-            UnselectAllCanvisElements();
+            UnselectAllCanvasElements();
             selectedBox.boxBorder.BorderThickness = new Thickness(3);
             selectedBox.boxBorder.BorderBrush = Brushes.PaleVioletRed;
             LeftSidebarSupplier.Visibility = Visibility.Visible;
 
         }
 
-        private void UnselectAllCanvisElements()
+        private void UnselectAllCanvasElements()
         {
             foreach (object Element in DiagramCanvas.Children)
             {

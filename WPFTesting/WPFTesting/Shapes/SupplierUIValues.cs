@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,26 +11,18 @@ namespace WPFTesting.Shapes;
 
 public class SupplierUIValues : INotifyPropertyChanged
 {
-    private int _xPosition;
-    private int _yPosition;
-    public int xPosition
+    private Point _position;
+    public Point Position
     {
-        get => _xPosition;
-        set
-        {
-            _xPosition = value;
-            OnPropertyChanged(nameof(xPosition));
-        }
+        get => _position;
+        set => _position = value;
     }
-    public int yPosition
+
+    public SupplierUIValues()
     {
-        get => _yPosition;
-        set
-        {
-            _yPosition = value;
-            OnPropertyChanged(nameof(yPosition));
-        }
+        Position = new Point(50,50);
     }
+
     public IVendor supplier { get; set; } = new Supplier();
 
     public event PropertyChangedEventHandler? PropertyChanged;

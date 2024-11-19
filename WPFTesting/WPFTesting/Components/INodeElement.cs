@@ -9,6 +9,6 @@ namespace WPFTesting.Components
 {
     public interface INodeElement
     {
-        SupplierUIValues nodeUIValues { get; set; }
+        SupplierUIValues NodeUIValues { get; set; }
     }
 }

@@ -14,12 +14,47 @@ public class SupplyChainViewModel : INotifyPropertyChanged
 {
     private IInitializedDataProvider _boxProvider;
     public event PropertyChangedEventHandler? PropertyChanged;
-    private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
-    private List<Shipment> _shipmentList = new List<Shipment>();
     private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
-    public EndpointUIValues? SelectedEndpoint;
-    public SupplierUIValues? SelectedSupplier;
-    public Shipment? SelectedShipment;
+    public ObservableCollection<EndpointUIValues> EndpointList
+    {
+        get => _endpointList;
+        set { 
+            _endpointList = value;
+            OnPropertyChanged(nameof(EndpointList));
+        }
+    }
+    private EndpointUIValues _selectedEndpoint;
+    public EndpointUIValues? SelectedEndpoint
+    {
+        get => _selectedEndpoint;
+        set
+        {
+            _selectedEndpoint = value;
+            OnPropertyChanged(nameof(SelectedEndpoint));
+        }
+    }
+    private SupplierUIValues _selectedSupplier;
+    public SupplierUIValues? SelectedSupplier
+    {
+        get => _selectedSupplier;
+        set
+        {
+            _selectedSupplier = value;
+            OnPropertyChanged(nameof(SelectedSupplier));
+        }
+    }
+    private Shipment _selectedShipment;
+    public Shipment? SelectedShipment
+    {
+        get => _selectedShipment;
+        set
+        {
+            _selectedShipment = value;
+            OnPropertyChanged(nameof(SelectedShipment));
+        }
+    }
+
+    private List<Shipment> _shipmentList = new List<Shipment>();
     public List<Shipment> ShipmentList
     {
         get { return _shipmentList; }
@@ -37,6 +72,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         _boxProvider = boxProvider;
     }
 
+    private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
     public ObservableCollection<SupplierUIValues> SupplierList
     {
         get => _supplierList;
@@ -47,7 +83,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         }
     }
 
-    protected void OnPropertyChanged(string name = null)
+    protected void OnPropertyChanged(string? name = null)
     {
         if (name is not null)
         {

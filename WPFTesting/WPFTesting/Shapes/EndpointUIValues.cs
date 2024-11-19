@@ -10,27 +10,17 @@ namespace WPFTesting.Shapes
 {
     public class EndpointUIValues : SupplierUIValues
     {
-        private decimal? _profit;
-        public decimal? Profit
-        {
-            get => _profit;
-            set {
-                _profit = value;
-                OnPropertyChanged(nameof(Profit));
-            }
-        }
         public EndpointUIValues()
         {
             supplier = new EndpointNode();
         }
         public void SetDefaultValues()
         {
-            xPosition = 120;
-            yPosition = 120;
-            Profit = 10;
+            Position = new System.Drawing.Point(120, 120);
             supplier = new EndpointNode()
             {
                 Id = new Guid(),
+                Profit = 1000,
                 Name = "Factory",
                 ComponentInventory = new List<Product>()
                     {
