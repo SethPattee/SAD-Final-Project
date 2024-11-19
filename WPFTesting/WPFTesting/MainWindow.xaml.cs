@@ -47,6 +47,7 @@ namespace YourNamespace
             InitializeComponent();
             WindowState = WindowState.Maximized;
             ViewModel = new SupplyChainViewModel(new InitializedDataProvider());
+            DataContext = ViewModel;
             Initialize();
             sideBar.BoxList.ItemsSource = boxList;
         }
@@ -580,13 +581,13 @@ namespace YourNamespace
         {
             EndpointUIValues EUIV = new EndpointUIValues();
             EUIV.SetDefaultValues();
-            EndpointElement element = new EndpointElement(EUIV);
-            element.DataContext = ViewModel;
+            EndpointElement element = new EndpointElement(EUIV, ViewModel);
 
             element.ElementMoved += Box_Position_Changed;
             element.RadialClicked += StartConnection_Click;
             element.RadialClicked += FinishConnection_Click;
             element.ElementClicked += SelectEndpoint_Click;
+            element.DataContext = ViewModel;
             
             Canvas.SetLeft(element, EUIV.Position.X);
             Canvas.SetTop(element, EUIV.Position.Y);
@@ -599,6 +600,7 @@ namespace YourNamespace
             UnselectAllCanvasElements();
             if(sender is EndpointElement element)
             {
+                
                 element.ElementBorder.BorderThickness = new Thickness(4);
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
                 ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;

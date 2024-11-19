@@ -99,12 +99,12 @@
 
                     <Button Content="Edit" Click="EditButton_Click" />
                 </StackPanel>
-                <StackPanel x:Name="LeftSidebarEndpoint" VerticalAlignment="Top" DataContext="{Binding ViewModel}" Visibility="Hidden">
+                <StackPanel x:Name="LeftSidebarEndpoint" VerticalAlignment="Top" Visibility="Visible">
                     <TextBlock Text="Element Details" FontWeight="Bold" Margin="10"/>
-                    <TextBox Text="{Binding SelectedEndpoint.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
+                    <TextBox Text="{Binding SelectedEndpoint.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
                     <TextBlock Text="Position:" />
-                    <TextBlock Text="{Binding SelectedEndpoint.Position, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding SelectedEndpoint.Position, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                     
                     <TextBlock Text="Size:" />
                     <TextBox  Text=""/>
