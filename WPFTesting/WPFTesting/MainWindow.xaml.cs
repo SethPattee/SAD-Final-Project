@@ -581,7 +581,7 @@ namespace YourNamespace
         {
             EndpointUIValues EUIV = new EndpointUIValues();
             EUIV.SetDefaultValues();
-            EndpointElement element = new EndpointElement(EUIV, ViewModel);
+            EndpointElement element = new EndpointElement(EUIV);
 
             element.ElementMoved += Box_Position_Changed;
             element.RadialClicked += StartConnection_Click;
