@@ -4,6 +4,16 @@
         xmlns:local="clr-namespace:WPFTesting"
         Title="New Supply Chain Graph" Height="550" Width="1000"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Window.Resources>
+        <DataTemplate x:Key="ProductListTemplate">
+            <Grid>
+                <TextBox Text="{Binding ProductName}"></TextBox>
+                <TextBox Text="{Binding Quantity}"></TextBox>
+                <TextBox Text="{Binding Units}"></TextBox>
+                <TextBox Text="{Binding Price}"></TextBox>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
@@ -115,53 +125,26 @@
                     <TextBlock Text="Profit: "/>
                     <TextBox Text="{Binding SelectedEndpoint.supplier.Profit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
-                    <!--<TextBlock Text="Production line" Margin="0 2 0 0"></TextBlock>
-                    <ListView Margin="2 3 0 2" x:Name="EndpointProductionLine" ItemsSource="{Binding EndpointList}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="-5"
-                        SelectedItem="{Binding Path=SelectedEndpoint.supplier.ProductionList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="9*"></ColumnDefinition>
-                                        <ColumnDefinition Width="4*"></ColumnDefinition>
-                                        <ColumnDefinition Width="9*"></ColumnDefinition>
-                                        <ColumnDefinition Width="4*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox Grid.Column="0" Text="{Binding Component.ProductName}"></TextBox>
-                                    <TextBox Grid.Column="0" Text="{Binding Component.Quantity}"></TextBox>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-
-                    <TextBlock Text="Components:" />
-                    <ListView x:Name="EndpointComponents" ItemsSource="{Binding EndpointList}"
-                                SelectedItem="{Binding SelectedEndpoint.supplier.ComponentInventory, Mode=TwoWay}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="9*"></ColumnDefinition>
-                                        <ColumnDefinition Width="4*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox ></TextBox>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-
-                    <TextBlock Text="Products:" />
-                    <ListView x:Name="EndpointProducts" ItemsSource="{Binding EndpointList}"
-                                SelectedItem="{Binding SelectedEndpoint.supplier.ProductInventory, Mode=TwoWay}">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding ProductName}" />
-                                <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
-                                <GridViewColumn Header="Units" DisplayMemberBinding="{Binding Units}" />
-                                <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>-->
+                    <TextBlock Text="Product Inventory" Margin="0 2 0 0"></TextBlock>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.RowSpan="6">
+                            
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="1">
+                            
+                        </StackPanel>
+                        <StackPanel>
+                            
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Grid>
         </Border>
