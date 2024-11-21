@@ -606,8 +606,6 @@ namespace YourNamespace
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
                 ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;
                 LeftSidebarEndpoint.Visibility = Visibility.Visible;
-                LeftSidebarSupplier.Visibility = Visibility.Hidden;
-
              }
          }
         private void SetSelectedBoxDisplay(SupplierElement selectedBox)
@@ -616,7 +614,6 @@ namespace YourNamespace
             selectedBox.boxBorder.BorderThickness = new Thickness(3);
             selectedBox.boxBorder.BorderBrush = Brushes.PaleVioletRed;
             LeftSidebarSupplier.Visibility = Visibility.Visible;
-
         }
 
         private void UnselectAllCanvasElements()
@@ -641,11 +638,13 @@ namespace YourNamespace
             }
             LeftSidebarEndpoint.Visibility = Visibility.Hidden;
             LeftSidebarSupplier.Visibility = Visibility.Hidden;
+            //LeftSidebarLineDetails.Visibility = Visibility.Hidden;
         }
 
 
         private void Line_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            UnselectAllCanvasElements();
             if (sender is ShippingLine l)
             {
                 ShippingLineDetailsList.ItemsSource = l.ShippingDetails;
@@ -654,19 +653,11 @@ namespace YourNamespace
                     ShippingDetails shippingDetails = new ShippingDetails("Cow", 15.8, 4, "Livestock");
                     l.ShippingDetails.Add(shippingDetails);
                 }
-                ShippingLineDetailsPanel.Visibility = Visibility.Visible;
+                LeftSidebarLineDetails.Visibility = Visibility.Visible;
             }
             else
             {
                 ShippingLineDetailsList.ItemsSource = null;
-                ShippingLineDetailsPanel.Visibility = Visibility.Collapsed;
-            }
-        }
-        private void DiagramCanvas_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.Source is not ShippingLine)
-            {
-                ShippingLineDetailsPanel.Visibility = Visibility.Collapsed;
             }
         }
 
