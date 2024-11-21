@@ -12,19 +12,11 @@ namespace SupplyChainTesting;
 
 internal class AdvanceTimeTests
 {
-    [Test]
-    public void AdvanceTime_with_one_shippment()
+    SupplyChainViewModel setupTest()
     {
         IInitializedDataProvider data = new DataProvider_FAKE();
         SupplyChainViewModel model = new SupplyChainViewModel(data);
         model.Load();
-        //Model has data properly
-        Assert.AreEqual(3, model.SupplierList.Count);
-        Assert.AreEqual(20, model.SupplierList[0].supplier.ProductInventory[0].Quantity);
-        Assert.AreEqual(20, model.SupplierList[1].supplier.ProductInventory[0].Quantity);
-        Assert.AreEqual(10, model.SupplierList[0].supplier.ProductInventory[1].Quantity);
-        Assert.AreEqual(10, model.SupplierList[1].supplier.ProductInventory[1].Quantity);
-
         Shipment s = new Shipment();
         s.Sender = model.SupplierList[0].supplier;
         s.Receiver = model.SupplierList[1].supplier;
@@ -41,8 +33,24 @@ internal class AdvanceTimeTests
                             Units="kg"
                         }
         };
-
         model.ShipmentList.Add(s);
+        return model;
+    }
+    [Test]
+    public void Test_Setup_Creates_valid_data()
+    {
+        SupplyChainViewModel model = setupTest();
+        //Model has data properly
+        Assert.AreEqual(3, model.SupplierList.Count);
+        Assert.AreEqual(20, model.SupplierList[0].supplier.ProductInventory[0].Quantity);
+        Assert.AreEqual(20, model.SupplierList[1].supplier.ProductInventory[0].Quantity);
+        Assert.AreEqual(10, model.SupplierList[0].supplier.ProductInventory[1].Quantity);
+        Assert.AreEqual(10, model.SupplierList[1].supplier.ProductInventory[1].Quantity);
+    }
+    [Test]
+    public void AdvanceTime_with_one_shippment()
+    {
+        SupplyChainViewModel model = setupTest();
 
         model.AdvanceTime();
         var giver_first_product = model.SupplierList[0].supplier.ProductInventory[0];
@@ -55,6 +63,88 @@ internal class AdvanceTimeTests
         // recever gains 10
         Assert.AreEqual(30, reciver_first_product.Quantity);
         Assert.AreEqual(15, reciver_second_product.Quantity);
+    }
+
+    [Test]
+    public void AdvanceTime_Ships_even_when_reciver_does_not_have_product()
+    {
+        SupplyChainViewModel model = setupTest();
+        //swap reciver to supplier with no drill bits (sender is sending drill bits)
+        model.ShipmentList.First().Receiver = model.SupplierList[2].supplier;
+        Assert.AreEqual(4, model.ShipmentList[0].Receiver.ProductInventory.Count);
+
+        model.AdvanceTime();
+        var first_product = model.ShipmentList[0].Products[0];
+        var giver_first_product = model.SupplierList[0].supplier.ProductInventory
+                .FirstOrDefault(p => p.ProductName == first_product.ProductName);
+        var reciver_first_product = model.SupplierList[2].supplier.ProductInventory
+                .FirstOrDefault(p => p.ProductName == first_product.ProductName);
+        var second_product = model.ShipmentList[0].Products[1];
+        var giver_second_product = model.SupplierList[0].supplier.ProductInventory
+                .FirstOrDefault(p => p.ProductName == second_product.ProductName);
+        var reciver_second_product = model.SupplierList[2].supplier.ProductInventory
+                .FirstOrDefault(p => p.ProductName == second_product.ProductName);
+        // supplier loses 10 
+        Assert.AreEqual(10, giver_first_product.Quantity);
+        Assert.AreEqual(5, giver_second_product.Quantity);
+        // recever gains 10
+        Assert.AreEqual(10, reciver_first_product.Quantity);
+        Assert.AreEqual(5, reciver_second_product.Quantity);
+        // recever has more products than before
+        Assert.AreEqual(6, model.ShipmentList[0].Receiver.ProductInventory.Count);
+    }
+
+    [Test]
+    public void Advancetime_increments_by_constant_amount_products_in_Shipment()
+    {
+        // there has been a bug where calling advance time will increase the quantity of the products in the shipment. 
+        // we want the quantity to remain the same for repeated shipments
+        SupplyChainViewModel model = setupTest();
+        var first_product = model.ShipmentList.First().Products.First();
+        var reciver_first_product = model.ShipmentList.First().Receiver.ProductInventory
+                .FirstOrDefault(p => p.ProductName == first_product.ProductName);
+        model.AdvanceTime();
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(30, reciver_first_product.Quantity);
+        model.AdvanceTime();
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(40, reciver_first_product.Quantity);
+        model.AdvanceTime();
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(50, reciver_first_product.Quantity);
+        for (int i = 0; i < 10; i++) {
+            model.AdvanceTime();
+        }
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(150, reciver_first_product.Quantity);
+        // keep the test, it showed the bug was somwhere in the display, because the viewmodel didn't have the changing value issue.
+    }
+    [Test]
+    public void Advancetime_increments_by_constant_amount_products_in_Shipment_when_frist_added_product()
+    {
+        // there has been a bug where calling advance time will increase the quantity of the products in the shipment. 
+        // we want the quantity to remain the same for repeated shipments
+        SupplyChainViewModel model = setupTest();
+        model.ShipmentList.First().Receiver = model.SupplierList[2].supplier;
+        var first_product = model.ShipmentList.First().Products.First();
+        model.AdvanceTime();
+        var reciver_first_product = model.SupplierList[2].supplier.ProductInventory
+                .FirstOrDefault(p => p.ProductName == first_product.ProductName);
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(10, reciver_first_product.Quantity);
+        model.AdvanceTime();
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(20, reciver_first_product.Quantity);
+        model.AdvanceTime();
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(30, reciver_first_product.Quantity);
+        for (int i = 0; i < 10; i++)
+        {
+            model.AdvanceTime();
+        }
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(130, reciver_first_product.Quantity);
+        // keep the test, it showed the bug was somwhere in the display, because the viewmodel didn't have the changing value issue.
     }
 
     [Test]

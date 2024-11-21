@@ -638,7 +638,7 @@ namespace YourNamespace
             }
             LeftSidebarEndpoint.Visibility = Visibility.Hidden;
             LeftSidebarSupplier.Visibility = Visibility.Hidden;
-            //LeftSidebarLineDetails.Visibility = Visibility.Hidden;
+            LeftSidebarLineDetails.Visibility = Visibility.Hidden;
         }
 
 
@@ -653,6 +653,8 @@ namespace YourNamespace
                     ShippingDetails shippingDetails = new ShippingDetails("Cow", 15.8, 4, "Livestock");
                     l.ShippingDetails.Add(shippingDetails);
                 }
+                l.ourShippingLine.StrokeThickness = 5;
+                l.ourShippingLine.Stroke = new SolidColorBrush(Colors.PaleVioletRed);
                 LeftSidebarLineDetails.Visibility = Visibility.Visible;
             }
             else
