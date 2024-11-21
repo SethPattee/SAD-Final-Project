@@ -26,5 +26,11 @@ namespace WPFTesting.Models
             });
             set => _product = value;
         }
+
+        public ComponentToProductTransformer()
+        {
+            _components = new List<Product>();
+            _product = new Product();
+        }
     }
 }
