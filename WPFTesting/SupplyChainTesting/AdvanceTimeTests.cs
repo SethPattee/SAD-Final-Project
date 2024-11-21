@@ -94,7 +94,33 @@ internal class AdvanceTimeTests
         Assert.AreEqual(6, model.ShipmentList[0].Receiver.ProductInventory.Count);
     }
 
-        [Test]
+    [Test]
+    public void Advancetime_increments_by_constant_amount_products_in_Shipment()
+    {
+        // there has been a bug where calling advance time will increase the quantity of the products in the shipment. 
+        // we want the quantity to remain the same for repeated shipments
+        SupplyChainViewModel model = setupTest();
+        var first_product = model.ShipmentList.First().Products.First();
+        var reciver_first_product = model.ShipmentList.First().Receiver.ProductInventory
+                .FirstOrDefault(p => p.ProductName == first_product.ProductName);
+        model.AdvanceTime();
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(30, reciver_first_product.Quantity);
+        model.AdvanceTime();
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(40, reciver_first_product.Quantity);
+        model.AdvanceTime();
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(50, reciver_first_product.Quantity);
+        for (int i = 0; i < 10; i++) {
+            model.AdvanceTime();
+        }
+        Assert.AreEqual(10, first_product.Quantity);
+        Assert.AreEqual(150, reciver_first_product.Quantity);
+        // keep the test, it showed the bug was somwhere in the display, because the viewmodel didn't have the changing value issue.
+    }
+
+    [Test]
     public void EndpointNodeProcessDoesConsumeProperlyAndProduce()
     {
         // Beeg arrange
