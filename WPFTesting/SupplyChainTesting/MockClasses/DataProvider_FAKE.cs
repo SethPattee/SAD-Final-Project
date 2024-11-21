@@ -36,8 +36,8 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                     Name="Vendor 1",
                     Id = Guid.NewGuid()
                 },
-                xPosition=140,
-                yPosition=140
+                Position = new System.Drawing.Point(140,140)
+
             },
             new SupplierUIValues
             {
@@ -60,8 +60,6 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                     Name="Vendor 2",
                     Id = Guid.NewGuid()
                 },
-                xPosition=280,
-                yPosition=280
             },
             new SupplierUIValues
             {
@@ -94,8 +92,6 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                     Name="Vendor 3",
                     Id=Guid.NewGuid()
                 },
-                xPosition=50,
-                yPosition=320
             }
         };
 
