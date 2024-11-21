@@ -109,6 +109,24 @@
 
                     <Button Content="Edit" Click="EditButton_Click" />
                 </StackPanel>
+                <StackPanel x:Name="ShippingLineDetailsPanel" Grid.Column="0" Grid.Row="1" Visibility="Collapsed" Background="White">
+                    <TextBlock Text="Shipping Line Details" FontWeight="Bold" Margin="10" />
+                    <ItemsControl x:Name="ShippingLineDetailsList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5">
+                                    <TextBox Text="{Binding Item , Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontWeight="Bold" />
+                                    <TextBox Text="Weight: " />
+                                    <TextBox Text="{Binding Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    <TextBox Text="Quantity: " />
+                                    <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    <TextBox Text="Type: " />
+                                    <TextBox Text="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
                 <StackPanel x:Name="LeftSidebarEndpoint" VerticalAlignment="Top" Visibility="Visible">
                     <TextBlock Text="Element Details" FontWeight="Bold" Margin="10"/>
                     <TextBox Text="{Binding SelectedEndpoint.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
