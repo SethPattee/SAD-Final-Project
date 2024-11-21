@@ -109,7 +109,7 @@
 
                     <Button Content="Edit" Click="EditButton_Click" />
                 </StackPanel>
-                <StackPanel x:Name="ShippingLineDetailsPanel" Grid.Column="0" Grid.Row="1" Visibility="Collapsed" Background="White">
+                <StackPanel x:Name="LeftSidebarLineDetails" Grid.Column="0" Grid.Row="1" Visibility="Visible" Background="White">
                     <TextBlock Text="Shipping Line Details" FontWeight="Bold" Margin="10" />
                     <ItemsControl x:Name="ShippingLineDetailsList">
                         <ItemsControl.ItemTemplate>

@@ -68,10 +68,6 @@ public partial class ShippingLine : UserControl
 
         canvas.Children.Remove(this);
     }
-    private void Line_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        (sender as UIElement).CaptureMouse();
-    }
 
 }
 public class ShippingDetails
