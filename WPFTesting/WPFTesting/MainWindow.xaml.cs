@@ -42,7 +42,7 @@ namespace YourNamespace
         public event EventHandler? LineChanged;
 
 
-        public MainWindow()
+    public MainWindow()
         {
             InitializeComponent();
             WindowState = WindowState.Maximized;
@@ -182,6 +182,7 @@ namespace YourNamespace
             if (sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
+                shippingLine.MouseDown += Line_MouseDown;
                 shippingLine.ShipmentOrder.Sender = lineTarget.NodeUIValues.supplier;
                 shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
                 shippingLine.Source = lineTarget;
@@ -641,5 +642,33 @@ namespace YourNamespace
             LeftSidebarEndpoint.Visibility = Visibility.Hidden;
             LeftSidebarSupplier.Visibility = Visibility.Hidden;
         }
+
+
+        private void Line_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ShippingLine l)
+            {
+                ShippingLineDetailsList.ItemsSource = l.ShippingDetails;
+                if (l.ShippingDetails != null)
+                {
+                    ShippingDetails shippingDetails = new ShippingDetails("Cow", 15.8, 4, "Livestock");
+                    l.ShippingDetails.Add(shippingDetails);
+                }
+                ShippingLineDetailsPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ShippingLineDetailsList.ItemsSource = null;
+                ShippingLineDetailsPanel.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void DiagramCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.Source is not ShippingLine)
+            {
+                ShippingLineDetailsPanel.Visibility = Visibility.Collapsed;
+            }
+        }
+
     }
 }

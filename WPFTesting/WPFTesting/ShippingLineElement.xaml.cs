@@ -49,6 +49,7 @@ public partial class ShippingLine : UserControl
         this.ourShippingLine.Y1 = 17;
         this.ourShippingLine.X2 = 170;
         this.ourShippingLine.Y2 = 170;
+
     }
     
 
@@ -67,8 +68,11 @@ public partial class ShippingLine : UserControl
 
         canvas.Children.Remove(this);
     }
+    private void Line_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        (sender as UIElement).CaptureMouse();
+    }
 
-    
 }
 public class ShippingDetails
 {
