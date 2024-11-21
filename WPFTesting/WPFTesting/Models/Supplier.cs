@@ -32,16 +32,20 @@ namespace WPFTesting.Models
 
         public void Receive(List<Product> products)
         {
-            products.ForEach(p => { 
-                if (ProductInventory.FirstOrDefault(x => p is not null && x.ProductName == p.ProductName)?.ProductName == p.ProductName)
+            foreach (var product in products)
+            {
+                if (ProductInventory.FirstOrDefault(x => product is not null && x.ProductName == product.ProductName)?.ProductName == product.ProductName)
                 {
-                    ProductInventory.FirstOrDefault(x => x.ProductName == p.ProductName).Quantity += p.Quantity;
+                    ProductInventory.FirstOrDefault(x => x.ProductName == product.ProductName).Quantity += product.Quantity;
                 }
                 else
                 {
-                    ProductInventory.Add(p);
+                    Product toAdd = new Product();
+                    toAdd.ProductName = product.ProductName;
+                    toAdd.Quantity = product.Quantity;
+                    ProductInventory.Add(toAdd);
                 }
-            });
+            }
         }
 
         public List<Product> ShipOrder(List<Product> products)
