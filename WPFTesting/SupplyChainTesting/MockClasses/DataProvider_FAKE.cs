@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,8 +37,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                     Name="Vendor 1",
                     Id = Guid.NewGuid()
                 },
-                xPosition=140,
-                yPosition=140
+                Position= new Point(140,140)
             },
             new SupplierUIValues
             {
@@ -60,8 +60,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                     Name="Vendor 2",
                     Id = Guid.NewGuid()
                 },
-                xPosition=280,
-                yPosition=280
+                Position= new Point(280,280)
             },
             new SupplierUIValues
             {
@@ -94,8 +93,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                     Name="Vendor 3",
                     Id=Guid.NewGuid()
                 },
-                xPosition=50,
-                yPosition=320
+                Position= new Point(50,320)
             }
         };
 

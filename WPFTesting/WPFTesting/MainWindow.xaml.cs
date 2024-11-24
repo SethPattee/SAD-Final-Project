@@ -25,19 +25,22 @@ namespace YourNamespace
     {
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
         public SupplyChainViewModel ViewModel { get; set; }
-        private bool isRemovingConnection = false;
         private SupplierElement selectedBoxForRemoval = null;
-        private Popup? connectionSelectionPopup;
-        private bool isAddingConnection = false;
         private SupplierElement firstSelectedBox = null;
+        private Popup? connectionSelectionPopup;
+        private bool isRemovingConnection = false;
+        private bool isAddingConnection = false;
         private bool MouseIsCaptured = false;
         private bool IsDestinationSearching = false;
         private ShippingLine? targetShipingLine = null;
         private Shipment? targetShipment = null;
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
-        private (SupplierElement?,ShippingLine?,EndpointElement?) selectedElement = (null,null,null);
         private Product selectedProduct;
-
+        public ObservableCollection<Product> EndpointProductListData { get; set; }
+        public ObservableCollection<Product> EndpointComponentListData { get; set; }
+        public ObservableCollection<Product> EndpointDeliveryListData { get; set; }
+        public (SupplierElement?, EndpointElement?, Shipment?) selectedElement = new();
+        public ObservableCollection<ComponentToProductTransformer> EndpointProductionLineData { get; set; }
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
 
@@ -47,6 +50,7 @@ namespace YourNamespace
             InitializeComponent();
             WindowState = WindowState.Maximized;
             ViewModel = new SupplyChainViewModel(new InitializedDataProvider());
+            MakeEndpoint();
             DataContext = ViewModel;
             Initialize();
             sideBar.BoxList.ItemsSource = boxList;
@@ -579,6 +583,11 @@ namespace YourNamespace
 
         private void AddEndpointElement_Click(object sender, RoutedEventArgs e)
         {
+            MakeEndpoint();
+        }
+
+        private void MakeEndpoint()
+        {
             EndpointUIValues EUIV = new EndpointUIValues();
             EUIV.SetDefaultValues();
             EndpointElement element = new EndpointElement(EUIV);
@@ -588,7 +597,7 @@ namespace YourNamespace
             element.RadialClicked += FinishConnection_Click;
             element.ElementClicked += SelectEndpoint_Click;
             element.DataContext = ViewModel;
-            
+
             Canvas.SetLeft(element, EUIV.Position.X);
             Canvas.SetTop(element, EUIV.Position.Y);
             ViewModel.AddEndpointToChain(EUIV);
@@ -600,10 +609,36 @@ namespace YourNamespace
             UnselectAllCanvasElements();
             if(sender is EndpointElement element)
             {
-                
+                ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;
+                EndpointProductListData = element.NodeUIValues.supplier.ProductInventory;
+                EndpointProductionLineData = ((EndpointNode)element.NodeUIValues.supplier).ProductionList;
+                EndpointComponentListData = ((EndpointNode)element.NodeUIValues.supplier).ComponentInventory;
+                EndpointDeliveryListData = ((EndpointNode)element.NodeUIValues.supplier).DeliveryRequirementsList;
+                foreach(var item in EndpointProductListData)
+                {
+                    if(!EndpointProductList.Items.Contains(item))
+                        EndpointProductList.Items.Add(item);
+                }
+                foreach(var item in EndpointComponentListData)
+                {
+                    //EndpointComponentList.Items.Add(item);
+                }
+                foreach(var item in EndpointDeliveryListData)
+                {
+                    //EndpointComponentList.Items.Add(item);
+                }
+
+                foreach(var item in EndpointProductionLineData)
+                {
+                    foreach(var component in item.Components)
+                    {
+                        
+                    }
+
+                }
+
                 element.ElementBorder.BorderThickness = new Thickness(4);
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
-                ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;
                 LeftSidebarEndpoint.Visibility = Visibility.Visible;
                 LeftSidebarSupplier.Visibility = Visibility.Hidden;
 
@@ -640,6 +675,23 @@ namespace YourNamespace
             }
             LeftSidebarEndpoint.Visibility = Visibility.Hidden;
             LeftSidebarSupplier.Visibility = Visibility.Hidden;
+        }
+
+        private void AddProductToEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void SaveEndpointElementData_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.SelectedEndpoint is null)
+                return;
+            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ProductInventory = EndpointProductListData;
+            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ComponentInventory = EndpointComponentListData;
+            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ProductionList = EndpointProductionLineData;
+            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).DeliveryRequirementsList = EndpointDeliveryListData;
+
+            ViewModel.EndpointList.Where(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id).Select(item => item = ViewModel.SelectedEndpoint);
         }
     }
 }

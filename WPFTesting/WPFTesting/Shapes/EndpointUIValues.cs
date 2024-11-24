@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -8,7 +10,7 @@ using WPFTesting.Models;
 
 namespace WPFTesting.Shapes
 {
-    public class EndpointUIValues : SupplierUIValues
+    public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
     {
         public EndpointUIValues()
         {
@@ -22,7 +24,7 @@ namespace WPFTesting.Shapes
                 Id = new Guid(),
                 Profit = 1000,
                 Name = "Factory",
-                ComponentInventory = new List<Product>()
+                ComponentInventory = new ObservableCollection<Product>()
                     {
                         new Product()
                         {
@@ -46,7 +48,7 @@ namespace WPFTesting.Shapes
                         }
                     },
 
-                ProductInventory = new List<Product>()
+                ProductInventory = new ObservableCollection<Product>()
                     {
                         new Product()
                         {
