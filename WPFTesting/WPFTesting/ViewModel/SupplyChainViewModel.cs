@@ -14,7 +14,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
 {
     private IInitializedDataProvider _boxProvider;
     public event PropertyChangedEventHandler? PropertyChanged;
-    private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
+    private ObservableCollection<EndpointUIValues> _endpointList;
     public ObservableCollection<EndpointUIValues> EndpointList
     {
         get => _endpointList;

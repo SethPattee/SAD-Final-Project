@@ -1,25 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace WPFTesting.Models;
 
 public class EndpointNode : IVendor, INotifyPropertyChanged
 {
-    private string _name = "";
+    private ILogger logger;
+    private string _name;
     private Guid _id;
-    private List<Product> _productInventory = new();
-    private List<Product> _componentInventory = new();
-    private List<ComponentToProductTransformer> _productionList = new();
-    private List<Product> _deliveryrequirementslist = new();
+    private ObservableCollection<Product> _productInventory;
+    private ObservableCollection<Product> _componentInventory;
+    private ObservableCollection<ComponentToProductTransformer> _productionList;
+    private ObservableCollection<Product> _deliveryrequirementslist;
     private decimal _profit;
     public EndpointNode()
     {
+        using ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        logger = loggerFactory.CreateLogger("EndpointNode");
         _profit = (decimal)1234.0;
+        _name = "";
+        _productInventory = new ObservableCollection<Product>();
+        _componentInventory = new ObservableCollection<Product>();
+        _productionList = new ObservableCollection<ComponentToProductTransformer>();
+        _deliveryrequirementslist = new ObservableCollection<Product>();
     }
     public string Name { 
         get => _name; 
@@ -34,7 +44,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                 _id = value; 
                 OnPropertyChanged(nameof(Id));
         } }
-    public List<Product> ProductInventory {
+    public ObservableCollection<Product> ProductInventory {
         get => _productInventory;
         set
         {
@@ -42,7 +52,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             OnPropertyChanged(nameof(ProductInventory));
         }
     }
-    public List<Product> ComponentInventory {
+    public ObservableCollection<Product> ComponentInventory {
         get => _componentInventory;
         set
         {
@@ -50,7 +60,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             OnPropertyChanged(nameof(ComponentInventory));
         }
     }
-    public List<ComponentToProductTransformer> ProductionList
+    public ObservableCollection<ComponentToProductTransformer> ProductionList
     {
         get => _productionList;
         set
@@ -59,7 +69,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             OnPropertyChanged(nameof(ProductionList));
         }
     }
-    public List<Product> DeliveryRequirementsList
+    public ObservableCollection<Product> DeliveryRequirementsList
     {
         get => _deliveryrequirementslist;
         set
@@ -82,22 +92,51 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
     public void ProduceProduct()
     {
         //For every component set to make a given product:
-        _productionList.ForEach(pl =>
+        foreach( var pl in _productionList)
         {
-            List<(int,float)> ComponentIndices = new List<(int,float)>();
-            pl.Components.ForEach(component =>
-            {
-                ComponentIndices.Add((_componentInventory.FindIndex(x => 
-                                                                component.ProductName == x.ProductName && 
-                                                                x.Quantity >= component.Quantity), component.Quantity));
-            });
-            ComponentIndices.RemoveAll(i => i.Item1 < 0);
-            if (ComponentIndices.Count == pl.Components.Count)
-            {
-                ComponentIndices.ForEach(index => _componentInventory[index.Item1].Quantity -= index.Item2);
-                ProductInventory.FirstOrDefault(pibin => pibin.ProductName == pl.ResultingProduct.ProductName).Quantity += pl.ResultingProduct.Quantity;
+            try
+            { 
+                var TransactionalComponentInventory = _componentInventory;
+                if (_productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).Any())
+                {
+                    foreach(var component in TransactionalComponentInventory)
+                    {
+                        foreach(var plcomponent in pl.Components)
+                        {
+                            if (component.ProductName == plcomponent.ProductName
+                                && component.Quantity >= plcomponent.Quantity)
+                                component.Quantity -= plcomponent.Quantity;
+                            else throw new Exception($"Insufficient components to produce {pl.ResultingProduct.ProductName}.");
+                        }
+                    }
+                    _productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName)
+                        .ToList()
+                        .ForEach(x =>
+                        {
+                            x.Quantity += pl.ResultingProduct.Quantity;
+                        });
+                }
+                else
+                {
+                    foreach (var component in TransactionalComponentInventory)
+                    {
+                        foreach (var plcomponent in pl.Components)
+                        {
+                            if (component.ProductName == plcomponent.ProductName
+                                && component.Quantity >= plcomponent.Quantity)
+                                component.Quantity -= plcomponent.Quantity;
+                            else throw new Exception($"Insufficient components to produce {pl.ResultingProduct.ProductName}.");
+                        }
+                    }
+                    _productInventory.Add(pl.ResultingProduct);
+                }
             }
-        });
+            catch (Exception ex)
+            {
+                logger.LogCritical(ex.Message);
+            }
+
+        };
 
         OnPropertyChanged(nameof(ComponentInventory));
         OnPropertyChanged(nameof(ProductInventory));
@@ -137,15 +176,15 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         });
 
         if (productsNotInComponentInventory.Count > 0)
-            ComponentInventory.AddRange(productsNotInComponentInventory);
+            productsNotInComponentInventory.ForEach(x => _componentInventory.Add(x));
     }
 
-    public List<Product> ShipOrder(List<Product> p)
+    public ObservableCollection<Product> ShipOrder(List<Product> p)
     {
 
         p.ForEach(pitem =>
         {
-            var targetindex = ProductInventory.FindIndex(x => x.ProductName == pitem.ProductName);
+            var targetindex = ProductInventory.ToList().FindIndex(x => x.ProductName == pitem.ProductName);
             if(ProductInventory[targetindex].Quantity - pitem.Quantity >= 0) {
                 ProductInventory[targetindex].Quantity -= pitem.Quantity;
                 Profit += (decimal)pitem.Quantity * ProductInventory[targetindex].Price;

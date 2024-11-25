@@ -1,6 +1,7 @@
 ﻿using SupplyChainTesting.MockClasses;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -155,7 +156,7 @@ internal class AdvanceTimeTests
         {
             Id = Guid.NewGuid(),
             Name = "Factory",
-            ComponentInventory = new List<Product>()
+            ComponentInventory = new ObservableCollection<Product>()
             {
                 new Product()
                 {
@@ -177,7 +178,7 @@ internal class AdvanceTimeTests
                     Quantity = 400
                 }
             },
-            ProductInventory = new List<Product>()
+            ProductInventory = new ObservableCollection<Product>()
             {
                 new Product()
                 {
@@ -186,11 +187,11 @@ internal class AdvanceTimeTests
                     Quantity = 0
                 }
             },
-            ProductionList = new List<ComponentToProductTransformer>()
+            ProductionList = new ObservableCollection<ComponentToProductTransformer>()
             {
                 new ComponentToProductTransformer()
                 {
-                    Components = new List<Product>()
+                    Components = new ObservableCollection<Product>()
                     {
                         new Product()
                         {
@@ -261,7 +262,7 @@ internal class AdvanceTimeTests
         EndpointNode endpointTest = new EndpointNode()
         {
             Name = "Swedish fish factory",
-            ProductInventory = new List<Product>()
+            ProductInventory = new ObservableCollection<Product>()
             {
                 new Product()
                 {
@@ -284,6 +285,6 @@ internal class AdvanceTimeTests
         endpointTest.ShipOrder(testOrder);
 
         Assert.That(endpointTest.Profit, Is.EqualTo(10005.99));
-        Assert.That(endpointTest.ProductInventory.Find(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(9900));
+        Assert.That(endpointTest.ProductInventory.FirstOrDefault(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(9900));
         }
 }

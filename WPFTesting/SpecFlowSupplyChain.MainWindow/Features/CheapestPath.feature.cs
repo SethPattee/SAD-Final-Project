@@ -26,7 +26,7 @@ namespace SpecFlowSupplyChain.Features
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private static string[] featureTags = ((string[])(null));
+        private string[] _featureTags = ((string[])(null));
         
 #line 1 "CheapestPath.feature"
 #line hidden
@@ -35,7 +35,7 @@ namespace SpecFlowSupplyChain.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SupplyChainCheapestPath", null, ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SupplyChainCheapestPath", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -47,43 +47,53 @@ namespace SpecFlowSupplyChain.Features
         }
         
         [NUnit.Framework.SetUpAttribute()]
-        public void TestInitialize()
+        public virtual void TestInitialize()
         {
         }
         
         [NUnit.Framework.TearDownAttribute()]
-        public void TestTearDown()
+        public virtual void TestTearDown()
         {
             testRunner.OnScenarioEnd();
         }
         
-        public void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
+        public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
-        public void ScenarioStart()
+        public virtual void ScenarioStart()
         {
             testRunner.OnScenarioStart();
         }
         
-        public void ScenarioCleanup()
+        public virtual void ScenarioCleanup()
         {
             testRunner.CollectScenarioErrors();
         }
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields at least 1 leaf.")]
-        public void SupplyChainCheapestPathYieldsAtLeast1Leaf_()
+        public virtual void SupplyChainCheapestPathYieldsAtLeast1Leaf_()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields at least 1 leaf.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields at least 1 leaf.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 3
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }
@@ -117,15 +127,25 @@ testRunner.Then("The cheapest path list has 1 leaves", ((string)(null)), ((TechT
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields at least 1 root.")]
-        public void SupplyChainCheapestPathYieldsAtLeast1Root_()
+        public virtual void SupplyChainCheapestPathYieldsAtLeast1Root_()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields at least 1 root.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields at least 1 root.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 13
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }
@@ -160,7 +180,7 @@ testRunner.Then("The cheapest path list has 1 roots", ((string)(null)), ((TechTa
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields the correct number of roots.")]
         [NUnit.Framework.TestCaseAttribute("lumber", "hardware", "construction", "lumber", "hardware", "hardware", "construction", null)]
-        public void SupplyChainCheapestPathYieldsTheCorrectNumberOfRoots_(string company, string company2, string company3, string source1, string destination1, string source2, string destination2, string[] exampleTags)
+        public virtual void SupplyChainCheapestPathYieldsTheCorrectNumberOfRoots_(string company, string company2, string company3, string source1, string destination1, string source2, string destination2, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -171,11 +191,21 @@ testRunner.Then("The cheapest path list has 1 roots", ((string)(null)), ((TechTa
             argumentsOfScenario.Add("destination1", destination1);
             argumentsOfScenario.Add("source2", source2);
             argumentsOfScenario.Add("destination2", destination2);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the correct number of roots.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the correct number of roots.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 23
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }
@@ -213,16 +243,26 @@ testRunner.And("The cheapest path list has 2 leaves", ((string)(null)), ((TechTa
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields the correct number of roots on a not-strongly-conn" +
             "ected graph")]
-        public void SupplyChainCheapestPathYieldsTheCorrectNumberOfRootsOnANot_Strongly_ConnectedGraph()
+        public virtual void SupplyChainCheapestPathYieldsTheCorrectNumberOfRootsOnANot_Strongly_ConnectedGraph()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the correct number of roots on a not-strongly-conn" +
-                    "ected graph", null, tagsOfScenario, argumentsOfScenario, featureTags);
+                    "ected graph", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 37
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }
@@ -271,15 +311,25 @@ testRunner.And("The cheapest path list has 2 leaves", ((string)(null)), ((TechTa
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields the correct number of roots on a looped graph.")]
-        public void SupplyChainCheapestPathYieldsTheCorrectNumberOfRootsOnALoopedGraph_()
+        public virtual void SupplyChainCheapestPathYieldsTheCorrectNumberOfRootsOnALoopedGraph_()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the correct number of roots on a looped graph.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the correct number of roots on a looped graph.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 51
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }
@@ -334,15 +384,25 @@ testRunner.And("The cheapest path list has 1 leaves", ((string)(null)), ((TechTa
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields the cheapest path.")]
-        public void SupplyChainCheapestPathYieldsTheCheapestPath_()
+        public virtual void SupplyChainCheapestPathYieldsTheCheapestPath_()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the cheapest path.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the cheapest path.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 67
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }
@@ -376,15 +436,25 @@ testRunner.Then("The cheapest path is \"lumber -> hardware -> construction\" for
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields the cheapest path in a weakly-connected graph.")]
-        public void SupplyChainCheapestPathYieldsTheCheapestPathInAWeakly_ConnectedGraph_()
+        public virtual void SupplyChainCheapestPathYieldsTheCheapestPathInAWeakly_ConnectedGraph_()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the cheapest path in a weakly-connected graph.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the cheapest path in a weakly-connected graph.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 76
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }
@@ -430,15 +500,25 @@ testRunner.And("The cheapest path is \"lumber2 -> hardware -> construction\" for
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields the cheapest path in a looped graph.")]
-        public void SupplyChainCheapestPathYieldsTheCheapestPathInALoopedGraph_()
+        public virtual void SupplyChainCheapestPathYieldsTheCheapestPathInALoopedGraph_()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the cheapest path in a looped graph.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the cheapest path in a looped graph.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 90
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }
@@ -487,15 +567,25 @@ testRunner.Then("The cheapest path is \"lumber -> hardware -> construction\" for
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("SupplyChainCheapestPath yields the cheapest path of two paths.")]
-        public void SupplyChainCheapestPathYieldsTheCheapestPathOfTwoPaths_()
+        public virtual void SupplyChainCheapestPathYieldsTheCheapestPathOfTwoPaths_()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the cheapest path of two paths.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("SupplyChainCheapestPath yields the cheapest path of two paths.", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 104
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
             {
                 testRunner.SkipScenario();
             }

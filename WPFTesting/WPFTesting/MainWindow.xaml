@@ -128,41 +128,158 @@
                     </ItemsControl>
                 </StackPanel>
                 <StackPanel x:Name="LeftSidebarEndpoint" VerticalAlignment="Top" Visibility="Visible">
-                    <TextBlock Text="Element Details" FontWeight="Bold" Margin="10"/>
+                    <TextBlock Text="Element Details" FontWeight="Bold" Margin="10 0 5 0"/>
                     <TextBox Text="{Binding SelectedEndpoint.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-
-                    <TextBlock Text="Position:" />
+                    <Button Content="Save" HorizontalAlignment="Center" Width="50" Click="SaveEndpointElementData_Click"></Button>
+                    
+                    <TextBlock Text="Position:"  Margin="5 0 0 0"/>
                     <TextBlock Text="{Binding SelectedEndpoint.Position, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    
-                    <TextBlock Text="Size:" />
+
+                    <TextBlock Text="Size:"  Margin="5 0 0 0"/>
                     <TextBox  Text=""/>
 
-                    <TextBlock Text="Color:" />
+                    <TextBlock Text="Color:"  Margin="5 0 0 0"/>
                     <TextBox  Text=""/>
                     
-                    <TextBlock Text="Profit: "/>
-                    <TextBox Text="{Binding SelectedEndpoint.supplier.Profit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Text="Profit: " Margin="5 0 0 0"/>
+                    <TextBox Text="{Binding SelectedEndpoint.supplier.Profit,
+                        Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}${0}}"></TextBox>
 
-                    <TextBlock Text="Product Inventory" Margin="0 2 0 0"></TextBlock>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Column="0" Grid.RowSpan="6">
-                            
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" Grid.Row="1">
-                            
-                        </StackPanel>
+                    <Border>
                         <StackPanel>
-                            
+                            <TextBlock Text="{Binding SelectedEndpoint.supplier.Name, Mode=OneWay, StringFormat={}{0}\'s products:}" Margin="5 0 0 0 "></TextBlock>
+                            <ListView x:Name="EndpointProductList" 
+                                      ItemsSource="{Binding SelectedEndpoint.supplier.ProductInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding Product}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
+                                                      HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
+                                                      HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
+                                                      HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                                StringFormat={}${0}}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"></TextBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <Button Content="New Product" Width="81" Click="AddProductToEndpoint_Click"/>
                         </StackPanel>
-                    </Grid>
+                    </Border>
+                    <Border>
+                        <StackPanel>
+                            <TextBlock Text="{Binding SelectedEndpoint.supplier.Name,StringFormat={}{0}\'s components:}" Margin="5 0 0 0 "></TextBlock>
+                            <ListView x:Name="EndpointComponentList" ItemsSource="{Binding SelectedEndpoint.supplier.ComponentInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    SelectedItem="{Binding Product}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
+                                                      HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
+                                                      HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
+                                                      HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                                StringFormat={}${0}}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"></TextBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <Button Content="New Component" Width="90" Click="AddComponentToEndpoint_Click"/>
+                        </StackPanel>
+                    </Border>
+                    <Border>
+                        <StackPanel>
+                            <TextBlock Text="{Binding SelectedEndpoint.supplier.Name,StringFormat={}{0}\'s delivery goals:}" Margin="5 0 0 0 "></TextBlock>
+                            <ListView x:Name="EndpointDeliveryList" ItemsSource="{Binding SelectedEndpoint.supplier.DeliveryRequirementsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding Product}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
+                                  HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
+                                  HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
+                                  HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                            <TextBox Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                            StringFormat={}${0}}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"></TextBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <Button Content="New Delivery" Width="81" Click="AddDeliveryToEndpoint_Click"/>
+                        </StackPanel>
+                    </Border>
+                    <Border>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding SelectedEndpoint.supplier.Name,StringFormat={}{0} production lines:}" Margin="5 0 0 0 " Grid.ColumnSpan="2" Grid.Row="0"></TextBlock>
+                            <ListView x:Name="EndpointProductLineList" ItemsSource="{Binding SelectedEndpoint.supplier.ProductionList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding ComponentToProductTransformer}" Grid.Column="0" Grid.Row="1">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            
+                                        <ListView ItemsSource="{Binding Components}" SelectedItem="{Binding Product}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="4*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="8*"></RowDefinition>
+                                                            <RowDefinition Height="*"></RowDefinition>
+                                                        </Grid.RowDefinitions>
+                                                        <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0"
+                                                              HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                                        <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0"
+                                                              HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                                        <Button Content="New component" Click="AddComponentToPLEndpoint_Click" Grid.ColumnSpan="2" Grid.Row="1"></Button>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                            <StackPanel>
+                                                <TextBox Text="{Binding ResultingProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                                <TextBox Text="{Binding ResultingProduct.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <Button Content="New Production Line" Width="120" Click="AddProductLineToEndpoint_Click"
+                                    Grid.ColumnSpan="2" Grid.Row="2"/>
+                        </Grid>
+                    </Border>
                 </StackPanel>
             </Grid>
         </Border>

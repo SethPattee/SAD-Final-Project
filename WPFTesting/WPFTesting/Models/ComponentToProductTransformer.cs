@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,11 +9,12 @@ namespace WPFTesting.Models
 {
     public class ComponentToProductTransformer
     {
-        private List<Product> _components;
+        private ObservableCollection<Product> _components;
         private Product _product;
-        public List<Product> Components
+        private Guid _id;
+        public ObservableCollection<Product> Components
         {
-            get => _components ?? (new List<Product>());
+            get => _components ?? (new ObservableCollection<Product>());
             set => _components = value;
         }
 
@@ -26,6 +28,15 @@ namespace WPFTesting.Models
             });
             set => _product = value;
         }
+        public Guid Id
+        {
+            get => _id;
+            private set => _id = value;
+        }
+
+        public ComponentToProductTransformer()
+        {
+            Id = Guid.NewGuid();
 
         public ComponentToProductTransformer()
         {
