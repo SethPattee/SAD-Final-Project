@@ -11,6 +11,7 @@ namespace WPFTesting.Models
     {
         private ObservableCollection<Product> _components;
         private Product _product;
+        private Guid _id;
         public ObservableCollection<Product> Components
         {
             get => _components ?? (new ObservableCollection<Product>());
@@ -26,6 +27,16 @@ namespace WPFTesting.Models
                 ProductName = "Duck"
             });
             set => _product = value;
+        }
+        public Guid Id
+        {
+            get => _id;
+            private set => _id = value;
+        }
+
+        public ComponentToProductTransformer()
+        {
+            Id = Guid.NewGuid();
         }
     }
 }

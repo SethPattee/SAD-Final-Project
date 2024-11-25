@@ -13,18 +13,23 @@ namespace WPFTesting.Models;
 public class EndpointNode : IVendor, INotifyPropertyChanged
 {
     private ILogger logger;
-    private string _name = "";
+    private string _name;
     private Guid _id;
-    private ObservableCollection<Product> _productInventory = new();
-    private ObservableCollection<Product> _componentInventory = new();
-    private ObservableCollection<ComponentToProductTransformer> _productionList = new();
-    private ObservableCollection<Product> _deliveryrequirementslist = new();
+    private ObservableCollection<Product> _productInventory;
+    private ObservableCollection<Product> _componentInventory;
+    private ObservableCollection<ComponentToProductTransformer> _productionList;
+    private ObservableCollection<Product> _deliveryrequirementslist;
     private decimal _profit;
     public EndpointNode()
     {
         using ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-        _profit = (decimal)1234.0;
         logger = loggerFactory.CreateLogger("EndpointNode");
+        _profit = (decimal)1234.0;
+        _name = "";
+        _productInventory = new ObservableCollection<Product>();
+        _componentInventory = new ObservableCollection<Product>();
+        _productionList = new ObservableCollection<ComponentToProductTransformer>();
+        _deliveryrequirementslist = new ObservableCollection<Product>();
     }
     public string Name { 
         get => _name; 

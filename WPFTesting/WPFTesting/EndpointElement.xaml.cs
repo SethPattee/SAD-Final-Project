@@ -29,35 +29,43 @@ namespace WPFTesting
         public event EventHandler? RadialClicked;
         public event EventHandler? ElementMoved;
         public event EventHandler? ElementClicked;
-        public SupplyChainViewModel vm { get; set; }
+        public Guid Id { get; set; }
 
         private SupplierUIValues _nodeUIValues = new EndpointUIValues();
 
         private bool isDragging = false;
-        
+
         public SupplierUIValues NodeUIValues
         {
             get => _nodeUIValues;
-            set {
+            set
+            {
                 _nodeUIValues = value;
+                
+            }
+        }
+
+        public void PopulateElementLists()
+        {
+            this.ComponentsList.Items.Clear();
+            foreach (var x in ((EndpointNode)_nodeUIValues.supplier).ComponentInventory)
+            {
+                this.ComponentsList.Items.Add(x);
+            }
+
+            this.ProductsList.Items.Clear();
+            foreach (var x in ((EndpointNode)_nodeUIValues.supplier).ProductInventory)
+            {
+                this.ProductsList.Items.Add(x);
             }
         }
 
         public EndpointElement(EndpointUIValues endpointUIValues)
         {
             InitializeComponent();
-            vm = new SupplyChainViewModel(new InitializedDataProvider());
             this._nodeUIValues = endpointUIValues;
             //add products
-            foreach (var x in ((EndpointNode)endpointUIValues.supplier).ComponentInventory)
-            {
-                this.ComponentsList.Items.Add(x);
-            }
-            foreach (var x in ((EndpointNode)endpointUIValues.supplier).ProductInventory)
-            {
-                this.ProductsList.Items.Add(x);
-            }
-
+            PopulateElementLists();
             DataContext = endpointUIValues;
         }
 

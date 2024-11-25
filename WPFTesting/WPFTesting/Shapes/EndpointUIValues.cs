@@ -56,9 +56,49 @@ namespace WPFTesting.Shapes
                             Price = (decimal)300,
                             Quantity = 2
                         }
+                    },
+                DeliveryRequirementsList = new ObservableCollection<Product>()
+                {
+                    new Product() { ProductName = "Door", Quantity = 1, Price = (decimal)300 }
+                },
+
+                ProductionList = new ObservableCollection<ComponentToProductTransformer>()
+                {
+                    new ComponentToProductTransformer()
+                    {
+                        ResultingProduct = new Product()
+                        {
+                            ProductName = "red herring",
+                            Quantity = 1
+                        },
+                        Components = new ObservableCollection<Product>()
+                        {
+                            new Product()
+                            {
+                                ProductName = "seemingly important clue",
+                                Quantity = 1
+                            }
+                        }
+                    },
+                    new ComponentToProductTransformer()
+                    {
+                        ResultingProduct = new Product()
+                        {
+                            ProductName = "Marriage",
+                            Quantity = 1
+                        },
+                        Components = new ObservableCollection<Product>()
+                        {
+                            new Product()
+                            {
+                                ProductName = "commitment",
+                                Quantity = 20000
+                            }
+                        }
                     }
+                }
             };
-            }
+        }
 
     }
 }
