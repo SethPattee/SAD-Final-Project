@@ -509,6 +509,7 @@ namespace YourNamespace
             {
                 MessageBox.Show("Invalid color format. Please enter a valid color (e.g., #FF0000 or Red).");
             }
+            box.FillProductDisplay();
         }
 
         private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -581,6 +582,14 @@ namespace YourNamespace
         private void AdvanceTime_Click(object sender, EventArgs e)
         {
             ViewModel.AdvanceTime();
+            foreach (var element in DiagramCanvas.Children)
+            {
+                if (element is SupplierElement supplier)
+                {
+
+                supplier.FillProductDisplay();
+                }
+            }
         }
 
         private void AddEndpointElement_Click(object sender, RoutedEventArgs e)

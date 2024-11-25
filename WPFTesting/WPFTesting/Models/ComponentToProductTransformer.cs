@@ -40,5 +40,11 @@ namespace WPFTesting.Models
             _components = new ObservableCollection<Product>();
             _product = new Product();
         }
+
+        //public ComponentToProductTransformer()
+        //{
+        //    _components = new List<Product>();
+        //    _product = new Product();
+        //}
     }
 }

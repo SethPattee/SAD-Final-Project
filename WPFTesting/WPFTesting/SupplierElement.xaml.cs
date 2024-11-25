@@ -50,12 +50,20 @@ namespace YourNamespace
             this._nodeUIValues.supplier = supplierValues.supplier;
             if (this._nodeUIValues.supplier.Name == "" || this._nodeUIValues.supplier.Name == null)
                 this._nodeUIValues.supplier.Name = "New Supplier";
-            //add products
-            foreach (var x in supplierValues.supplier.ProductInventory)
+            FillProductDisplay();
+            DataContext = supplierValues;
+        }
+        public void EmptyProductDisplay()
+        {
+            this.ItemsList.Items.Clear();
+        }
+        public void FillProductDisplay()
+        {
+            this.ItemsList.Items.Clear();
+            foreach (var x in _nodeUIValues.supplier.ProductInventory)
             {
                 this.ItemsList.Items.Add(x);
             }
-            DataContext = supplierValues;
         }
 
         private void Box_MouseDown(object sender, MouseButtonEventArgs e)
