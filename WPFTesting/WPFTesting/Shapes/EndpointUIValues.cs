@@ -22,7 +22,7 @@ namespace WPFTesting.Shapes
             Position = new System.Drawing.Point(120, 120);
             supplier = new EndpointNode()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Profit = 1000,
                 Name = "Factory",
                 ComponentInventory = new ObservableCollection<Product>()
