@@ -37,6 +37,8 @@ namespace WPFTesting.Models
         public ComponentToProductTransformer()
         {
             Id = Guid.NewGuid();
+            _components = new ObservableCollection<Product>();
+            _product = new Product();
         }
 
         //public ComponentToProductTransformer()
