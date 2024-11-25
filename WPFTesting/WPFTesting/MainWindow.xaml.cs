@@ -45,7 +45,7 @@ namespace YourNamespace
         public event EventHandler? LineChanged;
 
 
-        public MainWindow()
+    public MainWindow()
         {
             InitializeComponent();
             WindowState = WindowState.Maximized;
@@ -186,6 +186,7 @@ namespace YourNamespace
             if (sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
+                shippingLine.MouseDown += Line_MouseDown;
                 shippingLine.ShipmentOrder.Sender = lineTarget.NodeUIValues.supplier;
                 shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
                 shippingLine.Source = lineTarget;
@@ -643,8 +644,6 @@ namespace YourNamespace
                 element.ElementBorder.BorderThickness = new Thickness(4);
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
                 LeftSidebarEndpoint.Visibility = Visibility.Visible;
-                LeftSidebarSupplier.Visibility = Visibility.Hidden;
-
              }
          }
         private void SetSelectedBoxDisplay(SupplierElement selectedBox)
@@ -653,7 +652,6 @@ namespace YourNamespace
             selectedBox.boxBorder.BorderThickness = new Thickness(3);
             selectedBox.boxBorder.BorderBrush = Brushes.PaleVioletRed;
             LeftSidebarSupplier.Visibility = Visibility.Visible;
-
         }
 
         private void UnselectAllCanvasElements()
@@ -678,6 +676,7 @@ namespace YourNamespace
             }
             LeftSidebarEndpoint.Visibility = Visibility.Hidden;
             LeftSidebarSupplier.Visibility = Visibility.Hidden;
+            LeftSidebarLineDetails.Visibility = Visibility.Hidden;
         }
 
         private void AddProductToEndpoint_Click(object sender, RoutedEventArgs e)
@@ -792,5 +791,27 @@ namespace YourNamespace
                 }
             };
         }
+
+        private void Line_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            UnselectAllCanvasElements();
+            if (sender is ShippingLine l)
+            {
+                ShippingLineDetailsList.ItemsSource = l.ShippingDetails;
+                if (l.ShippingDetails != null)
+                {
+                    ShippingDetails shippingDetails = new ShippingDetails("Cow", 15.8, 4, "Livestock");
+                    l.ShippingDetails.Add(shippingDetails);
+                }
+                l.ourShippingLine.StrokeThickness = 5;
+                l.ourShippingLine.Stroke = new SolidColorBrush(Colors.PaleVioletRed);
+                LeftSidebarLineDetails.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ShippingLineDetailsList.ItemsSource = null;
+            }
+        }
+
     }
 }

@@ -49,6 +49,7 @@ public partial class ShippingLine : UserControl
         this.ourShippingLine.Y1 = 17;
         this.ourShippingLine.X2 = 170;
         this.ourShippingLine.Y2 = 170;
+
     }
     
 
@@ -68,7 +69,6 @@ public partial class ShippingLine : UserControl
         canvas.Children.Remove(this);
     }
 
-    
 }
 public class ShippingDetails
 {

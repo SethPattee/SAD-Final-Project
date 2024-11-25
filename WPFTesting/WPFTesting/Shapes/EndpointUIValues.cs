@@ -15,6 +15,7 @@ namespace WPFTesting.Shapes
         public EndpointUIValues()
         {
             supplier = new EndpointNode();
+            SetDefaultValues();
         }
         public void SetDefaultValues()
         {

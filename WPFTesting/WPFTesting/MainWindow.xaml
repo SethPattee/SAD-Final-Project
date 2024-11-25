@@ -4,6 +4,16 @@
         xmlns:local="clr-namespace:WPFTesting"
         Title="New Supply Chain Graph" Height="550" Width="1000"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Window.Resources>
+        <DataTemplate x:Key="ProductListTemplate">
+            <Grid>
+                <TextBox Text="{Binding ProductName}"></TextBox>
+                <TextBox Text="{Binding Quantity}"></TextBox>
+                <TextBox Text="{Binding Units}"></TextBox>
+                <TextBox Text="{Binding Price}"></TextBox>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
@@ -98,6 +108,24 @@
                     <TextBox x:Name="PriceTextBox" />
 
                     <Button Content="Edit" Click="EditButton_Click" />
+                </StackPanel>
+                <StackPanel x:Name="LeftSidebarLineDetails" Grid.Column="0" Grid.Row="1" Visibility="Visible" Background="White">
+                    <TextBlock Text="Shipping Line Details" FontWeight="Bold" Margin="10" />
+                    <ItemsControl x:Name="ShippingLineDetailsList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5">
+                                    <TextBox Text="{Binding Item , Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontWeight="Bold" />
+                                    <TextBox Text="Weight: " />
+                                    <TextBox Text="{Binding Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    <TextBox Text="Quantity: " />
+                                    <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    <TextBox Text="Type: " />
+                                    <TextBox Text="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
                 <StackPanel x:Name="LeftSidebarEndpoint" VerticalAlignment="Top" Visibility="Visible">
                     <TextBlock Text="Element Details" FontWeight="Bold" Margin="10 0 5 0"/>

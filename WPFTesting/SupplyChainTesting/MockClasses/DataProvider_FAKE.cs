@@ -37,7 +37,9 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                     Name="Vendor 1",
                     Id = Guid.NewGuid()
                 },
-                Position= new Point(140,140)
+
+                Position = new System.Drawing.Point(140,140)
+
             },
             new SupplierUIValues
             {

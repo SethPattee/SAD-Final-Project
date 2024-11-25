@@ -17,6 +17,7 @@
 
                 <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="Gray" Background="white" Panel.ZIndex="1" Margin="-3 -8 0 0" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=ActualHeight}">
                     <TextBox TextAlignment="Left" BorderBrush="white" BorderThickness="0" Margin="5 0 0 0" Text="{Binding _nodeUIValues.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                 </Border>
                 <Border BorderBrush="Gray"
                     BorderThickness="3"
@@ -104,7 +105,7 @@
                                         <DataTemplate>
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="5*"></ColumnDefinition>
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
