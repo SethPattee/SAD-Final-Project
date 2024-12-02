@@ -187,7 +187,7 @@ namespace YourNamespace
             {
                 ShippingLine shippingLine = new ShippingLine();
                 shippingLine.MouseDown += Line_MouseDown;
-                shippingLine.ShipmentOrder.Sender = lineTarget.NodeUIValues.supplier;
+                shippingLine.OwnShipment.Sender = lineTarget.NodeUIValues.supplier;
                 shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
                 shippingLine.Source = lineTarget;
 
@@ -209,7 +209,7 @@ namespace YourNamespace
             {
                 ShippingLine shippingLine = new ShippingLine();
                 EndpointUIValues euiv = ViewModel.EndpointList.First(x => x.supplier.Id == lineTarget_endpoint.Id);
-                shippingLine.ShipmentOrder.Receiver = euiv.supplier;
+                shippingLine.OwnShipment.Receiver = euiv.supplier;
                 shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint);
                 shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint);
                 shippingLine.Destination = lineTarget_endpoint;
@@ -306,14 +306,14 @@ namespace YourNamespace
             if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
             {
                 Point LineAnchorOffset = GetLineOffset(lineTarget);
-                if(targetShipingLine.ShipmentOrder.Receiver is not null && targetShipingLine.ShipmentOrder.Receiver.GetType() == typeof(EndpointNode))
+                if(targetShipingLine.OwnShipment.Receiver is not null && targetShipingLine.OwnShipment.Receiver.GetType() == typeof(EndpointNode))
                 {
-                    targetShipingLine.ShipmentOrder.Sender = lineTarget.NodeUIValues.supplier;
+                    targetShipingLine.OwnShipment.Sender = lineTarget.NodeUIValues.supplier;
                     targetShipingLine.Source = lineTarget;
                 }
                 else
                 {
-                    targetShipingLine.ShipmentOrder.Receiver = lineTarget.NodeUIValues.supplier;
+                    targetShipingLine.OwnShipment.Receiver = lineTarget.NodeUIValues.supplier;
                     targetShipingLine.Destination = lineTarget;
                 }
 
@@ -326,12 +326,13 @@ namespace YourNamespace
                 IsDestinationSearching = false;
                 ShipmentList.Add(targetShipingLine);
                 targetShipment.Receiver = lineTarget.NodeUIValues.supplier;
+                targetShipingLine.OwnShipment = targetShipment;
                 ViewModel.ShipmentList.Add(targetShipment);
                 targetShipment = null;
             }
             else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
             {
-                targetShipingLine.ShipmentOrder.Receiver = lineTarget_endpoint.NodeUIValues.supplier;
+                targetShipingLine.OwnShipment.Receiver = lineTarget_endpoint.NodeUIValues.supplier;
                 double senseX2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth / 2;
                 double senseY2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight / 2;
                 targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth/2;
@@ -623,10 +624,6 @@ namespace YourNamespace
             if(sender is EndpointElement element)
             {
                 ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;
-                EndpointProductListData = element.NodeUIValues.supplier.ProductInventory;
-                EndpointProductionLineData = ((EndpointNode)element.NodeUIValues.supplier).ProductionList;
-                EndpointComponentListData = ((EndpointNode)element.NodeUIValues.supplier).ComponentInventory;
-                EndpointDeliveryListData = ((EndpointNode)element.NodeUIValues.supplier).DeliveryRequirementsList;
                 //foreach(var item in EndpointProductListData)
                 //{
                 //    if(!EndpointProductList.Items.Contains(item))
@@ -806,19 +803,10 @@ namespace YourNamespace
             UnselectAllCanvasElements();
             if (sender is ShippingLine l)
             {
-                ShippingLineDetailsList.ItemsSource = l.ShippingDetails;
-                if (l.ShippingDetails != null)
-                {
-                    ShippingDetails shippingDetails = new ShippingDetails("Cow", 15.8, 4, "Livestock");
-                    l.ShippingDetails.Add(shippingDetails);
-                }
+                ViewModel.SelectedShipment = l.OwnShipment;
                 l.ourShippingLine.StrokeThickness = 5;
                 l.ourShippingLine.Stroke = new SolidColorBrush(Colors.PaleVioletRed);
                 LeftSidebarLineDetails.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ShippingLineDetailsList.ItemsSource = null;
             }
         }
 

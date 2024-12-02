@@ -29,7 +29,7 @@ public partial class ShippingLine : UserControl
     public string Label { get; set; }
     public List<ShippingDetails> ShippingDetails { get; set; }
     public Guid Id { get; private set; }
-    public Shipment ShipmentOrder { get; set; }
+    public Shipment OwnShipment { get; set; }
     public INodeElement Source { get; set; }
     public INodeElement Destination { get; set; }
     public string FromJoiningBoxCorner { get; set; }
@@ -40,7 +40,7 @@ public partial class ShippingLine : UserControl
     public ShippingLine(Guid? id = null)
     {
         InitializeComponent();
-        this.ShipmentOrder = new Shipment();
+        this.OwnShipment = new Shipment();
         DataContext = this;
         ShippingDetails = new List<ShippingDetails>();
         Id = id ?? Guid.NewGuid();

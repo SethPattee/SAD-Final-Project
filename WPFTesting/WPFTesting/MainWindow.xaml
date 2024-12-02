@@ -110,22 +110,25 @@
                     <Button Content="Edit" Click="EditButton_Click" />
                 </StackPanel>
                 <StackPanel x:Name="LeftSidebarLineDetails" Grid.Column="0" Grid.Row="1" Visibility="Visible" Background="White">
-                    <TextBlock Text="Shipping Line Details" FontWeight="Bold" Margin="10" />
-                    <ItemsControl x:Name="ShippingLineDetailsList">
-                        <ItemsControl.ItemTemplate>
+                    <TextBlock Text="Shipment Details" FontWeight="Bold" Margin="10" />
+                    <ListView x:Name="LineProductList" 
+                        ItemsSource="{Binding SelectedShipment.Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding Product}">
+                        <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Margin="5">
-                                    <TextBox Text="{Binding Item , Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontWeight="Bold" />
-                                    <TextBox Text="Weight: " />
-                                    <TextBox Text="{Binding Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
-                                    <TextBox Text="Quantity: " />
-                                    <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
-                                    <TextBox Text="Type: " />
-                                    <TextBox Text="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
+                                        HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                    <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
+                                        HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                </Grid>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackPanel>
                 <StackPanel x:Name="LeftSidebarEndpoint" VerticalAlignment="Top" Visibility="Visible">
                     <TextBlock Text="Element Details" FontWeight="Bold" Margin="10 0 5 0"/>
