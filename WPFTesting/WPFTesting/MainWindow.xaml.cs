@@ -59,12 +59,12 @@ namespace YourNamespace
 
         private void AddDraggableBoxes()
         {
+            MakeEndpoint(); // still not using 'box'
             foreach (var box in ViewModel.SupplierList)
             {
                 if (box is EndpointUIValues)
                 {
                     //somehow the Endpoint is still generated?
-                    MakeEndpoint(); // still not using 'box'
                 }
                 else if (box is SupplierUIValues)
                 {
