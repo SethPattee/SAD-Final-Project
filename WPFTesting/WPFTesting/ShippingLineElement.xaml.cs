@@ -28,6 +28,7 @@ public partial class ShippingLine : UserControl
     public string CardinalJoint = "Center";
     public string Label { get; set; }
     public List<ShippingDetails> ShippingDetails { get; set; }
+    public EventHandler? LineSelected;
     public Guid Id { get; private set; }
     public Shipment OwnShipment { get; set; }
     public INodeElement Source { get; set; }
@@ -42,16 +43,23 @@ public partial class ShippingLine : UserControl
         InitializeComponent();
         this.OwnShipment = new Shipment();
         DataContext = this;
-        ShippingDetails = new List<ShippingDetails>();
+        OwnShipment.Products = new List<Product>() { new Product() {Price = 0,
+                    Units = "",
+                    ProductName = "Marbels",
+                    Quantity = 7 } };
         Id = id ?? Guid.NewGuid();
         this.Label = "This is a lable";
         this.ourShippingLine.X1 = 17;
         this.ourShippingLine.Y1 = 17;
         this.ourShippingLine.X2 = 170;
         this.ourShippingLine.Y2 = 170;
-
+        
     }
     
+    public void MouseDown_LineClicked(object sender, MouseEventArgs e)
+    {
+        LineSelected?.Invoke(this, e);
+    }
 
     public void AddShippingDetail(ShippingDetails detail)
     {
