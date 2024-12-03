@@ -45,8 +45,8 @@ public partial class ShippingLine : UserControl
         DataContext = this;
         OwnShipment.Products = new List<Product>() { new Product() {Price = 0,
                     Units = "",
-                    ProductName = "New product",
-                    Quantity = 0 } };
+                    ProductName = "Marbels",
+                    Quantity = 7 } };
         Id = id ?? Guid.NewGuid();
         this.Label = "This is a lable";
         this.ourShippingLine.X1 = 17;

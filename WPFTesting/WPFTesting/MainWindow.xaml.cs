@@ -684,14 +684,11 @@ namespace YourNamespace
                     ProductName = "New product",
                     Quantity = 0
                 });
-                //ViewModel.ShipmentList.First(s => s.Sender == ViewModel.SelectedShipment.Sender && s.Receiver == ViewModel.SelectedShipment.Receiver)
-                //    .Products.Add(new Product()
-                //    {
-                //        Price = 0,
-                //        Units = "",
-                //        ProductName = "New product",
-                //        Quantity = 0
-                //    });
+                //This is forcing a redraw of the products in the left side bar...
+                var save = ViewModel.SelectedShipment;
+                ViewModel.SelectedShipment = null;
+                ViewModel.SelectedShipment = save;
+                // it wasn't working another way, feel free to fix, please don't break it just because it ugly
             }
         }
         private void AddComponentToEndpoint_Click(object sender, RoutedEventArgs e)
