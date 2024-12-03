@@ -36,11 +36,7 @@ namespace YourNamespace
         private Shipment? targetShipment = null;
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
         private Product selectedProduct;
-        public ObservableCollection<Product> EndpointProductListData { get; set; }
-        public ObservableCollection<Product> EndpointComponentListData { get; set; }
-        public ObservableCollection<Product> EndpointDeliveryListData { get; set; }
         public (SupplierElement?, EndpointElement?, Shipment?) selectedElement = new();
-        public ObservableCollection<ComponentToProductTransformer> EndpointProductionLineData { get; set; }
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
 
@@ -50,7 +46,6 @@ namespace YourNamespace
             InitializeComponent();
             WindowState = WindowState.Maximized;
             ViewModel = new SupplyChainViewModel(new InitializedDataProvider());
-            MakeEndpoint();
             DataContext = ViewModel;
             Initialize();
             sideBar.BoxList.ItemsSource = boxList;
@@ -66,20 +61,47 @@ namespace YourNamespace
         {
             foreach (var box in ViewModel.SupplierList)
             {
-                SupplierElement dBox = new SupplierElement(box);
-                Canvas.SetLeft(dBox, box.Position.X);
-                Canvas.SetTop(dBox, box.Position.Y);
+                if (box is EndpointUIValues)
+                {
+                    //somehow the Endpoint is still generated?
+                    MakeEndpoint(); // still not using 'box'
+                }
+                else if (box is SupplierUIValues)
+                {
+                    SupplierElement dBox = new SupplierElement(box);
+                    Canvas.SetLeft(dBox, box.Position.X);
+                    Canvas.SetTop(dBox, box.Position.Y);
 
-                dBox.MouseDown += Box_MouseDown;
-                dBox.BoxChanged += Box_Position_Changed;
-                dBox.RadialClicked += StartConnection_Click;
-                dBox.RadialClicked += FinishConnection_Click;
-                dBox.BoxDeleted += RemoveSupplier;
+                    dBox.MouseDown += Box_MouseDown;
+                    dBox.BoxChanged += Box_Position_Changed;
+                    dBox.RadialClicked += StartConnection_Click;
+                    dBox.RadialClicked += FinishConnection_Click;
+                    dBox.BoxDeleted += RemoveSupplier;
 
-                AddBoxToTracker(dBox);
+                    AddBoxToTracker(dBox);
 
-                DiagramCanvas.Children.Add(dBox);
+                    DiagramCanvas.Children.Add(dBox);
+                }
             }
+        }
+        private void MakeEndpoint()
+        {
+            EndpointUIValues EUIV = new EndpointUIValues();
+            EUIV.SetDefaultValues();
+            EndpointElement element = new EndpointElement(EUIV);
+            element.Id = EUIV.supplier.Id;
+            element.DataContext = ViewModel;
+
+            element.ElementMoved += Box_Position_Changed;
+            element.RadialClicked += StartConnection_Click;
+            element.RadialClicked += FinishConnection_Click;
+            element.ElementClicked += SelectEndpoint_Click;
+            element.DataContext = ViewModel;
+
+            Canvas.SetLeft(element, EUIV.Position.X);
+            Canvas.SetTop(element, EUIV.Position.Y);
+            ViewModel.AddEndpointToChain(EUIV);
+            DiagramCanvas.Children.Add(element);
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -598,25 +620,6 @@ namespace YourNamespace
             MakeEndpoint();
         }
 
-        private void MakeEndpoint()
-        {
-            EndpointUIValues EUIV = new EndpointUIValues();
-            EUIV.SetDefaultValues();
-            EndpointElement element = new EndpointElement(EUIV);
-            element.Id = EUIV.supplier.Id;
-            element.DataContext = ViewModel;
-
-            element.ElementMoved += Box_Position_Changed;
-            element.RadialClicked += StartConnection_Click;
-            element.RadialClicked += FinishConnection_Click;
-            element.ElementClicked += SelectEndpoint_Click;
-            element.DataContext = ViewModel;
-
-            Canvas.SetLeft(element, EUIV.Position.X);
-            Canvas.SetTop(element, EUIV.Position.Y);
-            ViewModel.AddEndpointToChain(EUIV);
-            DiagramCanvas.Children.Add(element);
-        }
 
         private void SelectEndpoint_Click(object sender, EventArgs e)
         {
@@ -624,28 +627,6 @@ namespace YourNamespace
             if(sender is EndpointElement element)
             {
                 ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;
-                //foreach(var item in EndpointProductListData)
-                //{
-                //    if(!EndpointProductList.Items.Contains(item))
-                //        EndpointProductList.Items.Add(item);
-                //}
-                //foreach(var item in EndpointComponentListData)
-                //{
-                //    //EndpointComponentList.Items.Add(item);
-                //}
-                //foreach(var item in EndpointDeliveryListData)
-                //{
-                //    //EndpointComponentList.Items.Add(item);
-                //}
-
-                foreach(var item in EndpointProductionLineData)
-                {
-                    foreach(var component in item.Components)
-                    {
-                        
-                    }
-
-                }
 
                 element.ElementBorder.BorderThickness = new Thickness(4);
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
@@ -774,10 +755,6 @@ namespace YourNamespace
         {
             if (ViewModel.SelectedEndpoint is null)
                 return;
-            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ProductInventory = EndpointProductListData;
-            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ComponentInventory = EndpointComponentListData;
-            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ProductionList = EndpointProductionLineData;
-            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).DeliveryRequirementsList = EndpointDeliveryListData;
 
             ViewModel.SupplierList.Where(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
                 .Select(item => item = ViewModel.SelectedEndpoint);
