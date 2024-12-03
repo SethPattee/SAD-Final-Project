@@ -33,7 +33,6 @@ namespace YourNamespace
         private bool MouseIsCaptured = false;
         private bool IsDestinationSearching = false;
         private ShippingLine? targetShipingLine = null;
-        private Shipment? targetShipment = null;
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
         private Product selectedProduct;
         public (SupplierElement?, EndpointElement?, Shipment?) selectedElement = new();
@@ -208,7 +207,6 @@ namespace YourNamespace
             if (sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
                 ShippingLine shippingLine = new ShippingLine();
-                shippingLine.MouseDown += Line_MouseDown;
                 shippingLine.OwnShipment.Sender = lineTarget.NodeUIValues.supplier;
                 shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
                 shippingLine.Source = lineTarget;
@@ -224,7 +222,6 @@ namespace YourNamespace
 
                 shippingLine = AssignLineValues(mousepos, shippingLine);
                 targetShipingLine = shippingLine;
-                targetShipment = ViewModel.ShipmentFirstSuplier((Supplier)lineTarget.NodeUIValues.supplier);
                 DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
             }
             if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured == false)
@@ -346,11 +343,9 @@ namespace YourNamespace
                 //ReleaseMouseCapture();
                 MouseIsCaptured = false;
                 IsDestinationSearching = false;
+                targetShipingLine.LineSelected += Line_MouseDown;
+                ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
                 ShipmentList.Add(targetShipingLine);
-                targetShipment.Receiver = lineTarget.NodeUIValues.supplier;
-                targetShipingLine.OwnShipment = targetShipment;
-                ViewModel.ShipmentList.Add(targetShipment);
-                targetShipment = null;
             }
             else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
             {
@@ -672,14 +667,31 @@ namespace YourNamespace
             {
 
                 ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
-                .supplier).ProductInventory.Add(new Product()
+                .supplier).ProductInventory.Add(new Product() {
+                    Price = 0, Units = "", ProductName = "New product", Quantity = 0
+                });
+
+            }
+        }
+        private void AddProductToShipment_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.ShipmentList is not null && ViewModel.SelectedShipment is not null)
+            {
+                ViewModel.SelectedShipment.Products.Add(new Product()
                 {
                     Price = 0,
                     Units = "",
                     ProductName = "New product",
                     Quantity = 0
                 });
-
+                //ViewModel.ShipmentList.First(s => s.Sender == ViewModel.SelectedShipment.Sender && s.Receiver == ViewModel.SelectedShipment.Receiver)
+                //    .Products.Add(new Product()
+                //    {
+                //        Price = 0,
+                //        Units = "",
+                //        ProductName = "New product",
+                //        Quantity = 0
+                //    });
             }
         }
         private void AddComponentToEndpoint_Click(object sender, RoutedEventArgs e)
@@ -775,7 +787,7 @@ namespace YourNamespace
             };
         }
 
-        private void Line_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Line_MouseDown(object sender, EventArgs e)
         {
             UnselectAllCanvasElements();
             if (sender is ShippingLine l)
