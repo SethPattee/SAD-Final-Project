@@ -46,7 +46,6 @@ namespace YourNamespace
             InitializeComponent();
             WindowState = WindowState.Maximized;
             ViewModel = new SupplyChainViewModel(new InitializedDataProvider());
-            MakeEndpoint();
             DataContext = ViewModel;
             Initialize();
             sideBar.BoxList.ItemsSource = boxList;
@@ -65,6 +64,7 @@ namespace YourNamespace
                 if (box is EndpointUIValues)
                 {
                     //somehow the Endpoint is still generated?
+                    MakeEndpoint(); // still not using 'box'
                 }
                 else if (box is SupplierUIValues)
                 {
@@ -83,6 +83,25 @@ namespace YourNamespace
                     DiagramCanvas.Children.Add(dBox);
                 }
             }
+        }
+        private void MakeEndpoint()
+        {
+            EndpointUIValues EUIV = new EndpointUIValues();
+            EUIV.SetDefaultValues();
+            EndpointElement element = new EndpointElement(EUIV);
+            element.Id = EUIV.supplier.Id;
+            element.DataContext = ViewModel;
+
+            element.ElementMoved += Box_Position_Changed;
+            element.RadialClicked += StartConnection_Click;
+            element.RadialClicked += FinishConnection_Click;
+            element.ElementClicked += SelectEndpoint_Click;
+            element.DataContext = ViewModel;
+
+            Canvas.SetLeft(element, EUIV.Position.X);
+            Canvas.SetTop(element, EUIV.Position.Y);
+            ViewModel.AddEndpointToChain(EUIV);
+            DiagramCanvas.Children.Add(element);
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -601,25 +620,6 @@ namespace YourNamespace
             MakeEndpoint();
         }
 
-        private void MakeEndpoint()
-        {
-            EndpointUIValues EUIV = new EndpointUIValues();
-            EUIV.SetDefaultValues();
-            EndpointElement element = new EndpointElement(EUIV);
-            element.Id = EUIV.supplier.Id;
-            element.DataContext = ViewModel;
-
-            element.ElementMoved += Box_Position_Changed;
-            element.RadialClicked += StartConnection_Click;
-            element.RadialClicked += FinishConnection_Click;
-            element.ElementClicked += SelectEndpoint_Click;
-            element.DataContext = ViewModel;
-
-            Canvas.SetLeft(element, EUIV.Position.X);
-            Canvas.SetTop(element, EUIV.Position.Y);
-            ViewModel.AddEndpointToChain(EUIV);
-            DiagramCanvas.Children.Add(element);
-        }
 
         private void SelectEndpoint_Click(object sender, EventArgs e)
         {
