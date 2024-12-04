@@ -130,6 +130,7 @@
                                         HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                                         HorizontalAlignment="Stretch" MinWidth="40"></TextBox>
+                                    
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
