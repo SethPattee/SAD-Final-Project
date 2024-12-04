@@ -112,6 +112,10 @@
                 <!--LINES-->
                 <StackPanel x:Name="LeftSidebarLineDetails" Grid.Column="0" Grid.Row="1" Visibility="Visible" Background="White">
                     <TextBlock Text="Shipment Details" FontWeight="Bold" Margin="10" />
+                    <Label>Supplier</Label>
+                    <TextBlock Text="{Binding SelectedShipment.Sender.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                    <Label>Reciver</Label>
+                    <TextBlock Text="{Binding SelectedShipment.Receiver.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                     <ListView x:Name="LineProductList" 
                         ItemsSource="{Binding SelectedShipment.Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItem="{Binding Product}">
