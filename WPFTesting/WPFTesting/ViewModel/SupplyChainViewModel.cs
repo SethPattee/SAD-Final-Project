@@ -129,9 +129,14 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         foreach (Shipment delivery in ShipmentList)
         {
             //shipOrder
-            delivery.Sender.ShipOrder(delivery.Products);
+            var sentProds = delivery.Sender.ShipOrder(delivery.Products);
+            List<Product> listSent = new List<Product>();
+            foreach (var prod in sentProds)
+            {
+                listSent.Add(prod);
+            }
             //Receive 
-            delivery.Receiver.Receive(delivery.Products);
+            delivery.Receiver.Receive(listSent);
         }
         foreach (var v in _supplierList)
         {
