@@ -55,13 +55,65 @@ internal class AdvanceTimeTests
         model.ShipmentList.First().Sender = model.SupplierList[2].supplier;
         //Sender doesn't have Drill Bit or Saw Blade 2-pack
         model.AdvanceTime();
-        var reciverInventory = model.SupplierList[1].supplier.ProductInventory  ?? new();
+        var reciverInventory = model.SupplierList[1].supplier.ProductInventory;
         var reciver_first_product = reciverInventory[0];
         var reciver_second_product = reciverInventory[1];
 
         // recever gains nothing
         Assert.AreEqual(20, reciver_first_product.Quantity);
         Assert.AreEqual(10, reciver_second_product.Quantity);
+        Assert.AreEqual(2, reciverInventory.Count);
+
+        model.ShipmentList.First().Products.Add(new Product() {
+            Quantity = 5,
+            ProductName = "screws"
+        });
+
+        model.AdvanceTime();
+        reciverInventory = model.SupplierList[1].supplier.ProductInventory;
+        reciver_first_product = reciverInventory[0];
+        reciver_second_product = reciverInventory[1];
+        var reciver_third_product = reciverInventory[2];
+
+        // recever gains just the screws
+        Assert.AreEqual(20, reciver_first_product.Quantity);
+        Assert.AreEqual(10, reciver_second_product.Quantity);
+        Assert.AreEqual(5, reciver_third_product.Quantity);
+        Assert.AreEqual(3, reciverInventory.Count);
+    }
+    [Test]
+    public void AdvanceTime_Moves_up_to_number_products_in_sender()
+    {
+        SupplyChainViewModel model = setupTest();
+        //Sender only has 20 Drill Bit or 10 Saw Blade 2-pack
+        model.ShipmentList.First().Products.First().Quantity = 200;
+        var reciverInventory = model.SupplierList[1].supplier.ProductInventory ?? new();
+        var suplierInventory = model.SupplierList[0].supplier.ProductInventory;
+        var reciver_first_product = reciverInventory[0];
+        var suplier_first_product = suplierInventory[0];
+        var suplier_second_product = suplierInventory[1];
+        var reciver_second_product = reciverInventory[1];
+
+        Assert.AreEqual(20, suplier_first_product.Quantity);
+        Assert.AreEqual(10, suplier_second_product.Quantity);
+        Assert.AreEqual(2, suplierInventory.Count);
+        Assert.AreEqual(20, reciver_first_product.Quantity);
+        Assert.AreEqual(10, reciver_second_product.Quantity);
+        Assert.AreEqual(2, reciverInventory.Count);
+
+        model.AdvanceTime();
+        reciverInventory = model.SupplierList[1].supplier.ProductInventory ?? new();
+        suplierInventory = model.SupplierList[0].supplier.ProductInventory;
+        reciver_first_product = reciverInventory[0];
+        suplier_first_product = suplierInventory[0];
+        reciver_second_product = reciverInventory[1];
+        suplier_second_product = suplierInventory[1];
+
+        Assert.AreEqual(0, suplier_first_product.Quantity);
+        Assert.AreEqual(5, suplier_second_product.Quantity);
+        Assert.AreEqual(2, suplierInventory.Count);
+        Assert.AreEqual(40, reciver_first_product.Quantity);
+        Assert.AreEqual(15, reciver_second_product.Quantity);
         Assert.AreEqual(2, reciverInventory.Count);
     }
 

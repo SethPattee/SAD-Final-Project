@@ -59,7 +59,8 @@ namespace WPFTesting.Models
                     var targetIndex = ProductInventory.ToList().FindIndex(x => x.ProductName == p.ProductName);
                     if (ProductInventory[targetIndex].Quantity-p.Quantity < 0)
                     {
-                        OrderLine.Add(ProductInventory[targetIndex]);
+                        Product product = new Product() { ProductName = ProductInventory[targetIndex].ProductName, Quantity = ProductInventory[targetIndex].Quantity };
+                        OrderLine.Add(product);
                         ProductInventory[targetIndex].Quantity = 0;
                     }
                     else
