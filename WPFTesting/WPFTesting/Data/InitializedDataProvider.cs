@@ -23,10 +23,20 @@ public class InitializedDataProvider : IInitializedDataProvider
         {
             var jString = File.ReadAllText("Suppliers.json");
             if (jString == null || jString == "")
-            { _Suppliers = GenneratedFirstSuppliers.InitialSuppliers(); }
+            {
+                _Suppliers = GenneratedFirstSuppliers.InitialSuppliers();
+            }
             else
             {
-                _Suppliers = JsonConvert.DeserializeObject<IEnumerable<SupplierUIValues>>(jString);
+                IEnumerable<ForJsonSuplier> forSuppliers = new List<ForJsonSuplier>();
+                forSuppliers = JsonConvert.DeserializeObject<IEnumerable<ForJsonSuplier>>(jString);
+                List<SupplierUIValues> toUiSuppliers = new List<SupplierUIValues>();
+                foreach (var s in forSuppliers)
+                {
+                    FromJsonSuplier fs = new FromJsonSuplier(s);
+                    toUiSuppliers.Add(fs.Supplier);
+                }
+                _Suppliers = (IEnumerable<SupplierUIValues>)toUiSuppliers;
             }
         }
         catch (Exception E) { Console.WriteLine(E); }
@@ -38,7 +48,12 @@ public class InitializedDataProvider : IInitializedDataProvider
 
     public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
     {
-        var jString = System.Text.Json.JsonSerializer.Serialize(supplierUIValues);
+        List<ForJsonSuplier> forJsonSupliers = new List<ForJsonSuplier>();
+        foreach(SupplierUIValues value in supplierUIValues)
+        {
+            forJsonSupliers.Add(new ForJsonSuplier(value));
+        }
+        var jString = System.Text.Json.JsonSerializer.Serialize(forJsonSupliers);
         try
         {
             //TODO: NEED an environment variable that has the path, or be happy diving into the bin/debug/.... stuff every time. 
