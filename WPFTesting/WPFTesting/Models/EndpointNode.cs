@@ -17,7 +17,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
     private Guid _id;
     private ObservableCollection<Product> _productInventory;
     private ObservableCollection<Product> _componentInventory;
-    private ObservableCollection<ComponentToProductTransformer> _productionList;
+    private ObservableCollection<ProductLine> _productionList;
     private ObservableCollection<Product> _deliveryrequirementslist;
     private decimal _profit;
     public EndpointNode()
@@ -28,7 +28,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         _name = "";
         _productInventory = new ObservableCollection<Product>();
         _componentInventory = new ObservableCollection<Product>();
-        _productionList = new ObservableCollection<ComponentToProductTransformer>();
+        _productionList = new ObservableCollection<ProductLine>();
         _deliveryrequirementslist = new ObservableCollection<Product>();
     }
     public string Name { 
@@ -60,7 +60,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             OnPropertyChanged(nameof(ComponentInventory));
         }
     }
-    public ObservableCollection<ComponentToProductTransformer> ProductionList
+    public ObservableCollection<ProductLine> ProductionList
     {
         get => _productionList;
         set

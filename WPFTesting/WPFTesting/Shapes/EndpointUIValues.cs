@@ -63,9 +63,9 @@ namespace WPFTesting.Shapes
                     new Product() { ProductName = "Door", Quantity = 1, Price = (decimal)300 }
                 },
 
-                ProductionList = new ObservableCollection<ComponentToProductTransformer>()
+                ProductionList = new ObservableCollection<ProductLine>()
                 {
-                    new ComponentToProductTransformer()
+                    new ProductLine()
                     {
                         ResultingProduct = new Product()
                         {
@@ -81,7 +81,7 @@ namespace WPFTesting.Shapes
                             }
                         }
                     },
-                    new ComponentToProductTransformer()
+                    new ProductLine()
                     {
                         ResultingProduct = new Product()
                         {

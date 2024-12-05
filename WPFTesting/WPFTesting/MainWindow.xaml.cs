@@ -36,11 +36,7 @@ namespace YourNamespace
         private Shipment? targetShipment = null;
         private List<ShippingLine> ShipmentList = new List<ShippingLine>();
         private Product selectedProduct;
-        public ObservableCollection<Product> EndpointProductListData { get; set; }
-        public ObservableCollection<Product> EndpointComponentListData { get; set; }
-        public ObservableCollection<Product> EndpointDeliveryListData { get; set; }
         public (SupplierElement?, EndpointElement?, Shipment?) selectedElement = new();
-        public ObservableCollection<ComponentToProductTransformer> EndpointProductionLineData { get; set; }
         public event EventHandler? BoxChanged;
         public event EventHandler? LineChanged;
 
@@ -573,7 +569,7 @@ namespace YourNamespace
                 }
                 else
                 {
-                    Console.WriteLine($"no supplier found to delete with guid {SupplierId}");
+                    Console.WriteLine($"No supplier found to delete with guid {SupplierId}");
                 }
             }
 
@@ -623,33 +619,6 @@ namespace YourNamespace
             if(sender is EndpointElement element)
             {
                 ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;
-                EndpointProductListData = element.NodeUIValues.supplier.ProductInventory;
-                EndpointProductionLineData = ((EndpointNode)element.NodeUIValues.supplier).ProductionList;
-                EndpointComponentListData = ((EndpointNode)element.NodeUIValues.supplier).ComponentInventory;
-                EndpointDeliveryListData = ((EndpointNode)element.NodeUIValues.supplier).DeliveryRequirementsList;
-                //foreach(var item in EndpointProductListData)
-                //{
-                //    if(!EndpointProductList.Items.Contains(item))
-                //        EndpointProductList.Items.Add(item);
-                //}
-                //foreach(var item in EndpointComponentListData)
-                //{
-                //    //EndpointComponentList.Items.Add(item);
-                //}
-                //foreach(var item in EndpointDeliveryListData)
-                //{
-                //    //EndpointComponentList.Items.Add(item);
-                //}
-
-                foreach(var item in EndpointProductionLineData)
-                {
-                    foreach(var component in item.Components)
-                    {
-                        
-                    }
-
-                }
-
                 element.ElementBorder.BorderThickness = new Thickness(4);
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
                 LeftSidebarEndpoint.Visibility = Visibility.Visible;
@@ -694,13 +663,7 @@ namespace YourNamespace
             {
 
                 ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
-                .supplier).ProductInventory.Add(new Product()
-                {
-                    Price = 0,
-                    Units = "",
-                    ProductName = "New product",
-                    Quantity = 0
-                });
+                .supplier).ProductInventory.Add(CreateNewProduct());
 
             }
         }
@@ -710,13 +673,7 @@ namespace YourNamespace
             {
 
                 ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
-                .supplier).ComponentInventory.Add(new Product()
-                {
-                    Price = 0,
-                    Units = "",
-                    ProductName = "New product",
-                    Quantity = 0
-                });
+                .supplier).ComponentInventory.Add(CreateNewProduct());
             
             }
         }
@@ -726,13 +683,7 @@ namespace YourNamespace
             if (IsViewModelEndpointUsable())
             {
                 ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
-                .supplier).DeliveryRequirementsList.Add(new Product()
-                {
-                    Price = 0,
-                    Units = "",
-                    ProductName = "New product",
-                    Quantity = 0
-                });
+                .supplier).DeliveryRequirementsList.Add(CreateNewProduct());
             }
         }
 
@@ -746,41 +697,43 @@ namespace YourNamespace
             if(IsViewModelEndpointUsable())
             {
                 ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
-                .supplier).ProductionList.Add(new ComponentToProductTransformer()
+                .supplier).ProductionList.Add(new ProductLine()
                 {
                     Components = new ObservableCollection<Product>()
                     {
-                        new Product()
-                        {
-                            ProductName = "new component",
-                            Quantity = 0
-                        }
+                        CreateNewProduct()
                     },
-                    ResultingProduct = new Product()
-                    {
-                        ProductName = "New Product",
-                        Quantity = 0
-                    }
+                    ResultingProduct = CreateNewProduct()
                 });
             }
         }
 
         private void AddComponentToPLEndpoint_Click(object sender, RoutedEventArgs e)
         {
-            if (IsViewModelEndpointUsable())
+            if (IsViewModelEndpointUsable() && sender is Button button)
             {
-                Console.WriteLine(sender.ToString());
+                ((ProductLine)button.DataContext).Components.Add(CreateNewProduct());
             }
+        }
+
+
+        private Product CreateNewProduct()
+        {
+            Product product = new Product()
+            {
+                Price = 0,
+                Units = "",
+                ProductName = "New product",
+                Quantity = 0
+            };
+
+            return product;
         }
 
         private void SaveEndpointElementData_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.SelectedEndpoint is null)
                 return;
-            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ProductInventory = EndpointProductListData;
-            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ComponentInventory = EndpointComponentListData;
-            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).ProductionList = EndpointProductionLineData;
-            ((EndpointNode)ViewModel.SelectedEndpoint.supplier).DeliveryRequirementsList = EndpointDeliveryListData;
 
             ViewModel.SupplierList.Where(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
                 .Select(item => item = ViewModel.SelectedEndpoint);
@@ -822,5 +775,39 @@ namespace YourNamespace
             }
         }
 
+        private void DeleteComponentButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(IsViewModelEndpointUsable() && sender is Button button)
+            {
+                var plcontexttarget = GetAncestorOfType(VisualTreeHelper.GetParent(button));
+
+                ((ProductLine)plcontexttarget.DataContext)
+                    .Components.Remove((Product)button.DataContext);
+
+            }
+        }
+
+        private void DeleteProductLineButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(IsViewModelEndpointUsable() && sender is Button button)
+            {
+                ((EndpointNode)ViewModel.SelectedEndpoint.supplier)
+                    .ProductionList.Remove((ProductLine)button.DataContext);
+            }
+        }
+
+        private ListView GetAncestorOfType(DependencyObject element)
+        {
+            var parent = VisualTreeHelper.GetParent(element);
+            if (parent is null)
+                return null;
+
+            if(parent.GetType() == typeof(ListView))
+                return (ListView)parent;
+            else
+            {
+                return (ListView)GetAncestorOfType((DependencyObject)parent);
+            }
+        }
     }
 }
