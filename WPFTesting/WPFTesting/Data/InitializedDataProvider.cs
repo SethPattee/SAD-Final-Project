@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.IO;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using YourNamespace;
 
 namespace WPFTesting.Data;
 
@@ -49,9 +50,16 @@ public class InitializedDataProvider : IInitializedDataProvider
     public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
     {
         List<ForJsonSuplier> forJsonSupliers = new List<ForJsonSuplier>();
-        foreach(SupplierUIValues value in supplierUIValues)
-        {
-            forJsonSupliers.Add(new ForJsonSuplier(value));
+        foreach(var value in supplierUIValues)
+        {     
+            if( !(value is Shapes.EndpointUIValues))
+            {
+                forJsonSupliers.Add(new ForJsonSuplier(value));
+            }
+            else
+            {
+                //value;
+            }
         }
         var jString = System.Text.Json.JsonSerializer.Serialize(forJsonSupliers);
         try
