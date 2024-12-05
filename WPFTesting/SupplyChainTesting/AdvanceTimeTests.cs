@@ -256,9 +256,9 @@ internal class AdvanceTimeTests
                     Quantity = 0
                 }
             },
-            ProductionList = new ObservableCollection<ComponentToProductTransformer>()
+            ProductionList = new ObservableCollection<ProductLine>()
             {
-                new ComponentToProductTransformer()
+                new ProductLine()
                 {
                     Components = new ObservableCollection<Product>()
                     {

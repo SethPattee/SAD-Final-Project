@@ -29,10 +29,21 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         get => _selectedEndpoint;
         set
         {
-            _selectedEndpoint = value;
+            _selectedEndpoint = value ?? new EndpointUIValues();
             OnPropertyChanged(nameof(SelectedEndpoint));
         }
     }
+    private ProductLine _selectedComponentLine;
+    public ProductLine SelectedComponentLine
+    {
+        get => _selectedComponentLine;
+        set
+        {
+            _selectedComponentLine = value;
+            OnPropertyChanged(nameof(SelectedComponentLine));
+        }
+    }
+
     private SupplierUIValues _selectedSupplier;
     public SupplierUIValues? SelectedSupplier
     {
