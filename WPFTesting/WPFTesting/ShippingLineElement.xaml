@@ -13,7 +13,9 @@
             </ContextMenu>
         </Grid.ContextMenu>
 
-        <Line Stroke="Aqua" Panel.ZIndex="-10" StrokeThickness="5" X1="0" X2="100" Y1="0" Y2="100" x:Name="ourShippingLine"/>
+        <Line Stroke="Aqua" Panel.ZIndex="-10" 
+              StrokeThickness="5" X1="0" X2="100" Y1="0" Y2="100" x:Name="ourShippingLine"
+              MouseDown="MouseDown_LineClicked"/>
 
         <!-- TextBlock to show label -->
         <TextBlock Text="{Binding Label}" 
