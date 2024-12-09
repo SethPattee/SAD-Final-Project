@@ -95,40 +95,67 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         foreach( var pl in _productionList)
         {
             try
-            { 
+            {
+                bool CanProceed = false;
                 var TransactionalComponentInventory = _componentInventory;
                 if (_productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).Any())
                 {
-                    foreach(var component in TransactionalComponentInventory)
+                    foreach (var component in pl.Components)
                     {
-                        foreach(var plcomponent in pl.Components)
+                        foreach(var inventorycomponent in TransactionalComponentInventory)
                         {
-                            if (component.ProductName == plcomponent.ProductName
-                                && component.Quantity >= plcomponent.Quantity)
-                                component.Quantity -= plcomponent.Quantity;
-                            else throw new Exception($"Insufficient components to produce {pl.ResultingProduct.ProductName}.");
+                            if(inventorycomponent.ProductName == component.ProductName
+                                && inventorycomponent.Quantity >= component.Quantity)
+                            {
+                                inventorycomponent.Quantity -= component.Quantity;
+                                CanProceed = true;
+                                break;
+                            }
+                            else
+                            {
+                                CanProceed = false;
+                                continue;
+                            }
                         }
+                        if (!CanProceed) break;
                     }
-                    _productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName)
-                        .ToList()
-                        .ForEach(x =>
-                        {
-                            x.Quantity += pl.ResultingProduct.Quantity;
-                        });
+
+                    if (CanProceed)
+                    {
+                        _productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName)
+                            .Select(x => x.Quantity += pl.ResultingProduct.Quantity);
+
+                        _componentInventory = TransactionalComponentInventory;
+                    }
                 }
                 else
                 {
-                    foreach (var component in TransactionalComponentInventory)
+                    foreach (var component in pl.Components)
                     {
-                        foreach (var plcomponent in pl.Components)
+                        foreach (var inventorycomponent in TransactionalComponentInventory)
                         {
-                            if (component.ProductName == plcomponent.ProductName
-                                && component.Quantity >= plcomponent.Quantity)
-                                component.Quantity -= plcomponent.Quantity;
-                            else throw new Exception($"Insufficient components to produce {pl.ResultingProduct.ProductName}.");
+                            if (inventorycomponent.ProductName == component.ProductName
+                                && inventorycomponent.Quantity >= component.Quantity)
+                            {
+                                inventorycomponent.Quantity -= component.Quantity;
+                                CanProceed = true;
+                                break;
+                            }
+                            else
+                            {
+                                CanProceed = false;
+                                continue;
+                            }
                         }
+                        if (!CanProceed) break;
                     }
-                    _productInventory.Add(pl.ResultingProduct);
+
+                    if (CanProceed)
+                    {
+                        _productInventory.Add(pl.ResultingProduct);
+
+                        _componentInventory = TransactionalComponentInventory;
+                    }
                 }
             }
             catch (Exception ex)
