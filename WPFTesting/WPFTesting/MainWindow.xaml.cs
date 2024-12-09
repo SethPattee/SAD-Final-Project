@@ -602,12 +602,12 @@ namespace YourNamespace
             ViewModel.AdvanceTime();
             foreach (var element in DiagramCanvas.Children)
             {
-                if (element is SupplierElement supplier)
+                if (element is SupplierElement supplier && element is not EndpointElement)
                 {
-
-                supplier.FillProductDisplay();
+                    supplier.FillProductDisplay();
                 }
             }
+            RefreshEndpointElementDisplay();
         }
 
         private void AddEndpointElement_Click(object sender, RoutedEventArgs e)
@@ -751,21 +751,22 @@ namespace YourNamespace
 
         private void SaveEndpointElementData_Click(object sender, RoutedEventArgs e)
         {
+            RefreshEndpointElementDisplay();
+        }
+
+        private void RefreshEndpointElementDisplay()
+        {
             if (ViewModel.SelectedEndpoint is null)
                 return;
-
-            ViewModel.SupplierList.Where(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
-                .Select(item => item = ViewModel.SelectedEndpoint);
             foreach (var item in DiagramCanvas.Children)
             {
-                if(item is EndpointElement eitem)
+                if (item is EndpointElement eitem)
                 {
-                    if(eitem.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                    if (eitem.NodeUIValues.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
                     {
                         // Until we can get a better binding model for the dynamically created elements,
                         // We're forcibly re-updating them with the save button. 
                         // That way those elements are always up to date.
-                        eitem.NodeUIValues = ViewModel.SelectedEndpoint;
                         eitem.PopulateElementLists();
                     }
 
