@@ -54,4 +54,11 @@
 
 ## 5 week buffer inside April and May
 - Ensure production is ready for release and deliverable.
-- Add stretch goal features with remaining time. 
+- Add stretch goal features with remaining time.
+
+https://github.com/xceedsoftware/wpftoolkit/wiki/Xceed-Toolkit-Plus-for-WPF#feature-comparison
+https://www.reactiveui.net/
+https://scottplot.net/ (only for C#)
+https://github.com/MahApps/MahApps.Metro (For Looks)
+https://github.com/lepoco/wpfui (Looks really nice, might be hard to use)
+https://github.com/handyOrg/HandyControl(Has tons of stuff that might be useful?)
