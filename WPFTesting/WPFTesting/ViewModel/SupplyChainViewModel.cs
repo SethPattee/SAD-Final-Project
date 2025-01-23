@@ -81,6 +81,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     public SupplyChainViewModel(IInitializedDataProvider boxProvider)
     {
         _boxProvider = boxProvider;
+        EndpointList = new ObservableCollection<EndpointUIValues>();
     }
 
     private ObservableCollection<SupplierUIValues> _supplierList = new ObservableCollection<SupplierUIValues>();
@@ -125,8 +126,8 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     }
     public void AddEndpointToChain(EndpointUIValues endpoint)
     {
-        SupplierList.Add(endpoint);
-        OnPropertyChanged(nameof(SupplierList));
+        EndpointList.Add(endpoint);
+        OnPropertyChanged(nameof(EndpointList));
     }
 
     public void AddSupplierToChain(SupplierUIValues supplier)
