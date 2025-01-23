@@ -47,7 +47,7 @@ namespace YourNamespace
             ViewModel = new SupplyChainViewModel(new InitializedDataProvider());
             DataContext = ViewModel;
             Initialize();
-            sideBar.BoxList.ItemsSource = boxList;
+            //sideBar.BoxList.ItemsSource = boxList;
         }
 
         private void Initialize()
