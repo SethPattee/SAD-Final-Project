@@ -17,9 +17,8 @@
     </Window.Resources>
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="350"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
@@ -55,8 +54,8 @@
             </StackPanel>
         </Border>
 
-        <!-- Left Sidebar -->
-        <Border Grid.Column="0" Grid.Row="1" BorderBrush="Gray" BorderThickness="0,0,1,0">
+        <!-- Right Sidebar -->
+        <Border Grid.Column="1" Grid.Row="1" BorderBrush="Gray" BorderThickness="0,0,1,0">
             <Grid>
                 <StackPanel x:Name="LeftSidebarSupplier" Visibility="Hidden">
                     <TextBlock Text="Box Details" FontWeight="Bold" Margin="10"/>
@@ -299,7 +298,7 @@
             </Grid>
         </Border>
 
-        <Border Grid.Column="1" Grid.Row="1" BorderBrush="Gray" BorderThickness="0,0,0,0">
+        <Border Grid.Column="0" Grid.Row="1" BorderBrush="Gray" BorderThickness="0,0,0,0">
             <!-- Main Canvas Area -->
             <Grid>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -331,6 +330,6 @@
         </Border>
 
         <!-- Right Sidebar -->
-        <local:RightSideBar x:Name="sideBar" Grid.Column="2" Grid.Row="1" />
+        
     </Grid>
 </Window>
