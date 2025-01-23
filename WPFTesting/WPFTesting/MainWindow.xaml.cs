@@ -90,7 +90,7 @@ namespace YourNamespace
             EndpointElement element = new EndpointElement(EUIV);
             element.Id = EUIV.supplier.Id;
             element.DataContext = ViewModel;
-            element.EndpointTitle.Text = element.NodeUIValues.supplier.Name;
+            element.PopulateElementLists();
             element.ElementMoved += Box_Position_Changed;
             element.RadialClicked += StartConnection_Click;
             element.RadialClicked += FinishConnection_Click;

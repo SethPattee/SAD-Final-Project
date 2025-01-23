@@ -48,6 +48,19 @@ namespace WPFTesting
         public void PopulateElementLists()
         {
             EndpointTitle.Text = NodeUIValues.supplier.Name;
+            ProfitTracker.Text = ((EndpointNode)(NodeUIValues.supplier)).Profit.ToString();
+
+            if(((EndpointNode)(NodeUIValues.supplier)).Profit < 0)
+            {
+                ProfitTracker.Foreground = Brushes.Red;
+                ProfitTrackerDollarSign.Foreground = Brushes.Red;
+            }
+            else
+            {
+                ProfitTracker.Foreground = Brushes.LimeGreen;
+                ProfitTrackerDollarSign.Foreground = Brushes.LimeGreen;
+            }
+
             this.ComponentsList.Items.Clear();
             foreach (var x in ((EndpointNode)_nodeUIValues.supplier).ComponentInventory)
             {
