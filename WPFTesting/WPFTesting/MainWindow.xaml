@@ -280,12 +280,15 @@
                                                          TextWrapping="Wrap"/>
                                                 <TextBox Text="{Binding ResultingProduct.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                          TextWrapping="Wrap"/>
+                                               
                                                 <Button Content="Add Component" Click="AddComponentToPLEndpoint_Click"
                                                         IsEnabled="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}, Mode=FindAncestor}}"
                                                         Grid.ColumnSpan="2" Grid.Row="1"></Button>
-                                                <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                                                        Grid.Column="2" Grid.Row="1"
+                                                <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="1">
+                                                    <CheckBox Margin="5,0,5,0" IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">Enabled?</CheckBox>
+                                                    <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
                                                         Click="DeleteProductLineButton_Click"></Button>
+                                                </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
                                     </DataTemplate>

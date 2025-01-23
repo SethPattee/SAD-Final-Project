@@ -96,6 +96,9 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         {
             try
             {
+                if (!pl.IsEnabled)
+                    continue;
+
                 bool CanProceed = false;
                 var TransactionalComponentInventory = _componentInventory;
                 if (_productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).Any())
