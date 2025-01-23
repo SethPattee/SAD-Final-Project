@@ -328,35 +328,30 @@ namespace YourNamespace
         private void FinishConnection_Click(object sender, EventArgs e)
         {
             if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
-            {
-                Point LineAnchorOffset = GetLineOffset(lineTarget);
-                if(targetShipingLine.OwnShipment.Receiver is not null && targetShipingLine.OwnShipment.Receiver.GetType() == typeof(EndpointNode))
-                {
-                    targetShipingLine.OwnShipment.Sender = lineTarget.NodeUIValues.supplier;
-                    targetShipingLine.Source = lineTarget;
-                }
-                else
-                {
-                    targetShipingLine.OwnShipment.Receiver = lineTarget.NodeUIValues.supplier;
-                    targetShipingLine.Destination = lineTarget;
-                }
+			{
+				Point LineAnchorOffset = GetLineOffset(lineTarget);
+				if (targetShipingLine.OwnShipment.Receiver is not null && targetShipingLine.OwnShipment.Receiver.GetType() == typeof(EndpointNode))
+				{
+					targetShipingLine.OwnShipment.Sender = lineTarget.NodeUIValues.supplier;
+					targetShipingLine.Source = lineTarget;
+				}
+				else
+				{
+					targetShipingLine.OwnShipment.Receiver = lineTarget.NodeUIValues.supplier;
+					targetShipingLine.Destination = lineTarget;
+				}
 
-                targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
-                if (targetShipingLine.FromJoiningBoxCorner is null)
-                {
-                    targetShipingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
-                }
+				targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
+				if (targetShipingLine.FromJoiningBoxCorner is null)
+				{
+					targetShipingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
+				}
 
-                targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + LineAnchorOffset.X;
-                targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + LineAnchorOffset.Y;
-                //ReleaseMouseCapture();
-                MouseIsCaptured = false;
-                IsDestinationSearching = false;
-                targetShipingLine.LineSelected += Line_MouseDown;
-                ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
-                ShipmentList.Add(targetShipingLine);
-            }
-            else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
+				targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + LineAnchorOffset.X;
+				targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + LineAnchorOffset.Y;
+				FinnishLineMaker();
+			}
+			else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
             {
                 targetShipingLine.OwnShipment.Receiver = lineTarget_endpoint.NodeUIValues.supplier;
                 double senseX2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth / 2;
@@ -365,16 +360,9 @@ namespace YourNamespace
                 targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight/2;
                 targetShipingLine.Destination = lineTarget_endpoint;
 
-                MouseIsCaptured = false;
-                IsDestinationSearching = false;
-                ShipmentList.Add(targetShipingLine);
-                //Shipment s = new Shipment();
-                //s.Sender = targetShipment.Source.nodeUIValues.supplier;
-                //s.Receiver = targetShipment.Source.nodeUIValues.supplier;
-                //_viewModel.ShipmentList.Add(targetShipment);
-
-            }
-            else if (sender is not null && sender is not SupplierElement && IsDestinationSearching)
+				FinnishLineMaker();
+			}
+			else if (sender is not null && sender is not SupplierElement && IsDestinationSearching)
             {
                 DiagramCanvas.Children.Remove(targetShipingLine);
                 targetShipingLine = null;
@@ -385,8 +373,16 @@ namespace YourNamespace
                 IsDestinationSearching = true;
             }
         }
+		private void FinnishLineMaker()
+		{
+			MouseIsCaptured = false;
+			IsDestinationSearching = false;
+			targetShipingLine.LineSelected += Line_MouseDown;
+			ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
+			ShipmentList.Add(targetShipingLine);
+		}
 
-        private void Box_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		private void Box_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (sender is SupplierElement selectedBox)
             {
