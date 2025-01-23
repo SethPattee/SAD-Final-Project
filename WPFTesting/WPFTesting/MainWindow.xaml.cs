@@ -273,6 +273,9 @@ namespace YourNamespace
 
         private Point GetLineOffset(SupplierElement lineTarget)
         {
+            if (lineTarget is SupplierElement)
+            {
+
             double lineXOffset = 0;
             double lineYOffset = 0;
             switch (lineTarget.CornerClicked.ToLower())
@@ -318,6 +321,8 @@ namespace YourNamespace
             }
 
             return new Point(lineXOffset, lineYOffset);
+            }
+            return new Point(10, 10);
         }
 
         private void FinishConnection_Click(object sender, EventArgs e)
@@ -337,6 +342,10 @@ namespace YourNamespace
                 }
 
                 targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
+                if (targetShipingLine.FromJoiningBoxCorner is null)
+                {
+                    targetShipingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
+                }
 
                 targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + LineAnchorOffset.X;
                 targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + LineAnchorOffset.Y;
