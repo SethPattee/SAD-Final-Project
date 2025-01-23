@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WPFTesting"
              mc:Ignorable="d" 
              d:DesignHeight="360" d:DesignWidth="560"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+             DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid Width="530" Height="330" MinWidth="400">
         <Border x:Name="ElementBorder"  BorderBrush="Gray" BorderThickness="1" MouseDown="Box_MouseDown" PreviewMouseDown="Click_SelectElement" MouseMove="Box_MouseMove" MouseUp="Box_MouseUp">
             <Grid>
@@ -15,10 +15,7 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="Gray" Background="white" Panel.ZIndex="1" Margin="-3 -8 0 0" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=ActualHeight}">
-                    <TextBlock TextAlignment="Left" Panel.ZIndex="3" Margin="5 0 0 0" Text="{Binding _nodeUIValues.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                </Border>
                 <Border BorderBrush="Gray"
                     BorderThickness="3"
                     Opacity="0.7"
@@ -43,6 +40,10 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="24"></RowDefinition>
                         </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="-5, -13, 0, 0"
+                            HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" BorderThickness="1" BorderBrush="Gray" Panel.ZIndex="1" Width="330">
+                            <TextBlock x:Name="EndpointTitle" Padding="4,2,0,0" DataContext="{Binding NodeUIValues, BindsDirectlyToSource=True}" Text="{Binding supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" VerticalAlignment="Stretch" TextAlignment="Left" HorizontalAlignment="Stretch"></TextBlock>
+                        </Border> <!-- {Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" HorizontalAlignment="Stretch"-->
                         <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Gray" Margin="0 0 2 0">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -119,7 +120,7 @@
                             </Grid>
 
                         </Border>
-                        <Border Grid.ColumnSpan="2" Grid.Row="2" BorderThickness="1" BorderBrush="Gray" Background="Gainsboro">
+                        <Border Grid.ColumnSpan="2" Grid.Row="1" BorderThickness="1" BorderBrush="Gray" Background="Gainsboro">
                             <Grid>
                                 <TextBlock x:Name="HoverLabel" Text="{Binding _nodeUIValues.supplier.Profit, Mode=OneWay, StringFormat=\${}{0}}" HorizontalAlignment="Left" Margin="3 1 0 0" MaxWidth="250"></TextBlock>
                                 <Border BorderBrush="DimGray" Width="18" Height="18" BorderThickness="0 0 2 2" HorizontalAlignment="Right" Margin="0 0 2 0" CornerRadius="1">
