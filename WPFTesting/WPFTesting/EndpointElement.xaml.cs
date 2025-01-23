@@ -47,6 +47,7 @@ namespace WPFTesting
 
         public void PopulateElementLists()
         {
+            EndpointTitle.Text = NodeUIValues.supplier.Name;
             this.ComponentsList.Items.Clear();
             foreach (var x in ((EndpointNode)_nodeUIValues.supplier).ComponentInventory)
             {
