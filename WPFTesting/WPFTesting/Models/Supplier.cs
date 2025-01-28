@@ -23,6 +23,7 @@ namespace WPFTesting.Models
         
         }
         public ObservableCollection<Product> ProductInventory { get; set; } = new ObservableCollection<Product>();
+        public ObservableCollection<Product> ComponentInventory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
