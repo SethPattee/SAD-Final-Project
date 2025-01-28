@@ -44,4 +44,15 @@ public class DataProviderTests
         Assert.AreEqual(1,  model.EndpointList.Count);
         Assert.AreEqual(3, model.SupplierList.Count);
     }
+    [Test]
+    public void EndpointRecivesShippmentsToComponentInventory()
+    {
+        SupplyChainViewModel model = setupTest();
+        model.ShipmentList.First().Receiver = model.EndpointList.First().supplier;
+        IVendor supplier = model.ShipmentList[0].Sender;
+        IVendor endPoint = model.ShipmentList[0].Receiver;
+        model.AdvanceTime();
+        Assert.AreEqual("Drill Bit", endPoint.ComponentInventory.FirstOrDefault(p => p.ProductName == "Drill Bit").ProductName);
+        Assert.AreEqual(10, endPoint.ComponentInventory.FirstOrDefault(p => p.ProductName == "Drill Bit").Quantity);
+    }
 }
