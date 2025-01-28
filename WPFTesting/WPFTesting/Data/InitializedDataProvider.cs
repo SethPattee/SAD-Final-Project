@@ -30,21 +30,20 @@ public class InitializedDataProvider : IInitializedDataProvider
             }
             else
             {
-                IEnumerable<ForJsonSuplier> forSuppliers = new List<ForJsonSuplier>();
-                forSuppliers = JsonConvert.DeserializeObject<IEnumerable<ForJsonSuplier>>(jString);
-                List<SupplierUIValues> toUiSuppliers = new List<SupplierUIValues>();
-                List<EndpointUIValues> endpoints = (List<EndpointUIValues>)JsonConvert.DeserializeObject<IEnumerable<EndpointUIValues>>(jString_endpoint);
+                IEnumerable<ForJsonSuplier> forSuppliers = JsonConvert.DeserializeObject<IEnumerable<ForJsonSuplier>>(jString);
+                IEnumerable<ForJsonEndpoint> forEndpoints = JsonConvert.DeserializeObject<IEnumerable<ForJsonEndpoint>>(jString_endpoint);
+                List<SupplierUIValues> toUiEndpointsAndSuppliers = new List<SupplierUIValues>();
                 foreach (var s in forSuppliers)
                 {
                     FromJsonSuplier fs = new FromJsonSuplier(s);
-                    toUiSuppliers.Add(fs.Supplier);
+                    toUiEndpointsAndSuppliers.Add((SupplierUIValues)fs.Supplier);
                 }
-                _Suppliers = (IEnumerable<SupplierUIValues>)toUiSuppliers;
-
-                foreach (var item in endpoints)
+                foreach (var item in forEndpoints)
                 {
-                    _Suppliers.Append(item);
+                    FromJsonEndpoint fe = new FromJsonEndpoint(item);
+                    toUiEndpointsAndSuppliers.Add((EndpointUIValues)fe.Supplier);
                 }
+                _Suppliers = (IEnumerable<SupplierUIValues>)toUiEndpointsAndSuppliers;
             }
         }
         catch (Exception E) { Console.WriteLine(E); }
@@ -57,6 +56,7 @@ public class InitializedDataProvider : IInitializedDataProvider
     public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
     {
         List<ForJsonSuplier> forJsonSupliers = new List<ForJsonSuplier>();
+        List<ForJsonSuplier> forJsonEndpoints = new List<ForJsonSuplier>();
         List<EndpointUIValues> endpoints = new List<EndpointUIValues>();
         foreach(var value in supplierUIValues)
         {     
@@ -66,12 +66,14 @@ public class InitializedDataProvider : IInitializedDataProvider
             }
             else
             {
-                endpoints.Add((EndpointUIValues)value);
+                forJsonEndpoints.Add(new ForJsonSuplier(value));
+                //endpoints.Add((EndpointUIValues)value);
             }
         }
         var jString = System.Text.Json.JsonSerializer.Serialize(forJsonSupliers);
-        var jString_endpoint = System.Text.Json.JsonSerializer.Serialize(endpoints);
-        try
+        var jString_endpoint = System.Text.Json.JsonSerializer.Serialize(forJsonEndpoints);
+        //var jString_endpoint = System.Text.Json.JsonSerializer.Serialize(endpoints);
+		try
         {
             //TODO: NEED an environment variable that has the path, or be happy diving into the bin/debug/.... stuff every time. 
             // for now, it is saving down SAD-Final-Project\WPFTesting\WPFTesting\bin\Debug\net8.0-windows7.0\Suppliers.json

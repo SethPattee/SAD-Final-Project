@@ -105,7 +105,10 @@ public class SupplyChainViewModel : INotifyPropertyChanged
 
     public void updateFileSave()
     {
-        _boxProvider.SaveSupplierInfoAsync(SupplierList);
+        List<SupplierUIValues> endpointsAndSuppliers = new List<SupplierUIValues>();
+        endpointsAndSuppliers.AddRange(SupplierList);
+        endpointsAndSuppliers.AddRange(EndpointList);
+        _boxProvider.SaveSupplierInfoAsync(endpointsAndSuppliers);
         //save the Shipping line here
     }
 
