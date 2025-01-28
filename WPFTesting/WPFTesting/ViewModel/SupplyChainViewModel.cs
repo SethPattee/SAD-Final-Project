@@ -119,7 +119,14 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         {
             foreach (var box in boxes)
             {
-                SupplierList.Add(box);
+                if (box is EndpointUIValues Endp)
+                {
+                    EndpointList.Add(Endp);
+                }
+                else if (box is SupplierUIValues supp)
+                {
+                    SupplierList.Add(supp);
+                }
             }
         }
 
