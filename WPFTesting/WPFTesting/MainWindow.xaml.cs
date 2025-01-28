@@ -680,7 +680,7 @@ namespace YourNamespace
         {
             if (ViewModel.SupplierList is not null && ViewModel.SelectedEndpoint is not null)
             {
-                ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
                 .supplier).ProductInventory.Add(CreateNewProduct());
             }
         }
@@ -706,10 +706,8 @@ namespace YourNamespace
         {
             if(IsViewModelEndpointUsable())
             {
-
-                ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
                 .supplier).ComponentInventory.Add(CreateNewProduct());
-            
             }
         }
 
