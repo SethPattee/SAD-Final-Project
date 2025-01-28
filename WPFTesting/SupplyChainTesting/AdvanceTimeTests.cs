@@ -356,4 +356,9 @@ internal class AdvanceTimeTests
         Assert.That(endpointTest.Profit, Is.EqualTo(10005.99));
         Assert.That(endpointTest.ProductInventory.FirstOrDefault(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(9900));
         }
+    [Test]
+    public void EndpointRecivesShippmentsToComponentInventory()
+    {
+        Assert.Fail();
+    }
 }

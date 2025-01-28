@@ -181,32 +181,46 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
 
     public void Receive(List<Product> products)
     {
-        List<Product> productsNotInComponentInventory = new List<Product>();
-        products.ForEach(p =>
+        foreach (var product in products)
         {
-            if(ComponentInventory.Count > 0)
-                foreach(var c in ComponentInventory)
-                {
-                    if(c.ProductName == p.ProductName)
-                    {
-                        c.Quantity += p.Quantity;
-                        Profit -= p.Price;
-                    }
-                    else
-                    {
-                        productsNotInComponentInventory.Add(p);
-                        Profit -= p.Price;
-                    }
-                }
+            if (ComponentInventory.FirstOrDefault(x => product is not null && x.ProductName == product.ProductName)?.ProductName == product.ProductName)
+            {
+                ComponentInventory.FirstOrDefault(x => x.ProductName == product.ProductName).Quantity += product.Quantity;
+            }
             else
             {
-                ComponentInventory.Add(p);
-                Profit -= p.Price;
-            }    
-        });
+                Product toAdd = new Product();
+                toAdd.ProductName = product.ProductName;
+                toAdd.Quantity = product.Quantity;
+                ComponentInventory.Add(toAdd);
+            }
+        }
+        //List<Product> productsNotInComponentInventory = new List<Product>();
+        //products.ForEach(p =>
+        //{
+        //    if(ComponentInventory.Count > 0)
+        //        foreach(var c in ComponentInventory)
+        //        {
+        //            if(c.ProductName == p.ProductName)
+        //            {
+        //                c.Quantity += p.Quantity;
+        //                Profit -= p.Price;
+        //            }
+        //            else
+        //            {
+        //                productsNotInComponentInventory.Add(p);
+        //                Profit -= p.Price;
+        //            }
+        //        }
+        //    else
+        //    {
+        //        ComponentInventory.Add(p);
+        //        Profit -= p.Price;
+        //    }    
+        //});
 
-        if (productsNotInComponentInventory.Count > 0)
-            productsNotInComponentInventory.ForEach(x => _componentInventory.Add(x));
+        //if (productsNotInComponentInventory.Count > 0)
+        //    productsNotInComponentInventory.ForEach(x => _componentInventory.Add(x));
     }
 
     public ObservableCollection<Product> ShipOrder(List<Product> p)
