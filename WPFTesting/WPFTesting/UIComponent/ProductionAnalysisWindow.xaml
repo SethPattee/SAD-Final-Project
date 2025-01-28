@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFTesting.UIComponent"
         xmlns:classes="clr-namespace:WPFTesting.ViewModel"
-        mc:Ignorable="d"
+        mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Title="ProductionAnalysisWindow"
         Background="Transparent"  Height="450" Width="800">
     <Grid>
@@ -24,11 +24,35 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5*"></RowDefinition>
             </Grid.RowDefinitions>
-
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Border Background="LightSlateGray">
+                    <Slider VerticalAlignment="Center" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                            TickFrequency="1"
+                            Width="250" Minimum="1" Maximum="8" Value="{Binding DaysToRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Left" ValueChanged="Slider_ValueChanged"
+                            Margin="10 0 10 0"></Slider>
+                </Border>
+                <Border Background="LightGray" BorderThickness="0" HorizontalAlignment="Stretch" BorderBrush="Transparent" Width="170">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Enter days:" Margin="5 0 3 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                    x:Name="AnalysisPeriodTutor" Visibility="Visible"></TextBlock>
+                        <TextBox Text="{Binding DaysToRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Visibility="Visible"
+                                 Margin="5 0 0 0" VerticalAlignment="Center" BorderThickness="0"
+                                 Background="Transparent" x:Name="AnalysisPeriodValue"></TextBox>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <Border Grid.Row="1" Background="DarkGray">
+                <ListView Background="Transparent">
+                    <!--<ListView.ItemTemplate>
+                        
+                    </ListView.ItemTemplate>-->
+                </ListView>
+            </Border>
         </Grid>
 
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="20 0 0 0">
-        
+
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="1" Margin="20 0 0 0">
@@ -36,11 +60,11 @@
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="2">
-            <Border BorderBrush="CornflowerBlue" Background="DodgerBlue" BorderThickness="1" CornerRadius="50">
+            <Border BorderBrush="CornflowerBlue" Background="DodgerBlue" BorderThickness="1" CornerRadius="50" Margin="5 10 5 10">
                 <Button Background="Transparent">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Start Sim" FontSize="30" TextWrapping="Wrap" Foreground="AntiqueWhite" VerticalAlignment="Center" Margin="0 0 8 0"></TextBlock>
+                            <TextBlock Text="Start Sim" FontSize="28" TextWrapping="Wrap" Foreground="AntiqueWhite" VerticalAlignment="Center" Margin="0 0 8 0"></TextBlock>
                             <Polygon Points="0,40 30,20 0,0" Height="40" Fill="AntiqueWhite" VerticalAlignment="Bottom"
                                      ></Polygon>
                         </StackPanel>
