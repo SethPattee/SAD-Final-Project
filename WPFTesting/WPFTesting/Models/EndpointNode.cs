@@ -194,33 +194,8 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                 toAdd.Quantity = product.Quantity;
                 ComponentInventory.Add(toAdd);
             }
+            Profit -= product.Price;
         }
-        //List<Product> productsNotInComponentInventory = new List<Product>();
-        //products.ForEach(p =>
-        //{
-        //    if(ComponentInventory.Count > 0)
-        //        foreach(var c in ComponentInventory)
-        //        {
-        //            if(c.ProductName == p.ProductName)
-        //            {
-        //                c.Quantity += p.Quantity;
-        //                Profit -= p.Price;
-        //            }
-        //            else
-        //            {
-        //                productsNotInComponentInventory.Add(p);
-        //                Profit -= p.Price;
-        //            }
-        //        }
-        //    else
-        //    {
-        //        ComponentInventory.Add(p);
-        //        Profit -= p.Price;
-        //    }    
-        //});
-
-        //if (productsNotInComponentInventory.Count > 0)
-        //    productsNotInComponentInventory.ForEach(x => _componentInventory.Add(x));
     }
 
     public ObservableCollection<Product> ShipOrder(List<Product> p)
