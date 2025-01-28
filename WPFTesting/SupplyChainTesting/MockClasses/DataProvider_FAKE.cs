@@ -293,7 +293,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                 },
                 Position= new Point(50,320)
             },
-            new SupplierUIValues
+            new EndpointUIValues
             {
                 supplier = new EndpointNode()
                 {
