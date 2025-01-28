@@ -18,6 +18,7 @@ using System.Reflection;
 using WPFTesting.Components;
 using System.Net;
 using System.Xml.Linq;
+using WPFTesting.UIComponent;
 
 namespace YourNamespace
 {
@@ -824,6 +825,14 @@ namespace YourNamespace
             {
                 return (ListView)GetAncestorOfType((DependencyObject)parent);
             }
+        }
+
+        // Code learned from Window Ownership section of https://learn.microsoft.com/en-us/dotnet/desktop/wpf/windows/?view=netdesktop-9.0
+        private void Button_ClickForAnalyze(object sender, RoutedEventArgs e)
+        {
+            var AnalysisWindow = new ProductionAnalysisWindow();
+            AnalysisWindow.Owner = this;
+            AnalysisWindow.Show();
         }
     }
 }
