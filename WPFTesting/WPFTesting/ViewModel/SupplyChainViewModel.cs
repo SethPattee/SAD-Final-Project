@@ -136,7 +136,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     }
     public void AddEndpointToChain(EndpointUIValues endpoint)
     {
-        EndpointList.Add(endpoint);
+        //EndpointList.Add(endpoint);
         OnPropertyChanged(nameof(EndpointList));
     }
 

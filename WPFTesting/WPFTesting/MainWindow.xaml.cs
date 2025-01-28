@@ -18,6 +18,7 @@ using System.Reflection;
 using WPFTesting.Components;
 using System.Net;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace YourNamespace
 {
@@ -58,14 +59,10 @@ namespace YourNamespace
 
         private void AddDraggableBoxes()
         {
-            MakeEndpoint(); // still not using 'box'
+            //MakeEndpoint(); // still not using 'box'
             foreach (var box in ViewModel.SupplierList)
             {
-                if (box is EndpointUIValues)
-                {
-                    //somehow the Endpoint is still generated?
-                }
-                else if (box is SupplierUIValues)
+                if (box is SupplierUIValues)
                 {
                     SupplierElement dBox = new SupplierElement(box);
                     Canvas.SetLeft(dBox, box.Position.X);
@@ -82,28 +79,43 @@ namespace YourNamespace
                     DiagramCanvas.Children.Add(dBox);
                 }
             }
+            foreach (var EUIV in ViewModel.EndpointList)
+            {
+				if (EUIV is EndpointUIValues)
+				{
+					AddEndpointToCanvas(EUIV);
+				}
+			}
+            if (ViewModel.EndpointList.Count == 0)
+            {
+                MakeNewEndpoint();
+            }
         }
-        private void MakeEndpoint()
-        {
-            EndpointUIValues EUIV = new EndpointUIValues();
-            EUIV.SetDefaultValues();
-            EndpointElement element = new EndpointElement(EUIV);
-            element.Id = EUIV.supplier.Id;
-            element.DataContext = ViewModel;
-            element.PopulateElementLists();
-            element.ElementMoved += Box_Position_Changed;
-            element.RadialClicked += StartConnection_Click;
-            element.RadialClicked += FinishConnection_Click;
-            element.ElementClicked += SelectEndpoint_Click;
-            element.DataContext = ViewModel;
+        private void MakeNewEndpoint()
+		{
+			EndpointUIValues EUIV = new EndpointUIValues();
+			EUIV.SetDefaultValues();
+			AddEndpointToCanvas(EUIV);
+		}
 
-            Canvas.SetLeft(element, EUIV.Position.X);
-            Canvas.SetTop(element, EUIV.Position.Y);
-            ViewModel.AddEndpointToChain(EUIV);
-            DiagramCanvas.Children.Add(element);
-        }
+		private void AddEndpointToCanvas(EndpointUIValues EUIV)
+		{
+			EndpointElement element = new EndpointElement(EUIV);
+			element.Id = EUIV.supplier.Id;
+			element.DataContext = ViewModel;
+			//element.PopulateElementLists();
+			element.ElementMoved += Box_Position_Changed;
+			element.RadialClicked += StartConnection_Click;
+			element.RadialClicked += FinishConnection_Click;
+			element.ElementClicked += SelectEndpoint_Click;
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+			Canvas.SetLeft(element, EUIV.Position.X);
+			Canvas.SetTop(element, EUIV.Position.Y);
+			ViewModel.AddEndpointToChain(EUIV);
+			DiagramCanvas.Children.Add(element);
+		}
+
+		private void Save_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.updateFileSave();
         }
@@ -601,7 +613,6 @@ namespace YourNamespace
             }
 
         }
-
         private void AdvanceTime_Click(object sender, EventArgs e)
         {
             ViewModel.AdvanceTime();
@@ -617,7 +628,7 @@ namespace YourNamespace
 
         private void AddEndpointElement_Click(object sender, RoutedEventArgs e)
         {
-            MakeEndpoint();
+            MakeNewEndpoint();
         }
 
 

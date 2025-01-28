@@ -40,7 +40,7 @@ public class ForJsonEndpoint
 	public int YPos { get; set; }
 	public ForJsonEndpoint()
 	{
-		Supplier = new Supplier();
+		Supplier = new EndpointNode();
 		XPos = 10;
 		YPos = 10;
 	}
