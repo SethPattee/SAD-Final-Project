@@ -35,15 +35,19 @@ namespace WPFTesting.Models
         {
             foreach (var product in products)
             {
-                if (ProductInventory.FirstOrDefault(x => product is not null && x.ProductName == product.ProductName)?.ProductName == product.ProductName)
+                var reciveingProd = ProductInventory
+                     .FirstOrDefault(x =>
+                     x.ProductName == product.ProductName);
+                if (reciveingProd?.ProductName == product.ProductName)
                 {
-                    ProductInventory.FirstOrDefault(x => x.ProductName == product.ProductName).Quantity += product.Quantity;
+                       reciveingProd.Quantity += product.Quantity;
                 }
                 else
                 {
-                    Product toAdd = new Product();
-                    toAdd.ProductName = product.ProductName;
-                    toAdd.Quantity = product.Quantity;
+                    Product toAdd = new Product()
+                    { Quantity = product.Quantity,
+                      ProductName = product.ProductName
+                    };
                     ProductInventory.Add(toAdd);
                 }
             }
