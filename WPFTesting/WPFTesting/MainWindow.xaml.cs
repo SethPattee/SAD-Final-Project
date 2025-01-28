@@ -96,6 +96,7 @@ namespace YourNamespace
 			EndpointUIValues EUIV = new EndpointUIValues();
 			EUIV.SetDefaultValues();
 			AddEndpointToCanvas(EUIV);
+			ViewModel.AddEndpointToChain(EUIV);
 		}
 
 		private void AddEndpointToCanvas(EndpointUIValues EUIV)
@@ -103,7 +104,7 @@ namespace YourNamespace
 			EndpointElement element = new EndpointElement(EUIV);
 			element.Id = EUIV.supplier.Id;
 			element.DataContext = ViewModel;
-			//element.PopulateElementLists();
+			element.PopulateElementLists();
 			element.ElementMoved += Box_Position_Changed;
 			element.RadialClicked += StartConnection_Click;
 			element.RadialClicked += FinishConnection_Click;
@@ -111,7 +112,6 @@ namespace YourNamespace
 
 			Canvas.SetLeft(element, EUIV.Position.X);
 			Canvas.SetTop(element, EUIV.Position.Y);
-			ViewModel.AddEndpointToChain(EUIV);
 			DiagramCanvas.Children.Add(element);
 		}
 
@@ -717,21 +717,21 @@ namespace YourNamespace
         {
             if (IsViewModelEndpointUsable())
             {
-                ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
                 .supplier).DeliveryRequirementsList.Add(CreateNewProduct());
             }
         }
 
         private bool IsViewModelEndpointUsable()
         {
-            return ViewModel.SupplierList is not null && ViewModel.SelectedEndpoint is not null;
+            return ViewModel.EndpointList is not null && ViewModel.SelectedEndpoint is not null;
         }
 
         private void AddProductLineToEndpoint_Click(object sender, RoutedEventArgs e)
         {
             if(IsViewModelEndpointUsable())
             {
-                ((EndpointNode)ViewModel.SupplierList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
                 .supplier).ProductionList.Add(new ProductLine()
                 {
                     Components = new ObservableCollection<Product>()
