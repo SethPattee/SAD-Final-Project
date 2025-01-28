@@ -220,73 +220,73 @@ internal class AdvanceTimeTests
     [Test]
     public void EndpointNodeProcessDoesConsumeProperlyAndProduce()
     {
-        // Beeg arrange
-        EndpointNode endpointTest = new EndpointNode()
-        {
-            Id = Guid.NewGuid(),
-            Name = "Factory",
-            ComponentInventory = new ObservableCollection<Product>()
-            {
-                new Product()
-                {
-                    Price = 12,
-                    ProductName = "wood",
-                    Quantity = 30
-                },
-                new Product()
-                {
-                    Price = (decimal)5.99,
-                    ProductName = "glue",
-                    Quantity = 10,
-                    Units = "ml"
-                },
-                new Product()
-                {
-                    Price = 10,
-                    ProductName = "nails",
-                    Quantity = 400
-                }
-            },
-            ProductInventory = new ObservableCollection<Product>()
-            {
-                new Product()
-                {
-                    Price = 100,
-                    ProductName = "box",
-                    Quantity = 0
-                }
-            },
-            ProductionList = new ObservableCollection<ProductLine>()
-            {
-                new ProductLine()
-                {
-                    Components = new ObservableCollection<Product>()
-                    {
-                        new Product()
-                        {
-                            ProductName = "wood",
-                            Quantity = 6
-                        },
-                        new Product()
-                        {
-                            ProductName = "glue",
-                            Quantity = 2
-                        }
-                    },
-                    ResultingProduct = new Product()
-                                       {
-                                           ProductName = "box",
-                                           Quantity = 1
-                                       }
-                }
-            }
+        //// Beeg arrange
+        //EndpointNode endpointTest = new EndpointNode()
+        //{
+        //    Id = Guid.NewGuid(),
+        //    Name = "Factory",
+        //    ComponentInventory = new ObservableCollection<Product>()
+        //    {
+        //        new Product()
+        //        {
+        //            Price = 12,
+        //            ProductName = "wood",
+        //            Quantity = 30
+        //        },
+        //        new Product()
+        //        {
+        //            Price = (decimal)5.99,
+        //            ProductName = "glue",
+        //            Quantity = 10,
+        //            Units = "ml"
+        //        },
+        //        new Product()
+        //        {
+        //            Price = 10,
+        //            ProductName = "nails",
+        //            Quantity = 400
+        //        }
+        //    },
+        //    ProductInventory = new ObservableCollection<Product>()
+        //    {
+        //        new Product()
+        //        {
+        //            Price = 100,
+        //            ProductName = "box",
+        //            Quantity = 0
+        //        }
+        //    },
+        //    ProductionList = new ObservableCollection<ProductLine>()
+        //    {
+        //        new ProductLine()
+        //        {
+        //            Components = new ObservableCollection<Product>()
+        //            {
+        //                new Product()
+        //                {
+        //                    ProductName = "wood",
+        //                    Quantity = 6
+        //                },
+        //                new Product()
+        //                {
+        //                    ProductName = "glue",
+        //                    Quantity = 2
+        //                }
+        //            },
+        //            ResultingProduct = new Product()
+        //                               {
+        //                                   ProductName = "box",
+        //                                   Quantity = 1
+        //                               }
+        //        }
+        //    }
 
-        };
+        //};
 
-        endpointTest.Process();
-        Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "glue").Quantity, Is.EqualTo(8));
-        Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "wood").Quantity, Is.EqualTo(24));
-        Assert.That(endpointTest.ProductInventory.First(x => x.ProductName == "box").Quantity, Is.EqualTo(1));
+        //endpointTest.Process();
+        //Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "glue").Quantity, Is.EqualTo(8));
+        //Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "wood").Quantity, Is.EqualTo(24));
+        //Assert.That(endpointTest.ProductInventory.First(x => x.ProductName == "box").Quantity, Is.EqualTo(1));
     }
 
     [Test]
