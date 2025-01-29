@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -325,6 +326,30 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                             Quantity=1000,
                             ProductName= "wood"
                         }
+                    },
+                    ProductionList =
+                    {
+                           new ProductLine()
+                            {
+                                ResultingProduct = new Product()
+                                {
+                                    Quantity = 1,
+                                    ProductName = "box"
+                                },
+                                Components = new ObservableCollection<Product>()
+                                {
+                                    new Product()
+                                    {
+                                        Quantity=12,
+                                        ProductName="screws"
+                                    },
+                                    new Product()
+                                    {
+                                        Quantity=10,
+                                        ProductName= "wood"
+                                    }
+                                }
+                            }
                     }
                 }
             }
