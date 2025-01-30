@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WPFTesting.Data;
 using WPFTesting.Models;
+using WPFTesting.Shapes;
 using WPFTesting.ViewModel;
 
 namespace SupplyChainTesting;
@@ -220,74 +221,15 @@ internal class AdvanceTimeTests
     [Test]
     public void EndpointNodeProcessDoesConsumeProperlyAndProduce()
     {
-        //// Beeg arrange
-        //EndpointNode endpointTest = new EndpointNode()
-        //{
-        //    Id = Guid.NewGuid(),
-        //    Name = "Factory",
-        //    ComponentInventory = new ObservableCollection<Product>()
-        //    {
-        //        new Product()
-        //        {
-        //            Price = 12,
-        //            ProductName = "wood",
-        //            Quantity = 30
-        //        },
-        //        new Product()
-        //        {
-        //            Price = (decimal)5.99,
-        //            ProductName = "glue",
-        //            Quantity = 10,
-        //            Units = "ml"
-        //        },
-        //        new Product()
-        //        {
-        //            Price = 10,
-        //            ProductName = "nails",
-        //            Quantity = 400
-        //        }
-        //    },
-        //    ProductInventory = new ObservableCollection<Product>()
-        //    {
-        //        new Product()
-        //        {
-        //            Price = 100,
-        //            ProductName = "box",
-        //            Quantity = 0
-        //        }
-        //    },
-        //    ProductionList = new ObservableCollection<ProductLine>()
-        //    {
-        //        new ProductLine()
-        //        {
-        //            Components = new ObservableCollection<Product>()
-        //            {
-        //                new Product()
-        //                {
-        //                    ProductName = "wood",
-        //                    Quantity = 6
-        //                },
-        //                new Product()
-        //                {
-        //                    ProductName = "glue",
-        //                    Quantity = 2
-        //                }
-        //            },
-        //            ResultingProduct = new Product()
-        //                               {
-        //                                   ProductName = "box",
-        //                                   Quantity = 1
-        //                               }
-        //        }
-        //    }
-
-        //};
-
-        //endpointTest.Process();
-        //Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "glue").Quantity, Is.EqualTo(8));
-        //Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "wood").Quantity, Is.EqualTo(24));
-        //Assert.That(endpointTest.ProductInventory.First(x => x.ProductName == "box").Quantity, Is.EqualTo(1));
+        // Beeg arrange
+        EndpointNode endpointTest = RealEnpointForTest.makeAnEnpointForTest();
+        endpointTest.Process();
+        Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "glue").Quantity, Is.EqualTo(8));
+        Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "wood").Quantity, Is.EqualTo(24));
+        Assert.That(endpointTest.ProductInventory.First(x => x.ProductName == "box").Quantity, Is.EqualTo(1));
     }
+
+    
 
     [Test]
     public void EndpointNodeDoesReceiveProperly()
@@ -356,5 +298,16 @@ internal class AdvanceTimeTests
         Assert.That(endpointTest.Profit, Is.EqualTo(10005.99));
         Assert.That(endpointTest.ProductInventory.FirstOrDefault(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(9900));
         }
-    
+    [Test]
+    public void EndpointWillProccessProductionLineWhenViewModelCallAddvanceTime()
+    {
+        SupplyChainViewModel model = setupTest();
+        EndpointNode endpointTest = RealEnpointForTest.makeAnEnpointForTest();
+        EndpointUIValues endpointUIValues = new EndpointUIValues();
+        endpointUIValues.supplier = endpointTest;
+        model.EndpointList.Clear();
+        model.EndpointList.Add(endpointUIValues);
+        model.AdvanceTime();
+        Assert.That(endpointTest.ProductInventory.First(x => x.ProductName == "box").Quantity, Is.EqualTo(1));
+    }
 }

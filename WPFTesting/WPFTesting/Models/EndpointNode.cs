@@ -125,9 +125,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
 
                     if (CanProceed)
                     {
-                        _productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName)
-                            .Select(x => x.Quantity += pl.ResultingProduct.Quantity);
-
+                        _productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).First().Quantity += pl.ResultingProduct.Quantity;
                         _componentInventory = TransactionalComponentInventory;
                     }
                 }

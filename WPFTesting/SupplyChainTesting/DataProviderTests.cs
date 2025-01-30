@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SupplyChainTesting.MockClasses;
 using WPFTesting.Data;
 using WPFTesting.Models;
+using WPFTesting.Shapes;
 using WPFTesting.ViewModel;
 
 namespace SupplyChainTesting;
@@ -41,8 +42,8 @@ public class DataProviderTests
     {
         SupplyChainViewModel model = setupTest();
         //Assert.That(model.SupplierList.Count is 3);// just didn't tell me good feedvack
-        Assert.AreEqual(1,  model.EndpointList.Count);
-        Assert.AreEqual(3, model.SupplierList.Count);
+        Assert.That(model.EndpointList.Count.Equals(1));
+        Assert.That(model.SupplierList.Count.Equals(3));
     }
     [Test]
     public void EndpointRecivesShippmentsToComponentInventory()
@@ -52,7 +53,15 @@ public class DataProviderTests
         IVendor supplier = model.ShipmentList[0].Sender;
         EndpointNode endPoint = (EndpointNode)model.ShipmentList[0].Receiver;
         model.AdvanceTime();
-        Assert.AreEqual("Drill Bit", endPoint.ComponentInventory.FirstOrDefault(p => p.ProductName == "Drill Bit").ProductName);
-        Assert.AreEqual(10, endPoint.ComponentInventory.FirstOrDefault(p => p.ProductName == "Drill Bit").Quantity);
+        Product endProd = endPoint.ComponentInventory.FirstOrDefault(p => p.ProductName == "Drill Bit") ?? new Product();
+        Assert.True(endProd.ProductName.Equals("Drill Bit"));
+        Assert.That(endProd.Quantity.Equals(10));
+    }
+    [Test]
+    public void EnpointFromSaveShouldIncludeProductionLine()
+    {
+        SupplyChainViewModel model = setupTest();
+        EndpointNode endPoint = (EndpointNode)model.EndpointList.First().supplier;
+        Assert.That(endPoint.ProductionList.Count.Equals(1));
     }
 }

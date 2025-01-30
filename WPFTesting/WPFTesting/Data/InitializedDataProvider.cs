@@ -56,18 +56,16 @@ public class InitializedDataProvider : IInitializedDataProvider
     public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
     {
         List<ForJsonSuplier> forJsonSupliers = new List<ForJsonSuplier>();
-        List<ForJsonSuplier> forJsonEndpoints = new List<ForJsonSuplier>();
-        List<EndpointUIValues> endpoints = new List<EndpointUIValues>();
+        List<ForJsonEndpoint> forJsonEndpoints = new List<ForJsonEndpoint>();
         foreach(var value in supplierUIValues)
         {     
             if( !(value.GetType() == typeof(EndpointUIValues)))
             {
                 forJsonSupliers.Add(new ForJsonSuplier(value));
             }
-            else
+            else if (value is EndpointUIValues endpoint)
             {
-                forJsonEndpoints.Add(new ForJsonSuplier(value));
-                //endpoints.Add((EndpointUIValues)value);
+                forJsonEndpoints.Add(new ForJsonEndpoint(endpoint));
             }
         }
         var jString = System.Text.Json.JsonSerializer.Serialize(forJsonSupliers);
