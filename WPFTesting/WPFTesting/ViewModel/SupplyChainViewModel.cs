@@ -160,9 +160,14 @@ public class SupplyChainViewModel : INotifyPropertyChanged
             //Receive 
             delivery.Receiver.Receive(listSent);
         }
-        foreach (var v in _supplierList)
+        foreach (var v in SupplierList)
         {
             v.supplier.Process();
+        }
+        foreach (var e in EndpointList)
+        {
+            var end = (EndpointNode)e.supplier;
+            end.ProduceProduct();
         }
     }
 
