@@ -89,12 +89,12 @@ namespace YourNamespace
             foreach (Shipment shipment in ViewModel.ShipmentList)
             {
 				ShippingLine shippingLine = new ShippingLine();
+				DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
                 shippingLine.OwnShipment = shipment;
                 shippingLine.FromJoiningBoxCorner = shipment.FromJoiningBoxCorner;
                 shippingLine.ToJoiningBoxCorner = shipment.ToJoiningBoxCorner;
 				shippingLine.ShippmentDeleted += RemoveShipment;
 				shippingLine.LineSelected += Line_MouseDown;
-				DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
                 SupplierElement sender = new SupplierElement(new SupplierUIValues());
                 INodeElement receiver = new SupplierElement(new SupplierUIValues());
 				foreach (var child in DiagramCanvas.Children)
