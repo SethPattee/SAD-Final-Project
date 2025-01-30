@@ -228,34 +228,34 @@ namespace YourNamespace
 
                 shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget) + pos.X;
                 shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget) + pos.Y;
-                //CaptureMouse();
-                LogEventMessage("StartConnection_Click after Capture Mouse");
-                Point mousepos = Mouse.GetPosition(DiagramCanvas);
-                MouseIsCaptured = true;
-
-                shippingLine = AssignLineValues(mousepos, shippingLine);
-                shippingLine.ShippmentDeleted += RemoveShipment;
-                targetShipingLine = shippingLine;
-                DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
-            }
+				//CaptureMouse();
+				shippingLine = FinishSettingUpLine(shippingLine);
+			}
             if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured == false)
-            {
-                ShippingLine shippingLine = new ShippingLine();
-                EndpointUIValues euiv = ViewModel.EndpointList.First(x => x.supplier.Id == lineTarget_endpoint.Id);
-                shippingLine.OwnShipment.Receiver = euiv.supplier;
-                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint);
-                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint);
-                shippingLine.Destination = lineTarget_endpoint;
-                LogEventMessage("StartConnection_Click after Capture Mouse");
-                Point mousepos = Mouse.GetPosition(DiagramCanvas);
-                MouseIsCaptured = true;
-                shippingLine = AssignLineValues(mousepos, shippingLine);
-                targetShipingLine = shippingLine;
-                DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
-            }
-        }
+			{
+				ShippingLine shippingLine = new ShippingLine();
+				EndpointUIValues euiv = ViewModel.EndpointList.First(x => x.supplier.Id == lineTarget_endpoint.Id);
+				shippingLine.OwnShipment.Receiver = euiv.supplier;
+				shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint);
+				shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint);
+				shippingLine.Destination = lineTarget_endpoint;
+				shippingLine = FinishSettingUpLine(shippingLine);
+			}
+		}
 
-        private ShippingLine AssignLineValues(Point position, ShippingLine shippingLine)
+		private ShippingLine FinishSettingUpLine(ShippingLine shippingLine)
+		{
+			LogEventMessage("StartConnection_Click after Capture Mouse");
+			Point mousepos = Mouse.GetPosition(DiagramCanvas);
+			MouseIsCaptured = true;
+			shippingLine = AssignLineValues(mousepos, shippingLine);
+			shippingLine.ShippmentDeleted += RemoveShipment;
+			targetShipingLine = shippingLine;
+			DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
+			return shippingLine;
+		}
+
+		private ShippingLine AssignLineValues(Point position, ShippingLine shippingLine)
         {
             shippingLine.ourShippingLine.X2 = position.X;
             shippingLine.ourShippingLine.Y2 = position.Y;
