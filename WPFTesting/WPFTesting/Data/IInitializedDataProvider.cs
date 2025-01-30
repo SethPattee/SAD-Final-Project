@@ -10,7 +10,9 @@ namespace WPFTesting.Data;
 
 public interface IInitializedDataProvider
 {
-    IEnumerable<SupplierUIValues> GetBoxValuesAsync();
-    void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues);
-    //Task<IEnumerable<Supplier>> GetAllSuppliersAsync();
+    IEnumerable<SupplierUIValues> GetBoxValues();
+    IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers);
+    void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues);
+    void SaveShipmentInfo(IEnumerable<Shipment> shipments);
+
 }

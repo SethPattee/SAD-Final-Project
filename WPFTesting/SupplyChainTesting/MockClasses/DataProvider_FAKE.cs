@@ -13,7 +13,7 @@ namespace SupplyChainTesting.MockClasses;
 
 internal class DataProvider_FAKE : IInitializedDataProvider
 {
-    public IEnumerable<SupplierUIValues> GetBoxValuesAsync()
+    public IEnumerable<SupplierUIValues> GetBoxValues()
     { 
         
         IEnumerable<SupplierUIValues> suppliers = new List<SupplierUIValues>
@@ -103,15 +103,25 @@ internal class DataProvider_FAKE : IInitializedDataProvider
         return suppliers;
     }
 
-    public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
+	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
+	{
+		return new List<Shipment>();
+	}
+
+	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)
+	{
+        return;
+	}
+
+	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
     {
-        throw new NotImplementedException();
+        return;
     }
 }
 
 internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
 {
-    public IEnumerable<SupplierUIValues> GetBoxValuesAsync()
+    public IEnumerable<SupplierUIValues> GetBoxValues()
     {
 
         IEnumerable<SupplierUIValues> suppliers = new List<SupplierUIValues>
@@ -201,15 +211,25 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
         return suppliers;
     }
 
-    public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
+	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
+	{
+		return new List<Shipment>();
+	}
+
+	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)
+	{
+        return;
+	}
+
+	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
     {
-        throw new NotImplementedException();
+        return;
     }
 }
 
 internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
 { // This version is same as version1, but has a EndpointNode
-    public IEnumerable<SupplierUIValues> GetBoxValuesAsync()
+    public IEnumerable<SupplierUIValues> GetBoxValues()
     {
 
         IEnumerable<SupplierUIValues> suppliers = new List<SupplierUIValues>
@@ -358,8 +378,86 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
         return suppliers;
     }
 
-    public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
+	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
+	{
+       var toreturn =  new List<Shipment>() { 
+            new Shipment()
+            {
+                Products = new List<Product>()
+                {
+					new Product()
+									{
+										Quantity=10,
+										ProductName= "wood"
+									}
+				},
+                Sender = new Supplier()
+                {
+					ProductInventory =
+					{
+						new Product()
+						{
+							Quantity = 1,
+							ProductName = "Hammer"
+						},
+						new Product()
+						{
+							Quantity=1,
+							ProductName="10mm socket"
+						},
+						new Product()
+						{
+							Quantity=20,
+							ProductName="screws"
+						},
+						new Product()
+						{
+							Quantity=1000,
+							ProductName="sawdust",
+							Units="kg"
+						}
+					},
+					Name="Vendor 3",
+					Id=Guid.NewGuid()
+				},
+                Receiver =
+					new Supplier()
+				{
+					ProductInventory =
+					{
+						new Product()
+						{
+							Quantity = 1,
+							ProductName = "Hammer"
+						},
+						new Product()
+						{
+							Quantity=1,
+							ProductName="10mm socket"
+						},
+					},
+					Name="Vendor 2",
+					Id=Guid.NewGuid()
+
+				},
+                Id=Guid.NewGuid(),
+                FromJoiningBoxCorner = "",
+                ToJoiningBoxCorner = "",
+
+                
+            }
+       };
+        
+        return toreturn;
+	}
+
+	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)
+	{
+        return;
+	}
+
+	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
     {
-        throw new NotImplementedException();
+        return;
     }
 }

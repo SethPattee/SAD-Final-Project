@@ -55,10 +55,10 @@ namespace YourNamespace
         private void Initialize()
         {
             ViewModel.Load();
-            AddDraggableBoxes();
+            AddCanvasElements();
         }
 
-        private void AddDraggableBoxes()
+        private void AddCanvasElements()
         {
             foreach (var box in ViewModel.SupplierList)
             {
@@ -85,6 +85,55 @@ namespace YourNamespace
 				{
 					AddEndpointToCanvas(EUIV);
 				}
+			}
+            foreach (Shipment shipment in ViewModel.ShipmentList)
+            {
+				ShippingLine shippingLine = new ShippingLine();
+				DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
+                shippingLine.OwnShipment = shipment;
+                shippingLine.FromJoiningBoxCorner = shipment.FromJoiningBoxCorner;
+                shippingLine.ToJoiningBoxCorner = shipment.ToJoiningBoxCorner;
+				shippingLine.ShippmentDeleted += RemoveShipment;
+				shippingLine.LineSelected += Line_MouseDown;
+                SupplierElement sender = new SupplierElement(new SupplierUIValues());
+                INodeElement receiver = new SupplierElement(new SupplierUIValues());
+				foreach (var child in DiagramCanvas.Children)
+                {
+                    if (child is SupplierElement supplierElement)
+                    {
+                        if (supplierElement.NodeUIValues.supplier.Id == shipment.Sender.Id)
+                        {
+                            sender = supplierElement;
+                        }
+                        else if (supplierElement.NodeUIValues.supplier.Id == shipment.Receiver.Id)
+                        {
+                            receiver = supplierElement;
+                        }
+                    }
+                    else if (child is EndpointElement endpoint) {
+						if (endpoint.NodeUIValues.supplier.Id == shipment.Receiver.Id)
+						{
+							receiver = endpoint;
+						}
+					}
+
+                }
+                shippingLine.Source = sender;
+                shippingLine.Destination = receiver;
+				Point pos = GetLineOffset(sender);
+				shippingLine.ourShippingLine.X1 = Canvas.GetLeft(sender) + pos.X;
+				shippingLine.ourShippingLine.Y1 = Canvas.GetTop(sender) + pos.Y;
+                if (receiver is EndpointElement endpointElement)
+                {
+				    shippingLine.ourShippingLine.X2 = Canvas.GetLeft(endpointElement);
+				    shippingLine.ourShippingLine.Y2 = Canvas.GetTop(endpointElement);
+                }
+                else if (receiver is SupplierElement supplierElement){
+					Point LineAnchorOffset = GetLineOffset(supplierElement);
+					shippingLine.ourShippingLine.X2 = Canvas.GetLeft(supplierElement) + LineAnchorOffset.X;
+					shippingLine.ourShippingLine.Y2 = Canvas.GetTop(supplierElement) + LineAnchorOffset.Y;
+				}
+				ShipmentList.Add(shippingLine);
 			}
             if (ViewModel.EndpointList.Count == 0)
             {
@@ -215,7 +264,7 @@ namespace YourNamespace
             }
         }
 
-        private void StartConnection_Click(object sender, EventArgs e)
+        private void StartConnection_Click(object? sender, EventArgs? e)
         {
             if (sender is SupplierElement lineTarget && MouseIsCaptured == false)
             {
@@ -339,7 +388,7 @@ namespace YourNamespace
             return new Point(10, 10);
         }
 
-        private void FinishConnection_Click(object sender, EventArgs e)
+        private void FinishConnection_Click(object? sender, EventArgs? e)
         {
             if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
 			{
@@ -391,9 +440,14 @@ namespace YourNamespace
 		{
 			MouseIsCaptured = false;
 			IsDestinationSearching = false;
-			targetShipingLine.LineSelected += Line_MouseDown;
-			ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
-			ShipmentList.Add(targetShipingLine);
+            if (targetShipingLine is not null)
+            {
+			    targetShipingLine.LineSelected += Line_MouseDown;
+                targetShipingLine.OwnShipment.FromJoiningBoxCorner = targetShipingLine.FromJoiningBoxCorner;
+                targetShipingLine.OwnShipment.ToJoiningBoxCorner = targetShipingLine.ToJoiningBoxCorner;
+			    ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
+			    ShipmentList.Add(targetShipingLine);
+            }
 		}
 
 		private void Box_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -862,7 +916,7 @@ namespace YourNamespace
             };
         }
 
-        private void Line_MouseDown(object sender, EventArgs e)
+        private void Line_MouseDown(object? sender, EventArgs? e)
         {
             UnselectAllCanvasElements();
             if (sender is ShippingLine l)
