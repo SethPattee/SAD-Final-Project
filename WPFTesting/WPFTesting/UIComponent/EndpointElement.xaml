@@ -9,6 +9,12 @@
              DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid Width="530" Height="330" MinWidth="400">
         <Border x:Name="ElementBorder"  BorderBrush="Gray" BorderThickness="1" MouseDown="Box_MouseDown" PreviewMouseDown="Click_SelectElement" MouseMove="Box_MouseMove" MouseUp="Box_MouseUp">
+            <Border.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Delete Endpoint" Click="DeleteEndpoint_Click"/>
+                </ContextMenu>
+            </Border.ContextMenu>
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>
