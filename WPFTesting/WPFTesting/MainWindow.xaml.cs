@@ -869,5 +869,10 @@ namespace YourNamespace
             AnalysisWindow.Owner = this;
             AnalysisWindow.Show();
         }
+
+        private void EndpointProductList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
