@@ -605,7 +605,32 @@ namespace YourNamespace
                 var supplier = ViewModel.SupplierList.FirstOrDefault(s => s.supplier.Id == SupplierId);
                 if (supplier != null)
                 {
-                    ViewModel.SupplierList.Remove(supplier);
+                    List<Shipment> Shippments = new List<Shipment>();
+                    List<ShippingLine> lines = new();
+                    foreach (var s in ViewModel.ShipmentList)
+                    {
+                        if (s.Sender == supplier.supplier || s.Receiver == supplier.supplier)
+                        {
+                            Shippments.Add(s);
+                            foreach (var child in DiagramCanvas.Children)
+                            {
+                                if (child is ShippingLine l)
+                                {
+                                    if (l.OwnShipment.Sender == supplier.supplier || l.OwnShipment.Receiver == supplier.supplier)
+                                    { lines.Add(l); }
+                                }
+                            }
+                        }
+                        ViewModel.SupplierList.Remove(supplier);
+                    }
+                    foreach (var s in Shippments)
+                    {
+                        ViewModel.ShipmentList.Remove(s);
+                    }
+                    foreach (var line in lines)
+                    {
+                        DiagramCanvas.Children.Remove(line);
+                    }
                 }
                 else
                 {
@@ -614,6 +639,7 @@ namespace YourNamespace
             }
 
         }
+        
         private void AdvanceTime_Click(object sender, EventArgs e)
         {
             ViewModel.AdvanceTime();
