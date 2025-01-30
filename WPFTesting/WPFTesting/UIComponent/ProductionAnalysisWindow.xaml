@@ -42,8 +42,8 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-            <Border Grid.Row="1" Background="DarkGray">
-                <ListView Background="Transparent">
+            <Border Grid.Row="1" Background="DarkGray" Padding="8">
+                <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <!--<ListView.ItemTemplate>
                         
                     </ListView.ItemTemplate>-->
@@ -52,21 +52,36 @@
         </Grid>
 
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="20 0 0 0">
-
+            <Border Background="LightGray" BorderBrush="DarkGray" BorderThickness="1">
+                
+            </Border>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="1" Margin="20 0 0 0">
-
+            <Border Margin="0 4 0 10" BorderBrush="Bisque" Background="SandyBrown" CornerRadius="6">
+                <Button Background="Transparent" BorderThickness="0" x:Name="StartSimButton">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Check Shipments" FontSize="18" TextWrapping="Wrap" 
+                                       Foreground="AntiqueWhite" VerticalAlignment="Center" 
+                                       MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=Button, Mode=FindAncestor},
+                                Mode=OneWay, UpdateSourceTrigger=LostFocus, FallbackValue=100}"
+                                       TextAlignment="Right" FontWeight="SemiBold"></TextBlock>
+                            <Image Panel.ZIndex="3" Margin="5 1 1 1" Width="50" Height="50" Source="../Resources/PackageIcon.png"></Image>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </Border>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="2">
             <Border BorderBrush="CornflowerBlue" Background="DodgerBlue" BorderThickness="1" CornerRadius="50" Margin="5 10 5 10">
-                <Button Background="Transparent">
+                <Button Background="Transparent" BorderThickness="0">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Start Sim" FontSize="28" TextWrapping="Wrap" Foreground="AntiqueWhite" VerticalAlignment="Center" Margin="0 0 8 0"></TextBlock>
-                            <Polygon Points="0,40 30,20 0,0" Height="40" Fill="AntiqueWhite" VerticalAlignment="Bottom"
-                                     ></Polygon>
+                            <TextBlock Text="Start Sim" FontSize="28" TextWrapping="Wrap" Foreground="AntiqueWhite" 
+                                       VerticalAlignment="Center" Margin="0 0 4 0" FontWeight="SemiBold"></TextBlock>
+                            <Polygon Points="0,40 30,20 0,0" Height="40" Fill="AntiqueWhite" VerticalAlignment="Bottom"></Polygon>
                         </StackPanel>
                     </Button.Content>
                 </Button>
