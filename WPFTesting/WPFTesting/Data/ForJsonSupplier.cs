@@ -3,18 +3,18 @@ using WPFTesting.Shapes;
 
 namespace WPFTesting.Data;
 
-public class ForJsonSuplier
+public class ForJsonSupplier
 {
     public IVendor Supplier { get; set; }
     public int XPos {  get; set; }
     public int YPos { get; set; }
-    public ForJsonSuplier()
+    public ForJsonSupplier()
     {
         Supplier = new Supplier();
         XPos = 10;
         YPos = 10;
     }
-    public ForJsonSuplier(SupplierUIValues s)
+    public ForJsonSupplier(SupplierUIValues s)
     {
         Supplier = s.supplier;
         XPos = s.Position.X;
@@ -25,7 +25,7 @@ public class FromJsonSuplier
 {
     private SupplierUIValues _s = new SupplierUIValues();
 
-    public FromJsonSuplier( ForJsonSuplier s)
+    public FromJsonSuplier( ForJsonSupplier s)
     {
         _s.supplier = s.Supplier;
         _s.Position = new System.Drawing.Point() { X = s.XPos, Y = s.YPos};

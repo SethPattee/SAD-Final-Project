@@ -103,7 +103,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
         return suppliers;
     }
 
-	public IEnumerable<Shipment> GetShipments()
+	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
 	{
 		return new List<Shipment>();
 	}
@@ -211,7 +211,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
         return suppliers;
     }
 
-	public IEnumerable<Shipment> GetShipments()
+	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
 	{
 		return new List<Shipment>();
 	}
@@ -378,7 +378,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
         return suppliers;
     }
 
-	public IEnumerable<Shipment> GetShipments()
+	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
 	{
         return new List<Shipment>();
 	}

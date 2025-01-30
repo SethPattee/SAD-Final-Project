@@ -132,7 +132,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
                 }
             }
         }
-        var ship = _boxProvider.GetShipments();
+        IEnumerable<Shipment> ship = _boxProvider.GetShipments(EndpointList, SupplierList);
         if (ship is not null)
         {
             ShipmentList.AddRange(ship);

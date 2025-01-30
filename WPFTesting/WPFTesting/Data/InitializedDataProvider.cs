@@ -10,6 +10,7 @@ using System.IO;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using YourNamespace;
+using FactorSADEfficiencyOptimizer.Data;
 
 namespace WPFTesting.Data;
 
@@ -30,7 +31,7 @@ public class InitializedDataProvider : IInitializedDataProvider
             }
             else
             {
-                IEnumerable<ForJsonSuplier> forSuppliers = JsonConvert.DeserializeObject<IEnumerable<ForJsonSuplier>>(jString);
+                IEnumerable<ForJsonSupplier> forSuppliers = JsonConvert.DeserializeObject<IEnumerable<ForJsonSupplier>>(jString);
                 IEnumerable<ForJsonEndpoint> forEndpoints = JsonConvert.DeserializeObject<IEnumerable<ForJsonEndpoint>>(jString_endpoint);
                 List<SupplierUIValues> toUiEndpointsAndSuppliers = new List<SupplierUIValues>();
                 foreach (var s in forSuppliers)
@@ -53,25 +54,41 @@ public class InitializedDataProvider : IInitializedDataProvider
         return _Suppliers;
     }
 
-	public IEnumerable<Shipment> GetShipments()
+	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
 	{
-        return new List<Shipment>();
+        List<Shipment> shipments = new List<Shipment>();
+		var jString = File.ReadAllText("Shipments.json");
+		IEnumerable<ForJsonShipment>? forShipments = JsonConvert.DeserializeObject<IEnumerable<ForJsonShipment>>(jString);
+        foreach (ForJsonShipment ship in forShipments ?? new List<ForJsonShipment>())
+        {
+            shipments.Add(new FromJsonShipment(ship).GetShipment(endpoints,suppliers));  
+        }
+		return shipments;
 	}
 
 	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)
 	{
-		
+		List<ForJsonShipment> shipments1 = new List<ForJsonShipment>();
+        foreach (var shipment in shipments) {
+            shipments1.Add(new ForJsonShipment(shipment));
+        }
+		var jString = System.Text.Json.JsonSerializer.Serialize(shipments1);
+        try
+        {
+            File.WriteAllText("Shipments.json", jString);
+        }
+        catch (Exception E) { Console.WriteLine(E.Message); }
 	}
 
 	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
     {
-        List<ForJsonSuplier> forJsonSupliers = new List<ForJsonSuplier>();
+        List<ForJsonSupplier> forJsonSupliers = new List<ForJsonSupplier>();
         List<ForJsonEndpoint> forJsonEndpoints = new List<ForJsonEndpoint>();
         foreach(var value in supplierUIValues)
         {     
             if( !(value.GetType() == typeof(EndpointUIValues)))
             {
-                forJsonSupliers.Add(new ForJsonSuplier(value));
+                forJsonSupliers.Add(new ForJsonSupplier(value));
             }
             else if (value is EndpointUIValues endpoint)
             {

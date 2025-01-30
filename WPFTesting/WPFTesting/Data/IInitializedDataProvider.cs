@@ -11,7 +11,7 @@ namespace WPFTesting.Data;
 public interface IInitializedDataProvider
 {
     IEnumerable<SupplierUIValues> GetBoxValues();
-    IEnumerable<Shipment> GetShipments();
+    IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers);
     void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues);
     void SaveShipmentInfo(IEnumerable<Shipment> shipments);
 
