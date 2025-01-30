@@ -17,6 +17,7 @@ using WPFTesting.Data;
 using WPFTesting.Models;
 using WPFTesting.Shapes;
 using WPFTesting.ViewModel;
+using YourNamespace;
 
 namespace WPFTesting
 {
@@ -29,7 +30,8 @@ namespace WPFTesting
         public event EventHandler? RadialClicked;
         public event EventHandler? ElementMoved;
         public event EventHandler? ElementClicked;
-        public Guid Id { get; set; }
+		public event EventHandler? EndpointDeleted;
+		public Guid Id { get; set; }
 
         private SupplierUIValues _nodeUIValues = new EndpointUIValues();
 
@@ -130,5 +132,16 @@ namespace WPFTesting
             isDragging = false;
             (sender as UIElement).ReleaseMouseCapture();
         }
-    }
+
+		private void DeleteEndpoint_Click(object sender, RoutedEventArgs e)
+		{
+			var canvas = this.Parent as Canvas;
+			if (canvas == null)
+			{
+				return;
+			}
+			canvas.Children.Remove(this);
+			EndpointDeleted?.Invoke(this, EventArgs.Empty);
+		}
+	}
 }

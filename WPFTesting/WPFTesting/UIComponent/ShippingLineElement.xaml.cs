@@ -27,12 +27,14 @@ public partial class ShippingLine : UserControl
 
     public string CardinalJoint = "Center";
     public string Label { get; set; }
-    public List<ShippingDetails> ShippingDetails { get; set; }
+    //public List<ShippingDetails> ShippingDetails { get; set; }
     public EventHandler? LineSelected;
-    public Guid Id { get; private set; }
+    public EventHandler? ShippmentDeleted;
+
+	public Guid Id { get; private set; }
     public Shipment OwnShipment { get; set; }
-    public INodeElement Source { get; set; }
-    public INodeElement Destination { get; set; }
+    public INodeElement? Source { get; set; }
+    public INodeElement? Destination { get; set; }
     public string FromJoiningBoxCorner { get; set; }
     public string ToJoiningBoxCorner { get; set; }
 
@@ -42,6 +44,9 @@ public partial class ShippingLine : UserControl
     {
         InitializeComponent();
         this.OwnShipment = new Shipment();
+        FromJoiningBoxCorner = String.Empty;
+        ToJoiningBoxCorner = String.Empty;
+
         DataContext = this;
         OwnShipment.Products = new List<Product>() { new Product() {Price = 0,
                     Units = "",
@@ -61,10 +66,10 @@ public partial class ShippingLine : UserControl
         LineSelected?.Invoke(this, e);
     }
 
-    public void AddShippingDetail(ShippingDetails detail)
-    {
-        ShippingDetails.Add(detail);
-    }
+    //public void AddShippingDetail(ShippingDetails detail)
+    //{
+    //    ShippingDetails.Add(detail);
+    //}
 
     private void DeleteShipLine_Click(object sender, RoutedEventArgs e)
     {
@@ -73,25 +78,25 @@ public partial class ShippingLine : UserControl
         {
             return;
         }
-
-        canvas.Children.Remove(this);
+		canvas.Children.Remove(this);
+        ShippmentDeleted?.Invoke(this, EventArgs.Empty);
     }
 
 }
-public class ShippingDetails
-{
-    public string? Item { get; set; }
-    public double? Weight { get; set; }
-    public int? Quantity { get; set; }
-    public string? Type { get; set; }
+//public class ShippingDetails
+//{
+//    public string? Item { get; set; }
+//    public double? Weight { get; set; }
+//    public int? Quantity { get; set; }
+//    public string? Type { get; set; }
 
-    public ShippingDetails(string item, double weight, int quantity, string type)
-    {
-        Item = item;
-        Weight = weight;
-        Quantity = quantity;
-        Type = type;
-    }
-}
+//    public ShippingDetails(string item, double weight, int quantity, string type)
+//    {
+//        Item = item;
+//        Weight = weight;
+//        Quantity = quantity;
+//        Type = type;
+//    }
+//}
 
 

@@ -60,7 +60,6 @@ namespace YourNamespace
 
         private void AddDraggableBoxes()
         {
-            //MakeEndpoint(); // still not using 'box'
             foreach (var box in ViewModel.SupplierList)
             {
                 if (box is SupplierUIValues)
@@ -110,6 +109,7 @@ namespace YourNamespace
 			element.RadialClicked += StartConnection_Click;
 			element.RadialClicked += FinishConnection_Click;
 			element.ElementClicked += SelectEndpoint_Click;
+            element.EndpointDeleted += RemoveEndpoint;
 
 			Canvas.SetLeft(element, EUIV.Position.X);
 			Canvas.SetTop(element, EUIV.Position.Y);
@@ -228,33 +228,34 @@ namespace YourNamespace
 
                 shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget) + pos.X;
                 shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget) + pos.Y;
-                //CaptureMouse();
-                LogEventMessage("StartConnection_Click after Capture Mouse");
-                Point mousepos = Mouse.GetPosition(DiagramCanvas);
-                MouseIsCaptured = true;
-
-                shippingLine = AssignLineValues(mousepos, shippingLine);
-                targetShipingLine = shippingLine;
-                DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
-            }
+				//CaptureMouse();
+				shippingLine = FinishSettingUpLine(shippingLine);
+			}
             if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured == false)
-            {
-                ShippingLine shippingLine = new ShippingLine();
-                EndpointUIValues euiv = ViewModel.EndpointList.First(x => x.supplier.Id == lineTarget_endpoint.Id);
-                shippingLine.OwnShipment.Receiver = euiv.supplier;
-                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint);
-                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint);
-                shippingLine.Destination = lineTarget_endpoint;
-                LogEventMessage("StartConnection_Click after Capture Mouse");
-                Point mousepos = Mouse.GetPosition(DiagramCanvas);
-                MouseIsCaptured = true;
-                shippingLine = AssignLineValues(mousepos, shippingLine);
-                targetShipingLine = shippingLine;
-                DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
-            }
-        }
+			{
+				ShippingLine shippingLine = new ShippingLine();
+				EndpointUIValues euiv = ViewModel.EndpointList.First(x => x.supplier.Id == lineTarget_endpoint.Id);
+				shippingLine.OwnShipment.Receiver = euiv.supplier;
+				shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint);
+				shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint);
+				shippingLine.Destination = lineTarget_endpoint;
+				shippingLine = FinishSettingUpLine(shippingLine);
+			}
+		}
 
-        private ShippingLine AssignLineValues(Point position, ShippingLine shippingLine)
+		private ShippingLine FinishSettingUpLine(ShippingLine shippingLine)
+		{
+			LogEventMessage("StartConnection_Click after Capture Mouse");
+			Point mousepos = Mouse.GetPosition(DiagramCanvas);
+			MouseIsCaptured = true;
+			shippingLine = AssignLineValues(mousepos, shippingLine);
+			shippingLine.ShippmentDeleted += RemoveShipment;
+			targetShipingLine = shippingLine;
+			DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
+			return shippingLine;
+		}
+
+		private ShippingLine AssignLineValues(Point position, ShippingLine shippingLine)
         {
             shippingLine.ourShippingLine.X2 = position.X;
             shippingLine.ourShippingLine.Y2 = position.Y;
@@ -596,7 +597,53 @@ namespace YourNamespace
                 removeConnectionButton.IsEnabled = true;
             }
         }
-
+        public void RemoveShipment(object? sender, EventArgs? e)
+        {
+            if (sender is ShippingLine element)
+            {
+                Guid shipId = element.OwnShipment.Id;
+                var shipment = ViewModel.ShipmentList.FirstOrDefault(x => x.Id == shipId);
+                if (shipment != null) {
+					ViewModel.ShipmentList.Remove(shipment);
+				}
+            }
+        }
+        public void RemoveEndpoint(object? sender, EventArgs? e)
+        {
+            if (sender is EndpointElement element)
+            {
+				Guid EndpointId = element.NodeUIValues.supplier.Id;
+				var Endpoint = ViewModel.EndpointList.FirstOrDefault(s => s.supplier.Id == EndpointId);
+                if (Endpoint != null) {
+					List<Shipment> Shippments = new List<Shipment>();
+					List<ShippingLine> lines = new();
+					foreach (var s in ViewModel.ShipmentList)
+					{
+						if (s.Sender == Endpoint.supplier || s.Receiver == Endpoint.supplier)
+						{
+							Shippments.Add(s);
+							foreach (var child in DiagramCanvas.Children)
+							{
+								if (child is ShippingLine l)
+								{
+									if (l.OwnShipment.Sender == Endpoint.supplier || l.OwnShipment.Receiver == Endpoint.supplier)
+									{ lines.Add(l); }
+								}
+							}
+						}
+					}
+				    ViewModel.EndpointList.Remove(Endpoint);
+					foreach (var s in Shippments)
+					{
+						ViewModel.ShipmentList.Remove(s);
+					}
+					foreach (var line in lines)
+					{
+						DiagramCanvas.Children.Remove(line);
+					}
+				}
+			}
+        }
         public void RemoveSupplier(object sender, EventArgs e)
         {
             if (sender is SupplierElement selectedBox)
@@ -621,8 +668,8 @@ namespace YourNamespace
                                 }
                             }
                         }
-                        ViewModel.SupplierList.Remove(supplier);
                     }
+                    ViewModel.SupplierList.Remove(supplier);
                     foreach (var s in Shippments)
                     {
                         ViewModel.ShipmentList.Remove(s);

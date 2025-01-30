@@ -12,9 +12,11 @@ public class Shipment : INotifyPropertyChanged
     private List<Product> _products = new List<Product>();
     private IVendor _sender;
     private IVendor _reciever;
+    public Guid Id { get; set; }
     public event PropertyChangedEventHandler? PropertyChanged;
     public Shipment()
     {
+        Id = Guid.NewGuid();
         _sender = new Supplier();
         _reciever = new Supplier();
     }
