@@ -110,16 +110,14 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         List<SupplierUIValues> endpointsAndSuppliers = new List<SupplierUIValues>();
         endpointsAndSuppliers.AddRange(SupplierList);
         endpointsAndSuppliers.AddRange(EndpointList);
-        _boxProvider.SaveSupplierInfoAsync(endpointsAndSuppliers);
-        //save the Shipping line here
+        _boxProvider.SaveSupplierInfo(endpointsAndSuppliers);
+        _boxProvider.SaveShipmentInfo(ShipmentList);
     }
 
 
     public void Load()
     {
-        //if (Boxes.Any()) return; //don't override any existing data
-
-        var boxes = _boxProvider.GetBoxValuesAsync();
+        var boxes = _boxProvider.GetBoxValues();
         if (boxes is not null)
         {
             foreach (var box in boxes)
@@ -134,7 +132,11 @@ public class SupplyChainViewModel : INotifyPropertyChanged
                 }
             }
         }
-
+        var ship = _boxProvider.GetShipments();
+        if (ship is not null)
+        {
+            ShipmentList.AddRange(ship);
+        }
     }
     public void AddEndpointToChain(EndpointUIValues endpoint)
     {

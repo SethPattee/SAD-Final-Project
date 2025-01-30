@@ -64,4 +64,13 @@ public class DataProviderTests
         EndpointNode endPoint = (EndpointNode)model.EndpointList.First().supplier;
         Assert.That(endPoint.ProductionList.Count.Equals(1));
     }
+    [Test]
+    public void LinesAreSaved()
+    {
+        SupplyChainViewModel model = setupTest();
+        Shipment shipment = model.ShipmentList.First();
+        Assert.That(shipment.Sender.Name.Length >= 1);
+        Assert.That(shipment.Receiver.Name.Length >= 1);
+        Assert.That(shipment.Products.Count.Equals(1));
+	}
 }

@@ -48,12 +48,22 @@ public class InitializedDataProvider : IInitializedDataProvider
         }
         catch (Exception E) { Console.WriteLine(E); }
     }
-    public IEnumerable<SupplierUIValues> GetBoxValuesAsync()
+    public IEnumerable<SupplierUIValues> GetBoxValues()
     {
         return _Suppliers;
     }
 
-    public void SaveSupplierInfoAsync(IEnumerable<SupplierUIValues> supplierUIValues)
+	public IEnumerable<Shipment> GetShipments()
+	{
+		throw new NotImplementedException();
+	}
+
+	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)
+	{
+		
+	}
+
+	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
     {
         List<ForJsonSuplier> forJsonSupliers = new List<ForJsonSuplier>();
         List<ForJsonEndpoint> forJsonEndpoints = new List<ForJsonEndpoint>();
