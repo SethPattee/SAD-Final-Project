@@ -380,7 +380,75 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
 
 	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
 	{
-        return new List<Shipment>();
+       var toreturn =  new List<Shipment>() { 
+            new Shipment()
+            {
+                Products = new List<Product>()
+                {
+					new Product()
+									{
+										Quantity=10,
+										ProductName= "wood"
+									}
+				},
+                Sender = new Supplier()
+                {
+					ProductInventory =
+					{
+						new Product()
+						{
+							Quantity = 1,
+							ProductName = "Hammer"
+						},
+						new Product()
+						{
+							Quantity=1,
+							ProductName="10mm socket"
+						},
+						new Product()
+						{
+							Quantity=20,
+							ProductName="screws"
+						},
+						new Product()
+						{
+							Quantity=1000,
+							ProductName="sawdust",
+							Units="kg"
+						}
+					},
+					Name="Vendor 3",
+					Id=Guid.NewGuid()
+				},
+                Receiver =
+					new Supplier()
+				{
+					ProductInventory =
+					{
+						new Product()
+						{
+							Quantity = 1,
+							ProductName = "Hammer"
+						},
+						new Product()
+						{
+							Quantity=1,
+							ProductName="10mm socket"
+						},
+					},
+					Name="Vendor 2",
+					Id=Guid.NewGuid()
+
+				},
+                Id=Guid.NewGuid(),
+                FromJoiningBoxCorner = "",
+                ToJoiningBoxCorner = "",
+
+                
+            }
+       };
+        
+        return toreturn;
 	}
 
 	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)

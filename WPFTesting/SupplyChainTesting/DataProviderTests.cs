@@ -49,12 +49,13 @@ public class DataProviderTests
     public void EndpointRecivesShippmentsToComponentInventory()
     {
         SupplyChainViewModel model = setupTest();
+        model.ShipmentList.Remove(model.ShipmentList.First());
         model.ShipmentList.First().Receiver = model.EndpointList.First().supplier;
         IVendor supplier = model.ShipmentList[0].Sender;
         EndpointNode endPoint = (EndpointNode)model.ShipmentList[0].Receiver;
         model.AdvanceTime();
         Product endProd = endPoint.ComponentInventory.FirstOrDefault(p => p.ProductName == "Drill Bit") ?? new Product();
-        Assert.True(endProd.ProductName.Equals("Drill Bit"));
+        Assert.That(endProd.ProductName.Equals("Drill Bit"));
         Assert.That(endProd.Quantity.Equals(10));
     }
     [Test]
@@ -65,7 +66,7 @@ public class DataProviderTests
         Assert.That(endPoint.ProductionList.Count.Equals(1));
     }
     [Test]
-    public void LinesAreSaved()
+    public void LinesArePutIntoViewModel()
     {
         SupplyChainViewModel model = setupTest();
         Shipment shipment = model.ShipmentList.First();
