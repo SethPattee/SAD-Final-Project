@@ -234,6 +234,7 @@ namespace YourNamespace
                 MouseIsCaptured = true;
 
                 shippingLine = AssignLineValues(mousepos, shippingLine);
+                shippingLine.ShippmentDeleted += RemoveShipment;
                 targetShipingLine = shippingLine;
                 DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
             }
@@ -594,6 +595,17 @@ namespace YourNamespace
             if (removeConnectionButton != null)
             {
                 removeConnectionButton.IsEnabled = true;
+            }
+        }
+        public void RemoveShipment(object? sender, EventArgs? e)
+        {
+            if (sender is ShippingLine element)
+            {
+                Guid shipId = element.OwnShipment.Id;
+                var shipment = ViewModel.ShipmentList.FirstOrDefault(x => x.Id == shipId);
+                if (shipment != null) {
+					ViewModel.ShipmentList.Remove(shipment);
+				}
             }
         }
         public void RemoveEndpoint(object? sender, EventArgs? e)

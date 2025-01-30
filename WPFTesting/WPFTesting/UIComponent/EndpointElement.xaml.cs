@@ -140,13 +140,8 @@ namespace WPFTesting
 			{
 				return;
 			}
-
 			canvas.Children.Remove(this);
 			EndpointDeleted?.Invoke(this, EventArgs.Empty);
-			if (Window.GetWindow(this) is MainWindow mainWindow)
-			{
-				mainWindow.UpdateBoxTracker();
-			}
 		}
 	}
 }
