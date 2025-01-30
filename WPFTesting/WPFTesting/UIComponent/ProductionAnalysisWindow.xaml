@@ -29,26 +29,61 @@
                     <Slider VerticalAlignment="Center" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                             TickFrequency="1"
                             Width="250" Minimum="1" Maximum="8" Value="{Binding DaysToRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            HorizontalAlignment="Left" ValueChanged="Slider_ValueChanged"
-                            Margin="10 0 10 0"></Slider>
+                            HorizontalAlignment="Left"
+                            Margin="10 0 10 0" ValueChanged="Slider_ValueChanged"></Slider>
                 </Border>
                 <Border Background="LightGray" BorderThickness="0" HorizontalAlignment="Stretch" BorderBrush="Transparent" Width="170">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Enter days:" Margin="5 0 3 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        <TextBlock Text="Days to run:" Margin="5 0 3 0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                   FontSize="16"
                                     x:Name="AnalysisPeriodTutor" Visibility="Visible"></TextBlock>
                         <TextBox Text="{Binding DaysToRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Visibility="Visible"
-                                 Margin="5 0 0 0" VerticalAlignment="Center" BorderThickness="0"
+                                 Margin="5 0 0 0" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" BorderThickness="0" KeyUp="AnalysisPeriodValue_KeyUp" LostFocus="AnalysisPeriodValue_LostFocus"
                                  Background="Transparent" x:Name="AnalysisPeriodValue"></TextBox>
                     </StackPanel>
                 </Border>
             </StackPanel>
             <Border Grid.Row="1" Background="DarkGray" Padding="8">
-                <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <!--<ListView.ItemTemplate>
-                        
-                    </ListView.ItemTemplate>-->
+                <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          ItemsSource="{Binding productionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding TargetProductionTarget}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding IsTargetEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                                <TextBox Text="{Binding ProductTarget.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                <TextBox Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                <TextBox Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                <Image ></Image>
+                            </StackPanel>
+                        </DataTemplate>    
+                    </ListView.ItemTemplate>
                 </ListView>
             </Border>
+            <Button Width="48" Height="48" VerticalAlignment="Bottom" Grid.RowSpan="2" HorizontalAlignment="Left"
+                    Margin="20" Click="AddTargetButton_Click">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="BorderThickness" Value="1"></Setter>
+                        <Setter Property="BorderBrush">
+                            <Setter.Value>
+                                <RadialGradientBrush Opacity="1" MappingMode="RelativeToBoundingBox" SpreadMethod="Pad">
+                                    <GradientStopCollection>
+                                        <GradientStop Color="LightGray" Offset="0.0"></GradientStop>
+                                        <GradientStop Color="DarkGray" Offset="0.9"></GradientStop>
+                                        <GradientStop Color="Black" Offset="1.7"></GradientStop>
+                                    </GradientStopCollection>
+                                </RadialGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+                <Button.Content>
+                    <TextBlock FontFamily="Verdana" FontWeight="UltraBold" FontSize="30" Margin="0 0 0 5">
+                        +
+                    </TextBlock>
+                </Button.Content>
+            </Button>
         </Grid>
 
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="20 0 0 0">
