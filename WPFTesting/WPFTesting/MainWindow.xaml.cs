@@ -391,9 +391,14 @@ namespace YourNamespace
 		{
 			MouseIsCaptured = false;
 			IsDestinationSearching = false;
-			targetShipingLine.LineSelected += Line_MouseDown;
-			ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
-			ShipmentList.Add(targetShipingLine);
+            if (targetShipingLine is not null)
+            {
+			    targetShipingLine.LineSelected += Line_MouseDown;
+                targetShipingLine.OwnShipment.FromJoiningBoxCorner = targetShipingLine.FromJoiningBoxCorner;
+                targetShipingLine.OwnShipment.ToJoiningBoxCorner = targetShipingLine.ToJoiningBoxCorner;
+			    ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
+			    ShipmentList.Add(targetShipingLine);
+            }
 		}
 
 		private void Box_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -862,7 +867,7 @@ namespace YourNamespace
             };
         }
 
-        private void Line_MouseDown(object sender, EventArgs e)
+        private void Line_MouseDown(object? sender, EventArgs? e)
         {
             UnselectAllCanvasElements();
             if (sender is ShippingLine l)

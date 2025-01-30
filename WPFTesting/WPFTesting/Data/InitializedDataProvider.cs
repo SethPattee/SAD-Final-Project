@@ -55,7 +55,7 @@ public class InitializedDataProvider : IInitializedDataProvider
 
 	public IEnumerable<Shipment> GetShipments()
 	{
-		throw new NotImplementedException();
+        return new List<Shipment>();
 	}
 
 	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)
