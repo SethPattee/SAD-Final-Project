@@ -56,13 +56,19 @@ public class InitializedDataProvider : IInitializedDataProvider
 
 	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
 	{
+
         List<Shipment> shipments = new List<Shipment>();
-		var jString = File.ReadAllText("Shipments.json");
-		IEnumerable<ForJsonShipment>? forShipments = JsonConvert.DeserializeObject<IEnumerable<ForJsonShipment>>(jString);
-        foreach (ForJsonShipment ship in forShipments ?? new List<ForJsonShipment>())
+        try
         {
-            shipments.Add(new FromJsonShipment(ship).GetShipment(endpoints,suppliers));  
+
+            var jString = File.ReadAllText("Shipments.json");
+            IEnumerable<ForJsonShipment>? forShipments = JsonConvert.DeserializeObject<IEnumerable<ForJsonShipment>>(jString);
+            foreach (ForJsonShipment ship in forShipments ?? new List<ForJsonShipment>())
+            {
+                shipments.Add(new FromJsonShipment(ship).GetShipment(endpoints, suppliers));
+            }
         }
+        catch (Exception E) { Console.WriteLine("couldn't read shipments from file"); }
 		return shipments;
 	}
 
