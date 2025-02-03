@@ -90,6 +90,7 @@ namespace YourNamespace
             {
 				ShippingLine shippingLine = new ShippingLine();
 				DiagramCanvas.Children.Insert(DiagramCanvas.Children.Count, shippingLine);
+                Canvas.SetZIndex(shippingLine, -10);
                 shippingLine.OwnShipment = shipment;
                 shippingLine.FromJoiningBoxCorner = shipment.FromJoiningBoxCorner;
                 shippingLine.ToJoiningBoxCorner = shipment.ToJoiningBoxCorner;
@@ -125,14 +126,15 @@ namespace YourNamespace
 				shippingLine.ourShippingLine.Y1 = Canvas.GetTop(sender) + pos.Y;
                 if (receiver is EndpointElement endpointElement)
                 {
-				    shippingLine.ourShippingLine.X2 = Canvas.GetLeft(endpointElement);
-				    shippingLine.ourShippingLine.Y2 = Canvas.GetTop(endpointElement);
+                    shippingLine.ourShippingLine.X2 = Canvas.GetLeft(endpointElement);
+                    shippingLine.ourShippingLine.Y2 = Canvas.GetTop(endpointElement);
                 }
-                else if (receiver is SupplierElement supplierElement){
-					Point LineAnchorOffset = GetLineOffset(supplierElement);
-					shippingLine.ourShippingLine.X2 = Canvas.GetLeft(supplierElement) + LineAnchorOffset.X;
-					shippingLine.ourShippingLine.Y2 = Canvas.GetTop(supplierElement) + LineAnchorOffset.Y;
-				}
+                else if (receiver is SupplierElement supplierElement)
+                {
+                    Point LineAnchorOffset = GetLineOffset(supplierElement);
+                    shippingLine.ourShippingLine.X2 = Canvas.GetLeft(supplierElement) + LineAnchorOffset.X;
+                    shippingLine.ourShippingLine.Y2 = Canvas.GetTop(supplierElement) + LineAnchorOffset.Y;
+                }
 				ShipmentList.Add(shippingLine);
 			}
             if (ViewModel.EndpointList.Count == 0)
