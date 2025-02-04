@@ -977,5 +977,57 @@ namespace YourNamespace
         {
 
         }
+
+        private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
+        {
+            if(ViewModel is not null && ViewModel.SelectedShipment is not null)
+                ViewModel.SelectedShipment.TimeToDeliver++;
+        }
+        private void DecrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is null && ViewModel?.SelectedShipment is null)
+                return;
+
+            if (ViewModel?.SelectedShipment?.TimeToDeliver - 1 <= 0)
+                ViewModel.SelectedShipment.TimeToDeliver = 1;
+            else
+                ViewModel.SelectedShipment.TimeToDeliver--;
+        }
+
+        private void DeleteItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button button)
+            {
+                ViewModel.SelectedShipment.Products
+                    .Remove((Product)button.DataContext);
+            }
+        }
+
+        private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button b)
+            {
+                ViewModel.SelectedEndpoint.supplier
+                    .ProductInventory.Remove((Product)b.DataContext);
+            }
+        }
+
+        private void DeleteDeliveryButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button b)
+            {
+                ((EndpointNode)ViewModel.SelectedEndpoint.supplier)
+                    .DeliveryRequirementsList.Remove((Product)b.DataContext);
+            }
+        }
+
+        private void DeleteEndpointComponentInventoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b)
+            {
+                ViewModel.SelectedEndpoint.supplier
+                    .ComponentInventory.Remove((Product)b.DataContext);
+            }
+        }
     }
 }
