@@ -12,6 +12,26 @@ public class Shipment : INotifyPropertyChanged
     private List<Product> _products = new List<Product>();
     private IVendor _sender;
     private IVendor _reciever;
+    private bool _isRecurring = true;
+    public bool IsRecurring {
+        get { return _isRecurring; }
+        set
+        {   _isRecurring = value; 
+            OnPropertyChanged(nameof(IsRecurring));
+        }
+    }
+    private int _timeToDeliver;
+    public int TimeToDeliver
+    {
+        get { return _timeToDeliver; }
+        set
+        {
+            _timeToDeliver = value;
+            OnPropertyChanged(nameof(TimeToDeliver));
+        }
+    }
+    public int TimeUntilNextDelivery;
+
 	public string FromJoiningBoxCorner { get; set; }
 	public string ToJoiningBoxCorner { get; set; }
 	public Guid Id { get; set; }
@@ -23,6 +43,8 @@ public class Shipment : INotifyPropertyChanged
         _reciever = new Supplier();
         FromJoiningBoxCorner = string.Empty;
         ToJoiningBoxCorner = string.Empty;
+        TimeToDeliver = 1;
+        TimeUntilNextDelivery = TimeToDeliver;
     }
 
     protected void OnPropertyChanged(string PropertyName)
@@ -58,4 +80,14 @@ public class Shipment : INotifyPropertyChanged
         }
     }
 
+    public void ProcessTime()
+    {
+        if (TimeUntilNextDelivery <= 0)
+        {
+            if (IsRecurring)
+                TimeUntilNextDelivery = TimeToDeliver;
+        }
+        else
+            TimeUntilNextDelivery--;
+    }
 }
