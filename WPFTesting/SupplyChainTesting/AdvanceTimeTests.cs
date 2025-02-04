@@ -324,7 +324,9 @@ internal class AdvanceTimeTests
     public void ShipmentProcessTime_DecrementsCorrectly_NumberResets()
     {
         Shipment shipment = new();
+        shipment.TimeUntilNextDelivery = 0;
+        shipment.TimeToDeliver = 5;
         shipment.ProcessTime();
-        Assert.That(shipment.TimeUntilNextDelivery == shipment.TimeToDeliver);
+        Assert.That(shipment.TimeUntilNextDelivery, Is.EqualTo(4));
     }
 }

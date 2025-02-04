@@ -26,8 +26,8 @@ public class AnalizorModel
 		}
 	}
 
-	private List<Shipment> _shipmentList = new List<Shipment>();
-	public List<Shipment> ShipmentList
+	private ObservableCollection<Shipment> _shipmentList = new ObservableCollection<Shipment>();
+	public ObservableCollection<Shipment> ShipmentList
 	{
 		get { return _shipmentList; }
 		set

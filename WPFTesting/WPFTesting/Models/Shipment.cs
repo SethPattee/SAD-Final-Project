@@ -82,12 +82,13 @@ public class Shipment : INotifyPropertyChanged
 
     public void ProcessTime()
     {
-        if (TimeUntilNextDelivery <= 0)
+        
+        if (TimeUntilNextDelivery  <= 0)
         {
             if (IsRecurring)
-                TimeUntilNextDelivery = TimeToDeliver;
+                TimeUntilNextDelivery = TimeToDeliver - 1;
         }
-        else
+        else 
             TimeUntilNextDelivery--;
     }
 }
