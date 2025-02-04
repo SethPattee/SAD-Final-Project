@@ -336,7 +336,7 @@ namespace YourNamespace
             }
         }
 
-        private Point GetLineOffset(SupplierElement lineTarget)
+        public Point GetLineOffset(SupplierElement lineTarget)
         {
             if (lineTarget is SupplierElement)
             {
