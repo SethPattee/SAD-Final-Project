@@ -9,7 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UIComponent\SelectProductTargetDialog.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\PackageIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="UIComponent\SelectProductTargetDialog.xaml" />
   </ItemGroup>
 
   <ItemGroup>

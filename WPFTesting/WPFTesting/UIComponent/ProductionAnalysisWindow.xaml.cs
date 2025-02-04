@@ -46,6 +46,7 @@ namespace WPFTesting.UIComponent
             InitializeComponent();
             this.DataContext = this;
             scViewModel = new SupplyChainViewModel(new InitializedDataProvider());
+            productionTargets = new ObservableCollection<ProductionTarget>();
             DaysToRun = 1;
         }
 
@@ -125,6 +126,9 @@ namespace WPFTesting.UIComponent
                 TargetQuantity = 1
 
             };
+
+            productionTargets.Add(newtarg);
+            OnPropertyChanged(nameof(productionTargets));
         }
     }
 }

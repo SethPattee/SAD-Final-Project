@@ -482,3 +482,5 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+/WPFTesting/WPFTesting/UIComponent/SelectProductTargetDialog.xaml
+/WPFTesting/WPFTesting/UIComponent/SelectProductTargetDialog.xaml.cs
