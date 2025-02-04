@@ -154,15 +154,22 @@ public class SupplyChainViewModel : INotifyPropertyChanged
     {
         foreach (Shipment delivery in ShipmentList)
         {
-            //shipOrder
-            var sentProds = delivery.Sender.ShipOrder(delivery.Products);
-            List<Product> listSent = new List<Product>();
-            foreach (var prod in sentProds)
+            delivery.ProcessTime();
+            // When it's time to deliver a shipment, do:
+            if(delivery.TimeUntilNextDelivery <= 0)
             {
-                listSent.Add(prod);
+                //shipOrder
+                var sentProds = delivery.Sender.ShipOrder(delivery.Products);
+                List<Product> listSent = new List<Product>();
+                foreach (var prod in sentProds)
+                {
+                    listSent.Add(prod);
+                }
+                //Receive 
+                delivery.Receiver.Receive(listSent);
+                if(!delivery.IsRecurring)
+                    ShipmentList.Remove(delivery);
             }
-            //Receive 
-            delivery.Receiver.Receive(listSent);
         }
         foreach (var v in SupplierList)
         {

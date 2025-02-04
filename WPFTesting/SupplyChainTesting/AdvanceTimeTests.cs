@@ -310,4 +310,21 @@ internal class AdvanceTimeTests
         model.AdvanceTime();
         Assert.That(endpointTest.ProductInventory.First(x => x.ProductName == "box").Quantity, Is.EqualTo(1));
     }
+
+    [Test]
+    public void ShipmentProcessTime_DecrementsCorrectly_NumberGoDown()
+    {
+        Shipment shipment = new();
+        shipment.TimeUntilNextDelivery = 3;
+        shipment.ProcessTime();
+        Assert.That(shipment.TimeUntilNextDelivery == 2);
+    }
+
+    [Test]
+    public void ShipmentProcessTime_DecrementsCorrectly_NumberResets()
+    {
+        Shipment shipment = new();
+        shipment.ProcessTime();
+        Assert.That(shipment.TimeUntilNextDelivery == shipment.TimeToDeliver);
+    }
 }
