@@ -47,6 +47,7 @@ namespace WPFTesting.UIComponent
             InitializeComponent();
             this.DataContext = this;
             simModel = new AnalizorModel(model);
+            productionTargets = new ObservableCollection<ProductionTarget>();
             DaysToRun = 1;
         }
 
@@ -126,6 +127,9 @@ namespace WPFTesting.UIComponent
                 TargetQuantity = 1
 
             };
+
+            productionTargets.Add(newtarg);
+            OnPropertyChanged(nameof(productionTargets));
         }
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
