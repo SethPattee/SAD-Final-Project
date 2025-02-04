@@ -60,8 +60,40 @@ public class AnalizorModel
 			sup.supplier.Name = supplier.supplier.Name;
 			sup.supplier.ComponentInventory = supplier.supplier.ComponentInventory;
 			sup.supplier.ProductInventory = supplier.supplier.ProductInventory;
+			sup.supplier.Id = supplier.supplier.Id;
 			sup.Position = new System.Drawing.Point();
 			AddSupplier(sup);
+		}
+		foreach (EndpointUIValues endpoint in model.EndpointList)
+		{
+			EndpointUIValues end = new EndpointUIValues();
+			end.supplier = new EndpointNode();
+			end.supplier.Name = endpoint.supplier.Name;
+			end.supplier.ComponentInventory = endpoint.supplier.ComponentInventory;
+			end.supplier.ProductInventory = endpoint.supplier.ProductInventory;
+			end.supplier.Id = endpoint.supplier.Id;
+			end.Position = new System.Drawing.Point();
+			((EndpointNode)end.supplier).DeliveryRequirementsList = ((EndpointNode)endpoint.supplier).DeliveryRequirementsList;
+			((EndpointNode)end.supplier).ProductionList = ((EndpointNode)endpoint.supplier).ProductionList;
+			((EndpointNode)end.supplier).Profit = ((EndpointNode)endpoint.supplier).Profit;
+			AddEndpoint(end);
+		}
+		foreach (Shipment shipment in model.ShipmentList) {
+			Shipment ship = new Shipment();
+			ship.Sender = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Sender.Id)?.supplier ?? new Supplier();
+			if (shipment.Sender is EndpointNode endpoint)
+			{
+				ship.Receiver = EndpointList.FirstOrDefault(e => e.supplier.Id == shipment.Receiver.Id)?.supplier ?? new EndpointNode();
+			}
+			else
+			{
+				ship.Receiver = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Receiver.Id)?.supplier ?? new Supplier();
+			}
+			ship.Products = shipment.Products;
+			ship.ToJoiningBoxCorner = "";
+			ship.FromJoiningBoxCorner = "";
+			// TODO: Add Dalins changes to Shipments HERE!!! It is missing some stuff
+			AddShipment(ship);
 		}
 	}
 
@@ -84,42 +116,16 @@ public class AnalizorModel
 		SupplierList.Add(supplier);
 		OnPropertyChanged(nameof(SupplierList));
 	}
-
+	public void AddShipment(Shipment shipment)
+	{
+		ShipmentList.Add(shipment);
+		OnPropertyChanged(nameof(ShipmentList));
+	}
 	public void AdvanceTime()
 	{
-		foreach (Shipment delivery in ShipmentList)
-		{
-			//shipOrder
-			var sentProds = delivery.Sender.ShipOrder(delivery.Products);
-			List<Product> listSent = new List<Product>();
-			foreach (var prod in sentProds)
-			{
-				listSent.Add(prod);
-			}
-			//Receive 
-			delivery.Receiver.Receive(listSent);
-		}
-		foreach (var v in SupplierList)
-		{
-			v.supplier.Process();
-		}
-		foreach (var e in EndpointList)
-		{
-			var end = (EndpointNode)e.supplier;
-			end.ProduceProduct();
-		}
-	}
-
-	public Shipment ShipmentFirstSuplier(Supplier target)
-	{
-		Shipment targetShipment = new Shipment();
-		targetShipment.Sender = target;
-		targetShipment.Products.Clear();
-		Product toShip = target.ProductInventory.First();
-		targetShipment.Products.Add(new Product());
-		targetShipment.Products[0].ProductName = toShip.ProductName;
-		targetShipment.Products[0].Quantity = 5;
-		return targetShipment;
+		ToolsForViewModel.AdvanceTimeforShipmentList(ShipmentList);
+		ToolsForViewModel.AdvancetimeForSupplierList(SupplierList);
+		ToolsForViewModel.AdvanceTimeForEndpointList(EndpointList);
 	}
 
 	public void PassTimeUntilDuration()
