@@ -7,7 +7,7 @@
         xmlns:classes="clr-namespace:WPFTesting.ViewModel"
         mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Title="ProductionAnalysisWindow"
-        Background="Transparent"  Height="450" Width="800">
+        Background="Transparent" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"></RowDefinition>
@@ -43,17 +43,20 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-            <Border Grid.Row="1" Background="DarkGray" Padding="8">
+            <Border Grid.Row="1" Background="DarkGray" Padding="8" x:Name="ProductionTargList">
                 <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                           ItemsSource="{Binding productionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding TargetProductionTarget}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding IsTargetEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                                <TextBox Text="{Binding ProductTarget.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                <TextBox Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                <TextBox Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="LightGray" Height="48"
+                                        Width="{Binding ElementName=ProductionTargList.ActualWidth}">
+                                <CheckBox IsChecked="{Binding IsTargetEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
+                                          Margin="4 0 4 0"></CheckBox>
+                                <TextBox Text="{Binding ProductTarget.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"
+                                         FontSize="16"></TextBox>
+                                <TextBox FontSize="16" Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
+                                <TextBox FontSize="16" Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
                                 <Image ></Image>
                             </StackPanel>
                         </DataTemplate>
