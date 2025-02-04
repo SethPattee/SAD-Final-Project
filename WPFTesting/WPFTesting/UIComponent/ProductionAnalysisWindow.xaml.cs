@@ -1,4 +1,5 @@
 ﻿using FactorSADEfficiencyOptimizer.Models;
+using FactorSADEfficiencyOptimizer.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,10 +26,10 @@ namespace WPFTesting.UIComponent
     /// </summary>
     public partial class ProductionAnalysisWindow : Window, INotifyPropertyChanged
     {
-        public SupplyChainViewModel scViewModel {  get; set; }
+        public AnalizorModel simModel;
         public ObservableCollection<ProductionTarget> productionTargets { get; set; }
         public ProductionTarget TargetProductionTarget { get; set; }
-        private int _daystorun;
+		private int _daystorun;
         public int DaysToRun { 
             get
             {
@@ -41,11 +42,11 @@ namespace WPFTesting.UIComponent
             }
         }
 
-        public ProductionAnalysisWindow()
+        public ProductionAnalysisWindow(SupplyChainViewModel model)
         {
             InitializeComponent();
             this.DataContext = this;
-            scViewModel = new SupplyChainViewModel(new InitializedDataProvider());
+            simModel = new AnalizorModel(model);
             DaysToRun = 1;
         }
 
@@ -126,5 +127,10 @@ namespace WPFTesting.UIComponent
 
             };
         }
-    }
+        private void StartSim_Click(object? sender,  RoutedEventArgs? e)
+        {
+
+        }
+
+	}
 }
