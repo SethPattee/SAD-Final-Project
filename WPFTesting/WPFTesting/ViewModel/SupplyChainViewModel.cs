@@ -68,8 +68,8 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         }
     }
 
-    private List<Shipment> _shipmentList = new List<Shipment>();
-    public List<Shipment> ShipmentList
+    private ObservableCollection<Shipment> _shipmentList = new ObservableCollection<Shipment>();
+    public ObservableCollection<Shipment> ShipmentList
     {
         get { return _shipmentList; }
         set
@@ -136,7 +136,10 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         IEnumerable<Shipment> ship = _boxProvider.GetShipments(EndpointList, SupplierList);
         if (ship is not null)
         {
-            ShipmentList.AddRange(ship);
+            foreach (var shipment in ship)
+            {
+                ShipmentList.Add(shipment);
+            }
         }
     }
     public void AddEndpointToChain(EndpointUIValues endpoint)
