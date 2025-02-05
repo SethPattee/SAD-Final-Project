@@ -66,4 +66,11 @@ public class SimulatorTests
 			Assert.That(endpoint.supplier.ProductInventory.Count, Is.Not.EqualTo(simulation.SupplierList.First().supplier.ProductInventory.Count));
 		}
 	}
+	[Test]
+	public void GivenTwoDaySimulaitonItRunsForTwoAdvanceTimes()
+	{
+        var model = setupTest();
+        AnalizorModel simulation = new AnalizorModel(model);
+		
+    }
 }

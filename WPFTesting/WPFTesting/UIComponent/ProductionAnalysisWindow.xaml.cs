@@ -133,7 +133,7 @@ namespace WPFTesting.UIComponent
         }
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
-
+            simModel.PassTimeUntilDuration(_daystorun);
         }
 
 	}
