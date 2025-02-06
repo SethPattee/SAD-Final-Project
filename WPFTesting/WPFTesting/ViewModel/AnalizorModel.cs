@@ -187,4 +187,56 @@ public class AnalizorModel
 		}
 		return products;
 	}
+	public void OrderMissingComponents()
+	{
+		foreach (ProductionTarget target in ProductionTargets)
+		{
+			EndpointNode endpointNode = new EndpointNode();
+			ProductLine productLine = new ProductLine();
+			foreach (var endpoint in EndpointList)
+			{
+				var posibleLine = ((EndpointNode)endpoint.supplier).ProductionList
+					.FirstOrDefault(pl => pl.ResultingProduct.ProductName == target.ProductTarget?.ProductName);
+				if (posibleLine is not null)
+				{
+					endpointNode = (EndpointNode)endpoint.supplier;
+					productLine = (ProductLine)posibleLine;
+					List<Product> products = GetNeededComponentQuantitiesForTarget(target,productLine);
+					foreach (Product product in products)
+					{
+						float Quant = endpoint.supplier.ComponentInventory.FirstOrDefault(p => p.ProductName == product.ProductName)?.Quantity ?? 0;
+						if (!(Quant >= product.Quantity))
+						{
+							Product toOrder = new Product();
+							toOrder.ProductName = product.ProductName;
+							toOrder.Price = product.Price;
+							toOrder.Quantity = product.Quantity - Quant;
+							PlaceOrderFor(product, endpoint);
+						}
+					}
+					break;
+				}
+			}
+
+		}
+	}
+	public void PlaceOrderFor(Product product, EndpointUIValues endpoint)
+	{
+		//find a supplier with the product (enough of the product)
+		Supplier supplier = 
+			(Supplier)(SupplierList.FirstOrDefault(s => s.supplier.ProductInventory
+				.FirstOrDefault(p => 
+					p.ProductName == product.ProductName 
+					&& p.Quantity >= product.Quantity) 
+			!= null)?.supplier ?? new Supplier());
+
+		//create shippingline that has some of the product 
+		Shipment shipment = new Shipment()
+		{
+			Sender = supplier,
+			Receiver = endpoint.supplier,
+			Products = new List<Product>() { product }
+		};
+		ShipmentList.Add(shipment);
+	}
 }
