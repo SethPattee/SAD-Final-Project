@@ -51,7 +51,7 @@ public class AnalizorModel
 			OnPropertyChanged(nameof(SupplierList));
 		}
 	}
-    private ObservableCollection<ProductionTarget> _productionTargets { get; set; }
+    private ObservableCollection<ProductionTarget> _productionTargets = new ObservableCollection<ProductionTarget>();
 	public ObservableCollection<ProductionTarget> ProductionTargets
 	{
 		get => _productionTargets;
@@ -64,7 +64,6 @@ public class AnalizorModel
     public AnalizorModel(SupplyChainViewModel model)
 	{
 		ShortestPath = "";
-		_productionTargets = new ObservableCollection<ProductionTarget>();
 		foreach (var supplier in model.SupplierList)
 		{
 			SupplierUIValues sup = new SupplierUIValues();
