@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using FactorSADEfficiencyOptimizer.Models;
 using WPFTesting.Data;
 using WPFTesting.Models;
 using WPFTesting.Shapes;
@@ -13,7 +15,6 @@ using WPFTesting.ViewModel;
 namespace FactorSADEfficiencyOptimizer.ViewModel;
 public class AnalizorModel
 {
-	public int Duration { get; set; }
 	public event PropertyChangedEventHandler? PropertyChanged;
 	private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
 	public ObservableCollection<EndpointUIValues> EndpointList
@@ -50,7 +51,17 @@ public class AnalizorModel
 			OnPropertyChanged(nameof(SupplierList));
 		}
 	}
-	public AnalizorModel(SupplyChainViewModel model)
+    private ObservableCollection<ProductionTarget> _productionTargets = new ObservableCollection<ProductionTarget>();
+	public ObservableCollection<ProductionTarget> ProductionTargets
+	{
+		get => _productionTargets;
+		set
+		{
+			_productionTargets = value;
+			OnPropertyChanged(nameof(ProductionTargets));
+		}
+	}
+    public AnalizorModel(SupplyChainViewModel model)
 	{
 		ShortestPath = "";
 		foreach (var supplier in model.SupplierList)
@@ -128,11 +139,19 @@ public class AnalizorModel
 		ToolsForViewModel.AdvanceTimeForEndpointList(EndpointList);
 	}
 
-	public void PassTimeUntilDuration()
+	public void PassTimeUntilDuration(int duration)
 	{
-		for (int i = 0; i < Duration; i++)
+		for (int i = 0; i < duration; i++)
 		{
 			AdvanceTime();
+			UpdateProducitonTargets();
+		}
+	}
+	private void UpdateProducitonTargets()
+	{
+		foreach (var target in ProductionTargets)
+		{
+			
 		}
 	}
 }

@@ -13,8 +13,6 @@ namespace WPFTesting.ViewModel;
 
 public class SupplyChainViewModel : INotifyPropertyChanged
 {
-    public int Duration { get; set; }
-
     private IInitializedDataProvider _boxProvider;
     public event PropertyChangedEventHandler? PropertyChanged;
     private ObservableCollection<EndpointUIValues> _endpointList;
@@ -159,14 +157,5 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         ToolsForViewModel.AdvanceTimeforShipmentList(ShipmentList);
         ToolsForViewModel.AdvancetimeForSupplierList(SupplierList);
         ToolsForViewModel.AdvanceTimeForEndpointList(EndpointList);
-    }
-
-
-    public void PassTimeUntilDuration()
-    {
-        for (int i = 0; i < Duration; i++)
-        {
-            AdvanceTime();
-        }
     }
 }

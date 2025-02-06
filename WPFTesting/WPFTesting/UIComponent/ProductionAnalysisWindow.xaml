@@ -45,7 +45,7 @@
             </StackPanel>
             <Border Grid.Row="1" Background="DarkGray" Padding="8" x:Name="ProductionTargList">
                 <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                          ItemsSource="{Binding productionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding simModel.ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding TargetProductionTarget}">
                     <ListView.ItemTemplate>
                         <DataTemplate>

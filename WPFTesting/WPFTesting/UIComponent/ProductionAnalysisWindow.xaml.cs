@@ -26,8 +26,7 @@ namespace WPFTesting.UIComponent
     /// </summary>
     public partial class ProductionAnalysisWindow : Window, INotifyPropertyChanged
     {
-        public AnalizorModel simModel;
-        public ObservableCollection<ProductionTarget> productionTargets { get; set; }
+        public AnalizorModel simModel { get; set; }
         public ProductionTarget TargetProductionTarget { get; set; }
 		private int _daystorun;
         public int DaysToRun { 
@@ -45,9 +44,8 @@ namespace WPFTesting.UIComponent
         public ProductionAnalysisWindow(SupplyChainViewModel model)
         {
             InitializeComponent();
-            this.DataContext = this;
             simModel = new AnalizorModel(model);
-            productionTargets = new ObservableCollection<ProductionTarget>();
+            this.DataContext = this;
             DaysToRun = 1;
         }
 
@@ -127,13 +125,13 @@ namespace WPFTesting.UIComponent
                 TargetQuantity = 1
 
             };
-
-            productionTargets.Add(newtarg);
-            OnPropertyChanged(nameof(productionTargets));
+            simModel.ProductionTargets.Add(newtarg);
+            OnPropertyChanged(nameof(simModel));
+            
         }
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
-
+            simModel.PassTimeUntilDuration(_daystorun);
         }
 
 	}
