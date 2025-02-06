@@ -92,7 +92,7 @@ public class SimulatorTests
 	//Assert.That(simulation.ProductionTargets.First().InitAmount, Is.EqualTo(1));
 	//   }
 	[Test]
-	public void AnalyzerSetsDailyQuotaForTargetProduct()
+	public void AnalyzerGetsDailyQuotaForTargetProduct()
 	{
 		var model = setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
@@ -115,5 +115,32 @@ public class SimulatorTests
 		Product product = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
 		int num = simulation.GetProductsNeededPerDay(newtarg, product);
 		Assert.That(num, Is.EqualTo(1));
+	}
+	[Test]
+	public void AnalyzerGetsNeededComponentsForTargetProduct()
+	{
+		var model = setupTest();
+		AnalizorModel simulation = new AnalizorModel(model);
+		ProductionTarget newtarg = new ProductionTarget()
+		{
+			DueDate = 2,
+			InitAmount = 0,
+			IsTargetEnabled = true,
+			Status = 0,
+			ProductTarget = new Product()
+			{
+				Quantity = 0,
+				ProductName = "box"
+			},
+			TargetQuantity = 1
+		};
+		EndpointUIValues endpoint = simulation.EndpointList.First();
+		ProductLine productLine = ((EndpointNode)endpoint.supplier).ProductionList.First();
+		List<Product> neededProducts =  simulation.GetNeededComponentQuantitiesForTarget( newtarg, productLine);
+		Assert.That(neededProducts.Count, Is.EqualTo(2));
+		Product wood = neededProducts.FirstOrDefault(p => p.ProductName == "wood") ?? new Product();
+		Product screws = neededProducts.FirstOrDefault(p => p.ProductName == "screws") ?? new Product();
+		Assert.That(wood.Quantity, Is.EqualTo(10));
+		Assert.That(screws.Quantity, Is.EqualTo(12));
 	}
 }

@@ -174,4 +174,17 @@ public class AnalizorModel
 		else
 			return 0;
 	}
+	public List<Product> GetNeededComponentQuantitiesForTarget(ProductionTarget newtarg, ProductLine productLine)
+	{
+		List<Product> products = new List<Product>();
+		foreach (Product p in productLine.Components)
+		{
+			Product qp = new Product();
+			qp.ProductName = p.ProductName;
+			qp.Price = p.Price;
+			qp.Quantity = p.Quantity * newtarg.TargetQuantity;
+			products.Add(qp);
+		}
+		return products;
+	}
 }
