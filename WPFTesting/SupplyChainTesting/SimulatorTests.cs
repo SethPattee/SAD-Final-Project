@@ -1,4 +1,5 @@
 ﻿using FactorSADEfficiencyOptimizer.ViewModel;
+using FactorSADEfficiencyOptimizer.Models;
 using SupplyChainTesting.MockClasses;
 using System;
 using System.Collections.Generic;
@@ -71,6 +72,23 @@ public class SimulatorTests
 	{
         var model = setupTest();
         AnalizorModel simulation = new AnalizorModel(model);
-		
+        ProductionTarget newtarg = new ProductionTarget()
+        {
+            DueDate = 2,
+            InitAmount = 0,
+            IsTargetEnabled = true,
+            Status = 0,
+            ProductTarget = new Product()
+            {
+                Quantity = 0,
+                ProductName = "box"
+            },
+            TargetQuantity = 1
+        };
+        simulation.ProductionTargets.Add(newtarg);
+
+		simulation.PassTimeUntilDuration(2);
+
+		Assert.That(simulation.ProductionTargets.First().InitAmount, Is.EqualTo(1));
     }
 }

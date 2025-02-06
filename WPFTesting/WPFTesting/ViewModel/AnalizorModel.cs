@@ -144,6 +144,13 @@ public class AnalizorModel
 		for (int i = 0; i < duration; i++)
 		{
 			AdvanceTime();
+			UpdateProducitonTargets();
+		}
+	}
+	private void UpdateProducitonTargets()
+	{
+		foreach (var target in ProductionTargets)
+		{
 			
 		}
 	}
