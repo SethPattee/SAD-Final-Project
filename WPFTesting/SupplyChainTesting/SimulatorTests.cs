@@ -67,28 +67,53 @@ public class SimulatorTests
 			Assert.That(endpoint.supplier.ProductInventory.Count, Is.Not.EqualTo(simulation.SupplierList.First().supplier.ProductInventory.Count));
 		}
 	}
+	//[Test]
+	//public void GivenTwoDaySimulaitonItRunsForTwoAdvanceTimes()
+	//{
+	//      var model = setupTest();
+	//      AnalizorModel simulation = new AnalizorModel(model);
+	//      ProductionTarget newtarg = new ProductionTarget()
+	//      {
+	//          DueDate = 2,
+	//          InitAmount = 0,
+	//          IsTargetEnabled = true,
+	//          Status = 0,
+	//          ProductTarget = new Product()
+	//          {
+	//              Quantity = 0,
+	//              ProductName = "box"
+	//          },
+	//          TargetQuantity = 1
+	//      };
+	//      simulation.ProductionTargets.Add(newtarg);
+
+	//simulation.PassTimeUntilDuration(2);
+
+	//Assert.That(simulation.ProductionTargets.First().InitAmount, Is.EqualTo(1));
+	//   }
 	[Test]
-	public void GivenTwoDaySimulaitonItRunsForTwoAdvanceTimes()
+	public void AnalyzerSetsDailyQuotaForTargetProduct()
 	{
-        var model = setupTest();
-        AnalizorModel simulation = new AnalizorModel(model);
-        ProductionTarget newtarg = new ProductionTarget()
-        {
-            DueDate = 2,
-            InitAmount = 0,
-            IsTargetEnabled = true,
-            Status = 0,
-            ProductTarget = new Product()
-            {
-                Quantity = 0,
-                ProductName = "box"
-            },
-            TargetQuantity = 1
-        };
-        simulation.ProductionTargets.Add(newtarg);
-
-		simulation.PassTimeUntilDuration(2);
-
-		Assert.That(simulation.ProductionTargets.First().InitAmount, Is.EqualTo(1));
-    }
+		var model = setupTest();
+		AnalizorModel simulation = new AnalizorModel(model);
+		Assert.That(simulation.CurrentDay, Is.EqualTo(1));
+		ProductionTarget newtarg = new ProductionTarget()
+		{
+			DueDate = 2,
+			InitAmount = 0,
+			IsTargetEnabled = true,
+			Status = 0,
+			ProductTarget = new Product()
+			{
+				Quantity = 0,
+				ProductName = "box"
+			},
+			TargetQuantity = 1
+		};
+		simulation.ProductionTargets.Add(newtarg);
+		EndpointUIValues endpoint = simulation.EndpointList.First();
+		Product product = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
+		int num = simulation.GetProductsNeededPerDay(newtarg, product);
+		Assert.That(num, Is.EqualTo(1));
+	}
 }

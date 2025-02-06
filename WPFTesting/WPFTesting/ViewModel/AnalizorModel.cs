@@ -61,6 +61,15 @@ public class AnalizorModel
 			OnPropertyChanged(nameof(ProductionTargets));
 		}
 	}
+	private int _currentDay = 1;
+	public int CurrentDay
+	{
+		get => _currentDay;
+		set {
+			_currentDay = value;
+			OnPropertyChanged(nameof(CurrentDay));
+		}
+	}
     public AnalizorModel(SupplyChainViewModel model)
 	{
 		ShortestPath = "";
@@ -153,5 +162,16 @@ public class AnalizorModel
 		{
 			
 		}
+	}
+	public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
+	{
+		double neededQuant = newtarg.TargetQuantity - product.Quantity;
+		if (neededQuant > 0)
+		{
+			double perDayQuant = neededQuant / (newtarg.DueDate - CurrentDay);
+			return (int)Math.Ceiling(perDayQuant);
+		}
+		else
+			return 0;
 	}
 }
