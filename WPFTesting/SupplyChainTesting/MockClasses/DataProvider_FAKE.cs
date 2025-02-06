@@ -389,8 +389,14 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
 									{
 										Quantity=10,
 										ProductName= "wood"
-									}
-				},
+									},
+                    new Product()
+                                    {
+                                        Quantity=10,
+                                        ProductName= "nails"
+                                    }
+
+                },
                 Sender = new Supplier()
                 {
 					ProductInventory =

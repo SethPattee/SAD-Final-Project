@@ -72,6 +72,6 @@ public class DataProviderTests
         Shipment shipment = model.ShipmentList.First();
         Assert.That(shipment.Sender.Name.Length >= 1);
         Assert.That(shipment.Receiver.Name.Length >= 1);
-        Assert.That(shipment.Products.Count.Equals(1));
+        Assert.That(shipment.Products.Count.Equals(2));
 	}
 }
