@@ -1,5 +1,6 @@
 ﻿using FactorSADEfficiencyOptimizer.Models;
 using FactorSADEfficiencyOptimizer.ViewModel;
+using InteractiveDataDisplay.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,6 +50,21 @@ namespace WPFTesting.UIComponent
             simModel = new AnalizorModel(model);
             productionTargets = new ObservableCollection<ProductionTarget>();
             DaysToRun = 1;
+            double[] x = new double[200];
+            for (int i = 0; i < x.Length; i++)
+                x[i] = 3.1415 * i / (x.Length - 1);
+
+            for (int i = 0; i < 25; i++)
+            {
+                var lg = new LineGraph();
+                lines.Children.Add(lg);
+                lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
+                lg.Description = String.Format("Data series {0}", i + 1);
+                lg.StrokeThickness = 2;
+                lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
+            }
+
+            UpdatePlot();
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -113,8 +129,8 @@ namespace WPFTesting.UIComponent
         {
             ProductionTarget newtarg = new ProductionTarget()
             {
-                DueDate = 3,
-                InitAmount = 0,
+                DueDate = productionTargets.Count + 1,
+                InitAmount = new Random().Next(40, 100),
                 IsTargetEnabled = true,
                 Status = 0,
                 ProductTarget = new Product()
@@ -125,16 +141,30 @@ namespace WPFTesting.UIComponent
                     Units = ""
                 },
                 TargetQuantity = 1
-
             };
 
             productionTargets.Add(newtarg);
             OnPropertyChanged(nameof(productionTargets));
+
+            UpdatePlot();
         }
+
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
 
         }
+        private void UpdatePlot()
+        {
+            if (linegraph == null) return;
 
-	}
+            var xData = productionTargets.Select(pt => (double)pt.DueDate).ToArray();
+            var yData = productionTargets.Select(pt => (double)pt.InitAmount).ToArray();
+
+            linegraph.Plot(xData, yData);
+            linegraph.Description = "Production Target Over Time";
+        }
+
+
+
+    }
 }
