@@ -20,7 +20,7 @@ public static class ToolsForViewModel
 			if (delivery.TimeUntilNextDelivery <= 0)
 			{
 				//shipOrder
-				var sentProds = delivery.Sender.ShipOrder(delivery.Products);
+				var sentProds = delivery.Sender.ShipOrder(delivery.Products.ToList<Product>());
 				List<Product> listSent = new List<Product>();
 				foreach (var prod in sentProds)
 				{

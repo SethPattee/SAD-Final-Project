@@ -1,4 +1,6 @@
-﻿using FactorSADEfficiencyOptimizer.Models;
+﻿using FactorSADEfficiencyOptimizer.Methods;
+using FactorSADEfficiencyOptimizer.Models;
+using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -134,5 +136,25 @@ namespace WPFTesting.UIComponent
             simModel.PassTimeUntilDuration(_daystorun);
         }
 
-	}
+        private void OpenShipmentWindow_Click(object? sender, RoutedEventArgs? e)
+        {
+            if(sender is Button button)
+            {
+                var ShipmentWindow = new ShipmentsScheduled(simModel);
+                ShipmentWindow.Owner = this;
+                ShipmentWindow.SaveShipmentDetails += ReworkShipmentSimulation;
+                ShipmentWindow.Show();
+            }
+        }
+
+        private void ReworkShipmentSimulation(object? sender, EventArgs? s)
+        {
+            if(s is SavedShipmentEventArgs rea)
+            {
+                simModel.ShipmentList = rea.SavedShipmentList;
+            }
+        }
+
+        
+    }
 }

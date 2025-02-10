@@ -97,14 +97,13 @@
 
         <Grid Grid.Row="1" Grid.Column="1" Margin="20 0 0 0">
             <Border Margin="0 4 0 10" BorderBrush="Bisque" Background="SandyBrown" CornerRadius="6">
-                <Button Background="Transparent" BorderThickness="0" x:Name="StartSimButton">
+                <Button Background="Transparent" BorderThickness="0" x:Name="CheckShipmentButton"
+                        Click="OpenShipmentWindow_Click">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Check Shipments" FontSize="18" TextWrapping="Wrap" 
                                        Foreground="AntiqueWhite" VerticalAlignment="Center" 
-                                       MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=Button, Mode=FindAncestor},
-                                Mode=OneWay, UpdateSourceTrigger=LostFocus, FallbackValue=100}"
-                                       TextAlignment="Right" FontWeight="SemiBold"></TextBlock>
+                                       MaxWidth="100" TextAlignment="Right" FontWeight="SemiBold"></TextBlock>
                             <Image Panel.ZIndex="3" Margin="5 1 1 1" Width="50" Height="50" Source="../Resources/PackageIcon.png"></Image>
                         </StackPanel>
                     </Button.Content>

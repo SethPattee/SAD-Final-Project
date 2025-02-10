@@ -241,7 +241,7 @@ public class AnalizorModel
 		{
 			Sender = supplier,
 			Receiver = endpoint.supplier,
-			Products = new List<Product>() { product }
+			Products = new ObservableCollection<Product>() { product }
 		};
 		ShipmentList.Add(shipment);
 	}

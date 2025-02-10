@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace WPFTesting.Models;
 
 public class Shipment : INotifyPropertyChanged
 {
-    private List<Product> _products = new List<Product>();
+    private ObservableCollection<Product> _products = new ObservableCollection<Product>();
     private IVendor _sender;
     private IVendor _reciever;
     private bool _isRecurring = true;
@@ -51,7 +52,7 @@ public class Shipment : INotifyPropertyChanged
     {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
     }
-    public List<Product> Products
+    public ObservableCollection<Product> Products
     {
         get => _products;
         set
