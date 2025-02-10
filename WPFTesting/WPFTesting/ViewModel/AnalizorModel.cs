@@ -61,6 +61,15 @@ public class AnalizorModel
 			OnPropertyChanged(nameof(ProductionTargets));
 		}
 	}
+	private int _currentDay = 1;
+	public int CurrentDay
+	{
+		get => _currentDay;
+		set {
+			_currentDay = value;
+			OnPropertyChanged(nameof(CurrentDay));
+		}
+	}
     public AnalizorModel(SupplyChainViewModel model)
 	{
 		ShortestPath = "";
@@ -153,5 +162,81 @@ public class AnalizorModel
 		{
 			
 		}
+	}
+	public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
+	{
+		double neededQuant = newtarg.TargetQuantity - product.Quantity;
+		if (neededQuant > 0)
+		{
+			double perDayQuant = neededQuant / (newtarg.DueDate - CurrentDay);
+			return (int)Math.Ceiling(perDayQuant);
+		}
+		else
+			return 0;
+	}
+	public List<Product> GetNeededComponentQuantitiesForTarget(ProductionTarget newtarg, ProductLine productLine)
+	{
+		List<Product> products = new List<Product>();
+		foreach (Product p in productLine.Components)
+		{
+			Product qp = new Product();
+			qp.ProductName = p.ProductName;
+			qp.Price = p.Price;
+			qp.Quantity = p.Quantity * newtarg.TargetQuantity;
+			products.Add(qp);
+		}
+		return products;
+	}
+	public void OrderMissingComponents()
+	{
+		foreach (ProductionTarget target in ProductionTargets)
+		{
+			EndpointNode endpointNode = new EndpointNode();
+			ProductLine productLine = new ProductLine();
+			foreach (var endpoint in EndpointList)
+			{
+				var posibleLine = ((EndpointNode)endpoint.supplier).ProductionList
+					.FirstOrDefault(pl => pl.ResultingProduct.ProductName == target.ProductTarget?.ProductName);
+				if (posibleLine is not null)
+				{
+					endpointNode = (EndpointNode)endpoint.supplier;
+					productLine = (ProductLine)posibleLine;
+					List<Product> products = GetNeededComponentQuantitiesForTarget(target,productLine);
+					foreach (Product product in products)
+					{
+						float Quant = endpoint.supplier.ComponentInventory.FirstOrDefault(p => p.ProductName == product.ProductName)?.Quantity ?? 0;
+						if (!(Quant >= product.Quantity))
+						{
+							Product toOrder = new Product();
+							toOrder.ProductName = product.ProductName;
+							toOrder.Price = product.Price;
+							toOrder.Quantity = product.Quantity - Quant;
+							PlaceOrderFor(product, endpoint);
+						}
+					}
+					break;
+				}
+			}
+
+		}
+	}
+	public void PlaceOrderFor(Product product, EndpointUIValues endpoint)
+	{
+		//find a supplier with the product (enough of the product)
+		Supplier supplier = 
+			(Supplier)(SupplierList.FirstOrDefault(s => s.supplier.ProductInventory
+				.FirstOrDefault(p => 
+					p.ProductName == product.ProductName 
+					&& p.Quantity >= product.Quantity) 
+			!= null)?.supplier ?? new Supplier());
+
+		//create shippingline that has some of the product 
+		Shipment shipment = new Shipment()
+		{
+			Sender = supplier,
+			Receiver = endpoint.supplier,
+			Products = new List<Product>() { product }
+		};
+		ShipmentList.Add(shipment);
 	}
 }
