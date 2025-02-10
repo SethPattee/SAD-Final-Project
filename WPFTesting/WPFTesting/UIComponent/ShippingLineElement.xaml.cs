@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ public partial class ShippingLine : UserControl
         ToJoiningBoxCorner = String.Empty;
 
         DataContext = this;
-        OwnShipment.Products = new List<Product>() { new Product() {Price = 0,
+        OwnShipment.Products = new ObservableCollection<Product>() { new Product() {Price = 0,
                     Units = "",
                     ProductName = "Marbels",
                     Quantity = 7 } };

@@ -251,7 +251,7 @@
                     </Border>
                     <Border>
                         <StackPanel>
-                            <TextBlock Text="{Binding SelectedEndpoint.supplier.Name, StringFormat=\{0\}\'s delivery goals:}" Margin="5 0 0 0 "/>
+                            <TextBlock Text="{Binding SelectedEndpoint.supplier.Name, StringFormat=\{0\} delivery goals:}" Margin="5 0 0 0"/>
                             <ListView x:Name="EndpointDeliveryList" ItemsSource="{Binding SelectedEndpoint.supplier.DeliveryRequirementsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding Product}">
                                 <ListView.ItemTemplate>
