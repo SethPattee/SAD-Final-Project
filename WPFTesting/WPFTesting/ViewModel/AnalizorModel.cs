@@ -163,7 +163,6 @@ public class AnalizorModel : INotifyPropertyChanged
 			EndpointUIValues? endpoint = EndpointList.FirstOrDefault(e => e.supplier.ProductInventory.Where(p => p.ProductName == target?.ProductTarget?.ProductName) is not null);
 			if (endpoint != null)
 			{
-
 				Product prod = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
 				target.InitAmount = prod.Quantity;
             }
