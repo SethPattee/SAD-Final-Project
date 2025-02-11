@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ public class DataProviderTests
         Shipment s = new Shipment();
         s.Sender = model.SupplierList[0].supplier;
         s.Receiver = model.SupplierList[1].supplier;
-        s.Products = new List<Product>() {
+        s.Products = new ObservableCollection<Product>() {
             new Product()
                         {
                             Quantity=10,
