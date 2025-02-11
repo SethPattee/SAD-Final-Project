@@ -160,7 +160,13 @@ public class AnalizorModel
 	{
 		foreach (var target in ProductionTargets)
 		{
-			
+			EndpointUIValues? endpoint = EndpointList.FirstOrDefault(e => e.supplier.ProductInventory.Where(p => p.ProductName == target?.ProductTarget?.ProductName) is not null);
+			if (endpoint != null)
+			{
+
+				Product prod = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
+				target.InitAmount = prod.Quantity;
+            }
 		}
 	}
 	public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
