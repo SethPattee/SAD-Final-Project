@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ public class ForJsonShipment
 		Id = Guid.NewGuid();
     }
     public ForJsonShipment(Shipment shipment) {
-		_products = shipment.Products;
+		_products = shipment.Products.ToList<Product>();
 		_senderId = shipment.Sender.Id;
 		_recieverId = shipment.Receiver.Id;
 		FromJoiningBoxCorner = shipment.FromJoiningBoxCorner;
@@ -46,7 +47,7 @@ public class FromJsonShipment
 	{
 		Shipment shipment = new Shipment();
 		shipment.Id = _shipment.Id;
-		shipment.Products = _shipment._products;
+		shipment.Products = new ObservableCollection<Product>(_shipment._products);
 		shipment.FromJoiningBoxCorner = _shipment.FromJoiningBoxCorner;
 		shipment.ToJoiningBoxCorner = _shipment.ToJoiningBoxCorner;
 		foreach (var endpoint in endpoints)

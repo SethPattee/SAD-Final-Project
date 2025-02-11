@@ -383,7 +383,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
        var toreturn =  new List<Shipment>() { 
             new Shipment()
             {
-                Products = new List<Product>()
+                Products = new ObservableCollection<Product>()
                 {
 					new Product()
 									{

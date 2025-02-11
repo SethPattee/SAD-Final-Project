@@ -22,7 +22,7 @@ internal class AdvanceTimeTests
         Shipment s = new Shipment();
         s.Sender = model.SupplierList[0].supplier;
         s.Receiver = model.SupplierList[1].supplier;
-        s.Products = new List<Product>() {
+        s.Products = new ObservableCollection<Product>() {
             new Product()
                         {
                             Quantity=10,
@@ -241,7 +241,7 @@ internal class AdvanceTimeTests
         };
         Shipment testShipment = new Shipment()
         {
-            Products = new List<Product>()
+            Products = new ObservableCollection<Product>()
             {
                 new Product()
                 {
@@ -259,7 +259,7 @@ internal class AdvanceTimeTests
             Receiver = endpointTest
         };
 
-        endpointTest.Receive(testShipment.Products);
+        endpointTest.Receive(testShipment.Products.ToList<Product>());
 
         Assert.That(endpointTest.ComponentInventory.Count, Is.GreaterThan(0));
         Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(100));

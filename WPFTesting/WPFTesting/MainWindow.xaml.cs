@@ -21,6 +21,7 @@ using System.Xml.Linq;
 using WPFTesting.UIComponent;
 using System.Diagnostics;
 using FactorSADEfficiencyOptimizer.UIComponent;
+using FactorSADEfficiencyOptimizer.ViewModel;
 
 namespace YourNamespace
 {
@@ -971,6 +972,8 @@ namespace YourNamespace
         {
             var AnalysisWindow = new ProductionAnalysisWindow(ViewModel);
             AnalysisWindow.Owner = this;
+            AnalysisWindow.simModel = new AnalizorModel(ViewModel);
+            AnalysisWindow.DataContext = AnalysisWindow.simModel;
             AnalysisWindow.Show();
         }
         private void Button_ClickForBillofMaterials(object sender, RoutedEventArgs e)
