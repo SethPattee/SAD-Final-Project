@@ -217,7 +217,7 @@ public class AnalizorModel : INotifyPropertyChanged
 							toOrder.ProductName = product.ProductName;
 							toOrder.Price = product.Price;
 							toOrder.Quantity = product.Quantity - Quant;
-							PlaceOrderFor(product, endpoint);
+							PlaceOrderFor(toOrder, endpoint);
 						}
 					}
 					break;
