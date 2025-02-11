@@ -53,13 +53,20 @@
                         <Button x:Name="EditMenu_Redo" Content="Redo" Background="WhiteSmoke"/>
                     </StackPanel>
                 </Popup>
-
                 <Button Margin="6 0 0 0" Height="20" Click="Button_ClickForAnalyze">
                     <Button.Content>
                         <TextBlock Text="Analyze"></TextBlock>
                     </Button.Content>
-                    
+
                 </Button>
+
+
+                <Button Margin="6 0 0 0" Height="20" Click="Button_ClickForBillofMaterials">
+                    <Button.Content>
+                        <TextBlock Text="BillofMaterial"></TextBlock>
+                    </Button.Content>
+
+                </Button> 
             </StackPanel>
         </Border>
 

@@ -20,6 +20,7 @@ using System.Net;
 using System.Xml.Linq;
 using WPFTesting.UIComponent;
 using System.Diagnostics;
+using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
 
 namespace YourNamespace
@@ -974,6 +975,12 @@ namespace YourNamespace
             AnalysisWindow.simModel = new AnalizorModel(ViewModel);
             AnalysisWindow.DataContext = AnalysisWindow.simModel;
             AnalysisWindow.Show();
+        }
+        private void Button_ClickForBillofMaterials(object sender, RoutedEventArgs e)
+        {
+            var BillWindow = new BillofMaterials();
+            BillWindow.Owner = this;
+            BillWindow.Show();
         }
 
         private void EndpointProductList_SelectionChanged(object sender, SelectionChangedEventArgs e)
