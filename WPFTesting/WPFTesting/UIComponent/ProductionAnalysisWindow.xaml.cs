@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,7 +29,15 @@ namespace WPFTesting.UIComponent
     /// </summary>
     public partial class ProductionAnalysisWindow : Window, INotifyPropertyChanged
     {
-        public AnalizorModel simModel { get; set; }
+        private AnalizorModel _simModel;
+        public AnalizorModel simModel { 
+            get => _simModel;
+            set
+            {
+                _simModel = value;
+                OnPropertyChanged(nameof(simModel));
+            } 
+        }
         public ProductionTarget TargetProductionTarget { get; set; }
 		private int _daystorun;
         public int DaysToRun { 
