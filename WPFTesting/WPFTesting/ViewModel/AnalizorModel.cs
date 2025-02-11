@@ -112,7 +112,7 @@ public class AnalizorModel
 			ship.Products = shipment.Products;
 			ship.ToJoiningBoxCorner = "";
 			ship.FromJoiningBoxCorner = "";
-			// TODO: Add Dalins changes to Shipments HERE!!! It is missing some stuff
+			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
 			AddShipment(ship);
 		}
 	}
@@ -201,7 +201,7 @@ public class AnalizorModel
 				{
 					endpointNode = (EndpointNode)endpoint.supplier;
 					productLine = (ProductLine)posibleLine;
-					List<Product> products = GetNeededComponentQuantitiesForTarget(target,productLine);
+					List<Product> products = GetNeededComponentQuantitiesForTarget(target, productLine).ToList();
 					foreach (Product product in products)
 					{
 						float Quant = endpoint.supplier.ComponentInventory.FirstOrDefault(p => p.ProductName == product.ProductName)?.Quantity ?? 0;
