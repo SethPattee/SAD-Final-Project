@@ -44,7 +44,7 @@ public class SimulatorTests
 		AnalizorModel simulation = new AnalizorModel(model);
 		simulation.ShipmentList.First().Sender.Name = "I Don't want to find ThIs:(";
 		simulation.ShipmentList.First().Receiver.Name = "I Don't want to find ThIs:(";
-		simulation.ShipmentList.First().Products = new () { };
+		simulation.ShipmentList.First().Products = new ObservableCollection<Product>() { };
 
 		foreach (Shipment shipment in model.ShipmentList)
 		{
@@ -136,7 +136,7 @@ public class SimulatorTests
 		};
 		EndpointUIValues endpoint = simulation.EndpointList.First();
 		ProductLine productLine = ((EndpointNode)endpoint.supplier).ProductionList.First();
-		List<Product> neededProducts =  simulation.GetNeededComponentQuantitiesForTarget( newtarg, productLine);
+		ObservableCollection<Product> neededProducts =  simulation.GetNeededComponentQuantitiesForTarget( newtarg, productLine);
 		Assert.That(neededProducts.Count, Is.EqualTo(2));
 		Product wood = neededProducts.FirstOrDefault(p => p.ProductName == "wood") ?? new Product();
 		Product screws = neededProducts.FirstOrDefault(p => p.ProductName == "screws") ?? new Product();

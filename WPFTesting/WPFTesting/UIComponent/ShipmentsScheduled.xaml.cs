@@ -39,6 +39,7 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
         }
         AnalizorModel ShipmentModel { get; set; }
         public EventHandler? SaveShipmentDetails;
+        public Shipment Shm {  get; set; }
         public Product product { get; set; }
         public ObservableCollection<Product> items { get; set; }
 
