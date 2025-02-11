@@ -21,10 +21,10 @@
                 <ListView x:Name="OutputListview" ItemsSource="{Binding List}" Margin="0,30,0,10">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Components" DisplayMemberBinding="{Binding}" />
-                            <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding}" />
-                            <GridViewColumn Header="Units" DisplayMemberBinding="{Binding}" />
-                            <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding}" />
+                            <GridViewColumn Header="Components" DisplayMemberBinding="{Binding ProductName}" />
+                            <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
+                            <GridViewColumn Header="Units" DisplayMemberBinding="{Binding Units}" />
+                            <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Price}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
