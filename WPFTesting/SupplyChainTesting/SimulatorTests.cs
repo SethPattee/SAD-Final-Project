@@ -44,7 +44,7 @@ public class SimulatorTests
 		AnalizorModel simulation = new AnalizorModel(model);
 		simulation.ShipmentList.First().Sender.Name = "I Don't want to find ThIs:(";
 		simulation.ShipmentList.First().Receiver.Name = "I Don't want to find ThIs:(";
-		simulation.ShipmentList.First().Products = new List<Product>() { };
+		simulation.ShipmentList.First().Products = new () { };
 
 		foreach (Shipment shipment in model.ShipmentList)
 		{
@@ -190,4 +190,38 @@ public class SimulatorTests
 		Assert.That(shipment.Products.Count, Is.EqualTo(1));
 		Assert.That(shipment.Products.First().ProductName, Is.EqualTo("Drill Bit"));
 	}
+	[Test]
+	public void AnalyzerWillProduceEnoughForOneProductionTarget()
+	{
+        var model = setupTest();
+        AnalizorModel simulation = new AnalizorModel(model);
+        ProductionTarget newtarg = new ProductionTarget()
+        {
+            DueDate = 10,
+            InitAmount = 0,
+            IsTargetEnabled = true,
+            Status = 0,
+            ProductTarget = new Product()
+            {
+                Quantity = 0,
+                ProductName = "box"
+            },
+            TargetQuantity = 10
+        }; //box takes 12 screws and 10 wood
+           // endpoint has 20 screws and 1000 wood
+           // 'Vendor 3'  has screws 
+        (simulation.SupplierList
+			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
+			?.supplier.ProductInventory
+			.FirstOrDefault(p => p.ProductName == "screws")
+			?? new Product())
+			.Quantity += 120;  //  give it more for the test
+
+                                        // there is one shipment bringing 10 wood and 10 nails from 'Vendor 3' to 'Vendor 2'
+                                        // TODO: We EXPECT to have added a shipment for more screws from 'Vendor 3' to 'Endpoint Name'
+
+
+
+
+    }
 }

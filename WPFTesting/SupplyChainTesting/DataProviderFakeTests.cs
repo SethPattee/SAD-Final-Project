@@ -48,7 +48,7 @@ public class DataProviderFakeTests
             new Shipment
             {
                 Id = System.Guid.NewGuid(),
-                Products = new List<Product>
+                Products =
                 {
                     new Product { ProductName = "Sample Product", Quantity = 5 }
                 },
@@ -156,7 +156,7 @@ public class DataProviderFakeTests
         {
             new Shipment
             {
-                Products = new List<Product>
+                Products =
                 {
                     new Product { ProductName = "wood", Quantity = 5 }
                 },
@@ -287,7 +287,7 @@ public class DataProviderFakeTests
         {
             new Shipment
             {
-                Products = new List<Product>
+                Products =
                 {
                     new Product { ProductName = "wood", Quantity = 8 },
                     new Product { ProductName = "metal", Quantity = 5 }
@@ -393,13 +393,13 @@ public class DataProviderFakeTests
         {
             new Shipment
             {
-                Products = new List<Product> { new Product { ProductName = "wood", Quantity = 10 } },
+                Products = { new Product { ProductName = "wood", Quantity = 10 } },
                 Sender = new Supplier { Name = "Supplier A" },
                 Receiver = new Supplier { Name = "Supplier B" }
             },
             new Shipment
             {
-                Products = new List<Product> { new Product { ProductName = "nails", Quantity = 50 } },
+                Products = { new Product { ProductName = "nails", Quantity = 50 } },
                 Sender = new Supplier { Name = "Supplier C" },
                 Receiver = new Supplier { Name = "Supplier D" }
             }

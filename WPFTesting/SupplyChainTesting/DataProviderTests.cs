@@ -21,7 +21,8 @@ public class DataProviderTests
         Shipment s = new Shipment();
         s.Sender = model.SupplierList[0].supplier;
         s.Receiver = model.SupplierList[1].supplier;
-        s.Products = new List<Product>() {
+        s.Products = new()
+        {
             new Product()
                         {
                             Quantity=10,
