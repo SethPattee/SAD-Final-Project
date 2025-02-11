@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFTesting.UIComponent"
         xmlns:classes="clr-namespace:WPFTesting.ViewModel"
-        mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        mc:Ignorable="d" DataContext="{Binding simModel}" 
         Title="ProductionAnalysisWindow"
         Background="Transparent" Height="450" Width="800">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"></RowDefinition>
@@ -45,7 +46,7 @@
             </StackPanel>
             <Border Grid.Row="1" Background="DarkGray" Padding="8" x:Name="ProductionTargList">
                 <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                          ItemsSource="{Binding simModel.ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding TargetProductionTarget}">
                     <ListView.ItemTemplate>
                         <DataTemplate>

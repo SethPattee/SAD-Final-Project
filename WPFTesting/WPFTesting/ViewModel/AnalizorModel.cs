@@ -13,7 +13,7 @@ using WPFTesting.Shapes;
 using WPFTesting.ViewModel;
 
 namespace FactorSADEfficiencyOptimizer.ViewModel;
-public class AnalizorModel
+public class AnalizorModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 	private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
