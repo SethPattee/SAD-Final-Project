@@ -216,14 +216,13 @@ public class SimulatorTests
 			.FirstOrDefault(p => p.ProductName == "screws")
 			?? new Product())
 			.Quantity += 120;  //  give it more for the test
-
+		(((EndpointNode)(simulation.EndpointList.FirstOrDefault() ?? new EndpointUIValues()).supplier  ?? new EndpointNode()).ProductionList.FirstOrDefault() ?? new ProductLine()).IsEnabled = true;
 		// there is one shipment bringing 10 wood and 10 nails from 'Vendor 3' to 'Vendor 2'
 		// TODO: We EXPECT to have added a shipment for more screws from 'Vendor 3' to 'Endpoint Name'
+		simulation.ProductionTargets.Add(newtarg);
 		simulation.PassTimeUntilDuration(10);
-		Assert.That(simulation.EndpointList.FirstOrDefault()?.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box")?.Quantity, Is.EqualTo(10));
-
-
-
-
+		var boxProd = simulation.EndpointList.FirstOrDefault()?.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
+		Assert.That(boxProd.Quantity, Is.EqualTo(10));
+		//TODO, Add other clarifiers here
     }
 }

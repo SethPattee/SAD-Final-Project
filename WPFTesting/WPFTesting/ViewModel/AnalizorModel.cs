@@ -150,6 +150,7 @@ public class AnalizorModel : INotifyPropertyChanged
 
 	public void PassTimeUntilDuration(int duration)
 	{
+		OrderMissingComponents();
 		for (int i = 0; i < duration; i++)
 		{
 			AdvanceTime();
