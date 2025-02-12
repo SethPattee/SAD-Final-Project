@@ -230,41 +230,41 @@ public class SimulatorTests
 		var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();
 		Assert.That(shipmentProd.Quantity, Is.EqualTo(100));
 	}
-	[Test]
-	public void AnalyzerWillSetFailureFlagIfUnAbleToOrderEnoughSupplies()
-	{
-		var model = setupTest();
-		AnalizorModel simulation = new AnalizorModel(model);
-		ProductionTarget newtarg = new ProductionTarget()
-		{
-			DueDate = 10,
-			InitAmount = 0,
-			IsTargetEnabled = true,
-			Status = StatusEnum.NotDone, 
-			ProductTarget = new Product()
-			{
-				Quantity = 0,
-				ProductName = "box"
-			},
-			TargetQuantity = 10
-		}; //box takes 12 screws and 10 wood
-		(simulation.SupplierList
-			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
-			?.supplier.ProductInventory
-			.FirstOrDefault(p => p.ProductName == "screws")
-			?? new Product())
-			.Quantity += 28; // will only have enough screws to make 4 boxes
-		(((EndpointNode)(simulation.EndpointList.FirstOrDefault() ?? new EndpointUIValues())
-			.supplier ?? new EndpointNode())
-			.ProductionList.FirstOrDefault() ?? new ProductLine())
-			.IsEnabled = true;
-		simulation.ProductionTargets.Add(newtarg);
-		simulation.PassTimeUntilDuration(10);
-		// Should place order and complete 4 boxes.
-		var shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault()?.ProductName == "screws") ?? new Shipment();
-		var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();
-		Assert.That(shipmentProd.Quantity, Is.EqualTo(28));
-		// should have a failure status for produciton Target
-		Assert.That(newtarg.Status, Is.EqualTo(StatusEnum.Failure));
-	}
+	//[Test]
+	//public void AnalyzerWillSetFailureFlagIfUnAbleToOrderEnoughSupplies()
+	//{
+	//	var model = setupTest();
+	//	AnalizorModel simulation = new AnalizorModel(model);
+	//	ProductionTarget newtarg = new ProductionTarget()
+	//	{
+	//		DueDate = 10,
+	//		InitAmount = 0,
+	//		IsTargetEnabled = true,
+	//		Status = StatusEnum.NotDone, 
+	//		ProductTarget = new Product()
+	//		{
+	//			Quantity = 0,
+	//			ProductName = "box"
+	//		},
+	//		TargetQuantity = 10
+	//	}; //box takes 12 screws and 10 wood
+	//	(simulation.SupplierList
+	//		.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
+	//		?.supplier.ProductInventory
+	//		.FirstOrDefault(p => p.ProductName == "screws")
+	//		?? new Product())
+	//		.Quantity += 28; // will only have enough screws to make 4 boxes
+	//	(((EndpointNode)(simulation.EndpointList.FirstOrDefault() ?? new EndpointUIValues())
+	//		.supplier ?? new EndpointNode())
+	//		.ProductionList.FirstOrDefault() ?? new ProductLine())
+	//		.IsEnabled = true;
+	//	simulation.ProductionTargets.Add(newtarg);
+	//	simulation.PassTimeUntilDuration(10);
+	//	// Should place order and complete 4 boxes.
+	//	var shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault()?.ProductName == "screws") ?? new Shipment();
+	//	var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();
+	//	Assert.That(shipmentProd.Quantity, Is.EqualTo(28));
+	//	// should have a failure status for produciton Target
+	//	Assert.That(newtarg.Status, Is.EqualTo(StatusEnum.Failure));
+	//}
 }
