@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using FactorSADEfficiencyOptimizer.Models;
@@ -150,6 +151,7 @@ public class AnalizorModel : INotifyPropertyChanged
 
 	public void PassTimeUntilDuration(int duration)
 	{
+		OrderMissingComponents();
 		for (int i = 0; i < duration; i++)
 		{
 			AdvanceTime();
@@ -163,7 +165,6 @@ public class AnalizorModel : INotifyPropertyChanged
 			EndpointUIValues? endpoint = EndpointList.FirstOrDefault(e => e.supplier.ProductInventory.Where(p => p.ProductName == target?.ProductTarget?.ProductName) is not null);
 			if (endpoint != null)
 			{
-
 				Product prod = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
 				target.InitAmount = prod.Quantity;
             }
@@ -211,13 +212,13 @@ public class AnalizorModel : INotifyPropertyChanged
 					foreach (Product product in products)
 					{
 						float Quant = endpoint.supplier.ComponentInventory.FirstOrDefault(p => p.ProductName == product.ProductName)?.Quantity ?? 0;
-						if (!(Quant >= product.Quantity))
+						if (!(Quant >= product.Quantity))//
 						{
 							Product toOrder = new Product();
 							toOrder.ProductName = product.ProductName;
 							toOrder.Price = product.Price;
 							toOrder.Quantity = product.Quantity - Quant;
-							PlaceOrderFor(product, endpoint);
+							PlaceOrderFor(toOrder, endpoint);
 						}
 					}
 					break;
@@ -228,21 +229,43 @@ public class AnalizorModel : INotifyPropertyChanged
 	}
 	public void PlaceOrderFor(Product product, EndpointUIValues endpoint)
 	{
-		//find a supplier with the product (enough of the product)
-		Supplier supplier = 
-			(Supplier)(SupplierList.FirstOrDefault(s => s.supplier.ProductInventory
+		//find a supplier with enough of the product
+		Supplier? supplier = 
+			(Supplier?)(SupplierList.FirstOrDefault(s => s.supplier.ProductInventory
 				.FirstOrDefault(p => 
 					p.ProductName == product.ProductName 
 					&& p.Quantity >= product.Quantity) 
-			!= null)?.supplier ?? new Supplier());
+			!= null)?.supplier);
 
-		//create shippingline that has some of the product 
-		Shipment shipment = new Shipment()
+		if (supplier != null) {
+			//create shippingline that has all of the product 
+			Shipment shipment = new Shipment()
+			{
+				Sender = supplier,
+				Receiver = endpoint.supplier,
+				Products = new ObservableCollection<Product>() { product }
+			};
+			ShipmentList.Add(shipment);
+		}
+		else
 		{
-			Sender = supplier,
-			Receiver = endpoint.supplier,
-			Products = new ObservableCollection<Product>() { product }
-		};
-		ShipmentList.Add(shipment);
+			float TotalRemamingNeeded = product.Quantity;
+			//order as much of the product as we can
+			foreach (SupplierUIValues sup in SupplierList)
+			{
+				Product? productWithSmallQuantity = sup.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == product.ProductName && p.Quantity > 0);
+				if (productWithSmallQuantity != null)
+				{
+					Shipment shipment = new Shipment()
+					{
+						Sender = sup.supplier,
+						Receiver = endpoint.supplier,
+						Products = new ObservableCollection<Product>() { productWithSmallQuantity }
+					};
+					ShipmentList.Add(shipment);
+					TotalRemamingNeeded -= productWithSmallQuantity.Quantity;
+				}
+			}
+		}
 	}
 }

@@ -163,14 +163,14 @@ public class SimulatorTests
 		};
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
-		endpoint.supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = 0;
+		endpoint.supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = 2;
 		simulation.OrderMissingComponents();
 		ObservableCollection<Shipment> shipments = simulation.ShipmentList;
 		Assert.That(shipments.Count, Is.EqualTo(2));
 		Shipment ship = shipments.First(s => s.Sender.Name == "Vendor 3");
 		Assert.That(ship.Products.Count, Is.EqualTo(1));
 		Assert.That(ship.Products.First().ProductName, Is.EqualTo("screws"));
-		Assert.That(ship.Products.First().Quantity, Is.EqualTo(12));
+		Assert.That(ship.Products.First().Quantity, Is.EqualTo(10));
 	}
 	[Test]
 	public void AnalyzersPlaceOrderForMethodPlacesAnOrder()
@@ -188,6 +188,7 @@ public class SimulatorTests
 		Shipment shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault(p => p.ProductName == "Drill Bit") != null) ;
 		Assert.That(shipment.Receiver.Name, Is.EqualTo(endpoint.supplier.Name));
 		Assert.That(shipment.Products.Count, Is.EqualTo(1));
+		Assert.That(shipment.Products.FirstOrDefault().Quantity, Is.EqualTo(10));
 		Assert.That(shipment.Products.First().ProductName, Is.EqualTo("Drill Bit"));
 	}
 	[Test]
@@ -216,12 +217,54 @@ public class SimulatorTests
 			.FirstOrDefault(p => p.ProductName == "screws")
 			?? new Product())
 			.Quantity += 120;  //  give it more for the test
-
-                                        // there is one shipment bringing 10 wood and 10 nails from 'Vendor 3' to 'Vendor 2'
-                                        // TODO: We EXPECT to have added a shipment for more screws from 'Vendor 3' to 'Endpoint Name'
-
-
-
-
-    }
+		(((EndpointNode)(simulation.EndpointList.FirstOrDefault() ?? new EndpointUIValues())
+			.supplier  ?? new EndpointNode())
+			.ProductionList.FirstOrDefault() ?? new ProductLine())
+			.IsEnabled = true;
+		// there is one shipment bringing 10 wood and 10 nails from 'Vendor 3' to 'Vendor 2'
+		simulation.ProductionTargets.Add(newtarg);
+		simulation.PassTimeUntilDuration(10);
+		var boxProd = simulation.EndpointList.FirstOrDefault()?.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
+		Assert.That(boxProd.Quantity, Is.EqualTo(10));// we make target product amount
+		var shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault()?.ProductName == "screws") ?? new Shipment();
+		var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();
+		Assert.That(shipmentProd.Quantity, Is.EqualTo(100));
+	}
+	//[Test]
+	//public void AnalyzerWillSetFailureFlagIfUnAbleToOrderEnoughSupplies()
+	//{
+	//	var model = setupTest();
+	//	AnalizorModel simulation = new AnalizorModel(model);
+	//	ProductionTarget newtarg = new ProductionTarget()
+	//	{
+	//		DueDate = 10,
+	//		InitAmount = 0,
+	//		IsTargetEnabled = true,
+	//		Status = StatusEnum.NotDone, 
+	//		ProductTarget = new Product()
+	//		{
+	//			Quantity = 0,
+	//			ProductName = "box"
+	//		},
+	//		TargetQuantity = 10
+	//	}; //box takes 12 screws and 10 wood
+	//	(simulation.SupplierList
+	//		.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
+	//		?.supplier.ProductInventory
+	//		.FirstOrDefault(p => p.ProductName == "screws")
+	//		?? new Product())
+	//		.Quantity += 28; // will only have enough screws to make 4 boxes
+	//	(((EndpointNode)(simulation.EndpointList.FirstOrDefault() ?? new EndpointUIValues())
+	//		.supplier ?? new EndpointNode())
+	//		.ProductionList.FirstOrDefault() ?? new ProductLine())
+	//		.IsEnabled = true;
+	//	simulation.ProductionTargets.Add(newtarg);
+	//	simulation.PassTimeUntilDuration(10);
+	//	// Should place order and complete 4 boxes.
+	//	var shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault()?.ProductName == "screws") ?? new Shipment();
+	//	var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();
+	//	Assert.That(shipmentProd.Quantity, Is.EqualTo(28));
+	//	// should have a failure status for produciton Target
+	//	Assert.That(newtarg.Status, Is.EqualTo(StatusEnum.Failure));
+	//}
 }
