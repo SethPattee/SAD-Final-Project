@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
 using SupplyChainTesting.MockClasses;
-using WPFTesting.Models;
-using WPFTesting.Shapes;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
 
 namespace DataProviderFakeTests;
 [TestFixture]

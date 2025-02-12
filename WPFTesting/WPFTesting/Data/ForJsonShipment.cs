@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WPFTesting.Models;
-using WPFTesting.Shapes;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
 
 namespace FactorSADEfficiencyOptimizer.Data;
 

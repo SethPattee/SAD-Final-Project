@@ -5,11 +5,11 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using WPFTesting.Components;
-using WPFTesting.Models;
-using WPFTesting.Shapes;
-using WPFTesting.ViewModel;
-using WPFTesting.ViewShared;
+using FactorySADEfficiencyOptimizer.Components;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
+using FactorySADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.ViewShared;
 
 namespace YourNamespace
 {

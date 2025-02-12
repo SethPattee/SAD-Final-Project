@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WPFTesting.Models;
+using FactorySADEfficiencyOptimizer.Models;
 
-namespace WPFTesting.Methods
+namespace FactorySADEfficiencyOptimizer.Methods
 {
     public class SupplyChainCheapestPath
     {

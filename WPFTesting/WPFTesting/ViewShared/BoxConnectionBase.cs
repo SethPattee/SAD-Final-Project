@@ -1,7 +1,7 @@
 ﻿using System.Windows.Shapes;
 using YourNamespace;
 
-namespace WPFTesting.ViewShared
+namespace FactorySADEfficiencyOptimizer.ViewShared
 {
     public class BoxConnectionBase
     {

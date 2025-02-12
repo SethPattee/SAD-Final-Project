@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace WPFTesting.Models;
+namespace FactorySADEfficiencyOptimizer.Models;
 
 public class EndpointNode : IVendor, INotifyPropertyChanged
 {

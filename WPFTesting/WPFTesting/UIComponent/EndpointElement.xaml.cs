@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WPFTesting.Components;
-using WPFTesting.Data;
-using WPFTesting.Models;
-using WPFTesting.Shapes;
-using WPFTesting.ViewModel;
+using FactorySADEfficiencyOptimizer.Components;
+using FactorySADEfficiencyOptimizer.Data;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using YourNamespace;
 
-namespace WPFTesting
+namespace FactorySADEfficiencyOptimizer
 {
     /// <summary>
     /// Interaction logic for EndpointElement.xaml
