@@ -17,122 +17,124 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using FactorySADEfficiencyOptimizer.Models;
 
-namespace FactorSADEfficiencyOptimizer.UIComponent
+namespace FactorSADEfficiencyOptimizer.UIComponent;
+
+/// <summary>
+/// Interaction logic for ShipmentsScheduled.xaml
+/// </summary>
+public partial class ShipmentsScheduled : Window
 {
-    /// <summary>
-    /// Interaction logic for ShipmentsScheduled.xaml
-    /// </summary>
-    public partial class ShipmentsScheduled : Window
+    private ObservableCollection<Shipment> _testshipments;
+    public Shipment SelectedShipment { get; set; }
+    public ObservableCollection<Shipment> Testshipments
     {
-        private ObservableCollection<Shipment> _testshipments;
-        public Shipment SelectedShipment { get; set; }
-        public ObservableCollection<Shipment> Testshipments
+        get
         {
-            get
-            {
-                return _testshipments;
-            }
-            set
-            {
-                _testshipments = value;
-                OnPropertyChanged(nameof(Testshipments));
-            }
+            return _testshipments;
         }
-        public EventHandler? SaveShipmentDetails;
-
-        private Product _item;
-        public Product Item {
-            get
-            {
-                return _item;
-            }
-            set
-            {
-                _item = value;
-                OnPropertyChanged(nameof(Item));
-            }
-        }
-
-        private ObservableCollection<Supplier> _suppliers;
-        public ObservableCollection<Supplier> Suppliers
+        set
         {
-            get
-            {
-                return _suppliers;
-            }
-            set
-            {
-                _suppliers = value;
-                OnPropertyChanged(nameof(Suppliers));
-            }
-        }
-        private ObservableCollection<Product> _items;
-        public ObservableCollection<Product> Items { get {
-                return _items;
-            }
-            set {
-                _items = value;
-                OnPropertyChanged(nameof(Items));
-            }
-        }
-
-        public ShipmentsScheduled(AnalizorModel simModel)
-        {
-            InitializeComponent();
-            ScheduledShipmentsList.DataContext = this;
-            Testshipments = simModel.ShipmentList;
-        }
-
-        public void AddNewShipment_Click(object? sender, RoutedEventArgs? e)
-        {
-            Testshipments.Add(new Shipment());
+            _testshipments = value;
             OnPropertyChanged(nameof(Testshipments));
-            //Shipment s = new();
-            
-            //ShipmentsList.Add(s);
-            //OnPropertyChanged(nameof(ShipmentsList));
         }
+    }
+    public EventHandler? SaveShipmentDetails;
 
-        public void AddComponentToShipment_Click(object? sender, RoutedEventArgs? e)
+    private Product _productitem;
+    public Product ProductItem {
+        get
         {
-            //Product p = new();
-            //selected_shipment.Products.Add(p);
-            //OnPropertyChanged(nameof(ShipmentsList));
+            return _productitem;
         }
-
-        public void DeleteShipment_Click(object? sender, RoutedEventArgs? e)
+        set
         {
-            if(sender is Button button)
-            {
-                Testshipments.Remove(button.DataContext as Shipment);
-            }
+            _productitem = value;
+            OnPropertyChanged(nameof(ProductItem));
         }
+    }
 
-        public void DeleteComponentToShipment_Click(object? sender, RoutedEventArgs? e)
+    private ObservableCollection<Supplier> _suppliers;
+    public ObservableCollection<Supplier> Suppliers
+    {
+        get
         {
-
+            return _suppliers;
         }
-
-        private void SaveButton_Click(object? sender, RoutedEventArgs? e)
+        set
         {
-            SavedShipmentEventArgs ssea = new SavedShipmentEventArgs()
-            {
-                SavedShipmentList = Testshipments
-            };
-            SaveShipmentDetails?.Invoke(sender, ssea);
+            _suppliers = value;
+            OnPropertyChanged(nameof(Suppliers));
         }
+    }
+    private ObservableCollection<Product> _productitems;
+    public ObservableCollection<Product> ProductItems { get {
+            return _productitems;
+        }
+        set {
+            _productitems = value;
+            OnPropertyChanged(nameof(ProductItems));
+        }
+    }
 
+    public ShipmentsScheduled(AnalizorModel simModel)
+    {
+        InitializeComponent();
+        ScheduledShipmentsList.DataContext = this;
+        SelectedProductList.DataContext = this;
+        Testshipments = simModel.ShipmentList;
+    }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string name)
+    public void AddNewShipment_Click(object? sender, RoutedEventArgs? e)
+    {
+        Testshipments.Add(new Shipment());
+        OnPropertyChanged(nameof(Testshipments));
+        //Shipment s = new();
+        
+        //ShipmentsList.Add(s);
+        //OnPropertyChanged(nameof(ShipmentsList));
+    }
+
+    public void AddComponentToShipment_Click(object? sender, RoutedEventArgs? e)
+    {
+        //Product p = new();
+        //selected_shipment.Products.Add(p);
+        //OnPropertyChanged(nameof(ShipmentsList));
+    }
+
+    public void DeleteShipment_Click(object? sender, RoutedEventArgs? e)
+    {
+        if(sender is Button button)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            Testshipments.Remove(button.DataContext as Shipment);
         }
+    }
 
+    public void DeleteComponentToShipment_Click(object? sender, RoutedEventArgs? e)
+    {
 
-        private void ShipmentWindowList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    }
+
+    private void SaveButton_Click(object? sender, RoutedEventArgs? e)
+    {
+        SavedShipmentEventArgs ssea = new SavedShipmentEventArgs()
         {
-            Items = SelectedShipment.Products;
-        }
+            SavedShipmentList = Testshipments
+        };
+        SaveShipmentDetails?.Invoke(sender, ssea);
+    }
+
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged(string name)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
+
+    private void ShipmentWindowList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        ProductItems = SelectedShipment.Products;
+
+        SelectedProductList.ItemsSource = ProductItems;
     }
 }

@@ -68,8 +68,8 @@
                 <Button Content="Add Product" Margin="5 0 0 0" Click="AddComponentToShipment_Click"></Button>
             </StackPanel>
             <ListView Grid.Row="1" Margin="10" x:Name="SelectedProductList"
-                      ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedItem="{Binding Item}">
+                      ItemsSource="{Binding ProductItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding ProductItem}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
