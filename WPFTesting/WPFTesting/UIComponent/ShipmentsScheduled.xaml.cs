@@ -111,7 +111,10 @@ public partial class ShipmentsScheduled : Window
 
     public void DeleteComponentToShipment_Click(object? sender, RoutedEventArgs? e)
     {
-
+        if(sender is Button button)
+        {
+            ProductItems.Remove(button.DataContext as Product);
+        }
     }
 
     private void SaveButton_Click(object? sender, RoutedEventArgs? e)
