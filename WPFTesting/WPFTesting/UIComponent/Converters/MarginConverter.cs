@@ -15,7 +15,7 @@ public class MarginConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        double width = ((ListView)value).ActualWidth;
+        double width = (double)value;
         return width - 16;
     }
 
