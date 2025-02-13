@@ -1,7 +1,7 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:WPFTesting"
+        xmlns:local="clr-namespace:FactorySADEfficiencyOptimizer"
         xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="av" x:Class="YourNamespace.MainWindow"
@@ -198,7 +198,7 @@
                             <TextBlock Text="{Binding SelectedEndpoint.supplier.Name, Mode=OneWay, StringFormat=\{0\}\'s products:}" Margin="5 0 0 0 "/>
                             <ListView x:Name="EndpointProductList" 
                                       ItemsSource="{Binding SelectedEndpoint.supplier.ProductInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                      SelectedItem="{Binding Product}" av:ItemsSource="{av:SampleData ItemCount=5}" SelectionChanged="EndpointProductList_SelectionChanged">
+                                      SelectedItem="{Binding Product}" av:ItemsSource="{av:SampleData ItemCount=5}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>

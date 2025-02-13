@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
-using WPFTesting.Models;
+using FactorySADEfficiencyOptimizer.Models;
 
-namespace WPFTesting.Shapes
+namespace FactorySADEfficiencyOptimizer.Shapes
 {
     public interface IVendorUIValues
     {

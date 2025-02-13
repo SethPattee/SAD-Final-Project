@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WPFTesting.Models;
+using FactorySADEfficiencyOptimizer.Models;
 
-namespace WPFTesting.Shapes;
+namespace FactorySADEfficiencyOptimizer.Shapes;
 
 public class SupplierUIValues : INotifyPropertyChanged
 {

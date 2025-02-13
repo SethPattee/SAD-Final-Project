@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WPFTesting.Models;
+using FactorySADEfficiencyOptimizer.Models;
 namespace FactorSADEfficiencyOptimizer.UIComponent
 {
     public partial class BillofMaterials : Window, INotifyPropertyChanged

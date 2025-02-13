@@ -13,12 +13,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WPFTesting.Components;
-using WPFTesting.Models;
-using WPFTesting.Shapes;
+using FactorySADEfficiencyOptimizer.Components;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
 using YourNamespace;
 
-namespace WPFTesting;
+namespace FactorySADEfficiencyOptimizer;
 
 /// <summary>
 /// Interaction logic for _.xaml

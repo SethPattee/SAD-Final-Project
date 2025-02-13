@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WPFTesting.Shapes;
-using WPFTesting.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
+using FactorySADEfficiencyOptimizer.Models;
 using System.Text.Json;
 using System.IO;
 using System.Text.Json.Serialization;
@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using YourNamespace;
 using FactorSADEfficiencyOptimizer.Data;
 
-namespace WPFTesting.Data;
+namespace FactorySADEfficiencyOptimizer.Data;
 
 
 public class InitializedDataProvider : IInitializedDataProvider

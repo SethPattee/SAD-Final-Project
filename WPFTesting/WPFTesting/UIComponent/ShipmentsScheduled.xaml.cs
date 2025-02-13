@@ -15,145 +15,142 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WPFTesting.Models;
+using FactorySADEfficiencyOptimizer.Models;
 
-namespace FactorSADEfficiencyOptimizer.UIComponent
+namespace FactorSADEfficiencyOptimizer.UIComponent;
+
+/// <summary>
+/// Interaction logic for ShipmentsScheduled.xaml
+/// </summary>
+public partial class ShipmentsScheduled : Window
 {
-    /// <summary>
-    /// Interaction logic for ShipmentsScheduled.xaml
-    /// </summary>
-    public partial class ShipmentsScheduled : Window
+    private ObservableCollection<Shipment> _testshipments;
+    public Shipment SelectedShipment { get; set; }
+    public ObservableCollection<Shipment> Testshipments
     {
-        private ObservableCollection<Shipment> _testshipments;
-        public ObservableCollection<Shipment> Testshipments
+        get
         {
-            get
-            {
-                return _testshipments;
-            }
-            set
-            {
-                _testshipments = value;
-                OnPropertyChanged(nameof(Testshipments));
-            }
+            return _testshipments;
         }
-        AnalizorModel ShipmentModel { get; set; }
-        public EventHandler? SaveShipmentDetails;
-        public Shipment Shm {  get; set; }
-        public Product product { get; set; }
-        public ObservableCollection<Product> items { get; set; }
-
-        public ShipmentsScheduled()
+        set
         {
-            InitializeComponent();
-        }
-        public ShipmentsScheduled(AnalizorModel s)
-        {
-            InitializeComponent();
-            ShipmentModel = s;
-            Testshipments = new ObservableCollection<Shipment>()
-            {
-                new Shipment()
-                {
-                    IsRecurring = false,
-                    Products = new ObservableCollection<Product>()
-                    {
-                        new Product()
-                        {
-                            ProductName = "highly marketable waluigi plush",
-                            Quantity = 1,
-                            Price = 100000
-                        },
-                        new Product()
-                        {
-                            ProductName = "highly marketable biohazard dude",
-                            Quantity = 1,
-                            Price = 10
-                        }
-                    }
-                },
-                new Shipment()
-                {
-                    IsRecurring = true,
-                    Products = new ObservableCollection<Product>()
-                    {
-                        new Product()
-                        {
-                            ProductName = "highly marketable waluigi plush",
-                            Quantity = 1,
-                            Price = 100000
-                        },
-                        new Product()
-                        {
-                            ProductName = "highly marketable biohazard dude",
-                            Quantity = 1,
-                            Price = 10
-                        }
-                    }
-                }
-            };
-
-            
-        }
-
-        public void AddNewShipment_Click(object? sender, RoutedEventArgs? e)
-        {
-            Testshipments.Add(new Shipment());
+            _testshipments = value;
             OnPropertyChanged(nameof(Testshipments));
-            //Shipment s = new();
-            
-            //ShipmentsList.Add(s);
-            //OnPropertyChanged(nameof(ShipmentsList));
-        }
-
-        public void AddComponentToShipment_Click(object? sender, RoutedEventArgs? e)
-        {
-            //Product p = new();
-            //selected_shipment.Products.Add(p);
-            //OnPropertyChanged(nameof(ShipmentsList));
-        }
-
-        public void DeleteShipment_Click(object? sender, RoutedEventArgs? e)
-        {
-            if(sender is Button button)
-            {
-                //ShipmentsList.Remove(button.DataContext as Shipment);
-            }
-        }
-
-        public void DeleteComponentToShipment_Click(object? sender, RoutedEventArgs? e)
-        {
-
-        }
-
-        private void SaveButton_Click(object? sender, RoutedEventArgs? e)
-        {
-            SavedShipmentEventArgs ssea = new SavedShipmentEventArgs()
-            {
-                SavedShipmentList = ShipmentModel.ShipmentList
-            };
-            SaveShipmentDetails?.Invoke(sender, ssea);
-        }
-
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        private void ProductListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ListViewItem lvi)
-            {
-                product = ((Product)lvi.DataContext);
-            }
-        }
-
-        private void ShipmentWindowList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if(sender is ListViewItem lvi)
-                items = ((Shipment)lvi.DataContext).Products;
         }
     }
+    public EventHandler? SaveShipmentDetails;
+
+    private Product _productitem;
+    public Product ProductItem {
+        get
+        {
+            return _productitem;
+        }
+        set
+        {
+            _productitem = value;
+            OnPropertyChanged(nameof(ProductItem));
+        }
+    }
+
+    private ObservableCollection<Supplier> _suppliers;
+    public ObservableCollection<Supplier> Suppliers
+    {
+        get
+        {
+            return _suppliers;
+        }
+        set
+        {
+            _suppliers = value;
+            OnPropertyChanged(nameof(Suppliers));
+        }
+    }
+    private ObservableCollection<Product> _productitems;
+    public ObservableCollection<Product> ProductItems { get {
+            return _productitems;
+        }
+        set {
+            _productitems = value;
+            OnPropertyChanged(nameof(ProductItems));
+        }
+    }
+
+    public ShipmentsScheduled(AnalizorModel simModel)
+    {
+        InitializeComponent();
+        ScheduledShipmentsList.DataContext = this;
+        SelectedProductList.DataContext = this;
+        Testshipments = simModel.ShipmentList;
+    }
+
+    public void AddNewShipment_Click(object? sender, RoutedEventArgs? e)
+    {
+        Testshipments.Add(new Shipment());
+        OnPropertyChanged(nameof(Testshipments));
+        //Shipment s = new();
+        
+        //ShipmentsList.Add(s);
+        //OnPropertyChanged(nameof(ShipmentsList));
+    }
+
+    public void AddComponentToShipment_Click(object? sender, RoutedEventArgs? e)
+    {
+        //Product p = new();
+        //selected_shipment.Products.Add(p);
+        //OnPropertyChanged(nameof(ShipmentsList));
+    }
+
+    public void DeleteShipment_Click(object? sender, RoutedEventArgs? e)
+    {
+        if(sender is Button button)
+        {
+            Testshipments.Remove(button.DataContext as Shipment);
+        }
+    }
+
+    public void DeleteComponentToShipment_Click(object? sender, RoutedEventArgs? e)
+    {
+
+    }
+
+    private void SaveButton_Click(object? sender, RoutedEventArgs? e)
+    {
+        SavedShipmentEventArgs ssea = new SavedShipmentEventArgs()
+        {
+            SavedShipmentList = Testshipments
+        };
+        SaveShipmentDetails?.Invoke(sender, ssea);
+    }
+
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged(string name)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
+
+    private void ShipmentWindowList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if(sender is ListView lvi){
+            AssignProductList((Shipment)lvi.SelectedItem);
+        }
+    }
+    private void ShowProductListButton_Click(object sender, RoutedEventArgs e)
+    {
+        if(sender is Button b)
+        {
+            AssignProductList((Shipment)b.DataContext);
+        }
+    }
+
+    private void AssignProductList(Shipment s)
+    {
+        SelectedShipment = s;
+        ProductItems = SelectedShipment.Products;
+
+        SelectedProductList.ItemsSource = ProductItems;
+    }
+
 }

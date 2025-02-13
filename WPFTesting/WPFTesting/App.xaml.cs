@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace WPFTesting
+namespace FactorySADEfficiencyOptimizer
 {
     /// <summary>
     /// Interaction logic for App.xaml
