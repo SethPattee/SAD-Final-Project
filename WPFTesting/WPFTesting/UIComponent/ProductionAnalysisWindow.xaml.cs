@@ -176,7 +176,25 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         {
             if(s is SavedShipmentEventArgs rea)
             {
-                simModel.ShipmentList = rea.SavedShipmentList;
+                List<Shipment> convertedShipments = new List<Shipment>();
+                foreach (var shipment in rea.SavedShipmentList)
+                {
+                    foreach(var supp in simModel.SupplierList)
+                    {
+                        if (shipment.Sender.Name == supp.supplier.Name)
+                            shipment.Sender = supp.supplier;
+                        else if(shipment.Receiver.Name == supp.supplier.Name)
+                            shipment.Receiver = supp.supplier;
+                    }
+
+                    foreach(var supp in simModel.EndpointList)
+                    {
+                        if(shipment.Receiver.Name == supp.supplier.Name)
+                            shipment.Receiver = supp.supplier;
+                    }
+                    convertedShipments.Add(shipment);
+                }
+                simModel.ShipmentList = new ObservableCollection<Shipment>(convertedShipments);
             }
         }
         //private void UpdatePlot()
