@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using FactorSADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 using FactorySADEfficiencyOptimizer.Shapes;
 using FactorySADEfficiencyOptimizer.ViewModel;
 
@@ -60,6 +61,26 @@ public class AnalizorModel : INotifyPropertyChanged
 		{
 			_productionTargets = value;
 			OnPropertyChanged(nameof(ProductionTargets));
+		}
+	}
+	private ObservableCollection<Change> _changeLog = new ObservableCollection<Change>();
+	public ObservableCollection<Change> ChangeLog
+	{
+		get { return _changeLog; }
+		set
+		{
+			_changeLog = value;
+			OnPropertyChanged(nameof(ChangeLog));
+		}
+	}
+	private ObservableCollection<Issue> _issueLog = new ObservableCollection<Issue>();
+	public ObservableCollection<Issue> IssueLog
+	{
+		get { return _issueLog; }
+		set
+		{
+			_issueLog = value;
+			OnPropertyChanged(nameof(IssueLog));
 		}
 	}
 	private int _currentDay = 1;
@@ -212,12 +233,24 @@ public class AnalizorModel : INotifyPropertyChanged
 					foreach (Product product in products)
 					{
 						float Quant = endpoint.supplier.ComponentInventory.FirstOrDefault(p => p.ProductName == product.ProductName)?.Quantity ?? 0;
-						if (!(Quant >= product.Quantity))//
+						if (!(Quant >= product.Quantity))
 						{
 							Product toOrder = new Product();
 							toOrder.ProductName = product.ProductName;
 							toOrder.Price = product.Price;
 							toOrder.Quantity = product.Quantity - Quant;
+							Issue issue = new Issue()
+							{
+								DayFound = 1,
+								Severity = StatusEnum.Warning,
+								Solution = new Change()
+								{
+									Action = ActionEnum.addedShipment,
+									neededProduct = toOrder
+								}
+							};
+							IssueLog.Add(issue);
+							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });
 							PlaceOrderFor(toOrder, endpoint);
 						}
 					}
