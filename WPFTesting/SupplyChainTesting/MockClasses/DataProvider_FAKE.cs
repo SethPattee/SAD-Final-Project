@@ -368,7 +368,8 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                                         Quantity=10,
                                         ProductName= "wood"
                                     }
-                                }
+                                },
+                                IsEnabled = true,
                             }
                     }
                 }

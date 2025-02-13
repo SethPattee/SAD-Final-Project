@@ -97,27 +97,12 @@ public class AnalizorModel : INotifyPropertyChanged
 		ShortestPath = "";
 		foreach (var supplier in model.SupplierList)
 		{
-			SupplierUIValues sup = new SupplierUIValues();
-			sup.supplier = new Supplier();
-			sup.supplier.Name = supplier.supplier.Name;
-			sup.supplier.ComponentInventory = supplier.supplier.ComponentInventory;
-			sup.supplier.ProductInventory = supplier.supplier.ProductInventory;
-			sup.supplier.Id = supplier.supplier.Id;
-			sup.Position = new System.Drawing.Point();
+			SupplierUIValues sup = makeIdenticalSupplierWithoutConnections(supplier);
 			AddSupplier(sup);
 		}
 		foreach (EndpointUIValues endpoint in model.EndpointList)
 		{
-			EndpointUIValues end = new EndpointUIValues();
-			end.supplier = new EndpointNode();
-			end.supplier.Name = endpoint.supplier.Name;
-			end.supplier.ComponentInventory = endpoint.supplier.ComponentInventory;
-			end.supplier.ProductInventory = endpoint.supplier.ProductInventory;
-			end.supplier.Id = endpoint.supplier.Id;
-			end.Position = new System.Drawing.Point();
-			((EndpointNode)end.supplier).DeliveryRequirementsList = ((EndpointNode)endpoint.supplier).DeliveryRequirementsList;
-			((EndpointNode)end.supplier).ProductionList = ((EndpointNode)endpoint.supplier).ProductionList;
-			((EndpointNode)end.supplier).Profit = ((EndpointNode)endpoint.supplier).Profit;
+			EndpointUIValues end = makeIdenticalEndpointWithoutConections(endpoint);
 			AddEndpoint(end);
 		}
 		foreach (Shipment shipment in model.ShipmentList) {
@@ -131,12 +116,60 @@ public class AnalizorModel : INotifyPropertyChanged
 			{
 				ship.Receiver = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Receiver.Id)?.supplier ?? new Supplier();
 			}
-			ship.Products = shipment.Products;
+			ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
 			ship.ToJoiningBoxCorner = "";
 			ship.FromJoiningBoxCorner = "";
 			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
 			AddShipment(ship);
 		}
+	}
+
+	private static SupplierUIValues makeIdenticalSupplierWithoutConnections(SupplierUIValues supplier)
+	{
+		SupplierUIValues sup = new SupplierUIValues();
+		sup.supplier = new Supplier();
+		sup.supplier.Name = supplier.supplier.Name;
+		sup.supplier.ComponentInventory = supplier.supplier.ComponentInventory;
+		sup.supplier.ProductInventory = supplier.supplier.ProductInventory;
+		sup.supplier.Id = supplier.supplier.Id;
+		sup.Position = new System.Drawing.Point();
+		return sup;
+	}
+
+	private static EndpointUIValues makeIdenticalEndpointWithoutConections(EndpointUIValues endpoint)
+	{
+		EndpointUIValues end = new EndpointUIValues();
+		end.supplier = new EndpointNode();
+		end.supplier.Name = endpoint.supplier.Name;
+		end.supplier.ComponentInventory = makeIdenticalColectionOfProductsNoConnections(endpoint.supplier.ComponentInventory);
+		end.supplier.ProductInventory = makeIdenticalColectionOfProductsNoConnections(endpoint.supplier.ProductInventory);
+		end.supplier.Id = endpoint.supplier.Id;
+		end.Position = new System.Drawing.Point();
+		((EndpointNode)end.supplier).DeliveryRequirementsList = ((EndpointNode)endpoint.supplier).DeliveryRequirementsList;
+		((EndpointNode)end.supplier).ProductionList = ((EndpointNode)endpoint.supplier).ProductionList;
+		((EndpointNode)end.supplier).Profit = ((EndpointNode)endpoint.supplier).Profit;
+		return end;
+	}
+
+	private static ObservableCollection<Product> makeIdenticalColectionOfProductsNoConnections(ObservableCollection<Product> products)
+	{
+		var prods = new ObservableCollection<Product>();
+		foreach (var ep in products)
+		{
+			Product p = makeIdenticalProductWithoutConections(ep);
+			prods.Add(p);
+		}
+		return prods;
+	}
+
+	private static Product makeIdenticalProductWithoutConections(Product ep)
+	{
+		Product p = new Product();
+		p.ProductName = ep.ProductName;
+		p.Price = ep.Price;
+		p.Quantity = ep.Quantity;
+		p.Units = ep.Units;
+		return p;
 	}
 
 	protected void OnPropertyChanged(string? name = null)
