@@ -2,6 +2,7 @@
 using FactorSADEfficiencyOptimizer.Models;
 using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
+using InteractiveDataDisplay.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -58,6 +59,21 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             simModel = new AnalizorModel(model);
             this.DataContext = this;
             DaysToRun = 1;
+            double[] x = new double[200];
+            for (int i = 0; i < x.Length; i++)
+                x[i] = 3.1415 * i / (x.Length - 1);
+
+            for (int i = 0; i < 25; i++)
+            {
+                var lg = new LineGraph();
+                lines.Children.Add(lg);
+                lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
+                lg.Description = String.Format("Data series {0}", i + 1);
+                lg.StrokeThickness = 2;
+                lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
+            }
+
+            //UpdatePlot();
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -163,7 +179,17 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 simModel.ShipmentList = rea.SavedShipmentList;
             }
         }
+        //private void UpdatePlot()
+        //{
+        //    if (linegraph == null) return;
 
-        
+        //    int xData = TargetProductionTarget.DueDate;
+        //    int yData = (int)Math.Round(TargetProductionTarget.InitAmount);
+
+        //    linegraph.Plot(xData, yData);
+        //    linegraph.Description = "Production Target Over Time";
+        //}
+
+
     }
 }
