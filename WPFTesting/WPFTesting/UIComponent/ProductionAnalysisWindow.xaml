@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFTesting.UIComponent"
         xmlns:classes="clr-namespace:WPFTesting.ViewModel"
+        xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d" DataContext="{Binding simModel}" 
         Title="ProductionAnalysisWindow"
         Background="Transparent" Height="450" Width="800">
@@ -90,9 +91,11 @@
             </Button>
         </Grid>
 
-        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="20 0 0 0">
+        <Grid Name="lines" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="20 0 0 0">
             <Border Background="LightGray" BorderBrush="DarkGray" BorderThickness="1">
-
+                <d3:Chart x:Name="plotter" BottomTitle="Bottom" LeftTitle="Left">
+                    <d3:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="Blue" StrokeThickness="3"/>
+                    </d3:Chart>
             </Border>
         </Grid>
 
