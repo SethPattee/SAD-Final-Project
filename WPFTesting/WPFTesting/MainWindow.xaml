@@ -198,7 +198,7 @@
                             <TextBlock Text="{Binding SelectedEndpoint.supplier.Name, Mode=OneWay, StringFormat=\{0\}\'s products:}" Margin="5 0 0 0 "/>
                             <ListView x:Name="EndpointProductList" 
                                       ItemsSource="{Binding SelectedEndpoint.supplier.ProductInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                      SelectedItem="{Binding Product}" av:ItemsSource="{av:SampleData ItemCount=5}" SelectionChanged="EndpointProductList_SelectionChanged">
+                                      SelectedItem="{Binding Product}" av:ItemsSource="{av:SampleData ItemCount=5}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>

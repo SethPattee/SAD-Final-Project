@@ -25,6 +25,7 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
     public partial class ShipmentsScheduled : Window
     {
         private ObservableCollection<Shipment> _testshipments;
+        public Shipment SelectedShipment { get; set; }
         public ObservableCollection<Shipment> Testshipments
         {
             get
@@ -37,63 +38,49 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
                 OnPropertyChanged(nameof(Testshipments));
             }
         }
-        AnalizorModel ShipmentModel { get; set; }
         public EventHandler? SaveShipmentDetails;
-        public Shipment Shm {  get; set; }
-        public Product product { get; set; }
-        public ObservableCollection<Product> items { get; set; }
 
-        public ShipmentsScheduled()
-        {
-            InitializeComponent();
-        }
-        public ShipmentsScheduled(AnalizorModel s)
-        {
-            InitializeComponent();
-            ShipmentModel = s;
-            Testshipments = new ObservableCollection<Shipment>()
+        private Product _item;
+        public Product Item {
+            get
             {
-                new Shipment()
-                {
-                    IsRecurring = false,
-                    Products = new ObservableCollection<Product>()
-                    {
-                        new Product()
-                        {
-                            ProductName = "highly marketable waluigi plush",
-                            Quantity = 1,
-                            Price = 100000
-                        },
-                        new Product()
-                        {
-                            ProductName = "highly marketable biohazard dude",
-                            Quantity = 1,
-                            Price = 10
-                        }
-                    }
-                },
-                new Shipment()
-                {
-                    IsRecurring = true,
-                    Products = new ObservableCollection<Product>()
-                    {
-                        new Product()
-                        {
-                            ProductName = "highly marketable waluigi plush",
-                            Quantity = 1,
-                            Price = 100000
-                        },
-                        new Product()
-                        {
-                            ProductName = "highly marketable biohazard dude",
-                            Quantity = 1,
-                            Price = 10
-                        }
-                    }
-                }
-            };
+                return _item;
+            }
+            set
+            {
+                _item = value;
+                OnPropertyChanged(nameof(Item));
+            }
+        }
 
-            
+        private ObservableCollection<Supplier> _suppliers;
+        public ObservableCollection<Supplier> Suppliers
+        {
+            get
+            {
+                return _suppliers;
+            }
+            set
+            {
+                _suppliers = value;
+                OnPropertyChanged(nameof(Suppliers));
+            }
+        }
+        private ObservableCollection<Product> _items;
+        public ObservableCollection<Product> Items { get {
+                return _items;
+            }
+            set {
+                _items = value;
+                OnPropertyChanged(nameof(Items));
+            }
+        }
+
+        public ShipmentsScheduled(AnalizorModel simModel)
+        {
+            InitializeComponent();
+            ScheduledShipmentsList.DataContext = this;
+            Testshipments = simModel.ShipmentList;
         }
 
         public void AddNewShipment_Click(object? sender, RoutedEventArgs? e)
@@ -117,7 +104,7 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
         {
             if(sender is Button button)
             {
-                //ShipmentsList.Remove(button.DataContext as Shipment);
+                Testshipments.Remove(button.DataContext as Shipment);
             }
         }
 
@@ -130,7 +117,7 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
         {
             SavedShipmentEventArgs ssea = new SavedShipmentEventArgs()
             {
-                SavedShipmentList = ShipmentModel.ShipmentList
+                SavedShipmentList = Testshipments
             };
             SaveShipmentDetails?.Invoke(sender, ssea);
         }
@@ -142,18 +129,10 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private void ProductListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ListViewItem lvi)
-            {
-                product = ((Product)lvi.DataContext);
-            }
-        }
 
         private void ShipmentWindowList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(sender is ListViewItem lvi)
-                items = ((Shipment)lvi.DataContext).Products;
+            Items = SelectedShipment.Products;
         }
     }
 }

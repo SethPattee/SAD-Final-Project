@@ -983,11 +983,6 @@ namespace YourNamespace
             BillWindow.Show();
         }
 
-        private void EndpointProductList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
         {
             if(ViewModel is not null && ViewModel.SelectedShipment is not null)

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent"
-        mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        mc:Ignorable="d" DataContext="{Binding Testshipment}"
         Title="ShipmentsScheduled" Height="400" Width="620">
     <Grid Background="Gray">
         <Grid.ColumnDefinitions>
@@ -26,20 +26,19 @@
                     <Button Content="Add Shipment" Click="AddNewShipment_Click"></Button>
                 </Border>
             </StackPanel>
-            <ListView x:Name="ShipmentWindowList" 
-                      ItemsSource="{Binding Testshipments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedItem="{Binding Shm}"
+            <ListView x:Name="ScheduledShipmentsList" ItemsSource="{Binding Testshipments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedShipment}" SelectionChanged="ShipmentWindowList_SelectionChanged"
                       Margin="10,10,10,10" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Background="Blue">
+                        <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
-                                <ColumnDefinition Width="4*"></ColumnDefinition>
-                                <ColumnDefinition Width="4*"></ColumnDefinition>
-                                <ColumnDefinition Width="4*"></ColumnDefinition>
-                                <ColumnDefinition Width="4*"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <CheckBox IsChecked="{Binding IsRecurring}" Grid.Column="0"></CheckBox>
                             <TextBox Text="{Binding Sender.Name}" Grid.Column="1"></TextBox>
@@ -47,7 +46,7 @@
                             <TextBox Text="{Binding TimeToDeliver}" Grid.Column="3"></TextBox>
                             <Button Content="Check Products" Grid.Column="4"></Button>
                             <Border Grid.Column="5" CornerRadius="2" Background="LightSalmon" BorderBrush="Red" BorderThickness="1"
-                                    Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}" VerticalAlignment="Stretch">
+                                    Width="40" VerticalAlignment="Stretch">
                                 <Button Content="X" Background="Transparent" BorderBrush="Gray" BorderThickness="0"
                                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                         Grid.Column="2" Click="DeleteShipment_Click"></Button>
@@ -68,8 +67,9 @@
                 <Label>Products</Label>
                 <Button Content="Add Product" Margin="5 0 0 0" Click="AddComponentToShipment_Click"></Button>
             </StackPanel>
-            <ListView Grid.Row="1" Margin="10" ItemsSource="{Binding Testshipments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedItem="{Binding Shipment}">
+            <ListView Grid.Row="1" Margin="10" x:Name="SelectedProductList"
+                      ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Item}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
