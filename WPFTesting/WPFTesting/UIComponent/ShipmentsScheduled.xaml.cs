@@ -133,8 +133,18 @@ public partial class ShipmentsScheduled : Window
 
     private void ShipmentWindowList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        AssignProductList();
+    }
+    private void ShowProductListButton_Click(object sender, RoutedEventArgs e)
+    {
+        AssignProductList();
+    }
+
+    private void AssignProductList()
+    {
         ProductItems = SelectedShipment.Products;
 
         SelectedProductList.ItemsSource = ProductItems;
     }
+
 }

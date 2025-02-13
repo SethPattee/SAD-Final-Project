@@ -44,7 +44,7 @@
                             <TextBox Text="{Binding Sender.Name}" Grid.Column="1"></TextBox>
                             <TextBox Text="{Binding Receiver.Name}" Grid.Column="2"></TextBox>
                             <TextBox Text="{Binding TimeToDeliver}" Grid.Column="3"></TextBox>
-                            <Button Content="Check Products" Grid.Column="4"></Button>
+                            <Button Content="Check Products" Click="ShowProductListButton_Click" Grid.Column="4"></Button>
                             <Border Grid.Column="5" CornerRadius="2" Background="LightSalmon" BorderBrush="Red" BorderThickness="1"
                                     Width="40" VerticalAlignment="Stretch">
                                 <Button Content="X" Background="Transparent" BorderBrush="Gray" BorderThickness="0"
