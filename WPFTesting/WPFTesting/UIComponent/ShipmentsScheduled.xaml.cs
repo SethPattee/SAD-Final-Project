@@ -133,15 +133,21 @@ public partial class ShipmentsScheduled : Window
 
     private void ShipmentWindowList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        AssignProductList();
+        if(sender is ListView lvi){
+            AssignProductList((Shipment)lvi.SelectedItem);
+        }
     }
     private void ShowProductListButton_Click(object sender, RoutedEventArgs e)
     {
-        AssignProductList();
+        if(sender is Button b)
+        {
+            AssignProductList((Shipment)b.DataContext);
+        }
     }
 
-    private void AssignProductList()
+    private void AssignProductList(Shipment s)
     {
+        SelectedShipment = s;
         ProductItems = SelectedShipment.Products;
 
         SelectedProductList.ItemsSource = ProductItems;
