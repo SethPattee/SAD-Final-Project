@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WPFTesting\FactorSADEfficiencyOptimizer.csproj" />
+    <ProjectReference Include="..\WPFTesting\FactorySADEfficiencyOptimizer.csproj" />
   </ItemGroup>
 
 </Project>

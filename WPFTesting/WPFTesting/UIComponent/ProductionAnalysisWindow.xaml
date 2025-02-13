@@ -3,16 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPFTesting.UIComponent"
-        xmlns:classes="clr-namespace:WPFTesting.ViewModel"
+        xmlns:local="clr-namespace:FactorySADEfficiencyOptimizer.UIComponent"
+        xmlns:classes="clr-namespace:FactorySADEfficiencyOptimizer.ViewModel"
         xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
+        xmlns:converter="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent.Converters"
         mc:Ignorable="d" DataContext="{Binding simModel}"
         Title="ProductionAnalysisWindow"
-        Background="Transparent" Height="450" Width="800">
+        Background="Transparent" Height="450" Width="800"
+        WindowStyle="ToolWindow">
     <Window.Resources>
         <converter:MarginConverter x:Key="marginConverter"></converter:MarginConverter>
     </Window.Resources>
-    <Grid>
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
