@@ -25,12 +25,12 @@
             <ColumnDefinition Width="17*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Grid.RowSpan="2" Margin="0 0 10 10">
+        <Grid Grid.Column="0" Grid.RowSpan="2" Margin="0 0 4 10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5*"></RowDefinition>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <DockPanel Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <Border Background="LightSlateGray">
                     <Slider VerticalAlignment="Center" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                             TickFrequency="1"
@@ -38,7 +38,7 @@
                             HorizontalAlignment="Left"
                             Margin="10 0 10 0" ValueChanged="Slider_ValueChanged"></Slider>
                 </Border>
-                <Border Background="LightGray" BorderThickness="0" BorderBrush="Transparent" Width="180">
+                <Border Background="LightGray" BorderThickness="0" BorderBrush="Transparent">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Days to run:" Margin="5 0 3 0" HorizontalAlignment="Left" VerticalAlignment="Center"
                                    FontSize="16"
@@ -48,7 +48,7 @@
                                  Background="Transparent" x:Name="AnalysisPeriodValue"></TextBox>
                     </StackPanel>
                 </Border>
-            </StackPanel>
+            </DockPanel>
             <Border Grid.Row="1" Background="DarkGray" Padding="8" x:Name="ProductionTargList">
                 <StackPanel Orientation="Vertical">
                     
@@ -115,15 +115,15 @@
             </Button>
         </Grid>
 
-        <Grid Name="lines" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="20 0 0 0">
+        <Grid Name="lines" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="4 0 0 0">
             <Border Background="LightGray" BorderBrush="DarkGray" BorderThickness="1">
                 <d3:Chart x:Name="plotter" BottomTitle="Bottom" LeftTitle="Left">
-                    <d3:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="Blue" StrokeThickness="3"/>
+                    <d3:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="RoyalBlue" StrokeThickness="3"/>
                     </d3:Chart>
             </Border>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="1" Margin="20 0 0 0">
+        <Grid Grid.Row="1" Grid.Column="1" Margin="4 0 0 0">
             <Border Margin="0 4 0 10" BorderBrush="Bisque" Background="SandyBrown" CornerRadius="6">
                 <Button Background="Transparent" BorderThickness="0" x:Name="CheckShipmentButton"
                         Click="OpenShipmentWindow_Click">
