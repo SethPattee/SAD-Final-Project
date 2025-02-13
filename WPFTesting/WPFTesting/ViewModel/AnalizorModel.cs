@@ -181,9 +181,9 @@ public class AnalizorModel : INotifyPropertyChanged
 		else
 			return 0;
 	}
-	public List<Product> GetNeededComponentQuantitiesForTarget(ProductionTarget newtarg, ProductLine productLine)
+	public ObservableCollection<Product> GetNeededComponentQuantitiesForTarget(ProductionTarget newtarg, ProductLine productLine)
 	{
-		List<Product> products = new List<Product>();
+		ObservableCollection<Product> products = new ObservableCollection<Product>();
 		foreach (Product p in productLine.Components)
 		{
 			Product qp = new Product();
