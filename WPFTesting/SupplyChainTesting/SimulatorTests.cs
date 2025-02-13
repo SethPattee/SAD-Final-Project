@@ -11,6 +11,7 @@ using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
 using FactorySADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 
 namespace SupplyChainTesting;
 
@@ -67,49 +68,13 @@ public class SimulatorTests
 			Assert.That(endpoint.supplier.ProductInventory.Count, Is.Not.EqualTo(simulation.SupplierList.First().supplier.ProductInventory.Count));
 		}
 	}
-	//[Test]
-	//public void GivenTwoDaySimulaitonItRunsForTwoAdvanceTimes()
-	//{
-	//      var model = setupTest();
-	//      AnalizorModel simulation = new AnalizorModel(model);
-	//      ProductionTarget newtarg = new ProductionTarget()
-	//      {
-	//          DueDate = 2,
-	//          InitAmount = 0,
-	//          IsTargetEnabled = true,
-	//          Status = 0,
-	//          ProductTarget = new Product()
-	//          {
-	//              Quantity = 0,
-	//              ProductName = "box"
-	//          },
-	//          TargetQuantity = 1
-	//      };
-	//      simulation.ProductionTargets.Add(newtarg);
-
-	//simulation.PassTimeUntilDuration(2);
-
-	//Assert.That(simulation.ProductionTargets.First().InitAmount, Is.EqualTo(1));
-	//   }
 	[Test]
 	public void AnalyzerGetsDailyQuotaForTargetProduct()
 	{
 		var model = setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
 		Assert.That(simulation.CurrentDay, Is.EqualTo(1));
-		ProductionTarget newtarg = new ProductionTarget()
-		{
-			DueDate = 2,
-			InitAmount = 0,
-			IsTargetEnabled = true,
-			Status = 0,
-			ProductTarget = new Product()
-			{
-				Quantity = 0,
-				ProductName = "box"
-			},
-			TargetQuantity = 1
-		};
+		ProductionTarget newtarg = MakeProductionTarget(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
 		Product product = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
@@ -121,19 +86,8 @@ public class SimulatorTests
 	{
 		var model = setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
-		ProductionTarget newtarg = new ProductionTarget()
-		{
-			DueDate = 2,
-			InitAmount = 0,
-			IsTargetEnabled = true,
-			Status = 0,
-			ProductTarget = new Product()
-			{
-				Quantity = 0,
-				ProductName = "box"
-			},
-			TargetQuantity = 1
-		};
+		ProductionTarget newtarg = MakeProductionTarget(dateDue: 2, targetQuantity: 1);
+		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
 		ProductLine productLine = ((EndpointNode)endpoint.supplier).ProductionList.First();
 		ObservableCollection<Product> neededProducts =  simulation.GetNeededComponentQuantitiesForTarget( newtarg, productLine);
@@ -148,19 +102,7 @@ public class SimulatorTests
 	{
 		var model = setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
-		ProductionTarget newtarg = new ProductionTarget()
-		{
-			DueDate = 2,
-			InitAmount = 0,
-			IsTargetEnabled = true,
-			Status = 0,
-			ProductTarget = new Product()
-			{
-				Quantity = 0,
-				ProductName = "box"
-			},
-			TargetQuantity = 1
-		};
+		ProductionTarget newtarg = MakeProductionTarget(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
 		endpoint.supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = 2;
@@ -194,31 +136,19 @@ public class SimulatorTests
 	[Test]
 	public void AnalyzerWillProduceEnoughForOneProductionTarget()
 	{
-        var model = setupTest();
-        AnalizorModel simulation = new AnalizorModel(model);
-        ProductionTarget newtarg = new ProductionTarget()
-        {
-            DueDate = 10,
-            InitAmount = 0,
-            IsTargetEnabled = true,
-            Status = 0,
-            ProductTarget = new Product()
-            {
-                Quantity = 0,
-                ProductName = "box"
-            },
-            TargetQuantity = 10
-        }; //box takes 12 screws and 10 wood
-           // endpoint has 20 screws and 1000 wood
-           // 'Vendor 3'  has screws 
-        (simulation.SupplierList
+		var model = setupTest();
+		AnalizorModel simulation = new AnalizorModel(model);
+		ProductionTarget newtarg = MakeProductionTarget(dateDue: 10, targetQuantity: 10); //box takes 12 screws and 10 wood
+												// endpoint has 20 screws and 1000 wood
+												// 'Vendor 3'  has screws 
+		(simulation.SupplierList
 			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
 			?.supplier.ProductInventory
 			.FirstOrDefault(p => p.ProductName == "screws")
 			?? new Product())
 			.Quantity += 120;  //  give it more for the test
 		(((EndpointNode)(simulation.EndpointList.FirstOrDefault() ?? new EndpointUIValues())
-			.supplier  ?? new EndpointNode())
+			.supplier ?? new EndpointNode())
 			.ProductionList.FirstOrDefault() ?? new ProductLine())
 			.IsEnabled = true;
 		// there is one shipment bringing 10 wood and 10 nails from 'Vendor 3' to 'Vendor 2'
@@ -230,41 +160,52 @@ public class SimulatorTests
 		var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();
 		Assert.That(shipmentProd.Quantity, Is.EqualTo(100));
 	}
-	//[Test]
-	//public void AnalyzerWillSetFailureFlagIfUnAbleToOrderEnoughSupplies()
-	//{
-	//	var model = setupTest();
-	//	AnalizorModel simulation = new AnalizorModel(model);
-	//	ProductionTarget newtarg = new ProductionTarget()
-	//	{
-	//		DueDate = 10,
-	//		InitAmount = 0,
-	//		IsTargetEnabled = true,
-	//		Status = StatusEnum.NotDone, 
-	//		ProductTarget = new Product()
-	//		{
-	//			Quantity = 0,
-	//			ProductName = "box"
-	//		},
-	//		TargetQuantity = 10
-	//	}; //box takes 12 screws and 10 wood
-	//	(simulation.SupplierList
-	//		.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
-	//		?.supplier.ProductInventory
-	//		.FirstOrDefault(p => p.ProductName == "screws")
-	//		?? new Product())
-	//		.Quantity += 28; // will only have enough screws to make 4 boxes
-	//	(((EndpointNode)(simulation.EndpointList.FirstOrDefault() ?? new EndpointUIValues())
-	//		.supplier ?? new EndpointNode())
-	//		.ProductionList.FirstOrDefault() ?? new ProductLine())
-	//		.IsEnabled = true;
-	//	simulation.ProductionTargets.Add(newtarg);
-	//	simulation.PassTimeUntilDuration(10);
-	//	// Should place order and complete 4 boxes.
+
+	private static ProductionTarget MakeProductionTarget(int dateDue, int targetQuantity)
+	{
+		return new ProductionTarget()
+		{
+			DueDate = dateDue,
+			InitAmount = 0,
+			IsTargetEnabled = true,
+			Status = 0,
+			ProductTarget = new Product()
+			{
+				Quantity = 0,
+				ProductName = "box"
+			},
+			TargetQuantity = targetQuantity
+		};
+	}
+
+	[Test]
+	public void AnalizorModelHasAListOfIssuesThatShowsWhenErrorsWereHit()
+	{
+		var model = setupTest();
+		AnalizorModel simulation = new AnalizorModel(model);
+		Assert.That(simulation.ChangeLog, Is.Empty);
+		Assert.That(simulation.IssueLog, Is.Empty);
+		ProductionTarget newtarg = MakeProductionTarget(targetQuantity: 10, dateDue: 10);
+		(simulation.SupplierList
+			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
+			?.supplier.ProductInventory
+			.FirstOrDefault(p => p.ProductName == "screws")
+			?? new Product())
+			.Quantity += 200;
+		simulation.ProductionTargets.Add(newtarg);
+		simulation.PassTimeUntilDuration(10); // will find Issue, Solution is to order another shipment
+		Assert.That(simulation.IssueLog.Count, Is.EqualTo(1));
+		Assert.That(simulation.IssueLog.First().Solution.Action, Is.EqualTo(ActionEnum.addedShipment));
+		Assert.That(simulation.ChangeLog.Count, Is.EqualTo(1));
+		Assert.That(simulation.ChangeLog.First().Action, Is.EqualTo(ActionEnum.addedShipment));
+		Assert.That(simulation.ChangeLog.First().shipmentReceiver, Is.EqualTo(simulation.EndpointList.First()));
+		Assert.That(simulation.ChangeLog.First().neededProduct.ProductName, Is.EqualTo("screws"));
+	}
+
+	//	Things we should test with similar
 	//	var shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault()?.ProductName == "screws") ?? new Shipment();
 	//	var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();
 	//	Assert.That(shipmentProd.Quantity, Is.EqualTo(28));
 	//	// should have a failure status for produciton Target
 	//	Assert.That(newtarg.Status, Is.EqualTo(StatusEnum.Failure));
-	//}
 }
