@@ -51,15 +51,31 @@
             </DockPanel>
             <Border Grid.Row="1" Background="DarkGray" Padding="8" x:Name="ProductionTargList">
                 <StackPanel Orientation="Vertical">
-                    
+                    <Border BorderThickness="0 0 0 1" BorderBrush="black">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                <ColumnDefinition Width="6*"></ColumnDefinition>
+                                <ColumnDefinition Width="6*"></ColumnDefinition>
+                                <ColumnDefinition Width="8*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Enabled"></TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Grid.Column="1" Text="Item"></TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Grid.Column="2" Text="Target Quantity"></TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Grid.Column="3" Text="Target Day"></TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Grid.Column="4" Text="Status"></TextBlock>
+                        </Grid>
+                    </Border>
                     <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1"
-                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ProdTargetList"
                               ItemsSource="{Binding ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding TargetProductionTarget}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="LightGray" Height="48"
-                                    Width="{Binding RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}, Mode=OneWay, Converter={StaticResource marginConverter}}">
+                                      Width="{Binding ElementName=ProdTargetList, Path=ActualWidth, Mode=OneWay, 
+                                    UpdateSourceTrigger=PropertyChanged, Converter={StaticResource marginConverter}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
@@ -73,8 +89,8 @@
                                              FontSize="16"></TextBox>
                                     <TextBox Grid.Column="2" FontSize="16" Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
                                     <TextBox Grid.Column="3" FontSize="16" Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
-                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="0">
-                                        <TextBlock Text="Not Run" FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0"></TextBlock>
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="10 0 0 0">
+                                        <TextBlock Text="Not Run" FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0" VerticalAlignment="Center"></TextBlock>
                                         <Image Height="48">
                                             <Image.Source>
                                                 <BitmapImage DecodePixelHeight="48"
