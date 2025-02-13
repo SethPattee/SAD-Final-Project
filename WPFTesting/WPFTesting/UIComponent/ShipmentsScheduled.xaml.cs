@@ -86,7 +86,7 @@ public partial class ShipmentsScheduled : Window
 
     public void AddNewShipment_Click(object? sender, RoutedEventArgs? e)
     {
-        Testshipments.Add(new Shipment());
+        Testshipments.Add(GetDefaultShipment());
         OnPropertyChanged(nameof(Testshipments));
         //Shipment s = new();
         
@@ -94,11 +94,41 @@ public partial class ShipmentsScheduled : Window
         //OnPropertyChanged(nameof(ShipmentsList));
     }
 
+    public Product GetDefaultProduct()
+    {
+        Product newprod = new()
+        {
+            ProductName = "new product",
+            Units = "unit",
+        };
+
+        return newprod;
+    }
+
+    public Shipment GetDefaultShipment()
+    {
+        Shipment newprod = new()
+        {
+            Sender = new Supplier()
+            {
+                Name = "new sender"
+            },
+            Receiver = new Supplier()
+            {
+                Name = "new receiver"
+            }
+        };
+
+        return newprod;
+    }
+
     public void AddComponentToShipment_Click(object? sender, RoutedEventArgs? e)
     {
-        //Product p = new();
-        //selected_shipment.Products.Add(p);
-        //OnPropertyChanged(nameof(ShipmentsList));
+        if(SelectedShipment is not null)
+        {
+            Product p = GetDefaultProduct();
+            SelectedShipment.Products.Add(p);
+        }
     }
 
     public void DeleteShipment_Click(object? sender, RoutedEventArgs? e)
