@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPFTesting.Models
+namespace FactorySADEfficiencyOptimizer.Models
 {
     public class Product : INotifyPropertyChanged
     {

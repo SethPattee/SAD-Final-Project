@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPFTesting.Models
+namespace FactorySADEfficiencyOptimizer.Models
 {
     public class ProductLine
     {

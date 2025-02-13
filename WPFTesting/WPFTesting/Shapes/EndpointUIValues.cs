@@ -6,9 +6,9 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using WPFTesting.Models;
+using FactorySADEfficiencyOptimizer.Models;
 
-namespace WPFTesting.Shapes
+namespace FactorySADEfficiencyOptimizer.Shapes
 {
     public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
     {

@@ -1,7 +1,7 @@
-﻿using WPFTesting.Models;
-using WPFTesting.Shapes;
+﻿using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
 
-namespace WPFTesting.Data;
+namespace FactorySADEfficiencyOptimizer.Data;
 
 public class ForJsonSupplier
 {

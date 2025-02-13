@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WPFTesting.Data;
-using WPFTesting.Models;
-using WPFTesting.Shapes;
+using FactorySADEfficiencyOptimizer.Data;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
 
 namespace SupplyChainTesting.MockClasses;
 

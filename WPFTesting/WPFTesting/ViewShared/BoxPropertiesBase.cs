@@ -1,6 +1,6 @@
-﻿using WPFTesting.Models;
+﻿using FactorySADEfficiencyOptimizer.Models;
 
-namespace WPFTesting.ViewShared
+namespace FactorySADEfficiencyOptimizer.ViewShared
 {
     public class BoxPropertiesBase
     {

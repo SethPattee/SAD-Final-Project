@@ -19,11 +19,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WPFTesting.Data;
-using WPFTesting.Models;
-using WPFTesting.ViewModel;
+using FactorySADEfficiencyOptimizer.Data;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.ViewModel;
 
-namespace WPFTesting.UIComponent
+namespace FactorySADEfficiencyOptimizer.UIComponent
 {
     /// <summary>
     /// Interaction logic for ProductionAnalysisWindow.xaml

@@ -8,10 +8,10 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using FactorSADEfficiencyOptimizer.Models;
-using WPFTesting.Data;
-using WPFTesting.Models;
-using WPFTesting.Shapes;
-using WPFTesting.ViewModel;
+using FactorySADEfficiencyOptimizer.Data;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
+using FactorySADEfficiencyOptimizer.ViewModel;
 
 namespace FactorSADEfficiencyOptimizer.ViewModel;
 public class AnalizorModel : INotifyPropertyChanged

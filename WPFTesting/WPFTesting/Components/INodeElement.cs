@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WPFTesting.Shapes;
+using FactorySADEfficiencyOptimizer.Shapes;
 
-namespace WPFTesting.Components
+namespace FactorySADEfficiencyOptimizer.Components
 {
     public interface INodeElement
     {

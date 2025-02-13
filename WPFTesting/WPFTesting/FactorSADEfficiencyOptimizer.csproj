@@ -14,6 +14,10 @@
 
   <ItemGroup>
     <None Remove="Resources\PackageIcon.png" />
+    <None Remove="UIComponent\Resources\CriticalFailIcon.png" />
+    <None Remove="UIComponent\Resources\MinorFailIcon.png" />
+    <None Remove="UIComponent\Resources\SuccessIcon.png" />
+    <None Remove="UIComponent\Resources\UnrunTargetIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +37,10 @@
 
   <ItemGroup>
     <Resource Include="Resources\PackageIcon.png" />
+    <Resource Include="UIComponent\Resources\CriticalFailIcon.png" />
+    <Resource Include="UIComponent\Resources\MinorFailIcon.png" />
+    <Resource Include="UIComponent\Resources\SuccessIcon.png" />
+    <Resource Include="UIComponent\Resources\UnrunTargetIcon.png" />
   </ItemGroup>
 
 </Project>

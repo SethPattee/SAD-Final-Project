@@ -4,12 +4,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Documents;
-using WPFTesting.Data;
-using WPFTesting.Models;
-using WPFTesting.Shapes;
+using FactorySADEfficiencyOptimizer.Data;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Shapes;
 using YourNamespace;
 
-namespace WPFTesting.ViewModel;
+namespace FactorySADEfficiencyOptimizer.ViewModel;
 
 public class SupplyChainViewModel : INotifyPropertyChanged
 {

@@ -7,18 +7,18 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using WPFTesting.Data;
-using WPFTesting.Shapes;
-using WPFTesting.ViewModel;
-using WPFTesting.Models;
-using WPFTesting;
+using FactorySADEfficiencyOptimizer.Data;
+using FactorySADEfficiencyOptimizer.Shapes;
+using FactorySADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer;
 using System.Windows.Documents;
 using System.Windows.Data;
 using System.Reflection;
-using WPFTesting.Components;
+using FactorySADEfficiencyOptimizer.Components;
 using System.Net;
 using System.Xml.Linq;
-using WPFTesting.UIComponent;
+using FactorySADEfficiencyOptimizer.UIComponent;
 using System.Diagnostics;
 using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
@@ -981,11 +981,6 @@ namespace YourNamespace
             var BillWindow = new BillofMaterials();
             BillWindow.Owner = this;
             BillWindow.Show();
-        }
-
-        private void EndpointProductList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)

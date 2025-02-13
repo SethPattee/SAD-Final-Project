@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
-using WPFTesting.Models;
+using FactorySADEfficiencyOptimizer.Models;
 
-namespace WPFTesting.Data;
+namespace FactorySADEfficiencyOptimizer.Data;
 
 public class ProductConverter : IValueConverter
 {
