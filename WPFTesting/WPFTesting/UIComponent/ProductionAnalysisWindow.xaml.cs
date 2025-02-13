@@ -66,7 +66,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             for (int i = 0; i < 25; i++)
             {
                 var lg = new LineGraph();
-                lines.Children.Add(lg);
+                linegraph.Children.Add(lg);
                 lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
                 lg.Description = String.Format("Data series {0}", i + 1);
                 lg.StrokeThickness = 2;
