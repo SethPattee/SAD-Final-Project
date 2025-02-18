@@ -83,6 +83,12 @@ public class AnalizorModel : INotifyPropertyChanged
 			OnPropertyChanged(nameof(IssueLog));
 		}
 	}
+	private ObservableCollection<Snapshot> _snapshot = new ObservableCollection<Snapshot>();
+	public ObservableCollection<Snapshot> Snapshots
+	{
+		get { return _snapshot; }
+		set { _snapshot = value; OnPropertyChanged(nameof(Snapshot));}
+	}
 	private int _currentDay = 1;
 	public int CurrentDay
 	{
@@ -135,7 +141,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		}
 	}
 
-	private static SupplierUIValues makeIdenticalSupplierWithoutConnections(SupplierUIValues supplier)
+	public static SupplierUIValues makeIdenticalSupplierWithoutConnections(SupplierUIValues supplier)
 	{
 		SupplierUIValues sup = new SupplierUIValues();
 		sup.supplier = new Supplier();
@@ -147,7 +153,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		return sup;
 	}
 
-	private static EndpointUIValues makeIdenticalEndpointWithoutConections(EndpointUIValues endpoint)
+	public static EndpointUIValues makeIdenticalEndpointWithoutConections(EndpointUIValues endpoint)
 	{
 		EndpointUIValues end = new EndpointUIValues();
 		end.supplier = new EndpointNode();
@@ -162,7 +168,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		return end;
 	}
 
-	private static ObservableCollection<Product> makeIdenticalColectionOfProductsNoConnections(ObservableCollection<Product> products)
+	public static ObservableCollection<Product> makeIdenticalColectionOfProductsNoConnections(ObservableCollection<Product> products)
 	{
 		var prods = new ObservableCollection<Product>();
 		foreach (var ep in products)
@@ -173,7 +179,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		return prods;
 	}
 
-	private static Product makeIdenticalProductWithoutConections(Product ep)
+	public static Product makeIdenticalProductWithoutConections(Product ep)
 	{
 		Product p = new Product();
 		p.ProductName = ep.ProductName;
