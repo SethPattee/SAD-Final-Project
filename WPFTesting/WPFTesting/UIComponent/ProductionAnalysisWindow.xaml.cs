@@ -42,25 +42,14 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             } 
         }
         public ProductionTarget TargetProductionTarget { get; set; }
-		private int _daystorun;
-        public int DaysToRun { 
-            get
-            {
-                return _daystorun;
-            }
-            set
-            {
-                _daystorun = value;
-                OnPropertyChanged(nameof(DaysToRun));
-            }
-        }
+
 
         public ProductionAnalysisWindow(SupplyChainViewModel model)
         {
             InitializeComponent();
             simModel = new AnalizorModel(model);
             this.DataContext = this;
-            DaysToRun = 1;
+            simModel.DaysToRun = 1;
             double[] x = new double[200];
             for (int i = 0; i < x.Length; i++)
                 x[i] = 3.1415 * i / (x.Length - 1);
@@ -68,10 +57,10 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             for (int i = 0; i < 25; i++)
             {
                 var lg = new LineGraph();
-                linegraph.Children.Add(lg);
                 lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
                 lg.Description = String.Format("Data series {0}", i + 1);
                 lg.StrokeThickness = 2;
+                linegraph.Children.Add(lg);
                 lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
             }
             //UpdatePlot();
@@ -84,13 +73,13 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             if (AnalysisPeriodValue is null)
                 return;
 
-            if (DaysToRun >= 8)
+            if (simModel.DaysToRun >= 8)
             {
                 AnalysisPeriodValue.Background = new SolidColorBrush(Colors.AliceBlue);
             }
-            else if (DaysToRun < 1)
+            else if (simModel.DaysToRun < 1)
             {
-                DaysToRun = 1;
+                simModel.DaysToRun = 1;
                 AnalysisPeriodValue.Background = new SolidColorBrush(Colors.Transparent);
             }
             else
@@ -117,7 +106,9 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             {
                 if (e.Key == Key.Enter)
                 {
-                    Int32.TryParse(textBox.Text, out _daystorun);
+                    int i = 0;
+                    Int32.TryParse(textBox.Text, out i);
+                    simModel.DaysToRun = i;
                     Keyboard.ClearFocus();
                 }
                 else if (e.Key == Key.Escape)
@@ -131,7 +122,9 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         {
             if(sender is TextBox tb)
             {
-                Int32.TryParse(tb.Text, out _daystorun);
+                int i = 0;
+                Int32.TryParse(tb.Text, out i);
+                simModel.DaysToRun = i;
             }
         }
 
@@ -160,6 +153,13 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
             simModel.PassTimeUntilDuration(simModel.DaysToRun);
+            linegraph.Children.Clear();
+
+        }
+
+        private void RenderLineResults()
+        {
+
         }
 
         private void OpenShipmentWindow_Click(object? sender, RoutedEventArgs? e)
