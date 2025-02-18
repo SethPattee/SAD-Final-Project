@@ -92,6 +92,17 @@ public class AnalizorModel : INotifyPropertyChanged
 			OnPropertyChanged(nameof(CurrentDay));
 		}
 	}
+	private double _daysToRun = 1;
+	public double DaysToRun
+	{
+		get => _daysToRun;
+		set
+		{
+			_daysToRun = value;
+			OnPropertyChanged(nameof(DaysToRun));
+		}
+	}
+
     public AnalizorModel(SupplyChainViewModel model)
 	{
 		ShortestPath = "";
