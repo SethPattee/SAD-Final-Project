@@ -85,6 +85,7 @@
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="6*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <CheckBox Grid.Column="0" IsChecked="{Binding IsTargetEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
@@ -99,7 +100,7 @@
                                             VerticalAlignment="Center"/>
                                         <Image Height="48">
                                             <Image.Source>
-                                                <BitmapImage DecodePixelHeight="48"
+                                                <BitmapImage DecodePixelHeight="24"
                                                              UriSource=".\Resources\UnrunTargetIcon.png">
                                                 </BitmapImage>
                                             </Image.Source>
@@ -140,7 +141,7 @@
         <Grid Name="lines" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="4 0 0 0">
             <Border Background="LightGray" BorderBrush="DarkGray" BorderThickness="1">
                 <d3:Chart x:Name="plotter" BottomTitle="Bottom" LeftTitle="Left">
-                    <d3:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="RoyalBlue" StrokeThickness="3"/>
+                    <d3:LineGraph x:Name="linegraph" Stroke="RoyalBlue" StrokeThickness="3"/>
                 </d3:Chart>
             </Border>
         </Grid>
