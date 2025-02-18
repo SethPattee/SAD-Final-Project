@@ -13,4 +13,5 @@ public record Issue
 
 	public StatusEnum Severity;
 	public Change Solution { get; set; } = new Change();
+	public ProductionTarget ProductionTarget { get; set; }
 }

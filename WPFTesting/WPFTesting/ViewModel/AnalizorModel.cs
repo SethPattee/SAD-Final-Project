@@ -291,9 +291,10 @@ public class AnalizorModel : INotifyPropertyChanged
 								{
 									Action = ActionEnum.addedShipment,
 									neededProduct = toOrder
-								}
+								},
+								ProductionTarget = target,
 							};
-							IssueLog.Add(issue);
+							IssueLog.Add(issue); 
 							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });
 							PlaceOrderFor(toOrder, endpoint);
 						}
