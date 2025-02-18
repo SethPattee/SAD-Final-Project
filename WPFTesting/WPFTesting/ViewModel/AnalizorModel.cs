@@ -123,22 +123,53 @@ public class AnalizorModel : INotifyPropertyChanged
 			AddEndpoint(end);
 		}
 		foreach (Shipment shipment in model.ShipmentList) {
-			Shipment ship = new Shipment();
-			ship.Sender = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Sender.Id)?.supplier ?? new Supplier();
-			if (shipment.Sender is EndpointNode endpoint)
-			{
-				ship.Receiver = EndpointList.FirstOrDefault(e => e.supplier.Id == shipment.Receiver.Id)?.supplier ?? new EndpointNode();
-			}
-			else
-			{
-				ship.Receiver = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Receiver.Id)?.supplier ?? new Supplier();
-			}
+			Shipment ship = ShipmentWithSenderReciver(shipment);
 			ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
 			ship.ToJoiningBoxCorner = "";
 			ship.FromJoiningBoxCorner = "";
 			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
 			AddShipment(ship);
 		}
+		Snapshots.Add(MakeCurrentSnapShot());
+	}
+	public Snapshot MakeCurrentSnapShot()
+	{
+		Snapshot snapshot = new Snapshot();
+		foreach (var supplier in SupplierList)
+		{
+			SupplierUIValues sup = makeIdenticalSupplierWithoutConnections(supplier);
+			snapshot.Suppliers.Add(supplier);
+		}
+		foreach (EndpointUIValues endpoint in EndpointList)
+		{
+			EndpointUIValues end = makeIdenticalEndpointWithoutConections(endpoint);
+			snapshot.Endpoints.Add(end);
+		}
+		foreach (Shipment shipment in ShipmentList)
+		{
+			Shipment ship = ShipmentWithSenderReciver(shipment);
+			ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
+			ship.ToJoiningBoxCorner = "";
+			ship.FromJoiningBoxCorner = "";
+			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
+			snapshot.Shipments.Add(ship);
+		}
+		return snapshot;
+	}
+
+	private Shipment ShipmentWithSenderReciver(Shipment shipment)
+	{
+		Shipment ship = new Shipment();
+		ship.Sender = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Sender.Id)?.supplier ?? new Supplier();
+		if (shipment.Sender is EndpointNode endpoint)
+		{
+			ship.Receiver = EndpointList.FirstOrDefault(e => e.supplier.Id == shipment.Receiver.Id)?.supplier ?? new EndpointNode();
+		}
+		else
+		{
+			ship.Receiver = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Receiver.Id)?.supplier ?? new Supplier();
+		}
+		return ship;
 	}
 
 	public static SupplierUIValues makeIdenticalSupplierWithoutConnections(SupplierUIValues supplier)
