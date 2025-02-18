@@ -17,17 +17,11 @@ namespace SupplyChainTesting;
 
 public class SimulatorTests
 {
-	SupplyChainViewModel setupTest()
-	{
-		IInitializedDataProvider data = new DataProvider_FAKE_Version3();
-		SupplyChainViewModel model = new SupplyChainViewModel(data);
-		model.Load();
-		return model;
-	}
+	
 	[Test]
     public void ChangesToAnalizorModelSupplierDoesNotChangeCurrentViewModel()
     {
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
 		simulation.SupplierList.First().supplier.Name = "I Don't want to find ThIs:(";
 		simulation.SupplierList.First().supplier.ProductInventory = new ObservableCollection<Product>() { };
@@ -41,7 +35,7 @@ public class SimulatorTests
 	[Test]
 	public void ChangesToAnalizorModelShipmentDoesNotChangeCurrentViewModel()
 	{
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
 		simulation.ShipmentList.First().Sender.Name = "I Don't want to find ThIs:(";
 		simulation.ShipmentList.First().Receiver.Name = "I Don't want to find ThIs:(";
@@ -57,7 +51,7 @@ public class SimulatorTests
 	[Test]
 	public void ChangesToAnalizorModelEndpointDoesNotChangeCurrentViewModel()
 	{
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
 		simulation.EndpointList.First().supplier.Name = "I Don't want to find ThIs:(";
 		simulation.EndpointList.First().supplier.ProductInventory = new ObservableCollection<Product>() { };
@@ -69,12 +63,36 @@ public class SimulatorTests
 		}
 	}
 	[Test]
+	public void AdvanceTimeInSimulationDoesNotChangeTheViewModel()
+	{
+		var model = SimulatorTestsHelpers.setupTest();
+		AnalizorModel simulation = new AnalizorModel(model);
+		int runTime = 5;
+		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: runTime, targetQuantity: runTime);
+		simulation.ProductionTargets.Add(newtarg);
+		simulation.EndpointList.First().supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = runTime * 12; //have enough screws to make the product
+		var prodInModel = model.EndpointList.First().supplier.ProductInventory.First();
+		var prodInSimulation = simulation.EndpointList.First().supplier.ProductInventory.First();
+		Assert.That(prodInModel.ProductName, Is.EqualTo(prodInSimulation.ProductName));
+		Assert.That(prodInModel.ProductName, Is.EqualTo("box"));
+		Assert.That(prodInModel.Quantity, Is.EqualTo(prodInSimulation.Quantity));
+		var modelsPrevQuant = prodInModel.Quantity;
+		var simPrevQuant = prodInSimulation.Quantity;
+		simulation.PassTimeUntilDuration(runTime);
+		prodInModel = model.EndpointList.First().supplier.ProductInventory.First();
+		prodInSimulation = simulation.EndpointList.First().supplier.ProductInventory.First();
+		Assert.That(prodInModel.Quantity, Is.EqualTo(modelsPrevQuant));
+		Assert.That(prodInSimulation.Quantity, Is.EqualTo(simPrevQuant + runTime)); //should have made a new product per day
+
+
+	}
+	[Test]
 	public void AnalyzerGetsDailyQuotaForTargetProduct()
 	{
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
 		Assert.That(simulation.CurrentDay, Is.EqualTo(1));
-		ProductionTarget newtarg = MakeProductionTarget(dateDue: 2, targetQuantity: 1);
+		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
 		Product product = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
@@ -84,9 +102,9 @@ public class SimulatorTests
 	[Test]
 	public void AnalyzerGetsNeededComponentsForTargetProduct()
 	{
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
-		ProductionTarget newtarg = MakeProductionTarget(dateDue: 2, targetQuantity: 1);
+		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
 		ProductLine productLine = ((EndpointNode)endpoint.supplier).ProductionList.First();
@@ -100,9 +118,9 @@ public class SimulatorTests
 	[Test]
 	public void AnalyzerOrdersNeededComponentsForTargetProduct()
 	{
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
-		ProductionTarget newtarg = MakeProductionTarget(dateDue: 2, targetQuantity: 1);
+		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
 		endpoint.supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = 2;
@@ -117,7 +135,7 @@ public class SimulatorTests
 	[Test]
 	public void AnalyzersPlaceOrderForMethodPlacesAnOrder()
 	{
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
 		Product product = new Product()
 		{
@@ -136,9 +154,9 @@ public class SimulatorTests
 	[Test]
 	public void AnalyzerWillProduceEnoughForOneProductionTarget()
 	{
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
-		ProductionTarget newtarg = MakeProductionTarget(dateDue: 10, targetQuantity: 10); //box takes 12 screws and 10 wood
+		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 10, targetQuantity: 10); //box takes 12 screws and 10 wood
 												// endpoint has 20 screws and 1000 wood
 												// 'Vendor 3'  has screws 
 		(simulation.SupplierList
@@ -161,31 +179,14 @@ public class SimulatorTests
 		Assert.That(shipmentProd.Quantity, Is.EqualTo(100));
 	}
 
-	private static ProductionTarget MakeProductionTarget(int dateDue, int targetQuantity)
-	{
-		return new ProductionTarget()
-		{
-			DueDate = dateDue,
-			InitAmount = 0,
-			IsTargetEnabled = true,
-			Status = 0,
-			ProductTarget = new Product()
-			{
-				Quantity = 0,
-				ProductName = "box"
-			},
-			TargetQuantity = targetQuantity
-		};
-	}
-
 	[Test]
 	public void AnalizorModelHasAListOfIssuesThatShowsWhenErrorsWereHit()
 	{
-		var model = setupTest();
+		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
 		Assert.That(simulation.ChangeLog, Is.Empty);
 		Assert.That(simulation.IssueLog, Is.Empty);
-		ProductionTarget newtarg = MakeProductionTarget(targetQuantity: 10, dateDue: 10);
+		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(targetQuantity: 10, dateDue: 10);
 		(simulation.SupplierList
 			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
 			?.supplier.ProductInventory

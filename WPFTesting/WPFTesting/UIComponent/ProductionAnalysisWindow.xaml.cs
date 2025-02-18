@@ -30,6 +30,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
     /// </summary>
     public partial class ProductionAnalysisWindow : Window, INotifyPropertyChanged
     {
+        public double ProdTargetListWidth { get; set; }
         private AnalizorModel _simModel;
         public AnalizorModel simModel { 
             get => _simModel;
@@ -153,8 +154,8 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
             };
             simModel.ProductionTargets.Add(newtarg);
+            //ResizeAnyProductionTargetRows();
             OnPropertyChanged(nameof(simModel));
-            
         }
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
@@ -197,6 +198,18 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 simModel.ShipmentList = new ObservableCollection<Shipment>(convertedShipments);
             }
         }
+
+        //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    ResizeAnyProductionTargetRows();
+        //}
+
+        //private void ResizeAnyProductionTargetRows()
+        //{
+        //    ProdTargetListWidth = ProdTargetList.ActualWidth - 16;
+        //    OnPropertyChanged(nameof(ProdTargetListWidth));
+        //}
+
         //private void UpdatePlot()
         //{
         //    if (linegraph == null) return;

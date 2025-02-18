@@ -9,8 +9,11 @@
         xmlns:converter="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent.Converters"
         mc:Ignorable="d" DataContext="{Binding simModel}"
         Title="ProductionAnalysisWindow"
-        Background="Transparent" Height="450" Width="800"
+        Height="450" Width="800"
         WindowStyle="ToolWindow">
+    <Window.Background>
+        <SolidColorBrush Color="DarkGray"></SolidColorBrush>
+    </Window.Background>
     <Window.Resources>
         <converter:MarginConverter x:Key="marginConverter"></converter:MarginConverter>
     </Window.Resources>
@@ -51,15 +54,31 @@
             </DockPanel>
             <Border Grid.Row="1" Background="DarkGray" Padding="8" x:Name="ProductionTargList">
                 <StackPanel Orientation="Vertical">
-                    
+                    <Border BorderThickness="0 0 0 1" BorderBrush="black">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                <ColumnDefinition Width="6*"></ColumnDefinition>
+                                <ColumnDefinition Width="6*"></ColumnDefinition>
+                                <ColumnDefinition Width="8*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Enabled"></TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Grid.Column="1" Text="Item"></TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Grid.Column="2" Text="Target Quantity"></TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Grid.Column="3" Text="Target Day"></TextBlock>
+                            <TextBlock HorizontalAlignment="Left" Grid.Column="4" Text="Status"></TextBlock>
+                        </Grid>
+                    </Border>
                     <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1"
-                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ProdTargetList"
                               ItemsSource="{Binding ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding TargetProductionTarget}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="LightGray" Height="48"
-                                    Width="{Binding RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}, Mode=OneWay, Converter={StaticResource marginConverter}}">
+                                      Width="{Binding ElementName=ProdTargetList, Path=ActualWidth, Mode=OneWay, 
+                                    UpdateSourceTrigger=PropertyChanged, Converter={StaticResource marginConverter}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
@@ -73,8 +92,8 @@
                                              FontSize="16"></TextBox>
                                     <TextBox Grid.Column="2" FontSize="16" Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
                                     <TextBox Grid.Column="3" FontSize="16" Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
-                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="0">
-                                        <TextBlock Text="Not Run" FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0"></TextBlock>
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="10 0 0 0">
+                                        <TextBlock Text="Not Run" FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0" VerticalAlignment="Center"></TextBlock>
                                         <Image Height="48">
                                             <Image.Source>
                                                 <BitmapImage DecodePixelHeight="48"
@@ -119,38 +138,32 @@
             <Border Background="LightGray" BorderBrush="DarkGray" BorderThickness="1">
                 <d3:Chart x:Name="plotter" BottomTitle="Bottom" LeftTitle="Left">
                     <d3:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="RoyalBlue" StrokeThickness="3"/>
-                    </d3:Chart>
+                </d3:Chart>
             </Border>
         </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="1" Margin="4 0 0 0">
-            <Border Margin="0 4 0 10" BorderBrush="Bisque" Background="SandyBrown" CornerRadius="6">
-                <Button Background="Transparent" BorderThickness="0" x:Name="CheckShipmentButton"
-                        Click="OpenShipmentWindow_Click">
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Check Shipments" FontSize="18" TextWrapping="Wrap" 
-                                       Foreground="AntiqueWhite" VerticalAlignment="Center" 
-                                       MaxWidth="100" TextAlignment="Right" FontWeight="SemiBold"></TextBlock>
-                            <Image Panel.ZIndex="3" Margin="5 1 1 1" Width="50" Height="50" Source="../Resources/PackageIcon.png"></Image>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-            </Border>
-        </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="2">
-            <Border BorderBrush="CornflowerBlue" Background="DodgerBlue" BorderThickness="1" CornerRadius="50" Margin="5 10 5 10">
-                <Button Background="Transparent" BorderThickness="0" Click="StartSim_Click">
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Start Sim" FontSize="28" TextWrapping="Wrap" Foreground="AntiqueWhite" 
+        <Border Grid.Row="1" Grid.Column="1" Margin="4 4 0 10" BorderBrush="Bisque" BorderThickness="1" Background="SandyBrown" CornerRadius="6">
+            <Button Background="Transparent" BorderThickness="0" x:Name="CheckShipmentButton"
+                    Click="OpenShipmentWindow_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Check Shipments" FontSize="18" TextWrapping="Wrap" 
+                                    Foreground="AntiqueWhite" VerticalAlignment="Center" 
+                                    MaxWidth="100" TextAlignment="Right" FontWeight="SemiBold"></TextBlock>
+                        <Image Panel.ZIndex="3" Margin="5 1 1 1" Width="50" Height="50" Source="../Resources/PackageIcon.png"></Image>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="2" BorderBrush="SkyBlue" Background="DodgerBlue" BorderThickness="1" CornerRadius="50" Margin="5 5 5 10">
+            <Button Background="Transparent" BorderThickness="0" Click="StartSim_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Start Sim" FontSize="28" TextWrapping="Wrap" Foreground="AntiqueWhite" 
                                        VerticalAlignment="Center" Margin="0 0 4 0" FontWeight="SemiBold"></TextBlock>
-                            <Polygon Points="0,40 30,20 0,0" Height="40" Fill="AntiqueWhite" VerticalAlignment="Bottom"></Polygon>
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-            </Border>
-        </Grid>
+                        <Polygon Points="0,40 30,20 0,0" Height="40" Fill="AntiqueWhite" VerticalAlignment="Bottom"></Polygon>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </Border>
     </Grid>
 </Window>
