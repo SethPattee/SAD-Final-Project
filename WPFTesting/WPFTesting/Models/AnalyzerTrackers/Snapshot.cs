@@ -10,8 +10,8 @@ namespace FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 
 public class Snapshot
 {
-	public List<EndpointUIValues> Endpoints { get; set; }
-	public List<Shipment> Shipments { get; set; }
-	public List<SupplierUIValues> Suppliers { get; set; }
-	public List<ProductionTarget> Targets { get; set; }
+	public List<EndpointUIValues> Endpoints { get; set; } = new List<EndpointUIValues>();
+	public List<Shipment> Shipments { get; set; } = new List<Shipment>();
+	public List<SupplierUIValues> Suppliers { get; set; } = new List<SupplierUIValues>();
+	public List<ProductionTarget> Targets { get; set; } = new List<ProductionTarget>(); 
 }
