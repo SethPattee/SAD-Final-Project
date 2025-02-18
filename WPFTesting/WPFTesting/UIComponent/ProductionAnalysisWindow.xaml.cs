@@ -159,7 +159,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         }
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
-            simModel.PassTimeUntilDuration(_daystorun);
+            simModel.PassTimeUntilDuration(simModel.DaysToRun);
         }
 
         private void OpenShipmentWindow_Click(object? sender, RoutedEventArgs? e)
