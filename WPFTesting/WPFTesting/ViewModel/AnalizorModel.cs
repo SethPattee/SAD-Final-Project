@@ -214,13 +214,14 @@ public class AnalizorModel : INotifyPropertyChanged
 		ToolsForViewModel.AdvanceTimeForEndpointList(EndpointList);
 	}
 
-	public void PassTimeUntilDuration(int duration)
+	public void PassTimeUntilDuration(double duration)
 	{
 		OrderMissingComponents();
-		for (int i = 0; i < duration; i++)
+		for (double i = 0; i < duration; i++)
 		{
 			AdvanceTime();
 			UpdateProducitonTargets();
+			CurrentDay++;
 		}
 	}
 	private void UpdateProducitonTargets()
@@ -290,7 +291,7 @@ public class AnalizorModel : INotifyPropertyChanged
 								Solution = new Change()
 								{
 									Action = ActionEnum.addedShipment,
-									neededProduct = toOrder
+									neededProduct = toOrder,
 								},
 								ProductionTarget = target,
 							};
