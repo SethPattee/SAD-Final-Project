@@ -177,8 +177,8 @@ public class AnalizorModel : INotifyPropertyChanged
 		SupplierUIValues sup = new SupplierUIValues();
 		sup.supplier = new Supplier();
 		sup.supplier.Name = supplier.supplier.Name;
-		sup.supplier.ComponentInventory = supplier.supplier.ComponentInventory;
-		sup.supplier.ProductInventory = supplier.supplier.ProductInventory;
+		sup.supplier.ComponentInventory = makeIdenticalColectionOfProductsNoConnections(supplier.supplier.ComponentInventory);
+		sup.supplier.ProductInventory = makeIdenticalColectionOfProductsNoConnections(supplier.supplier.ProductInventory);
 		sup.supplier.Id = supplier.supplier.Id;
 		sup.Position = new System.Drawing.Point();
 		return sup;
