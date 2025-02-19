@@ -130,7 +130,14 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
         private void AddTargetButton_Click(object sender, RoutedEventArgs e)
         {
-            ProductionTarget newtarg = new ProductionTarget()
+            ProductionTarget newtarg = GetNewProductionTarget();
+            simModel.ProductionTargets.Add(newtarg);
+            OnPropertyChanged(nameof(simModel));
+        }
+
+        private static ProductionTarget GetNewProductionTarget()
+        {
+            return new ProductionTarget()
             {
                 DueDate = 3,
                 CurrentAmount = 0,
@@ -138,18 +145,15 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 Status = 0,
                 ProductTarget = new Product()
                 {
-                    ProductName = "New Product",
+                    ProductName = "Target item",
                     Price = 1,
                     Quantity = 1,
                     Units = ""
                 },
                 TargetQuantity = 1
-
             };
-            simModel.ProductionTargets.Add(newtarg);
-            //ResizeAnyProductionTargetRows();
-            OnPropertyChanged(nameof(simModel));
         }
+
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
             simModel.PassTimeUntilDuration(simModel.DaysToRun);
@@ -159,6 +163,13 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
         private void RenderLineResults()
         {
+            double[] GraphDays = new double[(int)simModel.DaysToRun];
+            for (int i = 0; i < simModel.DaysToRun; i++)
+            {
+                GraphDays[i] = i;
+            }
+
+            
 
         }
 

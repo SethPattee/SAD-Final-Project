@@ -390,4 +390,6 @@ public class AnalizorModel : INotifyPropertyChanged
 			}
 		}
 	}
+
+
 }
