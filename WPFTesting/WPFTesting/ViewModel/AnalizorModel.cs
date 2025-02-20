@@ -147,14 +147,20 @@ public class AnalizorModel : INotifyPropertyChanged
 		}
 		foreach (Shipment shipment in ShipmentList)
 		{
-			Shipment ship = ShipmentWithSenderReciver(shipment);
-			ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
-			ship.ToJoiningBoxCorner = "";
-			ship.FromJoiningBoxCorner = "";
-			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
+			Shipment ship = makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(shipment);
 			snapshot.Shipments.Add(ship);
 		}
 		return snapshot;
+	}
+
+	private Shipment makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(Shipment shipment)
+	{
+		Shipment ship = ShipmentWithSenderReciver(shipment);
+		ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
+		ship.ToJoiningBoxCorner = "";
+		ship.FromJoiningBoxCorner = "";
+		// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
+		return ship;
 	}
 
 	private Shipment ShipmentWithSenderReciver(Shipment shipment)
@@ -253,6 +259,7 @@ public class AnalizorModel : INotifyPropertyChanged
 
 	public void PassTimeUntilDuration(double duration)
 	{
+		ResetStatetoFirstSnapShot();
 		OrderMissingComponents();
 		for (double i = 0; i < duration; i++)
 		{
@@ -262,6 +269,31 @@ public class AnalizorModel : INotifyPropertyChanged
 			CurrentDay++;
 		}
 		UpdateProducitonTargets(isLastGo: true);
+	}
+	private void ResetStatetoFirstSnapShot()
+	{
+		Snapshot initValues = Snapshots[0];
+		EndpointList.Clear();
+		foreach (var end in initValues.Endpoints)
+		{
+			EndpointList.Add(makeIdenticalEndpointWithoutConections(end));
+		}
+		SupplierList.Clear();
+		foreach (var sup in initValues.Suppliers)
+		{
+			SupplierList.Add(makeIdenticalSupplierWithoutConnections(sup));
+		}
+		ShipmentList.Clear();
+		foreach (var shipment in initValues.Shipments)
+		{
+			ShipmentList.Add(makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(shipment));
+		}
+		// we want to keep produciton targets as is
+		CurrentDay = 1;
+		ChangeLog.Clear();
+		IssueLog.Clear();
+		Snapshots.Clear();
+		Snapshots.Add(initValues);
 	}
 	private void UpdateProducitonTargets(bool isLastGo = false)
 	{

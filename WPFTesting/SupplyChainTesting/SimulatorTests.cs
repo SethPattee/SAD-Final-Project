@@ -82,9 +82,6 @@ public class SimulatorTests
 		prodInModel = model.EndpointList.First().supplier.ProductInventory.First();
 		prodInSimulation = simulation.EndpointList.First().supplier.ProductInventory.First();
 		Assert.That(prodInModel.Quantity, Is.EqualTo(modelsPrevQuant));
-		Assert.That(prodInSimulation.Quantity, Is.EqualTo(simPrevQuant + runTime)); //should have made a new product per day
-
-
 	}
 	[Test]
 	public void AnalyzerGetsDailyQuotaForTargetProduct()
@@ -224,12 +221,10 @@ public class SimulatorTests
 	{
 		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
-		SimulatorTestsHelpers.SetUpModelForChangeLogsFiveDayTenProductFailureSim(simulation);
+		SimulatorTestsHelpers.SetUpModelForChangeLogsTenDaySim(simulation);//will pass
+		simulation.PassTimeUntilDuration(5);//run again with only 5 days will fail
+		// it should have reset from the previous run if it didn't then it will claim it hit 10 products
 		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Failure));
-		simulation.ProductionTargets.First().DueDate = 10;
-		simulation.PassTimeUntilDuration(10);
-		//should be failing
-		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
 	}
 
 }
