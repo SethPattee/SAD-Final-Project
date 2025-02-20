@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:FactorySADEfficiencyOptimizer.UIComponent"
         xmlns:classes="clr-namespace:FactorySADEfficiencyOptimizer.ViewModel"
         xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:converter="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent.Converters"
         mc:Ignorable="d" DataContext="{Binding simModel}"
         Title="ProductionAnalysisWindow"
@@ -155,6 +156,14 @@
                 </d3:Chart>
             </Border>
         </Grid>
+
+        <Border Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
+            <DockPanel>
+                <TextBlock Text="Pick a line color:" Margin="0 0 10 0"></TextBlock>
+                <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"></xctk:ColorPicker>
+            </DockPanel>
+        </Border>
+        
         <Border Grid.Row="2" Grid.Column="1" Margin="4 4 0 10" BorderBrush="Bisque" BorderThickness="1" Background="SandyBrown" CornerRadius="6">
             <Button Background="Transparent" BorderThickness="0" x:Name="CheckShipmentButton"
                     Click="OpenShipmentWindow_Click">

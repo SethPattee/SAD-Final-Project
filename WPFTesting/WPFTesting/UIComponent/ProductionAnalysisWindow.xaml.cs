@@ -231,6 +231,15 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 simModel.ShipmentList = new ObservableCollection<Shipment>(convertedShipments);
             }
         }
+
+        private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            foreach (var item in linegraph.Children.OfType<LineGraph>())
+            {
+                if(e is not null)
+                    item.Stroke = new SolidColorBrush((Color)e.NewValue!);
+            }
+        }
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         //{
         //    ResizeAnyProductionTargetRows();
