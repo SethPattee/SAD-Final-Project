@@ -140,7 +140,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             ProductionTarget newtarg = new ProductionTarget()
             {
                 DueDate = 3,
-                InitAmount = 0,
+                CurrentAmount = 0,
                 IsTargetEnabled = true,
                 Status = 0,
                 ProductTarget = new Product()

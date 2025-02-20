@@ -12,7 +12,7 @@ namespace FactorSADEfficiencyOptimizer.Models
         public Product? ProductTarget {  get; set; }
         public float TargetQuantity { get; set; }
         public int DueDate { get; set; }
-        public float InitAmount { get; set; }
+        public float CurrentAmount { get; set; }
         public StatusEnum Status {  get; set; }
         public bool IsTargetEnabled { get; set; }
     }

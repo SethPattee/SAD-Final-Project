@@ -199,12 +199,13 @@ public class SimulatorTests
 	//	Assert.That(shipmentProd.Quantity, Is.EqualTo(28));
 	//	// should have a failure status for produciton Target
 	//	Assert.That(newtarg.Status, Is.EqualTo(StatusEnum.Failure));
-	//[Test]
-	//public void ModelSetsTargetToSuccessWhenSimulationCompletes()
-	//{
-	//	var model = SimulatorTestsHelpers.setupTest();
-	//	AnalizorModel simulation = new AnalizorModel(model);
-	//	SimulatorTestsHelpers.SetUpModelForChangeLogsTenDaySim(simulation);
+	[Test]
+	public void ModelSetsTargetToSuccessWhenSimulationCompletes()
+	{
+		var model = SimulatorTestsHelpers.setupTest();
+		AnalizorModel simulation = new AnalizorModel(model);
+		SimulatorTestsHelpers.SetUpModelForChangeLogsTenDaySim(simulation);
 
-	//}
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
+	}
 }

@@ -258,6 +258,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		{
 			AdvanceTime();
 			UpdateProducitonTargets();
+			Snapshots.Add(MakeCurrentSnapShot());
 			CurrentDay++;
 		}
 	}
@@ -269,7 +270,13 @@ public class AnalizorModel : INotifyPropertyChanged
 			if (endpoint != null)
 			{
 				Product prod = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
-				target.InitAmount = prod.Quantity;
+				target.CurrentAmount = prod.Quantity;
+				if (target.CurrentAmount == target.TargetQuantity)
+				{
+					target.Status = StatusEnum.Success;
+					OnPropertyChanged(nameof(ProductionTargets));
+					(((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine()).IsEnabled = false;
+				}
             }
 		}
 	}
