@@ -50,9 +50,9 @@ namespace FactorySADEfficiencyOptimizer
         public void PopulateElementLists()
         {
             EndpointTitle.Text = NodeUIValues.supplier.Name;
-            ProfitTracker.Text = ((EndpointNode)(NodeUIValues.supplier)).Profit.ToString();
+            ProfitTracker.Text = ((EndpointNode)(NodeUIValues.supplier)).Balance.ToString();
 
-            if(((EndpointNode)(NodeUIValues.supplier)).Profit < 0)
+            if(((EndpointNode)(NodeUIValues.supplier)).Balance < 0)
             {
                 ProfitTracker.Foreground = Brushes.Red;
                 ProfitTrackerDollarSign.Foreground = Brushes.Red;

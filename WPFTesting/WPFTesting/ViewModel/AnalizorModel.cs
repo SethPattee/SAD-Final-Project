@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Numerics;
@@ -195,7 +196,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		end.Position = new System.Drawing.Point();
 		((EndpointNode)end.supplier).DeliveryRequirementsList = ((EndpointNode)endpoint.supplier).DeliveryRequirementsList;
 		((EndpointNode)end.supplier).ProductionList = ((EndpointNode)endpoint.supplier).ProductionList;
-		((EndpointNode)end.supplier).Profit = ((EndpointNode)endpoint.supplier).Profit;
+		((EndpointNode)end.supplier).Balance = ((EndpointNode)endpoint.supplier).Balance;
 		return end;
 	}
 
@@ -299,7 +300,7 @@ public class AnalizorModel : INotifyPropertyChanged
 			Product qp = new Product();
 			qp.ProductName = p.ProductName;
 			qp.Price = p.Price;
-			qp.Quantity = p.Quantity * newtarg.TargetQuantity;
+			qp.Quantity = (float)(p.Quantity * newtarg.TargetQuantity);
 			products.Add(qp);
 		}
 		return products;
@@ -391,5 +392,25 @@ public class AnalizorModel : INotifyPropertyChanged
 		}
 	}
 
+	public double[] GetQuantityPerDayForGraph(string ItemName)
+	{
+		return Snapshots.Where(x =>
+		{
+			return x.Targets.Exists(x =>
+			{
+				if (x.ProductTarget is not null)
+					return x.ProductTarget.ProductName == ItemName;
+				else return false;
+			});
+		})
+		.Select(x => (double)x.Targets.Sum(y => y.TargetQuantity)).ToArray();
+    }
 
+	public double[] GetBalancePerDayForGraph()
+	{
+		return Snapshots.Select<Snapshot,double>(x =>
+		{
+			return (double)x.Endpoints.Sum(item => ((EndpointNode)item.supplier).Balance);
+		}).ToArray();
+	}
 }

@@ -158,7 +158,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         {
             simModel.PassTimeUntilDuration(simModel.DaysToRun);
             linegraph.Children.Clear();
-
+            RenderLineResults();
         }
 
         private void RenderLineResults()
@@ -168,9 +168,23 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             {
                 GraphDays[i] = i;
             }
+            double[] BalancePerDay = simModel.GetBalancePerDayForGraph();
+            var lg = new LineGraph();
+            lg.Stroke = GetIteratedLineColor();
+            lg.Description = "Financial State";
+            lg.StrokeThickness = 1;
+            plotter.BottomTitle = "Day";
+            plotter.LeftTitle = "Balance (in dollars)";
+            plotter.Title = "Balance-Per-Day during production.";
+            plotter.PlotOriginX = 1;
+            plotter.PlotOriginY = BalancePerDay.Min();
+            linegraph.Children.Add(lg);
+        }
 
-            
-
+        private SolidColorBrush GetIteratedLineColor()
+        {
+            Random random = new Random();
+            return new SolidColorBrush(Color.FromArgb(255, (byte)random.Next(0,255), (byte)random.Next(0, 255), (byte)random.Next(0, 255)));
         }
 
         private void OpenShipmentWindow_Click(object? sender, RoutedEventArgs? e)

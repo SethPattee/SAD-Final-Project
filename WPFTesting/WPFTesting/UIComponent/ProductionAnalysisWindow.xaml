@@ -30,7 +30,7 @@
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0">
-            <TextBlock Text="Production Targets:" FontSize="26" FontWeight="Bold"></TextBlock>
+            <TextBlock Text="Production Target Analysis:" FontSize="26" FontWeight="Bold"></TextBlock>
             <TextBlock Text="1. Make production targets from your endpoint." FontWeight="SemiBold"></TextBlock>
             <TextBlock Text="2. Run the simulation, and double-click on the status." FontWeight="SemiBold"></TextBlock>
             
@@ -65,11 +65,11 @@
                     <Border BorderThickness="0 0 0 1" BorderBrush="black">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"></ColumnDefinition>
                                 <ColumnDefinition Width="4*"></ColumnDefinition>
-                                <ColumnDefinition Width="6*"></ColumnDefinition>
-                                <ColumnDefinition Width="6*"></ColumnDefinition>
-                                <ColumnDefinition Width="8*"></ColumnDefinition>
+                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                <ColumnDefinition Width="7*"></ColumnDefinition>
+                                <ColumnDefinition Width="12*"></ColumnDefinition>
+                                <ColumnDefinition Width="10*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Enabled"></TextBlock>
                             <TextBlock HorizontalAlignment="Left" Grid.Column="1" Text="Item"></TextBlock>

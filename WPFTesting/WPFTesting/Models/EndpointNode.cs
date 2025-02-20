@@ -78,13 +78,13 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             OnPropertyChanged(nameof(DeliveryRequirementsList));
         }
     }
-    public decimal Profit
+    public decimal Balance
     {
         get => _profit;
         set
         {
             _profit = value;
-            OnPropertyChanged(nameof(Profit));
+            OnPropertyChanged(nameof(Balance));
         }
     }
 
@@ -192,7 +192,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                 toAdd.Quantity = product.Quantity;
                 ComponentInventory.Add(toAdd);
             }
-            Profit -= product.Price;
+            Balance -= product.Price;
         }
     }
 
@@ -204,10 +204,10 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             var targetindex = ProductInventory.ToList().FindIndex(x => x.ProductName == pitem.ProductName);
             if(ProductInventory[targetindex].Quantity - pitem.Quantity >= 0) {
                 ProductInventory[targetindex].Quantity -= pitem.Quantity;
-                Profit += (decimal)pitem.Quantity * ProductInventory[targetindex].Price;
+                Balance += (decimal)pitem.Quantity * ProductInventory[targetindex].Price;
             } 
             else {
-                Profit += (decimal)ProductInventory[targetindex].Quantity * ProductInventory[targetindex].Price;
+                Balance += (decimal)ProductInventory[targetindex].Quantity * ProductInventory[targetindex].Price;
                 ProductInventory[targetindex].Quantity = 0;
             }
         });
