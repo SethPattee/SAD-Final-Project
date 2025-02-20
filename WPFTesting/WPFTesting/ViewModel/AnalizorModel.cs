@@ -18,7 +18,7 @@ namespace FactorSADEfficiencyOptimizer.ViewModel;
 public class AnalizorModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
-	private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
+    private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
 	public ObservableCollection<EndpointUIValues> EndpointList
 	{
 		get => _endpointList;
@@ -280,7 +280,7 @@ public class AnalizorModel : INotifyPropertyChanged
             }
 		}
 	}
-	public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
+    public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
 	{
 		double neededQuant = newtarg.TargetQuantity - product.Quantity;
 		if (neededQuant > 0)

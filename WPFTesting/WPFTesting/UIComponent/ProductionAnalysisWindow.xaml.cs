@@ -33,7 +33,6 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
     {
         public double ProdTargetListWidth { get; set; }
         private AnalizorModel _simModel;
-        public event EventHandler? ProductionTargetsChanges;
         public AnalizorModel simModel { 
             get => _simModel;
             set
@@ -75,7 +74,6 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 lg.StrokeThickness = 2;
                 lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
             }
-
             //UpdatePlot();
         }
 
@@ -198,13 +196,6 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                     convertedShipments.Add(shipment);
                 }
                 simModel.ShipmentList = new ObservableCollection<Shipment>(convertedShipments);
-            }
-        }
-        private void targetStatusChanged(object? sender, EventArgs? s)
-        {
-            foreach (ProductionTarget targ in simModel.ProductionTargets)
-            {
-                targ.Status = StatusEnum.Failure;
             }
         }
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
