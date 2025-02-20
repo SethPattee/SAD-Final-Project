@@ -199,12 +199,53 @@ public class AnalizorModel : INotifyPropertyChanged
 		end.supplier.ProductInventory = makeIdenticalColectionOfProductsNoConnections(endpoint.supplier.ProductInventory);
 		end.supplier.Id = endpoint.supplier.Id;
 		end.Position = new System.Drawing.Point();
-		((EndpointNode)end.supplier).DeliveryRequirementsList = ((EndpointNode)endpoint.supplier).DeliveryRequirementsList;
-		((EndpointNode)end.supplier).ProductionList = ((EndpointNode)endpoint.supplier).ProductionList;
+		((EndpointNode)end.supplier).DeliveryRequirementsList = makeIdenticalColectionOfProductsNoConnections(((EndpointNode)endpoint.supplier).DeliveryRequirementsList);
+		((EndpointNode)end.supplier).ProductionList = makeIdenticalColectionOfProductionLineNoConnections(((EndpointNode)endpoint.supplier).ProductionList);
 		((EndpointNode)end.supplier).Profit = ((EndpointNode)endpoint.supplier).Profit;
 		return end;
 	}
-
+	public static ObservableCollection<ProductLine> makeIdenticalColectionOfProductionLineNoConnections(ObservableCollection<ProductLine> Lines)
+	{
+		var newLines = new ObservableCollection<ProductLine>();
+		foreach (var line in Lines) {
+			var nl = new ProductLine();
+			nl.ResultingProduct = makeIdenticalProductWithoutConections(line.ResultingProduct);
+			nl.ProductLineId = line.ProductLineId;
+			nl.IsEnabled = line.IsEnabled;
+			nl.Components = makeIdenticalColectionOfProductsNoConnections(line.Components);
+			newLines.Add(nl);
+		}
+		return newLines;
+	}
+	public static ObservableCollection<ProductionTarget> makeIdenticalColectionOfProductionTargetsNoConnections(ObservableCollection<ProductionTarget> targets)
+	{
+		var newTargets = new ObservableCollection<ProductionTarget>();
+		foreach (var target in targets) { 
+			var newtarg = new ProductionTarget();
+			newtarg.ProductTarget = makeIdenticalProductWithoutConections(target.ProductTarget ?? new Product());
+			newtarg.CurrentAmount = target.CurrentAmount;
+			newtarg.DueDate = target.DueDate;
+			StatusEnum temStatus;
+			switch (target.Status)
+			{
+				case (StatusEnum.Success):
+					temStatus = StatusEnum.Success;
+					break;
+				case (StatusEnum.Failure):
+					temStatus = StatusEnum.Failure;
+					break;
+				case (StatusEnum.Warning):
+					temStatus = StatusEnum.Warning;
+					break;
+				default:
+						temStatus = StatusEnum.NotDone;
+					break;
+			}
+			newtarg.Status = temStatus;
+			newtarg.IsTargetEnabled = target.IsTargetEnabled;
+		}
+		return newTargets;
+	}
 	public static ObservableCollection<Product> makeIdenticalColectionOfProductsNoConnections(ObservableCollection<Product> products)
 	{
 		var prods = new ObservableCollection<Product>();
@@ -294,6 +335,10 @@ public class AnalizorModel : INotifyPropertyChanged
 		IssueLog.Clear();
 		Snapshots.Clear();
 		Snapshots.Add(initValues);
+		foreach(ProductionTarget targ in ProductionTargets)
+		{
+			targ.Status = StatusEnum.NotDone;
+		}
 	}
 	private void UpdateProducitonTargets(bool isLastGo = false)
 	{
@@ -308,7 +353,9 @@ public class AnalizorModel : INotifyPropertyChanged
 				{
 					target.Status = StatusEnum.Success;
 					OnPropertyChanged(nameof(target.Status));
-					(((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine()).IsEnabled = false;
+					var pl = (((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
+					pl.IsEnabled = false;
+					OnPropertyChanged(nameof(pl));
 				}
 				else if (isLastGo)
 				{
