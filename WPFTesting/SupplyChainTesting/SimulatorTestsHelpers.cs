@@ -22,7 +22,7 @@ internal static class SimulatorTestsHelpers
 		return new ProductionTarget()
 		{
 			DueDate = dateDue,
-			InitAmount = 0,
+			CurrentAmount = 0,
 			IsTargetEnabled = true,
 			Status = 0,
 			ProductTarget = new Product()

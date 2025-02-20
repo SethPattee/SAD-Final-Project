@@ -18,7 +18,7 @@ namespace FactorSADEfficiencyOptimizer.ViewModel;
 public class AnalizorModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
-	private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
+    private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
 	public ObservableCollection<EndpointUIValues> EndpointList
 	{
 		get => _endpointList;
@@ -258,6 +258,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		{
 			AdvanceTime();
 			UpdateProducitonTargets();
+			Snapshots.Add(MakeCurrentSnapShot());
 			CurrentDay++;
 		}
 	}
@@ -269,11 +270,17 @@ public class AnalizorModel : INotifyPropertyChanged
 			if (endpoint != null)
 			{
 				Product prod = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
-				target.InitAmount = prod.Quantity;
+				target.CurrentAmount = prod.Quantity;
+				if (target.CurrentAmount == target.TargetQuantity)
+				{
+					target.Status = StatusEnum.Success;
+					OnPropertyChanged(nameof(target.Status));
+					(((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine()).IsEnabled = false;
+				}
             }
 		}
 	}
-	public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
+    public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
 	{
 		double neededQuant = newtarg.TargetQuantity - product.Quantity;
 		if (neededQuant > 0)

@@ -22,6 +22,7 @@ using System.Windows.Shapes;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.ViewModel;
+using System.Globalization;
 
 namespace FactorySADEfficiencyOptimizer.UIComponent
 {
@@ -73,7 +74,6 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 lg.StrokeThickness = 2;
                 lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
             }
-
             //UpdatePlot();
         }
 
@@ -140,7 +140,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             ProductionTarget newtarg = new ProductionTarget()
             {
                 DueDate = 3,
-                InitAmount = 0,
+                CurrentAmount = 0,
                 IsTargetEnabled = true,
                 Status = 0,
                 ProductTarget = new Product()
@@ -198,7 +198,6 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 simModel.ShipmentList = new ObservableCollection<Shipment>(convertedShipments);
             }
         }
-
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         //{
         //    ResizeAnyProductionTargetRows();
@@ -222,5 +221,29 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         //}
 
 
+    }
+    public class StatusToTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is StatusEnum status)
+            {
+                return status switch
+                {
+                    StatusEnum.Warning => "WARNING",
+                    StatusEnum.Failure => "FAILURE",
+                    StatusEnum.Success => "SUCCESS",
+                    StatusEnum.NotDone => "Not Run Yet",
+                    _ => "Unknown"
+                };
+            }
+            return "Unknown";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            // Convert back logic (if needed)
+            return Binding.DoNothing;
+        }
     }
 }
