@@ -22,6 +22,7 @@ using FactorySADEfficiencyOptimizer.UIComponent;
 using System.Diagnostics;
 using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 
 namespace YourNamespace
 {
@@ -925,10 +926,34 @@ namespace YourNamespace
             UnselectAllCanvasElements();
             if (sender is ShippingLine l)
             {
-                ViewModel.SelectedShipment = l.OwnShipment;
-                l.ourShippingLine.StrokeThickness = 5;
-                l.ourShippingLine.Stroke = new SolidColorBrush(Colors.PaleVioletRed);
-                LeftSidebarLineDetails.Visibility = Visibility.Visible;
+                SetSelectedShippingLine(l);
+            }
+        }
+
+        private void SetSelectedShippingLine(ShippingLine l)
+        {
+            ViewModel.SelectedShipment = l.OwnShipment;
+            l.ourShippingLine.StrokeThickness = 5;
+            l.ourShippingLine.Stroke = new SolidColorBrush(Colors.PaleVioletRed);
+            LeftSidebarLineDetails.Visibility = Visibility.Visible;
+        }
+
+        private void LineSelectedFromWindow_Click(object? sender, EventArgs e)
+        {
+            var selected = ((SelectedShipmentWindowMouseButtonEventArgs)e).selected;
+            if (ViewModel.ShipmentList.Any(x => x.Sender.Name == selected.Sender.Name && x.Receiver.Name == selected.Receiver.Name))
+            {
+                ViewModel.SelectedShipment = ViewModel.ShipmentList
+                                                      .Where(x => x.Sender.Name == selected.Sender.Name
+                                                              && x.Receiver.Name == selected.Receiver.Name).FirstOrDefault();
+
+                foreach (var line in DiagramCanvas.Children.OfType<ShippingLine>())
+                {
+                    if(line.OwnShipment == ViewModel.SelectedShipment)
+                    {
+                        SetSelectedShippingLine(line);
+                    }
+                }
             }
         }
 
@@ -974,6 +999,7 @@ namespace YourNamespace
             AnalysisWindow.Owner = this;
             AnalysisWindow.simModel = new AnalizorModel(ViewModel);
             AnalysisWindow.DataContext = AnalysisWindow.simModel;
+            AnalysisWindow.ShipmentHighlightPassoverHandler += LineSelectedFromWindow_Click;
             AnalysisWindow.Show();
         }
         private void Button_ClickForBillofMaterials(object sender, RoutedEventArgs e)
@@ -982,6 +1008,8 @@ namespace YourNamespace
             BillWindow.Owner = this;
             BillWindow.Show();
         }
+
+        
 
         private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
         {

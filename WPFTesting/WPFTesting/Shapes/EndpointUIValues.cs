@@ -23,7 +23,7 @@ namespace FactorySADEfficiencyOptimizer.Shapes
             supplier = new EndpointNode()
             {
                 Id = Guid.NewGuid(),
-                Profit = 1000,
+                Balance = 1000,
                 Name = "Factory",
                 ComponentInventory = new ObservableCollection<Product>()
                     {

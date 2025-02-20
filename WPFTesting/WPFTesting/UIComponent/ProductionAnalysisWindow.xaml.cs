@@ -31,6 +31,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
     /// </summary>
     public partial class ProductionAnalysisWindow : Window, INotifyPropertyChanged
     {
+        public event EventHandler? ShipmentHighlightPassoverHandler;
         public double ProdTargetListWidth { get; set; }
         private AnalizorModel _simModel;
         public AnalizorModel simModel { 
@@ -42,25 +43,14 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             } 
         }
         public ProductionTarget TargetProductionTarget { get; set; }
-		private int _daystorun;
-        public int DaysToRun { 
-            get
-            {
-                return _daystorun;
-            }
-            set
-            {
-                _daystorun = value;
-                OnPropertyChanged(nameof(DaysToRun));
-            }
-        }
+
 
         public ProductionAnalysisWindow(SupplyChainViewModel model)
         {
             InitializeComponent();
             simModel = new AnalizorModel(model);
             this.DataContext = this;
-            DaysToRun = 1;
+            simModel.DaysToRun = 1;
             double[] x = new double[200];
             for (int i = 0; i < x.Length; i++)
                 x[i] = 3.1415 * i / (x.Length - 1);
@@ -68,10 +58,10 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             for (int i = 0; i < 25; i++)
             {
                 var lg = new LineGraph();
-                linegraph.Children.Add(lg);
                 lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
                 lg.Description = String.Format("Data series {0}", i + 1);
                 lg.StrokeThickness = 2;
+                linegraph.Children.Add(lg);
                 lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
             }
             //UpdatePlot();
@@ -84,13 +74,13 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             if (AnalysisPeriodValue is null)
                 return;
 
-            if (DaysToRun >= 8)
+            if (simModel.DaysToRun >= 8)
             {
                 AnalysisPeriodValue.Background = new SolidColorBrush(Colors.AliceBlue);
             }
-            else if (DaysToRun < 1)
+            else if (simModel.DaysToRun < 1)
             {
-                DaysToRun = 1;
+                simModel.DaysToRun = 1;
                 AnalysisPeriodValue.Background = new SolidColorBrush(Colors.Transparent);
             }
             else
@@ -117,7 +107,9 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             {
                 if (e.Key == Key.Enter)
                 {
-                    Int32.TryParse(textBox.Text, out _daystorun);
+                    int i = 0;
+                    Int32.TryParse(textBox.Text, out i);
+                    simModel.DaysToRun = i;
                     Keyboard.ClearFocus();
                 }
                 else if (e.Key == Key.Escape)
@@ -131,13 +123,22 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         {
             if(sender is TextBox tb)
             {
-                Int32.TryParse(tb.Text, out _daystorun);
+                int i = 0;
+                Int32.TryParse(tb.Text, out i);
+                simModel.DaysToRun = i;
             }
         }
 
         private void AddTargetButton_Click(object sender, RoutedEventArgs e)
         {
-            ProductionTarget newtarg = new ProductionTarget()
+            ProductionTarget newtarg = GetNewProductionTarget();
+            simModel.ProductionTargets.Add(newtarg);
+            OnPropertyChanged(nameof(simModel));
+        }
+
+        private static ProductionTarget GetNewProductionTarget()
+        {
+            return new ProductionTarget()
             {
                 DueDate = 3,
                 CurrentAmount = 0,
@@ -145,21 +146,52 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 Status = 0,
                 ProductTarget = new Product()
                 {
-                    ProductName = "New Product",
+                    ProductName = "Target item",
                     Price = 1,
                     Quantity = 1,
                     Units = ""
                 },
                 TargetQuantity = 1
-
             };
-            simModel.ProductionTargets.Add(newtarg);
-            //ResizeAnyProductionTargetRows();
-            OnPropertyChanged(nameof(simModel));
         }
+
         private void StartSim_Click(object? sender,  RoutedEventArgs? e)
         {
             simModel.PassTimeUntilDuration(simModel.DaysToRun);
+            linegraph.Children.Clear();
+            RenderLineResults();
+        }
+
+        private void LineSelectedFromWindow_MouseDown(object? sender, EventArgs? e)
+        {
+            ShipmentHighlightPassoverHandler?.Invoke(this, e);
+        }
+
+        private void RenderLineResults()
+        {
+            double[] GraphDays = new double[(int)simModel.DaysToRun];
+            for (int i = 0; i < simModel.DaysToRun; i++)
+            {
+                GraphDays[i] = i;
+            }
+            double[] BalancePerDay = simModel.GetBalancePerDayForGraph();
+            var lg = new LineGraph();
+            lg.Stroke = GetIteratedLineColor();
+            lg.Description = "Financial State";
+            lg.StrokeThickness = 1;
+            plotter.BottomTitle = "Day";
+            plotter.LeftTitle = "Balance (in dollars)";
+            plotter.Title = "Balance-Per-Day during production.";
+            plotter.PlotOriginX = 1;
+            plotter.PlotOriginY = BalancePerDay.Min();
+            linegraph.IsAutoFitEnabled = true;
+            linegraph.Children.Add(lg);
+        }
+
+        private SolidColorBrush GetIteratedLineColor()
+        {
+            Random random = new Random();
+            return new SolidColorBrush(Color.FromArgb(255, (byte)random.Next(0,255), (byte)random.Next(0, 255), (byte)random.Next(0, 255)));
         }
 
         private void OpenShipmentWindow_Click(object? sender, RoutedEventArgs? e)
@@ -169,6 +201,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 var ShipmentWindow = new ShipmentsScheduled(simModel);
                 ShipmentWindow.Owner = this;
                 ShipmentWindow.SaveShipmentDetails += ReworkShipmentSimulation;
+                ShipmentWindow.SelectShipmentLineHandler += LineSelectedFromWindow_MouseDown;
                 ShipmentWindow.Show();
             }
         }
@@ -196,6 +229,15 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                     convertedShipments.Add(shipment);
                 }
                 simModel.ShipmentList = new ObservableCollection<Shipment>(convertedShipments);
+            }
+        }
+
+        private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            foreach (var item in linegraph.Children.OfType<LineGraph>())
+            {
+                if(e is not null)
+                    item.Stroke = new SolidColorBrush((Color)e.NewValue!);
             }
         }
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
