@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:FactorySADEfficiencyOptimizer.UIComponent"
         xmlns:classes="clr-namespace:FactorySADEfficiencyOptimizer.ViewModel"
         xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:converter="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent.Converters"
         mc:Ignorable="d" DataContext="{Binding simModel}"
         Title="ProductionAnalysisWindow"
-        Height="450" Width="800"
+        Height="522" Width="1000"
         WindowStyle="ToolWindow">
     <Window.Background>
         <SolidColorBrush Color="DarkGray"></SolidColorBrush>
@@ -20,16 +21,23 @@
     </Window.Resources>
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
+            <RowDefinition Height="72"></RowDefinition>
             <RowDefinition Height="3*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="46*"></ColumnDefinition>
-            <ColumnDefinition Width="17*"></ColumnDefinition>
-            <ColumnDefinition Width="17*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="0" Grid.RowSpan="2" Margin="0 0 4 10">
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <TextBlock Text="Production Target Analysis:" FontSize="26" FontWeight="Bold"></TextBlock>
+            <TextBlock Text="1. Make production targets from your endpoint." FontWeight="SemiBold"></TextBlock>
+            <TextBlock Text="2. Run the simulation, and double-click on the status." FontWeight="SemiBold"></TextBlock>
+            
+        </StackPanel>
+        
+        <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Margin="0 0 4 10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5*"></RowDefinition>
@@ -58,11 +66,11 @@
                     <Border BorderThickness="0 0 0 1" BorderBrush="black">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"></ColumnDefinition>
                                 <ColumnDefinition Width="4*"></ColumnDefinition>
-                                <ColumnDefinition Width="6*"></ColumnDefinition>
-                                <ColumnDefinition Width="6*"></ColumnDefinition>
-                                <ColumnDefinition Width="8*"></ColumnDefinition>
+                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                <ColumnDefinition Width="7*"></ColumnDefinition>
+                                <ColumnDefinition Width="12*"></ColumnDefinition>
+                                <ColumnDefinition Width="10*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Enabled"></TextBlock>
                             <TextBlock HorizontalAlignment="Left" Grid.Column="1" Text="Item"></TextBlock>
@@ -85,6 +93,7 @@
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="6*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <CheckBox Grid.Column="0" IsChecked="{Binding IsTargetEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
@@ -99,7 +108,7 @@
                                             VerticalAlignment="Center"/>
                                         <Image Height="48">
                                             <Image.Source>
-                                                <BitmapImage DecodePixelHeight="48"
+                                                <BitmapImage DecodePixelHeight="24"
                                                              UriSource=".\Resources\UnrunTargetIcon.png">
                                                 </BitmapImage>
                                             </Image.Source>
@@ -111,7 +120,7 @@
                     </ListView>
                 </StackPanel>
             </Border>
-            <Button Width="48" Height="48" VerticalAlignment="Bottom" Grid.RowSpan="2" HorizontalAlignment="Left"
+            <Button Padding="12 0 12 0" Height="48" VerticalAlignment="Bottom" Grid.RowSpan="2" HorizontalAlignment="Left"
                     Margin="20" Click="AddTargetButton_Click">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
@@ -130,21 +139,32 @@
                     </Style>
                 </Button.Style>
                 <Button.Content>
-                    <TextBlock FontFamily="Verdana" FontWeight="UltraBold" FontSize="30" Margin="0 0 0 5">
-                        +
-                    </TextBlock>
+                    <DockPanel>
+                        <TextBlock Text="Add New Target" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold" Margin="0 0 0 3"></TextBlock>
+                        <TextBlock FontFamily="Verdana" FontWeight="UltraBold" FontSize="30" Margin="8 0 0 5">
+                            +
+                        </TextBlock>
+                    </DockPanel>
                 </Button.Content>
             </Button>
         </Grid>
 
-        <Grid Name="lines" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="4 0 0 0">
-            <Border Background="LightGray" BorderBrush="DarkGray" BorderThickness="1">
+        <Grid Name="lines" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="4,0,0,108">
+            <Border Background="LightGray" BorderBrush="DarkGray" BorderThickness="1" Margin="10">
                 <d3:Chart x:Name="plotter" BottomTitle="Bottom" LeftTitle="Left">
-                    <d3:LineGraph x:Name="linegraph" Description="Simple linegraph" Stroke="RoyalBlue" StrokeThickness="3"/>
+                    <d3:LineGraph x:Name="linegraph" Stroke="RoyalBlue" StrokeThickness="3"/>
                 </d3:Chart>
             </Border>
         </Grid>
-        <Border Grid.Row="1" Grid.Column="1" Margin="4 4 0 10" BorderBrush="Bisque" BorderThickness="1" Background="SandyBrown" CornerRadius="6">
+
+        <Border Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
+            <DockPanel>
+                <TextBlock Text="Pick a line color:" Margin="0 0 10 0"></TextBlock>
+                <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"></xctk:ColorPicker>
+            </DockPanel>
+        </Border>
+        
+        <Border Grid.Row="2" Grid.Column="1" Margin="4 4 0 10" BorderBrush="Bisque" BorderThickness="1" Background="SandyBrown" CornerRadius="6">
             <Button Background="Transparent" BorderThickness="0" x:Name="CheckShipmentButton"
                     Click="OpenShipmentWindow_Click">
                 <Button.Content>
@@ -157,7 +177,7 @@
                 </Button.Content>
             </Button>
         </Border>
-        <Border Grid.Row="1" Grid.Column="2" BorderBrush="SkyBlue" Background="DodgerBlue" BorderThickness="1" CornerRadius="50" Margin="5 5 5 10">
+        <Border Grid.Row="2" Grid.Column="2" BorderBrush="SkyBlue" Background="DodgerBlue" BorderThickness="1" CornerRadius="50" Margin="5,5,5,10">
             <Button Background="Transparent" BorderThickness="0" Click="StartSim_Click">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">

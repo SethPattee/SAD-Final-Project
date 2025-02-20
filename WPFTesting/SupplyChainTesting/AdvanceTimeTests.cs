@@ -237,7 +237,7 @@ internal class AdvanceTimeTests
         EndpointNode endpointTest = new EndpointNode()
         {
             Name = "Factory",
-            Profit = (decimal)10000
+            Balance = (decimal)10000
         };
         Shipment testShipment = new Shipment()
         {
@@ -264,7 +264,7 @@ internal class AdvanceTimeTests
         Assert.That(endpointTest.ComponentInventory.Count, Is.GreaterThan(0));
         Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(100));
         Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "wood").Quantity, Is.EqualTo(100));
-        Assert.That(endpointTest.Profit, Is.EqualTo(9894.01));
+        Assert.That(endpointTest.Balance, Is.EqualTo(9894.01));
     }
 
     [Test]
@@ -282,7 +282,7 @@ internal class AdvanceTimeTests
                     Quantity = 10000
                 }
             },
-            Profit = 10000
+            Balance = 10000
         };
         List<Product> testOrder = new List<Product>()
         {
@@ -295,7 +295,7 @@ internal class AdvanceTimeTests
 
         endpointTest.ShipOrder(testOrder);
 
-        Assert.That(endpointTest.Profit, Is.EqualTo(10005.99));
+        Assert.That(endpointTest.Balance, Is.EqualTo(10005.99));
         Assert.That(endpointTest.ProductInventory.FirstOrDefault(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(9900));
         }
     [Test]
