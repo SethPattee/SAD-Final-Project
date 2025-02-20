@@ -16,6 +16,7 @@
     </Window.Background>
     <Window.Resources>
         <converter:MarginConverter x:Key="marginConverter"></converter:MarginConverter>
+        <local:StatusToTextConverter x:Key="StatusToTextConverter" />
     </Window.Resources>
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
@@ -93,7 +94,9 @@
                                     <TextBox Grid.Column="2" FontSize="16" Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
                                     <TextBox Grid.Column="3" FontSize="16" Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
                                     <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="10 0 0 0">
-                                        <TextBlock Text="Not Run" FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0" VerticalAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}" 
+                                            FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0" 
+                                            VerticalAlignment="Center"/>
                                         <Image Height="48">
                                             <Image.Source>
                                                 <BitmapImage DecodePixelHeight="48"

@@ -274,7 +274,7 @@ public class AnalizorModel : INotifyPropertyChanged
 				if (target.CurrentAmount == target.TargetQuantity)
 				{
 					target.Status = StatusEnum.Success;
-					OnPropertyChanged(nameof(ProductionTargets));
+					OnPropertyChanged(nameof(target.Status));
 					(((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine()).IsEnabled = false;
 				}
             }

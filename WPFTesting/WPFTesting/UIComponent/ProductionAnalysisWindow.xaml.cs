@@ -22,6 +22,7 @@ using System.Windows.Shapes;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.ViewModel;
+using System.Globalization;
 
 namespace FactorySADEfficiencyOptimizer.UIComponent
 {
@@ -32,6 +33,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
     {
         public double ProdTargetListWidth { get; set; }
         private AnalizorModel _simModel;
+        public event EventHandler? ProductionTargetsChanges;
         public AnalizorModel simModel { 
             get => _simModel;
             set
@@ -198,7 +200,13 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 simModel.ShipmentList = new ObservableCollection<Shipment>(convertedShipments);
             }
         }
-
+        private void targetStatusChanged(object? sender, EventArgs? s)
+        {
+            foreach (ProductionTarget targ in simModel.ProductionTargets)
+            {
+                targ.Status = StatusEnum.Failure;
+            }
+        }
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         //{
         //    ResizeAnyProductionTargetRows();
@@ -222,5 +230,29 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         //}
 
 
+    }
+    public class StatusToTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is StatusEnum status)
+            {
+                return status switch
+                {
+                    StatusEnum.Warning => "WARNING",
+                    StatusEnum.Failure => "FAILURE",
+                    StatusEnum.Success => "SUCCESS",
+                    StatusEnum.NotDone => "Not Run Yet",
+                    _ => "Unknown"
+                };
+            }
+            return "Unknown";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            // Convert back logic (if needed)
+            return Binding.DoNothing;
+        }
     }
 }
