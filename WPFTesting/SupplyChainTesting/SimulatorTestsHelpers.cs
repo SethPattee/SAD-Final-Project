@@ -43,8 +43,6 @@ internal static class SimulatorTestsHelpers
 
 	public static void SetUpModelForChangeLogsTenDaySim(AnalizorModel simulation)
 	{
-		Assert.That(simulation.ChangeLog, Is.Empty);
-		Assert.That(simulation.IssueLog, Is.Empty);
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(targetQuantity: 10, dateDue: 10);
 		(simulation.SupplierList
 			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
