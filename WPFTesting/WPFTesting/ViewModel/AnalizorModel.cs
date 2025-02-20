@@ -262,8 +262,9 @@ public class AnalizorModel : INotifyPropertyChanged
 			Snapshots.Add(MakeCurrentSnapShot());
 			CurrentDay++;
 		}
+		UpdateProducitonTargets(isLastGo: true);
 	}
-	private void UpdateProducitonTargets()
+	private void UpdateProducitonTargets(bool isLastGo = false)
 	{
 		foreach (var target in ProductionTargets)
 		{
@@ -278,7 +279,12 @@ public class AnalizorModel : INotifyPropertyChanged
 					OnPropertyChanged(nameof(target.Status));
 					(((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine()).IsEnabled = false;
 				}
-            }
+				else if (isLastGo)
+				{
+					target.Status = StatusEnum.Failure;
+					OnPropertyChanged(nameof(target.Status));
+				}
+			}
 		}
 	}
     public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)

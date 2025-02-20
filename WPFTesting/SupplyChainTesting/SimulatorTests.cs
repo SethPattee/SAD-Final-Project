@@ -204,8 +204,32 @@ public class SimulatorTests
 	{
 		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
+		Assert.That(simulation.ChangeLog, Is.Empty);
+		Assert.That(simulation.IssueLog, Is.Empty);
 		SimulatorTestsHelpers.SetUpModelForChangeLogsTenDaySim(simulation);
 
 		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
 	}
+	[Test]
+	public void ModelSetsTargetTofailWhenSimulationCompletesWithoutEnoughProduct()
+	{
+		var model = SimulatorTestsHelpers.setupTest();
+		AnalizorModel simulation = new AnalizorModel(model);
+		SimulatorTestsHelpers.SetUpModelForChangeLogsFiveDayTenProductFailureSim(simulation);
+
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Failure));
+	}
+	[Test]
+	public void ModelSetsTargetTofailWhenSimulationCompletesWithoutEnoughProductAndThenSuccedsOnTheSecondRun()
+	{
+		var model = SimulatorTestsHelpers.setupTest();
+		AnalizorModel simulation = new AnalizorModel(model);
+		SimulatorTestsHelpers.SetUpModelForChangeLogsFiveDayTenProductFailureSim(simulation);
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Failure));
+		simulation.ProductionTargets.First().DueDate = 10;
+		simulation.PassTimeUntilDuration(10);
+		//should be failing
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
+	}
+
 }

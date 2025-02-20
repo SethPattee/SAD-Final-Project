@@ -43,8 +43,6 @@ internal static class SimulatorTestsHelpers
 
 	public static void SetUpModelForChangeLogsTenDaySim(AnalizorModel simulation)
 	{
-		Assert.That(simulation.ChangeLog, Is.Empty);
-		Assert.That(simulation.IssueLog, Is.Empty);
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(targetQuantity: 10, dateDue: 10);
 		(simulation.SupplierList
 			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
@@ -54,5 +52,19 @@ internal static class SimulatorTestsHelpers
 			.Quantity += 200;
 		simulation.ProductionTargets.Add(newtarg);
 		simulation.PassTimeUntilDuration(10);
+	}
+	public static void SetUpModelForChangeLogsFiveDayTenProductFailureSim(AnalizorModel simulation)
+	{
+		Assert.That(simulation.ChangeLog, Is.Empty);
+		Assert.That(simulation.IssueLog, Is.Empty);
+		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(targetQuantity: 10, dateDue: 5);
+		(simulation.SupplierList
+			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
+			?.supplier.ProductInventory
+			.FirstOrDefault(p => p.ProductName == "screws")
+			?? new Product())
+			.Quantity += 200;
+		simulation.ProductionTargets.Add(newtarg);
+		simulation.PassTimeUntilDuration(5);
 	}
 }
