@@ -31,6 +31,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
     /// </summary>
     public partial class ProductionAnalysisWindow : Window, INotifyPropertyChanged
     {
+        public event EventHandler? ShipmentHighlightPassoverHandler;
         public double ProdTargetListWidth { get; set; }
         private AnalizorModel _simModel;
         public AnalizorModel simModel { 
@@ -161,6 +162,11 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             RenderLineResults();
         }
 
+        private void LineSelectedFromWindow_MouseDown(object? sender, EventArgs? e)
+        {
+            ShipmentHighlightPassoverHandler?.Invoke(this, e);
+        }
+
         private void RenderLineResults()
         {
             double[] GraphDays = new double[(int)simModel.DaysToRun];
@@ -178,6 +184,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             plotter.Title = "Balance-Per-Day during production.";
             plotter.PlotOriginX = 1;
             plotter.PlotOriginY = BalancePerDay.Min();
+            linegraph.IsAutoFitEnabled = true;
             linegraph.Children.Add(lg);
         }
 
@@ -194,6 +201,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 var ShipmentWindow = new ShipmentsScheduled(simModel);
                 ShipmentWindow.Owner = this;
                 ShipmentWindow.SaveShipmentDetails += ReworkShipmentSimulation;
+                ShipmentWindow.SelectShipmentLineHandler += LineSelectedFromWindow_MouseDown;
                 ShipmentWindow.Show();
             }
         }

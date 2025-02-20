@@ -49,7 +49,7 @@
                     </Border>
                     <ListView x:Name="ScheduledShipmentsList" ItemsSource="{Binding Testshipments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding SelectedShipment}" SelectionChanged="ShipmentWindowList_SelectionChanged"
-                          Background="DarkGray">
+                          Background="DarkGray" PreviewMouseDown="SelectLineFromWindow_MouseDown">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -61,7 +61,7 @@
                                         <ColumnDefinition Width="2*"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox IsChecked="{Binding IsRecurring}" Grid.Column="0"></CheckBox>
+                                    <CheckBox IsChecked="{Binding IsRecurring}" Grid.Column="0" Margin="0 2 0 0"></CheckBox>
                                     <TextBox Text="{Binding Sender.Name}" Grid.Column="1"></TextBox>
                                     <TextBox Text="{Binding Receiver.Name}" Grid.Column="2"></TextBox>
                                     <TextBox Text="{Binding TimeToDeliver}" Grid.Column="3"></TextBox>

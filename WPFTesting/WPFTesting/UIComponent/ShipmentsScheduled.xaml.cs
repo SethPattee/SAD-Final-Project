@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 
 namespace FactorSADEfficiencyOptimizer.UIComponent;
 
@@ -175,6 +176,17 @@ public partial class ShipmentsScheduled : Window
         if(sender is Button b)
         {
             AssignProductList((Shipment)b.DataContext);
+        }
+    }
+
+    public event EventHandler? SelectShipmentLineHandler;
+    private void SelectLineFromWindow_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is ListView b)
+        {
+            var shipmentSelectedEvent = new SelectedShipmentWindowMouseButtonEventArgs(e.MouseDevice, e.Timestamp, e.ChangedButton);
+            shipmentSelectedEvent.AssignSelectedShipment((Shipment)b.Items.CurrentItem);
+            SelectShipmentLineHandler?.Invoke(this, shipmentSelectedEvent);
         }
     }
 
