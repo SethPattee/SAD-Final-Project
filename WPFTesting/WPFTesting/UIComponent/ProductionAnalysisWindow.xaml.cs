@@ -170,7 +170,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
         private void RenderLineResults()
         {
-            double[] GraphDays = new double[(int)simModel.DaysToRun];
+            double[] GraphDays = new double[(int)simModel.DaysToRun + 1];
             for (int i = 0; i < simModel.DaysToRun; i++)
             {
                 GraphDays[i] = i;
@@ -186,6 +186,8 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             plotter.PlotOriginX = 1;
             plotter.PlotOriginY = BalancePerDay.Min();
             linegraph.IsAutoFitEnabled = true;
+            lg.Plot(GraphDays, BalancePerDay);
+            //lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
             linegraph.Children.Add(lg);
         }
 
