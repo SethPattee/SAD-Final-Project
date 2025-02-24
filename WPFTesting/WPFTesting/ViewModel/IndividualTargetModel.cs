@@ -1,4 +1,5 @@
 ﻿using FactorSADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,17 +13,17 @@ namespace FactorySADEfficiencyOptimizer.ViewModel
     public class IndividualTargetModel : INotifyPropertyChanged
     {
         private ProductionTarget _productionTarget;
-        public ProductionTarget ProductionTarget { get => _productionTarget;
+        public ProductionTarget TargetItem { get => _productionTarget;
             set { 
                     _productionTarget = value;
-                    OnPropertyChanged(nameof(ProductionTarget));
+                    OnPropertyChanged(nameof(TargetItem));
                 } 
         }
-        private ObservableCollection<ProductionTarget> _TargetOverDays;
+        private ObservableCollection<ProductionTarget> _targetoverdays;
         public ObservableCollection<ProductionTarget> TargetOverDays {
-            get => _TargetOverDays; 
+            get => _targetoverdays; 
             set {
-                    TargetOverDays = value;
+                    _targetoverdays = value;
                     OnPropertyChanged(nameof(TargetOverDays));
                 }
         }
@@ -38,13 +39,38 @@ namespace FactorySADEfficiencyOptimizer.ViewModel
                 }
         }
 
+        private ObservableCollection<string> _issues;
+        // Convert issues to string messages, and then dump in here for a message box.
+        public ObservableCollection<string> Issues
+        {
+            get => _issues;
+            set
+            {
+                _issues = value;
+                OnPropertyChanged(nameof(Issues));
+            }
+        }
 
+        private double _DayCompleted;
+        public double DayCompleted
+        {
+            get => _DayCompleted;
+            set
+            {
+                _DayCompleted = value;
+                OnPropertyChanged(nameof(DayCompleted));
+            }
+        }
 
         public IndividualTargetModel()
         {
-            ProductionTarget = new ProductionTarget();
+            TargetItem = new ProductionTarget();
             TargetOverDays = new ObservableCollection<ProductionTarget>();
-            DaysRun = Array.Empty<double>();
+            _daysrun = Array.Empty<double>();
+            _DayCompleted = -1;
+            _issues = new ObservableCollection<string>();
+            _productionTarget = new ProductionTarget();
+            _targetoverdays = new ObservableCollection<ProductionTarget>();
         }
 
         protected void OnPropertyChanged(string? name = null)

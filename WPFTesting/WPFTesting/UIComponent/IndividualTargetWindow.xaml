@@ -18,7 +18,7 @@
     <Grid Background="DarkGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="2"></ColumnDefinition>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
@@ -35,36 +35,64 @@
 
 
         <Border Grid.Column="0" Grid.Row="2" Margin="20,0,10,20" Grid.ColumnSpan="2">
-            <StackPanel DataContext="{Binding ProductionTarget, Mode=OneTime}" >
+            <StackPanel>
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="Margin" Value="{StaticResource ResultsBannerItemMargin}" />
                     </Style>
                 </StackPanel.Resources>
                 <Border BorderBrush="Black" BorderThickness="1" Height="34">
-                    <TextBlock Grid.ColumnSpan="3" Text="{Binding ProductTarget.ProductName, Mode=OneTime, StringFormat=Item: {0}}" FontSize="24"></TextBlock>
+                    <DockPanel>
+                        <TextBlock Text="Item: " FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                        <TextBlock Text="{Binding ProductionTarget.ProductTarget.ProductName, Mode=OneTime}" FontSize="24"></TextBlock>
+                    </DockPanel>
                 </Border>
                 <Border BorderBrush="Black" BorderThickness="1" Height="34">
                     <DockPanel>
                         <TextBlock Text="Target: " HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24"></TextBlock>
-                        <TextBlock Text="{Binding TargetQuantity, Mode=OneTime}" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
-                        <TextBlock Text="Quantity: " HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24"></TextBlock>
-                        <TextBlock Text="{Binding CurrentAmount, Mode=OneTime}" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="24"></TextBlock>
+                        <TextBlock Text="{Binding ProductionTarget.TargetQuantity, Mode=OneTime}" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                        <TextBlock Text="Total: " HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24" Margin="30 0 0 0"></TextBlock>
+                        <TextBlock Text="{Binding ProductionTarget.CurrentAmount, Mode=OneTime}" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="24"></TextBlock>
                     </DockPanel>
                 </Border>
                 <Border BorderBrush="Black" BorderThickness="1">
                     <DockPanel>
                         <TextBlock Text="Target Date: " FontSize="24"></TextBlock>
-                        <TextBlock Text="{Binding DueDate, Mode=OneTime}" FontSize="24" Margin="0 0 30 0"></TextBlock>
+                        <TextBlock Text="{Binding ProductionTarget.DueDate, Mode=OneTime}" FontSize="24" Margin="0 0 30 0"></TextBlock>
                         <TextBlock Text="Completed: " FontSize="24"></TextBlock>
-                        <TextBlock Text=""></TextBlock>
+                        <TextBlock Text="{Binding DayCompleted, Mode=OneTime}"></TextBlock>
                     </DockPanel>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <DockPanel>
+                        <TextBlock Text="Status: " FontSize="24"></TextBlock>
+                        <TextBlock Text="{Binding ProductionTarget.Status, Mode=OneTime}"></TextBlock>
+                    </DockPanel>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Warnings:" FontSize="24"></TextBlock>
+                        <ListView HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="DarkGray"
+                                  ItemsSource="{Binding Issues, Mode=OneTime}"
+                                  x:Name="Issue_list" SelectionChanged="Issue_list_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="" HorizontalAlignment="Left"></TextBlock>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
                 </Border>
             </StackPanel>
         </Border>
-
-        <Border x:Name="IndividualTargetGraph">
-            
+        <Border Grid.Column="3" Grid.Row="0">
+            <TextBlock Text=""></TextBlock>
+        </Border>
+        <Border x:Name="IndividualTargetGraph" Grid.Column="3" Grid.Row="2">
+            <d3:Chart x:Name="IT_PlotSpace" BottomTitle="Bottom" LeftTitle="Left" Margin="10 0 20 20">
+                <d3:LineGraph x:Name="IndividualTargetLine" Padding="0 0 0 0"
+                              Stroke="RoyalBlue" StrokeThickness="3"/>
+            </d3:Chart>
         </Border>
     </Grid>
 </Window>

@@ -79,7 +79,7 @@
                             <TextBlock HorizontalAlignment="Left" Grid.Column="4" Text="Status"></TextBlock>
                         </Grid>
                     </Border>
-                    <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1"
+                    <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" MouseDoubleClick="ProdTargetList_MouseDoubleClick"
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ProdTargetList"
                               ItemsSource="{Binding ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding TargetProductionTarget}">
