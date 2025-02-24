@@ -416,7 +416,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	{
 		return Snapshots.Select<Snapshot,double>(x =>
 		{
-			return (double)x.Endpoints.Sum(item => ((EndpointNode)item.supplier).Balance);
+			return (double)x.Endpoints.Sum(item => ((EndpointNode)item.supplier).Balance) / 1000;
 		}).ToArray();
 	}
 
