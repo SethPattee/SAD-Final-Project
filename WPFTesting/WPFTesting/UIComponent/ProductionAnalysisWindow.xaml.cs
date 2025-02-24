@@ -23,6 +23,7 @@ using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using System.Globalization;
+using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 
 namespace FactorySADEfficiencyOptimizer.UIComponent
 {
@@ -240,6 +241,44 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                     item.Stroke = new SolidColorBrush((Color)e.NewValue!);
             }
         }
+
+        private void ProdTargetList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is ListView s)
+            {
+                string product_name = ((ProductionTarget)s.SelectedItem).ProductTarget!.ProductName;
+                IndividualTargetWindow individualTargetWindow = new IndividualTargetWindow()
+                {
+                    ItemModel = new IndividualTargetModel()
+                    {
+                        TargetItem = ((ProductionTarget)s.SelectedItem),
+                        DaysRun = simModel.GetQuantityPerDayForGraph(product_name),
+                        TargetOverDays = new ObservableCollection<ProductionTarget>(simModel.ExtractProductionTargetChanges(product_name)!),
+                        Issues = new ObservableCollection<string>()
+                    }
+                };
+
+                // For each '!': Kaboom!
+                // Gotta find a better solution, maybe better design, but eh.
+                foreach(var issue in simModel.IssueLog.Where(x => x.ProductionTarget.ProductTarget!.ProductName == product_name))
+                {
+                    string shipmentaddition = "";
+                    if (issue.Severity == StatusEnum.Failure)
+                        shipmentaddition = "Critical failure occurred! Could not complete target.";
+                    if (issue.Solution.Action == ActionEnum.addedShipment)
+                        shipmentaddition = $"Added a shipment: {issue.Solution.neededProduct.Quantity}" +
+                            $" {issue.Solution.neededProduct.Units} {issue.Solution.neededProduct.ProductName}" +
+                            $" ordered for ${issue.Solution.neededProduct.Price}.";
+
+                    individualTargetWindow.ItemModel.Issues.Add($"Item {product_name} issue on {issue.DayFound}: {issue.Severity.ToString()}" +
+                        $"{shipmentaddition}");
+                }
+
+                individualTargetWindow.Owner = this;
+                individualTargetWindow.Show();
+            }
+        }
+
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         //{
         //    ResizeAnyProductionTargetRows();

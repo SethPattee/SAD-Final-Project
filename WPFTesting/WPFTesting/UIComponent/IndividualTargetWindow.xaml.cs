@@ -30,5 +30,10 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         {
             InitializeComponent();
         }
+
+        private void Issue_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -413,4 +413,9 @@ public class AnalizorModel : INotifyPropertyChanged
 			return (double)x.Endpoints.Sum(item => ((EndpointNode)item.supplier).Balance);
 		}).ToArray();
 	}
+
+	public List<ProductionTarget?> ExtractProductionTargetChanges(string name)
+	{
+		return Snapshots.Select(x => x.Targets.Find(y => (y.ProductTarget ?? throw new ArgumentNullException("Product target list is null!")).ProductName == name)).ToList();
+	}
 }
