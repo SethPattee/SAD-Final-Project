@@ -34,7 +34,5 @@ public class SimulationWithMultipleProductsTests
 												   // noticable at line 128 of Endpoint node "_productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).First().Quantity += pl.ResultingProduct.Quantity;"
 												   // 
 
-
-
 	}
 }
