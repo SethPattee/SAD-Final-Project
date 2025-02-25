@@ -311,6 +311,11 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             bom.Show();
         }
 
+        private void ProdTargetList_Click(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         //{
         //    ResizeAnyProductionTargetRows();
