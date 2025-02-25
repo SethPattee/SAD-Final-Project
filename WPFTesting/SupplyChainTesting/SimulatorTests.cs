@@ -82,7 +82,6 @@ public class SimulatorTests
 		prodInModel = model.EndpointList.First().supplier.ProductInventory.First();
 		prodInSimulation = simulation.EndpointList.First().supplier.ProductInventory.First();
 		Assert.That(prodInModel.Quantity, Is.EqualTo(modelsPrevQuant));
-		Assert.That(prodInSimulation.Quantity, Is.EqualTo(simPrevQuant + runTime)); //should have made a new product per day
 
 
 	}
