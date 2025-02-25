@@ -79,13 +79,14 @@
                             <TextBlock HorizontalAlignment="Left" Grid.Column="4" Text="Status"></TextBlock>
                         </Grid>
                     </Border>
-                    <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" MouseDoubleClick="ProdTargetList_MouseDoubleClick"
+                    <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" MouseDoubleClick="ProdTargetList_Click"
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ProdTargetList"
                               ItemsSource="{Binding ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding TargetProductionTarget}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="LightGray" Height="48"
+                                      PreviewMouseRightButtonDown="Grid_MouseRightButtonDown"
                                       Width="{Binding ElementName=ProdTargetList, Path=ActualWidth, Mode=OneWay, 
                                     UpdateSourceTrigger=PropertyChanged, Converter={StaticResource marginConverter}}">
                                     <Grid.ColumnDefinitions>
@@ -114,6 +115,13 @@
                                             </Image.Source>
                                         </Image>
                                     </StackPanel>
+
+                                    <Grid.ContextMenu>
+                                        <ContextMenu StaysOpen="true">
+                                            <MenuItem Header="Materials used" Click="OpenBillOfMaterials_Click"></MenuItem>
+                                            <MenuItem Header="View results" Click="ProdTargetList_Click"></MenuItem>
+                                        </ContextMenu>
+                                    </Grid.ContextMenu>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

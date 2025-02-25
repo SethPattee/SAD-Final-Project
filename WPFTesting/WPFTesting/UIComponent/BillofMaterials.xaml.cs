@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -24,8 +25,8 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
             SampleData();
         }
 
-        private List<Product> _list;
-        public List<Product> List
+        private ObservableCollection<Product> _list;
+        public ObservableCollection<Product> List
         {
             get { return _list; }
             set
@@ -35,20 +36,29 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
             }
         }
 
-        private double _total;
-        public double Total
+        private double _totalExpenses;
+        public double TotalExpenses
         {
-            get { return _total; }
+            get { return _totalExpenses; }
             set
             {
-                _total = value;
-                OnPropertyChanged(nameof(Total));
+                _totalExpenses = value;
+                OnPropertyChanged(nameof(TotalExpenses));
+            }
+        }
+
+        private string _targetName;
+        public string TargetName { get => _targetName;
+            set
+            {
+                _targetName = value;
+                OnPropertyChanged(nameof(TargetName));
             }
         }
 
         private void SampleData()
         {
-            List = new List<Product>
+            List = new ObservableCollection<Product>
             {
                 new Product { ProductName = "Component A", Quantity = 5, Units = "pcs", Price = 15.50M },
                 new Product { ProductName = "Component B", Quantity = 3, Units = "pcs", Price = 22.75M },
@@ -56,7 +66,7 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
                 new Product { ProductName = "Component D", Quantity = 2, Units = "pcs", Price = 50.00M }
             };
 
-            Total = List.Sum(p => (float)p.Quantity * (float)p.Price);
+            TotalExpenses = List.Sum(p => (float)p.Quantity * (float)p.Price);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

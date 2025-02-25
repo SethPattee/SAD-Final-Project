@@ -3,6 +3,7 @@ using FactorySADEfficiencyOptimizer.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
     /// <summary>
     /// Interaction logic for IndividualTargetWindow.xaml
     /// </summary>
-    public partial class IndividualTargetWindow : Window
+    public partial class IndividualTargetWindow : Window, INotifyPropertyChanged
     {
 
         public IndividualTargetModel ItemModel { get; set; }
@@ -29,7 +30,15 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         public IndividualTargetWindow()
         {
             InitializeComponent();
+            ItemModel = new();
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
 
         private void Issue_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

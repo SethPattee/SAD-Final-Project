@@ -243,10 +243,13 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             }
         }
 
-        private void ProdTargetList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ProdTargetList_Click(object sender, RoutedEventArgs e)
         {
             if(sender is ListView s)
             {
+                if (s.SelectedItem is null)
+                    return;
+
                 string product_name = ((ProductionTarget)s.SelectedItem).ProductTarget!.ProductName;
                 IndividualTargetWindow individualTargetWindow = new IndividualTargetWindow()
                 {
@@ -256,7 +259,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                         DaysRun = simModel.GetQuantityPerDayForGraph(product_name),
                         TargetOverDays = new ObservableCollection<ProductionTarget>(simModel.ExtractProductionTargetChanges(product_name)!),
                         Issues = new ObservableCollection<string>()
-                    }
+                    } 
                 };
 
                 // For each '!': Kaboom!
@@ -278,6 +281,34 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 individualTargetWindow.Owner = this;
                 individualTargetWindow.Show();
             }
+        }
+
+        private ProductionTarget _selectedTarget;
+
+        private void Grid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is Grid g)
+            {
+                _selectedTarget = ((ProductionTarget)g.DataContext);
+            }
+        }
+
+        private void OpenBillOfMaterials_Click(object sender, RoutedEventArgs e)
+        {
+            if(_selectedTarget is null)
+                return;
+
+            if (simModel.ProductionTargets.Any(x => x.Status == StatusEnum.NotDone))
+                return;
+
+            ObservableCollection<Product> spentProducts = new();
+            BillofMaterials bom = new BillofMaterials();
+            bom.TotalExpenses = simModel.Snapshots.Sum(x => x.todaysSpending);
+            bom.TargetName = _selectedTarget.ProductTarget!.ProductName;
+
+
+            bom.Owner = this;
+            bom.Show();
         }
 
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
