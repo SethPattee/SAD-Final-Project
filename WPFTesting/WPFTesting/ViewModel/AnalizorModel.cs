@@ -367,11 +367,12 @@ public class AnalizorModel : INotifyPropertyChanged
 					var addForQntProd = makeIdenticalProductWithoutConections(component);
 					if (BiginDayProd == null)
 					{
-						addForQntProd.Quantity = component.Quantity * prod.Quantity;
+						addForQntProd.Quantity = component.Quantity;
 					}
 					else
 					{
-						addForQntProd.Quantity = component.Quantity * (prod.Quantity - BiginDayProd.Quantity);
+
+						addForQntProd.Quantity = component.Quantity * ((prod.Quantity - BiginDayProd.Quantity) / productionrequirments.ResultingProduct.Quantity);
 					}
                     ToAddComponents.Add(addForQntProd);
 				}
