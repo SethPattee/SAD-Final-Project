@@ -122,6 +122,22 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
 		foreach (EndpointUIValues endpoint in model.EndpointList)
 		{
 			EndpointUIValues end = makeShallowCopyEndpoint(endpoint);
+			foreach (ProductLine pl in ((EndpointNode)end.supplier).ProductionList)
+			{
+				if (pl.IsEnabled) { 
+					ProductionTargets.Add(
+						new ProductionTarget()
+						{
+							DueDate = 1,
+							IsTargetEnabled = true,
+							TargetQuantity = pl.ResultingProduct.Quantity,
+							ProductTarget = makeShallowCopyProduct(pl.ResultingProduct),
+							CurrentAmount = (end.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == pl.ResultingProduct.ProductName) ?? new Product()).Quantity,
+							Status = StatusEnum.NotDone
+						}
+					);
+				}
+			}
 			AddEndpoint(end);
 		}
 		foreach (Shipment shipment in model.ShipmentList) {
