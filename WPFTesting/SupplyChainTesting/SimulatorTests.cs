@@ -231,5 +231,14 @@ public class SimulatorTests
 		//should be failing
 		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
 	}
+	[Test]
+	public void ModelAddsDalyComponentsToSnapShots()
+	{
+        var model = SimulatorTestsHelpers.setupTest();
+        AnalizorModel simulation = new AnalizorModel(model);
+		SimulatorTestsHelpers.SetUpModelForChangeLogsTenDaySim(simulation);
+		Assert.That(simulation.Snapshots.First().ComponentsUsed, Is.Empty);
+		Assert.That(simulation.Snapshots.Last().ComponentsUsed, Is.Not.Empty);
+    }
 
 }

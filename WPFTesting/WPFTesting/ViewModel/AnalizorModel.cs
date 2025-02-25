@@ -19,6 +19,7 @@ namespace FactorSADEfficiencyOptimizer.ViewModel;
 public class AnalizorModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
+    private ObservableCollection<Product> _daysUsedComponents = new ObservableCollection<Product>();
     private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
 	public ObservableCollection<EndpointUIValues> EndpointList
 	{
@@ -155,6 +156,8 @@ public class AnalizorModel : INotifyPropertyChanged
 			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
 			snapshot.Shipments.Add(ship);
 		}
+		snapshot.ComponentsUsed = makeIdenticalColectionOfProductsNoConnections(_daysUsedComponents).ToList();
+		_daysUsedComponents.Clear();
 		return snapshot;
 	}
 
@@ -258,11 +261,56 @@ public class AnalizorModel : INotifyPropertyChanged
 		for (double i = 0; i < duration; i++)
 		{
 			AdvanceTime();
+			RecordUsedComponents();
 			UpdateProducitonTargets();
 			Snapshots.Add(MakeCurrentSnapShot());
 			CurrentDay++;
 		}
 		UpdateProducitonTargets(isLastGo: true);
+	}
+	private void RecordUsedComponents()
+	{
+		List<Product> ToAddComponents = new List<Product>();
+		//get old products
+		List<Product> startProducts = new List<Product>();
+        foreach (EndpointUIValues end in Snapshots.Last().Endpoints)
+		{
+			startProducts.AddRange(end.supplier.ProductInventory);
+		}
+		foreach (EndpointUIValues end in EndpointList)
+		{
+			foreach ( Product prod in end.supplier.ProductInventory )
+			{
+				var BiginDayProd = startProducts.FirstOrDefault(p => p.ProductName == prod.ProductName);
+				var productionrequirments = ((EndpointNode)end.supplier).ProductionList.FirstOrDefault(p => p.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine();
+				foreach (Product component in productionrequirments.Components)
+				{
+					var addForQntProd = makeIdenticalProductWithoutConections(component);
+					if (BiginDayProd == null)
+					{
+						addForQntProd.Quantity = component.Quantity * prod.Quantity;
+					}
+					else
+					{
+						addForQntProd.Quantity = component.Quantity * (prod.Quantity - BiginDayProd.Quantity);
+					}
+                    ToAddComponents.Add(addForQntProd);
+				}
+			}
+		}
+		foreach (Product prod in ToAddComponents)
+		{
+			var existingProd = _daysUsedComponents.FirstOrDefault(p => p.ProductName == prod.ProductName);
+
+            if (existingProd != null)
+			{
+				existingProd.Quantity += prod.Quantity;
+			}
+			else
+			{
+				_daysUsedComponents.Add(prod);
+			}
+		}
 	}
 	private void UpdateProducitonTargets(bool isLastGo = false)
 	{
@@ -278,6 +326,7 @@ public class AnalizorModel : INotifyPropertyChanged
 					target.Status = StatusEnum.Success;
 					OnPropertyChanged(nameof(target.Status));
 					(((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine()).IsEnabled = false;
+					//TODO: add the profit made from the target here
 				}
 				else if (isLastGo)
 				{
