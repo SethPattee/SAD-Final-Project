@@ -558,7 +558,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		return Snapshots.Select(x => x.Targets.Find(y => (y.ProductTarget ?? throw new ArgumentNullException("Product target list is null!")).ProductName == name)).ToList();
 	}
 
-	internal double GetDayCompletedFor(string product_name)
+	public double GetDayCompletedFor(string product_name)
 	{
 		try
 		{
