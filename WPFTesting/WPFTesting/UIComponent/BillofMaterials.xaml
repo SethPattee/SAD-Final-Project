@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent"
-        mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        mc:Ignorable="d"
         Title="BillofMaterials" Height="450" Width="400">
     <Grid Background="DarkGray">
         <Grid.ColumnDefinitions>

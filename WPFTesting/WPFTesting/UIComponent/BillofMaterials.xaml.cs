@@ -22,7 +22,7 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
         {
             InitializeComponent();
             DataContext = this;
-            SampleData();
+            //SampleData();
         }
 
         private ObservableCollection<Product> _list;
