@@ -33,6 +33,38 @@ internal static class SimulatorTestsHelpers
 			TargetQuantity = targetQuantity
 		};
 	}
+	public static ProductionTarget MakeProductionTargetDoor(int dateDue, int targetQuantity)
+	{
+		return new ProductionTarget()
+		{
+			DueDate = dateDue,
+			CurrentAmount = 0,
+			IsTargetEnabled = true,
+			Status = 0,
+			ProductTarget = new Product()
+			{
+				Quantity = 0,
+				ProductName = "Door"
+			},
+			TargetQuantity = targetQuantity
+		};
+	}
+	public static ProductionTarget MakeProductionTargetBox2(int dateDue, int targetQuantity)
+	{
+		return new ProductionTarget()
+		{
+			DueDate = dateDue,
+			CurrentAmount = 0,
+			IsTargetEnabled = true,
+			Status = 0,
+			ProductTarget = new Product()
+			{
+				Quantity = 0,
+				ProductName = "Box"
+			},
+			TargetQuantity = targetQuantity
+		};
+	}
 	public static SupplyChainViewModel setupTest()
 	{
 		IInitializedDataProvider data = new DataProvider_FAKE_Version3();
