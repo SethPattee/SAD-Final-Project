@@ -116,24 +116,24 @@ public class AnalizorModel : INotifyPropertyChanged
 		ShortestPath = "";
 		foreach (var supplier in model.SupplierList)
 		{
-			SupplierUIValues sup = makeIdenticalSupplierWithoutConnections(supplier);
+			SupplierUIValues sup = makeShallowCopySupplier(supplier);
 			AddSupplier(sup);
 		}
 		foreach (EndpointUIValues endpoint in model.EndpointList)
 		{
-			EndpointUIValues end = makeIdenticalEndpointWithoutConections(endpoint);
+			EndpointUIValues end = makeShallowCopyEndpoint(endpoint);
 			AddEndpoint(end);
 		}
 		foreach (Shipment shipment in model.ShipmentList) {
-            Shipment ship = makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(shipment);
+            Shipment ship = makeShallowCopyShipment(shipment);
             AddShipment(ship);
 		}
 		Snapshots.Add(MakeCurrentSnapShot());
 	}
-    private Shipment makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(Shipment shipment)
+    private Shipment makeShallowCopyShipment(Shipment shipment)
     {
-        Shipment ship = ShipmentWithSenderReciver(shipment);
-        ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
+        Shipment ship = GetShipmentWithSenderReciver(shipment);
+        ship.Products = makeShallowCopyOfProductColection(shipment.Products);
         ship.ToJoiningBoxCorner = "";
         ship.FromJoiningBoxCorner = "";
         // TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
@@ -144,33 +144,33 @@ public class AnalizorModel : INotifyPropertyChanged
 		Snapshot snapshot = new Snapshot();
 		foreach (var supplier in SupplierList)
 		{
-			SupplierUIValues sup = makeIdenticalSupplierWithoutConnections(supplier);
+			SupplierUIValues sup = makeShallowCopySupplier(supplier);
 			snapshot.Suppliers.Add(supplier);
 		}
 		foreach (EndpointUIValues endpoint in EndpointList)
 		{
-			EndpointUIValues end = makeIdenticalEndpointWithoutConections(endpoint);
+			EndpointUIValues end = makeShallowCopyEndpoint(endpoint);
 			snapshot.Endpoints.Add(end);
 		}
 		foreach (Shipment shipment in ShipmentList)
 		{
-			Shipment ship = ShipmentWithSenderReciver(shipment);
-			ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
+			Shipment ship = GetShipmentWithSenderReciver(shipment);
+			ship.Products = makeShallowCopyOfProductColection(shipment.Products);
 			ship.ToJoiningBoxCorner = "";
 			ship.FromJoiningBoxCorner = "";
 			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
 			snapshot.Shipments.Add(ship);
 		}
-		snapshot.ComponentsUsed = makeIdenticalColectionOfProductsNoConnections(_daysUsedComponents).ToList();
+		snapshot.ComponentsUsed = makeShallowCopyOfProductColection(_daysUsedComponents).ToList();
 		_daysUsedComponents.Clear();
 		return snapshot;
 	}
 
-	private Shipment ShipmentWithSenderReciver(Shipment shipment)
+	private Shipment GetShipmentWithSenderReciver(Shipment shipment)
 	{
 		Shipment ship = new Shipment();
 		ship.Sender = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Sender.Id)?.supplier ?? new Supplier();
-		if (shipment.Sender is EndpointNode endpoint)
+		if (shipment.Receiver is EndpointNode endpoint)
 		{
 			ship.Receiver = EndpointList.FirstOrDefault(e => e.supplier.Id == shipment.Receiver.Id)?.supplier ?? new EndpointNode();
 		}
@@ -181,53 +181,53 @@ public class AnalizorModel : INotifyPropertyChanged
 		return ship;
 	}
 
-	public static SupplierUIValues makeIdenticalSupplierWithoutConnections(SupplierUIValues supplier)
+	public static SupplierUIValues makeShallowCopySupplier(SupplierUIValues supplier)
 	{
 		SupplierUIValues sup = new SupplierUIValues();
 		sup.supplier = new Supplier();
 		sup.supplier.Name = supplier.supplier.Name;
-		sup.supplier.ComponentInventory = makeIdenticalColectionOfProductsNoConnections(supplier.supplier.ComponentInventory);
-		sup.supplier.ProductInventory = makeIdenticalColectionOfProductsNoConnections(supplier.supplier.ProductInventory);
+		sup.supplier.ComponentInventory = makeShallowCopyOfProductColection(supplier.supplier.ComponentInventory);
+		sup.supplier.ProductInventory = makeShallowCopyOfProductColection(supplier.supplier.ProductInventory);
 		sup.supplier.Id = supplier.supplier.Id;
 		sup.Position = new System.Drawing.Point();
 		return sup;
 	}
 
-	public static EndpointUIValues makeIdenticalEndpointWithoutConections(EndpointUIValues endpoint)
+	public static EndpointUIValues makeShallowCopyEndpoint(EndpointUIValues endpoint)
 	{
 		EndpointUIValues end = new EndpointUIValues();
 		end.supplier = new EndpointNode();
 		end.supplier.Name = endpoint.supplier.Name;
-		end.supplier.ComponentInventory = makeIdenticalColectionOfProductsNoConnections(endpoint.supplier.ComponentInventory);
-		end.supplier.ProductInventory = makeIdenticalColectionOfProductsNoConnections(endpoint.supplier.ProductInventory);
+		end.supplier.ComponentInventory = makeShallowCopyOfProductColection(endpoint.supplier.ComponentInventory);
+		end.supplier.ProductInventory = makeShallowCopyOfProductColection(endpoint.supplier.ProductInventory);
 		end.supplier.Id = endpoint.supplier.Id;
 		end.Position = new System.Drawing.Point();
-        ((EndpointNode)end.supplier).DeliveryRequirementsList = makeIdenticalColectionOfProductsNoConnections(((EndpointNode)endpoint.supplier).DeliveryRequirementsList);
-        ((EndpointNode)end.supplier).ProductionList = makeIdenticalColectionOfProductionLineNoConnections(((EndpointNode)endpoint.supplier).ProductionList);
+        ((EndpointNode)end.supplier).DeliveryRequirementsList = makeShallowCopyOfProductColection(((EndpointNode)endpoint.supplier).DeliveryRequirementsList);
+        ((EndpointNode)end.supplier).ProductionList = makeShalowCopyColectionOfProductionLine(((EndpointNode)endpoint.supplier).ProductionList);
         ((EndpointNode)end.supplier).Balance = ((EndpointNode)endpoint.supplier).Balance;
 		return end;
 	}
-    public static ObservableCollection<ProductLine> makeIdenticalColectionOfProductionLineNoConnections(ObservableCollection<ProductLine> Lines)
+    public static ObservableCollection<ProductLine> makeShalowCopyColectionOfProductionLine(ObservableCollection<ProductLine> Lines)
     {
         var newLines = new ObservableCollection<ProductLine>();
         foreach (var line in Lines)
         {
             var nl = new ProductLine();
-            nl.ResultingProduct = makeIdenticalProductWithoutConections(line.ResultingProduct);
+            nl.ResultingProduct = makeShallowCopyProduct(line.ResultingProduct);
             nl.ProductLineId = line.ProductLineId;
             nl.IsEnabled = line.IsEnabled;
-            nl.Components = makeIdenticalColectionOfProductsNoConnections(line.Components);
+            nl.Components = makeShallowCopyOfProductColection(line.Components);
             newLines.Add(nl);
         }
         return newLines;
     }
-    public static ObservableCollection<ProductionTarget> makeIdenticalColectionOfProductionTargetsNoConnections(ObservableCollection<ProductionTarget> targets)
+    public static ObservableCollection<ProductionTarget> makeShallowCopyColectionOfProductionTargets(ObservableCollection<ProductionTarget> targets)
     {
         var newTargets = new ObservableCollection<ProductionTarget>();
         foreach (var target in targets)
         {
             var newtarg = new ProductionTarget();
-            newtarg.ProductTarget = makeIdenticalProductWithoutConections(target.ProductTarget ?? new Product());
+            newtarg.ProductTarget = makeShallowCopyProduct(target.ProductTarget ?? new Product());
             newtarg.CurrentAmount = target.CurrentAmount;
             newtarg.DueDate = target.DueDate;
             StatusEnum temStatus;
@@ -252,18 +252,18 @@ public class AnalizorModel : INotifyPropertyChanged
         return newTargets;
     }
 
-    public static ObservableCollection<Product> makeIdenticalColectionOfProductsNoConnections(ObservableCollection<Product> products)
+    public static ObservableCollection<Product> makeShallowCopyOfProductColection(ObservableCollection<Product> products)
 	{
 		var prods = new ObservableCollection<Product>();
 		foreach (var ep in products)
 		{
-			Product p = makeIdenticalProductWithoutConections(ep);
+			Product p = makeShallowCopyProduct(ep);
 			prods.Add(p);
 		}
 		return prods;
 	}
 
-	public static Product makeIdenticalProductWithoutConections(Product ep)
+	public static Product makeShallowCopyProduct(Product ep)
 	{
 		Product p = new Product();
 		p.ProductName = ep.ProductName;
@@ -324,17 +324,17 @@ public class AnalizorModel : INotifyPropertyChanged
         EndpointList.Clear();
         foreach (var end in initValues.Endpoints)
         {
-            EndpointList.Add(makeIdenticalEndpointWithoutConections(end));
+            EndpointList.Add(makeShallowCopyEndpoint(end));
         }
         SupplierList.Clear();
         foreach (var sup in initValues.Suppliers)
         {
-            SupplierList.Add(makeIdenticalSupplierWithoutConnections(sup));
+            SupplierList.Add(makeShallowCopySupplier(sup));
         }
         ShipmentList.Clear();
         foreach (var shipment in initValues.Shipments)
         {
-            ShipmentList.Add(makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(shipment));
+            ShipmentList.Add(makeShallowCopyShipment(shipment));
         }
         // we want to keep produciton targets as is
         CurrentDay = 1;
@@ -364,7 +364,7 @@ public class AnalizorModel : INotifyPropertyChanged
 				var productionrequirments = ((EndpointNode)end.supplier).ProductionList.FirstOrDefault(p => p.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine();
 				foreach (Product component in productionrequirments.Components)
 				{
-					var addForQntProd = makeIdenticalProductWithoutConections(component);
+					var addForQntProd = makeShallowCopyProduct(component);
 					if (BiginDayProd == null)
 					{
 						addForQntProd.Quantity = component.Quantity;

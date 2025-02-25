@@ -144,10 +144,10 @@ public class SimulatorTests
 		EndpointUIValues endpoint = simulation.EndpointList.First();
 		simulation.PlaceOrderFor(product,endpoint);
 		//Assert.That(simulation.ShipmentList.Count, Is.EqualTo(2));
-		Shipment shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault(p => p.ProductName == "Drill Bit") != null) ;
+		Shipment shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault(p => p.ProductName == "Drill Bit") != null) ?? throw new Exception() ;
 		Assert.That(shipment.Receiver.Name, Is.EqualTo(endpoint.supplier.Name));
 		Assert.That(shipment.Products.Count, Is.EqualTo(1));
-		Assert.That(shipment.Products.FirstOrDefault().Quantity, Is.EqualTo(10));
+		Assert.That(shipment.Products.FirstOrDefault()?.Quantity, Is.EqualTo(10));
 		Assert.That(shipment.Products.First().ProductName, Is.EqualTo("Drill Bit"));
 	}
 	[Test]
@@ -191,13 +191,6 @@ public class SimulatorTests
 		Assert.That(simulation.ChangeLog.First().shipmentReceiver, Is.EqualTo(simulation.EndpointList.First()));
 		Assert.That(simulation.ChangeLog.First().neededProduct.ProductName, Is.EqualTo("screws"));
 	}
-
-	//	Things we should test with similar set up
-	//	var shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault()?.ProductName == "screws") ?? new Shipment();
-	//	var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();
-	//	Assert.That(shipmentProd.Quantity, Is.EqualTo(28));
-	//	// should have a failure status for produciton Target
-	//	Assert.That(newtarg.Status, Is.EqualTo(StatusEnum.Failure));
 	[Test]
 	public void ModelSetsTargetToSuccessWhenSimulationCompletes()
 	{
@@ -239,5 +232,4 @@ public class SimulatorTests
 		Assert.That(simulation.Snapshots.First().ComponentsUsed, Is.Empty);
 		Assert.That(simulation.Snapshots.Last().ComponentsUsed, Is.Not.Empty);
     }
-
 }
