@@ -8,4 +8,9 @@ namespace SupplyChainTesting;
 
 public class SimulationWithMultipleProductsTests
 {
+	[Test]
+	public void TwoProductionTargetsCanCompleteWithShipmentsOrdered()
+	{
+
+	}
 }

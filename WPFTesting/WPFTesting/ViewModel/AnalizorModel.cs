@@ -125,12 +125,12 @@ public class AnalizorModel : INotifyPropertyChanged
 			AddEndpoint(end);
 		}
 		foreach (Shipment shipment in model.ShipmentList) {
-            Shipment ship = makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(shipment);
+            Shipment ship = makeShallowCopyShipment(shipment);
             AddShipment(ship);
 		}
 		Snapshots.Add(MakeCurrentSnapShot());
 	}
-    private Shipment makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(Shipment shipment)
+    private Shipment makeShallowCopyShipment(Shipment shipment)
     {
         Shipment ship = GetShipmentWithSenderReciver(shipment);
         ship.Products = makeShallowCopyOfProductColection(shipment.Products);
@@ -334,7 +334,7 @@ public class AnalizorModel : INotifyPropertyChanged
         ShipmentList.Clear();
         foreach (var shipment in initValues.Shipments)
         {
-            ShipmentList.Add(makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(shipment));
+            ShipmentList.Add(makeShallowCopyShipment(shipment));
         }
         // we want to keep produciton targets as is
         CurrentDay = 1;
