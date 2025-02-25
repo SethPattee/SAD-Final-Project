@@ -170,7 +170,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	{
 		Shipment ship = new Shipment();
 		ship.Sender = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Sender.Id)?.supplier ?? new Supplier();
-		if (shipment.Sender is EndpointNode endpoint)
+		if (shipment.Receiver is EndpointNode endpoint)
 		{
 			ship.Receiver = EndpointList.FirstOrDefault(e => e.supplier.Id == shipment.Receiver.Id)?.supplier ?? new EndpointNode();
 		}
