@@ -187,7 +187,6 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             plotter.PlotOriginY = BalancePerDay.Min();
             linegraph.IsAutoFitEnabled = true;
             lg.Plot(GraphDays, BalancePerDay);
-            //lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
             linegraph.Children.Add(lg);
         }
 

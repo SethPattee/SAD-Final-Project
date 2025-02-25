@@ -19,6 +19,7 @@ namespace FactorSADEfficiencyOptimizer.ViewModel;
 public class AnalizorModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
+    private ObservableCollection<Product> _daysUsedComponents = new ObservableCollection<Product>();
     private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
 	public ObservableCollection<EndpointUIValues> EndpointList
 	{
@@ -124,16 +125,21 @@ public class AnalizorModel : INotifyPropertyChanged
 			AddEndpoint(end);
 		}
 		foreach (Shipment shipment in model.ShipmentList) {
-			Shipment ship = ShipmentWithSenderReciver(shipment);
-			ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
-			ship.ToJoiningBoxCorner = "";
-			ship.FromJoiningBoxCorner = "";
-			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
-			AddShipment(ship);
+            Shipment ship = makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(shipment);
+            AddShipment(ship);
 		}
 		Snapshots.Add(MakeCurrentSnapShot());
 	}
-	public Snapshot MakeCurrentSnapShot()
+    private Shipment makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(Shipment shipment)
+    {
+        Shipment ship = ShipmentWithSenderReciver(shipment);
+        ship.Products = makeIdenticalColectionOfProductsNoConnections(shipment.Products);
+        ship.ToJoiningBoxCorner = "";
+        ship.FromJoiningBoxCorner = "";
+        // TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
+        return ship;
+    }
+    public Snapshot MakeCurrentSnapShot()
 	{
 		Snapshot snapshot = new Snapshot();
 		foreach (var supplier in SupplierList)
@@ -155,6 +161,8 @@ public class AnalizorModel : INotifyPropertyChanged
 			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
 			snapshot.Shipments.Add(ship);
 		}
+		snapshot.ComponentsUsed = makeIdenticalColectionOfProductsNoConnections(_daysUsedComponents).ToList();
+		_daysUsedComponents.Clear();
 		return snapshot;
 	}
 
@@ -194,13 +202,57 @@ public class AnalizorModel : INotifyPropertyChanged
 		end.supplier.ProductInventory = makeIdenticalColectionOfProductsNoConnections(endpoint.supplier.ProductInventory);
 		end.supplier.Id = endpoint.supplier.Id;
 		end.Position = new System.Drawing.Point();
-		((EndpointNode)end.supplier).DeliveryRequirementsList = ((EndpointNode)endpoint.supplier).DeliveryRequirementsList;
-		((EndpointNode)end.supplier).ProductionList = ((EndpointNode)endpoint.supplier).ProductionList;
-		((EndpointNode)end.supplier).Balance = ((EndpointNode)endpoint.supplier).Balance;
+        ((EndpointNode)end.supplier).DeliveryRequirementsList = makeIdenticalColectionOfProductsNoConnections(((EndpointNode)endpoint.supplier).DeliveryRequirementsList);
+        ((EndpointNode)end.supplier).ProductionList = makeIdenticalColectionOfProductionLineNoConnections(((EndpointNode)endpoint.supplier).ProductionList);
+        ((EndpointNode)end.supplier).Balance = ((EndpointNode)endpoint.supplier).Balance;
 		return end;
 	}
+    public static ObservableCollection<ProductLine> makeIdenticalColectionOfProductionLineNoConnections(ObservableCollection<ProductLine> Lines)
+    {
+        var newLines = new ObservableCollection<ProductLine>();
+        foreach (var line in Lines)
+        {
+            var nl = new ProductLine();
+            nl.ResultingProduct = makeIdenticalProductWithoutConections(line.ResultingProduct);
+            nl.ProductLineId = line.ProductLineId;
+            nl.IsEnabled = line.IsEnabled;
+            nl.Components = makeIdenticalColectionOfProductsNoConnections(line.Components);
+            newLines.Add(nl);
+        }
+        return newLines;
+    }
+    public static ObservableCollection<ProductionTarget> makeIdenticalColectionOfProductionTargetsNoConnections(ObservableCollection<ProductionTarget> targets)
+    {
+        var newTargets = new ObservableCollection<ProductionTarget>();
+        foreach (var target in targets)
+        {
+            var newtarg = new ProductionTarget();
+            newtarg.ProductTarget = makeIdenticalProductWithoutConections(target.ProductTarget ?? new Product());
+            newtarg.CurrentAmount = target.CurrentAmount;
+            newtarg.DueDate = target.DueDate;
+            StatusEnum temStatus;
+            switch (target.Status)
+            {
+                case (StatusEnum.Success):
+                    temStatus = StatusEnum.Success;
+                    break;
+                case (StatusEnum.Failure):
+                    temStatus = StatusEnum.Failure;
+                    break;
+                case (StatusEnum.Warning):
+                    temStatus = StatusEnum.Warning;
+                    break;
+                default:
+                    temStatus = StatusEnum.NotDone;
+                    break;
+            }
+            newtarg.Status = temStatus;
+            newtarg.IsTargetEnabled = target.IsTargetEnabled;
+        }
+        return newTargets;
+    }
 
-	public static ObservableCollection<Product> makeIdenticalColectionOfProductsNoConnections(ObservableCollection<Product> products)
+    public static ObservableCollection<Product> makeIdenticalColectionOfProductsNoConnections(ObservableCollection<Product> products)
 	{
 		var prods = new ObservableCollection<Product>();
 		foreach (var ep in products)
@@ -254,15 +306,91 @@ public class AnalizorModel : INotifyPropertyChanged
 
 	public void PassTimeUntilDuration(double duration)
 	{
-		OrderMissingComponents();
+        ResetStatetoFirstSnapShot();
+        OrderMissingComponents();
 		for (double i = 0; i < duration; i++)
 		{
 			AdvanceTime();
+			RecordUsedComponents();
 			UpdateProducitonTargets();
 			Snapshots.Add(MakeCurrentSnapShot());
 			CurrentDay++;
 		}
 		UpdateProducitonTargets(isLastGo: true);
+	}
+    private void ResetStatetoFirstSnapShot()
+    {
+        Snapshot initValues = Snapshots[0];
+        EndpointList.Clear();
+        foreach (var end in initValues.Endpoints)
+        {
+            EndpointList.Add(makeIdenticalEndpointWithoutConections(end));
+        }
+        SupplierList.Clear();
+        foreach (var sup in initValues.Suppliers)
+        {
+            SupplierList.Add(makeIdenticalSupplierWithoutConnections(sup));
+        }
+        ShipmentList.Clear();
+        foreach (var shipment in initValues.Shipments)
+        {
+            ShipmentList.Add(makeIdenticalShipmentWITH_CONNECTIONS_ToSuplierAndEndpointLists(shipment));
+        }
+        // we want to keep produciton targets as is
+        CurrentDay = 1;
+        ChangeLog.Clear();
+        IssueLog.Clear();
+        Snapshots.Clear();
+        Snapshots.Add(initValues);
+        foreach (ProductionTarget targ in ProductionTargets)
+        {
+            targ.Status = StatusEnum.NotDone;
+        }
+    }
+    private void RecordUsedComponents()
+	{
+		List<Product> ToAddComponents = new List<Product>();
+		//get old products
+		List<Product> startProducts = new List<Product>();
+        foreach (EndpointUIValues end in Snapshots.Last().Endpoints)
+		{
+			startProducts.AddRange(end.supplier.ProductInventory);
+		}
+		foreach (EndpointUIValues end in EndpointList)
+		{
+			foreach ( Product prod in end.supplier.ProductInventory )
+			{
+				var BiginDayProd = startProducts.FirstOrDefault(p => p.ProductName == prod.ProductName);
+				var productionrequirments = ((EndpointNode)end.supplier).ProductionList.FirstOrDefault(p => p.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine();
+				foreach (Product component in productionrequirments.Components)
+				{
+					var addForQntProd = makeIdenticalProductWithoutConections(component);
+					if (BiginDayProd == null)
+					{
+						addForQntProd.Quantity = component.Quantity;
+					}
+					else
+					{
+
+						addForQntProd.Quantity = component.Quantity * ((prod.Quantity - BiginDayProd.Quantity) / productionrequirments.ResultingProduct.Quantity);
+					}
+                    ToAddComponents.Add(addForQntProd);
+				}
+			}
+		}
+		foreach (Product prod in ToAddComponents)
+		{
+			var existingProd = _daysUsedComponents.FirstOrDefault(p => p.ProductName == prod.ProductName);
+
+            if (existingProd != null)
+			{
+				existingProd.Quantity += prod.Quantity;
+			}
+			else
+			{
+				_daysUsedComponents.Add(prod);
+			}
+		}
 	}
 	private void UpdateProducitonTargets(bool isLastGo = false)
 	{
@@ -277,8 +405,11 @@ public class AnalizorModel : INotifyPropertyChanged
 				{
 					target.Status = StatusEnum.Success;
 					OnPropertyChanged(nameof(target.Status));
-					(((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine()).IsEnabled = false;
-				}
+                    var pl = (((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
+                    pl.IsEnabled = false;
+                    OnPropertyChanged(nameof(pl));
+                    //TODO: add the profit made from the target here
+                }
 				else if (isLastGo)
 				{
 					target.Status = StatusEnum.Failure;

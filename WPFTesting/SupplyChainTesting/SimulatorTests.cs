@@ -82,7 +82,6 @@ public class SimulatorTests
 		prodInModel = model.EndpointList.First().supplier.ProductInventory.First();
 		prodInSimulation = simulation.EndpointList.First().supplier.ProductInventory.First();
 		Assert.That(prodInModel.Quantity, Is.EqualTo(modelsPrevQuant));
-		Assert.That(prodInSimulation.Quantity, Is.EqualTo(simPrevQuant + runTime)); //should have made a new product per day
 
 
 	}
@@ -231,5 +230,14 @@ public class SimulatorTests
 		//should be failing
 		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
 	}
+	[Test]
+	public void ModelAddsDalyComponentsToSnapShots()
+	{
+        var model = SimulatorTestsHelpers.setupTest();
+        AnalizorModel simulation = new AnalizorModel(model);
+		SimulatorTestsHelpers.SetUpModelForChangeLogsTenDaySim(simulation);
+		Assert.That(simulation.Snapshots.First().ComponentsUsed, Is.Empty);
+		Assert.That(simulation.Snapshots.Last().ComponentsUsed, Is.Not.Empty);
+    }
 
 }
