@@ -119,6 +119,7 @@ public class SimulatorTests
 	{
 		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
+		simulation.ProductionTargets.Clear();
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
@@ -155,6 +156,7 @@ public class SimulatorTests
 	{
 		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
+		simulation.ProductionTargets.Clear();
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 10, targetQuantity: 10); //box takes 12 screws and 10 wood
 												// endpoint has 20 screws and 1000 wood
 												// 'Vendor 3'  has screws 

@@ -33,6 +33,38 @@ internal static class SimulatorTestsHelpers
 			TargetQuantity = targetQuantity
 		};
 	}
+	public static ProductionTarget MakeProductionTargetDoor(int dateDue, int targetQuantity)
+	{
+		return new ProductionTarget()
+		{
+			DueDate = dateDue,
+			CurrentAmount = 0,
+			IsTargetEnabled = true,
+			Status = 0,
+			ProductTarget = new Product()
+			{
+				Quantity = 0,
+				ProductName = "Door"
+			},
+			TargetQuantity = targetQuantity
+		};
+	}
+	public static ProductionTarget MakeProductionTargetBox2(int dateDue, int targetQuantity)
+	{
+		return new ProductionTarget()
+		{
+			DueDate = dateDue,
+			CurrentAmount = 0,
+			IsTargetEnabled = true,
+			Status = 0,
+			ProductTarget = new Product()
+			{
+				Quantity = 0,
+				ProductName = "Box"
+			},
+			TargetQuantity = targetQuantity
+		};
+	}
 	public static SupplyChainViewModel setupTest()
 	{
 		IInitializedDataProvider data = new DataProvider_FAKE_Version3();
@@ -57,6 +89,7 @@ internal static class SimulatorTestsHelpers
 	{
 		Assert.That(simulation.ChangeLog, Is.Empty);
 		Assert.That(simulation.IssueLog, Is.Empty);
+		simulation.ProductionTargets.Clear();
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(targetQuantity: 10, dateDue: 5);
 		(simulation.SupplierList
 			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")

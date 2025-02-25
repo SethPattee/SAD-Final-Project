@@ -11,8 +11,12 @@ using System.Threading.Tasks;
 
 namespace SupplyChainTesting.MockClasses;
 
-public class DataProvider_FAKE_2 : IInitializedDataProvider
+public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 {
+	public DataProvider_FAKE_Version4()
+	{
+		
+	}
 	public IEnumerable<SupplierUIValues> GetBoxValues()
 	{
 
@@ -29,13 +33,13 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 						},
 						new Product()
 						{
-							Quantity=10,
-							ProductName="Saw Blade 2-pack",
+							Quantity=1000,
+							ProductName="Wood",
 							Units="kg"
 						}
 					},
 
-					Name="Vendor 1",
+					Name="Wood Vendor",
 					Id = Guid.NewGuid()
 				},
 
@@ -54,16 +58,16 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 						},
 						new Product()
 						{
-							Quantity=10,
-							ProductName="Saw Blade 2-pack",
+							Quantity=1000,
+							ProductName="Screws",
 							Units="kg"
 						}
 					},
 
-					Name="Vendor 2",
+					Name="Screws Vendor",
 					Id = Guid.NewGuid()
 				},
-				Position= new Point(280,280)
+				Position= new System.Drawing.Point(280,280)
 			},
 			new SupplierUIValues
 			{
@@ -84,19 +88,19 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=20,
-							ProductName="screws"
+							ProductName="Screws"
 						},
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="sawdust",
+							ProductName="Glue",
 							Units="kg"
 						}
 					},
-					Name="Vendor 3",
+					Name="Glue Vendor",
 					Id=Guid.NewGuid()
 				},
-				Position= new Point(50,320)
+				Position= new System.Drawing.Point(50,320)
 			},
 			new EndpointUIValues
 			{
@@ -107,7 +111,7 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity = 0,
-							ProductName = "box"
+							ProductName = "Box"
 						}
 					},
 					Name = "Enpoint Name",
@@ -117,18 +121,18 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=200,
-							ProductName="screws"
+							ProductName="Screws"
 						},
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="sawdust",
+							ProductName="Sawdust",
 							Units="kg"
 						},
 						new Product()
 						{
 							Quantity=10,
-							ProductName= "wood"
+							ProductName= "Wood"
 						}
 					},
 					ProductionList =
@@ -137,20 +141,42 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 							{
 								ResultingProduct = new Product()
 								{
-									Quantity = 1,
-									ProductName = "box"
+									Quantity = 2,
+									ProductName = "Box"
 								},
 								Components = new ObservableCollection<Product>()
 								{
 									new Product()
 									{
 										Quantity=12,
-										ProductName="screws"
+										ProductName="Screws"
 									},
 									new Product()
 									{
 										Quantity=10,
-										ProductName= "wood"
+										ProductName= "Wood"
+									}
+								},
+								IsEnabled = true,
+							},
+						   new ProductLine()
+							{
+								ResultingProduct = new Product()
+								{
+									Quantity = 1,
+									ProductName = "Door"
+								},
+								Components = new ObservableCollection<Product>()
+								{
+									new Product()
+									{
+										Quantity=10,
+										ProductName="Glue"
+									},
+									new Product()
+									{
+										Quantity=10,
+										ProductName= "Wood"
 									}
 								},
 								IsEnabled = true,
@@ -173,12 +199,12 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 					new Product()
 									{
 										Quantity=10,
-										ProductName= "wood"
+										ProductName= "Glue"
 									},
 					new Product()
 									{
-										Quantity=10,
-										ProductName= "nails"
+										Quantity=2,
+										ProductName= "Screws"
 									}
 
 				},
@@ -186,29 +212,8 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 				{
 					ProductInventory =
 					{
-						new Product()
-						{
-							Quantity = 1,
-							ProductName = "Hammer"
-						},
-						new Product()
-						{
-							Quantity=1,
-							ProductName="10mm socket"
-						},
-						new Product()
-						{
-							Quantity=20,
-							ProductName="screws"
-						},
-						new Product()
-						{
-							Quantity=1000,
-							ProductName="sawdust",
-							Units="kg"
-						}
 					},
-					Name="Vendor 3",
+					Name="Glue Vendor",
 					Id=Guid.NewGuid()
 				},
 				Receiver =
@@ -216,18 +221,8 @@ public class DataProvider_FAKE_2 : IInitializedDataProvider
 				{
 					ProductInventory =
 					{
-						new Product()
-						{
-							Quantity = 1,
-							ProductName = "Hammer"
-						},
-						new Product()
-						{
-							Quantity=1,
-							ProductName="10mm socket"
-						},
 					},
-					Name="Vendor 2",
+					Name="Enpoint Name",
 					Id=Guid.NewGuid()
 
 				},
