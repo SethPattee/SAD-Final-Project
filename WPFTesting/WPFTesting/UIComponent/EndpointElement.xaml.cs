@@ -143,5 +143,21 @@ namespace FactorySADEfficiencyOptimizer
 			canvas.Children.Remove(this);
 			EndpointDeleted?.Invoke(this, EventArgs.Empty);
 		}
-	}
+
+        internal void SetBackgroundColor(Color newValue)
+        {
+            if((newValue.ScG+newValue.ScB+newValue.ScR)/3 < 0.4)
+            {
+                ComponentTextBox.Foreground = new SolidColorBrush(Colors.FloralWhite);
+                ProductTextBox.Foreground = new SolidColorBrush(Colors.FloralWhite);
+            }
+            else
+            {
+                ComponentTextBox.Foreground = new SolidColorBrush(Colors.Black);
+                ProductTextBox.Foreground = new SolidColorBrush(Colors.Black);
+            }
+
+            ElementBackground.Background = new SolidColorBrush(newValue);
+        }
+    }
 }

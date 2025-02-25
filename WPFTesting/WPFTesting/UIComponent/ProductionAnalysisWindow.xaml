@@ -33,7 +33,7 @@
         <StackPanel Grid.Row="0" Grid.Column="0">
             <TextBlock Text="Production Target Analysis:" FontSize="26" FontWeight="Bold"></TextBlock>
             <TextBlock Text="1. Make production targets from your endpoint." FontWeight="SemiBold"></TextBlock>
-            <TextBlock Text="2. Run the simulation, and double-click on the status." FontWeight="SemiBold"></TextBlock>
+            <TextBlock Text="2. Run the simulation, and right-click on the status." FontWeight="SemiBold"></TextBlock>
             
         </StackPanel>
         
@@ -79,13 +79,14 @@
                             <TextBlock HorizontalAlignment="Left" Grid.Column="4" Text="Status"></TextBlock>
                         </Grid>
                     </Border>
-                    <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" MouseDoubleClick="ProdTargetList_MouseDoubleClick"
+                    <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" MouseDoubleClick="ProdTargetList_Click"
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ProdTargetList"
                               ItemsSource="{Binding ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding TargetProductionTarget}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="LightGray" Height="48"
+                                      PreviewMouseRightButtonDown="Grid_MouseRightButtonDown"
                                       Width="{Binding ElementName=ProdTargetList, Path=ActualWidth, Mode=OneWay, 
                                     UpdateSourceTrigger=PropertyChanged, Converter={StaticResource marginConverter}}">
                                     <Grid.ColumnDefinitions>
@@ -102,7 +103,7 @@
                                              FontSize="16"></TextBox>
                                     <TextBox Grid.Column="2" FontSize="16" Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
                                     <TextBox Grid.Column="3" FontSize="16" Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
-                                    <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="10 0 0 0">
+                                    <StackPanel Grid.Column="4" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10 0 0 0">
                                         <TextBlock Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}" 
                                             FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0" 
                                             VerticalAlignment="Center"/>
@@ -114,6 +115,13 @@
                                             </Image.Source>
                                         </Image>
                                     </StackPanel>
+
+                                    <Grid.ContextMenu>
+                                        <ContextMenu StaysOpen="true">
+                                            <MenuItem Header="Materials used" Click="OpenBillOfMaterials_Click"></MenuItem>
+                                            <MenuItem Header="View results" Click="ProdTargetList_Click"></MenuItem>
+                                        </ContextMenu>
+                                    </Grid.ContextMenu>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
