@@ -33,7 +33,7 @@
         <StackPanel Grid.Row="0" Grid.Column="0">
             <TextBlock Text="Production Target Analysis:" FontSize="26" FontWeight="Bold"></TextBlock>
             <TextBlock Text="1. Make production targets from your endpoint." FontWeight="SemiBold"></TextBlock>
-            <TextBlock Text="2. Run the simulation, and double-click on the status." FontWeight="SemiBold"></TextBlock>
+            <TextBlock Text="2. Run the simulation, and right-click on the status." FontWeight="SemiBold"></TextBlock>
             
         </StackPanel>
         

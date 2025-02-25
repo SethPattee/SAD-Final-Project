@@ -30,7 +30,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         public IndividualTargetWindow()
         {
             InitializeComponent();
-            ItemModel = new();
+            DataContext = ItemModel;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

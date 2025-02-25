@@ -1062,5 +1062,14 @@ namespace YourNamespace
                     .ComponentInventory.Remove((Product)b.DataContext);
             }
         }
+
+        private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            foreach(var endpoint in DiagramCanvas.Children.OfType<EndpointElement>())
+            {
+                endpoint.SetBackgroundColor(e.NewValue ?? throw new Exception("Color was null in main window color picker for Endpoint! Ya dingus!"));
+            }
+            
+        }
     }
 }

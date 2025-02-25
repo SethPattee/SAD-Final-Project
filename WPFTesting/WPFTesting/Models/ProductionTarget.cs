@@ -70,6 +70,16 @@ namespace FactorSADEfficiencyOptimizer.Models
                 OnPropertyChanged(nameof(IsTargetEnabled));
             }
         }
+        private double _daycompleted;
+        public double DayCompleted
+        {
+            get => _daycompleted;
+            set
+            {
+                _daycompleted = value;
+                OnPropertyChanged(nameof(DayCompleted));
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
