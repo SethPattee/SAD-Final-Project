@@ -12,6 +12,15 @@ namespace FactorySADEfficiencyOptimizer.Shapes
 {
     public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
     {
+        public decimal Profit
+        {
+            get => ((EndpointNode)supplier).Balance;
+            set
+            {
+                ((EndpointNode)supplier).Balance = value;
+                OnPropertyChanged(nameof(supplier));
+            }
+        }
         public EndpointUIValues()
         {
             supplier = new EndpointNode();

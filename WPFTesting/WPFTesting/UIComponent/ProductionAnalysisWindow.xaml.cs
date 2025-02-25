@@ -243,42 +243,124 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             }
         }
 
-        private void ProdTargetList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ProdTargetList_Click(object sender, RoutedEventArgs e)
         {
             if(sender is ListView s)
             {
-                string product_name = ((ProductionTarget)s.SelectedItem).ProductTarget!.ProductName;
-                IndividualTargetWindow individualTargetWindow = new IndividualTargetWindow()
-                {
-                    ItemModel = new IndividualTargetModel()
-                    {
-                        TargetItem = ((ProductionTarget)s.SelectedItem),
-                        DaysRun = simModel.GetQuantityPerDayForGraph(product_name),
-                        TargetOverDays = new ObservableCollection<ProductionTarget>(simModel.ExtractProductionTargetChanges(product_name)!),
-                        Issues = new ObservableCollection<string>()
-                    }
-                };
+                if (s.SelectedItem is null || ((ProductionTarget)s.SelectedItem).ProductTarget is null)
+                    return;
 
-                // For each '!': Kaboom!
-                // Gotta find a better solution, maybe better design, but eh.
-                foreach(var issue in simModel.IssueLog.Where(x => x.ProductionTarget.ProductTarget!.ProductName == product_name))
-                {
-                    string shipmentaddition = "";
-                    if (issue.Severity == StatusEnum.Failure)
-                        shipmentaddition = "Critical failure occurred! Could not complete target.";
-                    if (issue.Solution.Action == ActionEnum.addedShipment)
-                        shipmentaddition = $"Added a shipment: {issue.Solution.neededProduct.Quantity}" +
-                            $" {issue.Solution.neededProduct.Units} {issue.Solution.neededProduct.ProductName}" +
-                            $" ordered for ${issue.Solution.neededProduct.Price}.";
+                var product_target = (ProductionTarget)s.SelectedItem!;
+                var product_name = product_target.ProductTarget!.ProductName;
+                IndividualTargetWindow individualTarget = MakeNewIndividualTargetWindow(product_target, product_name);
 
-                    individualTargetWindow.ItemModel.Issues.Add($"Item {product_name} issue on {issue.DayFound}: {issue.Severity.ToString()}" +
-                        $"{shipmentaddition}");
-                }
+                individualTarget.ItemModel.Issues = GetAllIssues(product_name);
+                individualTarget.Owner = this;
+                individualTarget.Show();
+            }
+            else if (sender is MenuItem m)
+            {
+                if(m.DataContext is null || ((ProductionTarget)m.DataContext).ProductTarget is null)
+                        return;
 
-                individualTargetWindow.Owner = this;
-                individualTargetWindow.Show();
+                var product_target = (ProductionTarget)m.DataContext;
+                var product_name = product_target.ProductTarget!.ProductName;
+                IndividualTargetWindow individualTarget = MakeNewIndividualTargetWindow(product_target, product_name);
+                individualTarget.ItemModel.Issues = GetAllIssues(product_name);
+                individualTarget.Owner = this;
+                individualTarget.Show();
             }
         }
+
+        private ObservableCollection<string> GetAllIssues(string product_name)
+        {
+            var ocs = new ObservableCollection<string>();
+            if (simModel.IssueLog.Count == 0)
+            {
+                ocs.Add("No issues.");
+                return ocs;
+            }
+
+            // For each '!': Kaboom!
+            // Gotta find a better solution, maybe better design, but eh.
+            foreach (var issue in simModel.IssueLog.Where(x => x.ProductionTarget.ProductTarget!.ProductName == product_name))
+            {
+                string shipmentaddition = "";
+                if (issue.Severity == StatusEnum.Failure)
+                    shipmentaddition = "Critical failure occurred! Could not complete target.";
+                if (issue.Solution.Action == ActionEnum.addedShipment)
+                    shipmentaddition = $"Added a shipment: {issue.Solution.neededProduct.Quantity}" +
+                        $" {issue.Solution.neededProduct.Units} {issue.Solution.neededProduct.ProductName}" +
+                        $" ordered for ${issue.Solution.neededProduct.Price}.";
+
+                ocs.Add($"Item {product_name} issue on {issue.DayFound}: {issue.Severity.ToString()}" +
+                    $"{shipmentaddition}");
+            }
+
+            return ocs;
+        }
+
+        private IndividualTargetWindow MakeNewIndividualTargetWindow(ProductionTarget pt, string product_name)
+        {
+            return new IndividualTargetWindow()
+            {
+                ItemModel = new IndividualTargetModel()
+                {
+                    TargetItem = pt,
+                    DaysRun = simModel.GetQuantityPerDayForGraph(product_name),
+                    TargetOverDays = new ObservableCollection<ProductionTarget>(simModel.ExtractProductionTargetChanges(product_name)!),
+                    Issues = new ObservableCollection<string>(),
+                    DayCompleted = simModel.GetDayCompletedFor(product_name)
+                }
+            };
+        }
+
+        private ProductionTarget _selectedTarget;
+
+        private void Grid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is Grid g)
+            {
+                _selectedTarget = ((ProductionTarget)g.DataContext);
+            }
+        }
+
+        private void OpenBillOfMaterials_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedTarget is null)
+                return;
+
+            if (simModel.ProductionTargets.Any(x => x.Status == StatusEnum.NotDone))
+                return;
+
+            ObservableCollection<Product> spentProducts = new();
+            BillofMaterials bom = new BillofMaterials();
+            bom.TotalExpenses = simModel.Snapshots.Sum(x => x.todaysSpending);
+            bom.TargetName = _selectedTarget.ProductTarget!.ProductName;
+            Dictionary<string, Product> component_use = ExtractUsedComponents();
+            bom.List = new ObservableCollection<Product>(component_use.Values);
+
+            bom.Owner = this;
+            bom.Show();
+        }
+
+        private Dictionary<string, Product> ExtractUsedComponents()
+        {
+            Dictionary<string, Product> component_use = new();
+            foreach (var item in simModel.Snapshots)
+            {
+                foreach (var component in item.ComponentsUsed)
+                {
+                    if (!component_use.ContainsKey(component.ProductName))
+                        component_use.Add(component.ProductName, component);
+                    else
+                        component_use[component.ProductName].Quantity += component.Quantity;
+                }
+            }
+
+            return component_use;
+        }
+
 
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         //{

@@ -105,6 +105,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                 {
                     foreach (var component in pl.Components)
                     {
+                        CanProceed = true;
                         foreach(var inventorycomponent in TransactionalComponentInventory)
                         {
                             if(inventorycomponent.ProductName == component.ProductName

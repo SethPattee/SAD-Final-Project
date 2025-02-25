@@ -5,20 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent"
         mc:Ignorable="d"
-        Title="BillofMaterials" Height="450" Width="800">
-    <Grid>
+        Title="BillofMaterials" Height="450" Width="400">
+    <Grid Background="DarkGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="559*"/>
-            <ColumnDefinition Width="241*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <!-- Title Section -->
-        <TextBlock Text="Bill of Materials" FontSize="24" FontWeight="Bold" HorizontalAlignment="Left" Margin="302,10,0,10" />
+        <TextBlock Text="Bill of Materials" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"
+                   VerticalAlignment="Top" Margin="0 20 0 0" Grid.Column="0" Grid.ColumnSpan="2"/>
 
         <!-- Products List Section -->
         <Border BorderBrush="Gray" Margin="10,50,10,10" Grid.ColumnSpan="2">
             <Grid>
-                <TextBlock Text="Products:" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,10" />
-                <ListView x:Name="OutputListview" ItemsSource="{Binding List}" Margin="0,30,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="19*"></RowDefinition>
+                    <RowDefinition Height="168*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Products:" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                <TextBlock Text="{Binding TargetName, Mode=OneTime}" FontSize="24" FontWeight="SemiBold" Grid.Column="1"></TextBlock>
+                <ListView x:Name="OutputListview" ItemsSource="{Binding List}" Margin="0,0,0,10" Grid.Row="1" Grid.ColumnSpan="2">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Components" DisplayMemberBinding="{Binding ProductName}" />
@@ -32,9 +42,9 @@
         </Border>
 
         <!-- Total Section -->
-        <StackPanel HorizontalAlignment="Right" Margin="0,0,10,10" Grid.Column="1">
+        <StackPanel HorizontalAlignment="Right" Margin="0,0,10,10" Grid.Column="1" Width="52">
             <TextBlock Text="Total: $" FontSize="16" FontWeight="SemiBold" />
-            <TextBlock x:Name="TotalTextBlock" Text="{Binding Total}" FontSize="18" FontWeight="Bold" Foreground="Green" />
+            <TextBlock x:Name="TotalTextBlock" Text="{Binding TotalExpenses}" FontSize="18" FontWeight="Bold" Foreground="Green" />
         </StackPanel>
     </Grid>
 </Window>

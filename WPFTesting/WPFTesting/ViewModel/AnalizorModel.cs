@@ -14,13 +14,14 @@ using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 using FactorySADEfficiencyOptimizer.Shapes;
 using FactorySADEfficiencyOptimizer.ViewModel;
+using Microsoft.Extensions.Logging;
 
 namespace FactorSADEfficiencyOptimizer.ViewModel;
 public class AnalizorModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
-    private ObservableCollection<Product> _daysUsedComponents = new ObservableCollection<Product>();
-    private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
+	private ObservableCollection<Product> _daysUsedComponents = new ObservableCollection<Product>();
+	private ObservableCollection<EndpointUIValues> _endpointList = new ObservableCollection<EndpointUIValues>();
 	public ObservableCollection<EndpointUIValues> EndpointList
 	{
 		get => _endpointList;
@@ -55,7 +56,7 @@ public class AnalizorModel : INotifyPropertyChanged
 			OnPropertyChanged(nameof(SupplierList));
 		}
 	}
-    private ObservableCollection<ProductionTarget> _productionTargets = new ObservableCollection<ProductionTarget>();
+	private ObservableCollection<ProductionTarget> _productionTargets = new ObservableCollection<ProductionTarget>();
 	public ObservableCollection<ProductionTarget> ProductionTargets
 	{
 		get => _productionTargets;
@@ -89,13 +90,14 @@ public class AnalizorModel : INotifyPropertyChanged
 	public ObservableCollection<Snapshot> Snapshots
 	{
 		get { return _snapshot; }
-		set { _snapshot = value; OnPropertyChanged(nameof(Snapshot));}
+		set { _snapshot = value; OnPropertyChanged(nameof(Snapshot)); }
 	}
 	private int _currentDay = 1;
 	public int CurrentDay
 	{
 		get => _currentDay;
-		set {
+		set
+		{
 			_currentDay = value;
 			OnPropertyChanged(nameof(CurrentDay));
 		}
@@ -111,7 +113,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		}
 	}
 
-    public AnalizorModel(SupplyChainViewModel model)
+	public AnalizorModel(SupplyChainViewModel model)
 	{
 		ShortestPath = "";
 		foreach (var supplier in model.SupplierList)
@@ -306,8 +308,8 @@ public class AnalizorModel : INotifyPropertyChanged
 
 	public void PassTimeUntilDuration(double duration)
 	{
-        ResetStatetoFirstSnapShot();
-        OrderMissingComponents();
+		ResetStatetoFirstSnapShot();
+		OrderMissingComponents();
 		for (double i = 0; i < duration; i++)
 		{
 			AdvanceTime();
@@ -352,13 +354,13 @@ public class AnalizorModel : INotifyPropertyChanged
 		List<Product> ToAddComponents = new List<Product>();
 		//get old products
 		List<Product> startProducts = new List<Product>();
-        foreach (EndpointUIValues end in Snapshots.Last().Endpoints)
+		foreach (EndpointUIValues end in Snapshots.Last().Endpoints)
 		{
 			startProducts.AddRange(end.supplier.ProductInventory);
 		}
 		foreach (EndpointUIValues end in EndpointList)
 		{
-			foreach ( Product prod in end.supplier.ProductInventory )
+			foreach (Product prod in end.supplier.ProductInventory)
 			{
 				var BiginDayProd = startProducts.FirstOrDefault(p => p.ProductName == prod.ProductName);
 				var productionrequirments = ((EndpointNode)end.supplier).ProductionList.FirstOrDefault(p => p.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine();
@@ -371,10 +373,9 @@ public class AnalizorModel : INotifyPropertyChanged
 					}
 					else
 					{
-
 						addForQntProd.Quantity = component.Quantity * ((prod.Quantity - BiginDayProd.Quantity) / productionrequirments.ResultingProduct.Quantity);
 					}
-                    ToAddComponents.Add(addForQntProd);
+					ToAddComponents.Add(addForQntProd);
 				}
 			}
 		}
@@ -382,7 +383,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		{
 			var existingProd = _daysUsedComponents.FirstOrDefault(p => p.ProductName == prod.ProductName);
 
-            if (existingProd != null)
+			if (existingProd != null)
 			{
 				existingProd.Quantity += prod.Quantity;
 			}
@@ -401,15 +402,15 @@ public class AnalizorModel : INotifyPropertyChanged
 			{
 				Product prod = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
 				target.CurrentAmount = prod.Quantity;
-				if (target.CurrentAmount == target.TargetQuantity)
+				if (target.CurrentAmount >= target.TargetQuantity)
 				{
 					target.Status = StatusEnum.Success;
 					OnPropertyChanged(nameof(target.Status));
-                    var pl = (((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
-                    pl.IsEnabled = false;
-                    OnPropertyChanged(nameof(pl));
-                    //TODO: add the profit made from the target here
-                }
+					var pl = (((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
+					pl.IsEnabled = false;
+					OnPropertyChanged(nameof(pl));
+					//TODO: add the profit made from the target here
+				}
 				else if (isLastGo)
 				{
 					target.Status = StatusEnum.Failure;
@@ -418,7 +419,7 @@ public class AnalizorModel : INotifyPropertyChanged
 			}
 		}
 	}
-    public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
+	public int GetProductsNeededPerDay(ProductionTarget newtarg, Product product)
 	{
 		double neededQuant = newtarg.TargetQuantity - product.Quantity;
 		if (neededQuant > 0)
@@ -476,7 +477,7 @@ public class AnalizorModel : INotifyPropertyChanged
 									neededProduct = toOrder,
 								}
 							};
-							IssueLog.Add(issue); 
+							IssueLog.Add(issue);
 							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });
 							PlaceOrderFor(toOrder, endpoint);
 						}
@@ -490,14 +491,15 @@ public class AnalizorModel : INotifyPropertyChanged
 	public void PlaceOrderFor(Product product, EndpointUIValues endpoint)
 	{
 		//find a supplier with enough of the product
-		Supplier? supplier = 
+		Supplier? supplier =
 			(Supplier?)(SupplierList.FirstOrDefault(s => s.supplier.ProductInventory
-				.FirstOrDefault(p => 
-					p.ProductName == product.ProductName 
-					&& p.Quantity >= product.Quantity) 
+				.FirstOrDefault(p =>
+					p.ProductName == product.ProductName
+					&& p.Quantity >= product.Quantity)
 			!= null)?.supplier);
 
-		if (supplier != null) {
+		if (supplier != null)
+		{
 			//create shippingline that has all of the product 
 			Shipment shipment = new Shipment()
 			{
@@ -541,11 +543,11 @@ public class AnalizorModel : INotifyPropertyChanged
 			});
 		})
 		.Select(x => (double)x.Targets.Sum(y => y.TargetQuantity)).ToArray();
-    }
+	}
 
 	public double[] GetBalancePerDayForGraph()
 	{
-		return Snapshots.Select<Snapshot,double>(x =>
+		return Snapshots.Select<Snapshot, double>(x =>
 		{
 			return (double)x.Endpoints.Sum(item => ((EndpointNode)item.supplier).Balance) / 1000;
 		}).ToArray();
@@ -554,5 +556,21 @@ public class AnalizorModel : INotifyPropertyChanged
 	public List<ProductionTarget?> ExtractProductionTargetChanges(string name)
 	{
 		return Snapshots.Select(x => x.Targets.Find(y => (y.ProductTarget ?? throw new ArgumentNullException("Product target list is null!")).ProductName == name)).ToList();
+	}
+
+	public double GetDayCompletedFor(string product_name)
+	{
+		try
+		{
+			var item = Snapshots?.Where(x => x.Targets.Exists(x => x.ProductTarget?.ProductName == product_name)).LastOrDefault()?.Targets.FirstOrDefault()?.DayCompleted;
+			return (double)item!;
+		}
+		catch (Exception ex)
+		{
+			{
+				Console.WriteLine("Finding day completed ran aground on a null reference.\n", ex.Message);
+			}
+			return -1;
+		}
 	}
 }
