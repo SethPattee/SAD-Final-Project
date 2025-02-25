@@ -21,6 +21,7 @@ public class SimulationWithMultipleProductsTests
 		model.Load();
 
 		AnalizorModel simulation = new AnalizorModel(model);
+		simulation.ProductionTargets.Clear();
 		simulation.ProductionTargets.Add(SimulatorTestsHelpers.MakeProductionTargetBox2(dateDue: 5, targetQuantity: 10));//makes 2 boxes per day
 		simulation.ProductionTargets.Add(SimulatorTestsHelpers.MakeProductionTargetDoor(dateDue: 5, targetQuantity:  5));//makes 1 door per day
 		simulation.DaysToRun = 5;

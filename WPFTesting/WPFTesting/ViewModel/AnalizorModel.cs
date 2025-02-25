@@ -126,7 +126,8 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
 			EndpointUIValues end = makeShallowCopyEndpoint(endpoint);
 			foreach (ProductLine pl in ((EndpointNode)end.supplier).ProductionList)
 			{
-				if (pl.IsEnabled) { 
+				if (pl.IsEnabled)
+				{
 					ProductionTargets.Add(
 						new ProductionTarget()
 						{

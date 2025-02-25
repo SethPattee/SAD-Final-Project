@@ -89,6 +89,7 @@ internal static class SimulatorTestsHelpers
 	{
 		Assert.That(simulation.ChangeLog, Is.Empty);
 		Assert.That(simulation.IssueLog, Is.Empty);
+		simulation.ProductionTargets.Clear();
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(targetQuantity: 10, dateDue: 5);
 		(simulation.SupplierList
 			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
