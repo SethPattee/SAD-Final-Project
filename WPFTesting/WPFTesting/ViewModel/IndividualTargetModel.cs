@@ -12,15 +12,16 @@ namespace FactorySADEfficiencyOptimizer.ViewModel
 {
     public class IndividualTargetModel : INotifyPropertyChanged
     {
-        private ProductionTarget _productionTarget;
-        public ProductionTarget TargetItem { get => _productionTarget;
+        private ProductionTarget _target;
+        public ProductionTarget TargetItem { get => _target;
             set { 
-                    _productionTarget = value;
+                    _target = value;
                     OnPropertyChanged(nameof(TargetItem));
                 } 
         }
-        private ObservableCollection<ProductionTarget> _targetoverdays;
-        public ObservableCollection<ProductionTarget> TargetOverDays {
+
+        private double[] _targetoverdays;
+        public  double[] TargetOverDays {
             get => _targetoverdays; 
             set {
                     _targetoverdays = value;
@@ -65,12 +66,11 @@ namespace FactorySADEfficiencyOptimizer.ViewModel
         public IndividualTargetModel()
         {
             TargetItem = new ProductionTarget();
-            TargetOverDays = new ObservableCollection<ProductionTarget>();
-            _daysrun = Array.Empty<double>();
-            _DayCompleted = -1;
-            _issues = new ObservableCollection<string>();
-            _productionTarget = new ProductionTarget();
-            _targetoverdays = new ObservableCollection<ProductionTarget>();
+            TargetOverDays = Array.Empty<double>();
+            DaysRun = Array.Empty<double>();
+            DayCompleted = -1;
+            Issues = new ObservableCollection<string>();
+            TargetItem = new ProductionTarget();
         }
 
         protected void OnPropertyChanged(string? name = null)
