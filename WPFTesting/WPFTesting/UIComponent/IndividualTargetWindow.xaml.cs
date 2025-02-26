@@ -1,5 +1,6 @@
 ﻿using FactorSADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.ViewModel;
+using InteractiveDataDisplay.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,14 +24,20 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
     /// </summary>
     public partial class IndividualTargetWindow : Window, INotifyPropertyChanged
     {
-
-        public IndividualTargetModel ItemModel { get; set; }
+        private IndividualTargetModel _itemmodel;
+        public IndividualTargetModel ItemModel {
+            get => _itemmodel;
+            set
+            {
+                _itemmodel = value;
+                OnPropertyChanged(nameof(ItemModel));
+            }
+        }
 
 
         public IndividualTargetWindow()
         {
             InitializeComponent();
-            DataContext = ItemModel;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -39,8 +46,28 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        //public void SetGraphDetails()
+        //{
+        //    double[] GraphOfSupplyIncreasePerDay = ItemModel.TargetOverDays.Select(x => (double)x.CurrentAmount).ToArray();
+        //    var lg = new LineGraph();
+        //    lg.Stroke = new SolidColorBrush(Colors.Gold);
+        //    lg.StrokeThickness = 2;
+        //    lg.Description = ItemModel.TargetItem.ProductTarget?.ProductName;
+        //    IT_PlotSpace.BottomTitle = "Days";
+        //    IT_PlotSpace.LeftTitle = $"{lg.Description}s";
+        //    var dr = ItemModel.DaysRun.Max();
+        //    IT_PlotSpace.Title = $"Amount of {lg.Description}s per day for {dr.ToString()} period";
+        //    IndividualTargetLine.IsAutoFitEnabled = true;
+        //    lg.Plot(ItemModel.DaysRun, GraphOfSupplyIncreasePerDay);
+        //    IndividualTargetLine.Children.Add(lg);
+        //}
 
         private void Issue_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
 
         }

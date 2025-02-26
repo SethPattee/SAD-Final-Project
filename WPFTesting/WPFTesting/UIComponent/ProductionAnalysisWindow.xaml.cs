@@ -255,6 +255,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 IndividualTargetWindow individualTarget = MakeNewIndividualTargetWindow(product_target, product_name);
 
                 individualTarget.ItemModel.Issues = GetAllIssues(product_name);
+                //individualTarget.SetGraphDetails();
                 individualTarget.Owner = this;
                 individualTarget.Show();
             }
