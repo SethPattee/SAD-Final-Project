@@ -17,7 +17,7 @@ using FactorySADEfficiencyOptimizer.ViewModel;
 using Microsoft.Extensions.Logging;
 
 namespace FactorSADEfficiencyOptimizer.ViewModel;
-public class AnalizorModel : CopyMaker, INotifyPropertyChanged
+public class AnalizorModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 	private ObservableCollection<Product> _daysUsedComponents = new ObservableCollection<Product>();
@@ -118,12 +118,12 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
 		ShortestPath = "";
 		foreach (var supplier in model.SupplierList)
 		{
-			SupplierUIValues sup = makeShallowCopySupplier(supplier);
+			SupplierUIValues sup = CopyMaker.makeShallowCopySupplier(supplier);
 			AddSupplier(sup);
 		}
 		foreach (EndpointUIValues endpoint in model.EndpointList)
 		{
-			EndpointUIValues end = makeShallowCopyEndpoint(endpoint);
+			EndpointUIValues end = CopyMaker.makeShallowCopyEndpoint(endpoint);
 			foreach (ProductLine pl in ((EndpointNode)end.supplier).ProductionList)
 			{
 				if (pl.IsEnabled)
@@ -134,7 +134,7 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
 							DueDate = 1,
 							IsTargetEnabled = true,
 							TargetQuantity = pl.ResultingProduct.Quantity,
-							ProductTarget = makeShallowCopyProduct(pl.ResultingProduct),
+							ProductTarget = CopyMaker.makeShallowCopyProduct(pl.ResultingProduct),
 							CurrentAmount = (end.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == pl.ResultingProduct.ProductName) ?? new Product()).Quantity,
 							Status = StatusEnum.NotDone
 						}
@@ -152,10 +152,9 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
     private Shipment makeShallowCopyShipment(Shipment shipment)
     {
         Shipment ship = GetShipmentWithSenderReciver(shipment);
-        ship.Products = makeShallowCopyOfProductColection(shipment.Products);
+        ship.Products = CopyMaker.makeShallowCopyOfProductColection(shipment.Products);
         ship.ToJoiningBoxCorner = "";
         ship.FromJoiningBoxCorner = "";
-        // TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
         return ship;
     }
     public Snapshot MakeCurrentSnapShot()
@@ -163,29 +162,35 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
 		Snapshot snapshot = new Snapshot();
 		foreach (var supplier in SupplierList)
 		{
-			SupplierUIValues sup = makeShallowCopySupplier(supplier);
+			SupplierUIValues sup = CopyMaker.makeShallowCopySupplier(supplier);
 			snapshot.Suppliers.Add(supplier);
 		}
 		foreach (EndpointUIValues endpoint in EndpointList)
 		{
-			EndpointUIValues end = makeShallowCopyEndpoint(endpoint);
+			EndpointUIValues end = CopyMaker.makeShallowCopyEndpoint(endpoint);
 			snapshot.Endpoints.Add(end);
 		}
 		foreach (Shipment shipment in ShipmentList)
 		{
 			Shipment ship = GetShipmentWithSenderReciver(shipment);
-			ship.Products = makeShallowCopyOfProductColection(shipment.Products);
+			ship.Products = CopyMaker.makeShallowCopyOfProductColection(shipment.Products);
 			ship.ToJoiningBoxCorner = "";
 			ship.FromJoiningBoxCorner = "";
-			// TODO: Add Dallins changes to Shipments HERE!!! It is missing some stuff
 			snapshot.Shipments.Add(ship);
 		}
-		snapshot.ComponentsUsed = makeShallowCopyOfProductColection(_daysUsedComponents).ToList();
+		foreach (ProductionTarget target in ProductionTargets)
+        {
+            ProductionTarget targCopy = CopyMaker.makeShallowCopyProductionTarget(target);
+            snapshot.Targets.Add(targCopy);
+        }
+        snapshot.ComponentsUsed = CopyMaker.makeShallowCopyOfProductColection(_daysUsedComponents).ToList();
 		_daysUsedComponents.Clear();
 		return snapshot;
 	}
 
-	private Shipment GetShipmentWithSenderReciver(Shipment shipment)
+    
+
+    private Shipment GetShipmentWithSenderReciver(Shipment shipment)
 	{
 		Shipment ship = new Shipment();
 		ship.Sender = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Sender.Id)?.supplier ?? new Supplier();
@@ -206,7 +211,7 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
         foreach (var target in targets)
         {
             var newtarg = new ProductionTarget();
-            newtarg.ProductTarget = makeShallowCopyProduct(target.ProductTarget ?? new Product());
+            newtarg.ProductTarget = CopyMaker.makeShallowCopyProduct(target.ProductTarget ?? new Product());
             newtarg.CurrentAmount = target.CurrentAmount;
             newtarg.DueDate = target.DueDate;
             StatusEnum temStatus;
@@ -282,12 +287,12 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
         EndpointList.Clear();
         foreach (var end in initValues.Endpoints)
         {
-            EndpointList.Add(makeShallowCopyEndpoint(end));
+            EndpointList.Add(CopyMaker.makeShallowCopyEndpoint(end));
         }
         SupplierList.Clear();
         foreach (var sup in initValues.Suppliers)
         {
-            SupplierList.Add(makeShallowCopySupplier(sup));
+            SupplierList.Add(CopyMaker.makeShallowCopySupplier(sup));
         }
         ShipmentList.Clear();
         foreach (var shipment in initValues.Shipments)
@@ -307,46 +312,21 @@ public class AnalizorModel : CopyMaker, INotifyPropertyChanged
     }
     private void RecordUsedComponents()
 	{
-		List<Product> ToAddComponents = new List<Product>();
-		//get old products
-		List<Product> startProducts = new List<Product>();
-		foreach (EndpointUIValues end in Snapshots.Last().Endpoints)
-		{
-			startProducts.AddRange(end.supplier.ProductInventory);
-		}
 		foreach (EndpointUIValues end in EndpointList)
 		{
-			foreach (Product prod in end.supplier.ProductInventory)
+			ObservableCollection<Product> toUse = ((EndpointNode)end.supplier).DaysUsedComponents;
+			foreach (var component in toUse)
 			{
-				var BiginDayProd = startProducts.FirstOrDefault(p => p.ProductName == prod.ProductName);
-				var productionrequirments = ((EndpointNode)end.supplier).ProductionList.FirstOrDefault(p => p.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine();
-				foreach (Product component in productionrequirments.Components)
+                var existingProd = _daysUsedComponents.FirstOrDefault(p => p.ProductName == component.ProductName);
+				if (existingProd != null)
 				{
-					var addForQntProd = makeShallowCopyProduct(component);
-					if (BiginDayProd == null)
-					{
-						addForQntProd.Quantity = component.Quantity;
-					}
-					else
-					{
-						addForQntProd.Quantity = component.Quantity * ((prod.Quantity - BiginDayProd.Quantity) / productionrequirments.ResultingProduct.Quantity);
-					}
-					ToAddComponents.Add(addForQntProd);
+					existingProd.Quantity += component.Quantity;
 				}
-			}
-		}
-		foreach (Product prod in ToAddComponents)
-		{
-			var existingProd = _daysUsedComponents.FirstOrDefault(p => p.ProductName == prod.ProductName);
-
-			if (existingProd != null)
-			{
-				existingProd.Quantity += prod.Quantity;
-			}
-			else
-			{
-				_daysUsedComponents.Add(prod);
-			}
+				else
+				{
+					_daysUsedComponents.Add(component);
+				}
+            }
 		}
 	}
 	private void UpdateProducitonTargets(bool isLastGo = false)

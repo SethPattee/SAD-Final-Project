@@ -6,6 +6,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FactorSADEfficiencyOptimizer.ViewModel;
 using Microsoft.Extensions.Logging;
 
 namespace FactorySADEfficiencyOptimizer.Models;
@@ -19,6 +20,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
     private ObservableCollection<Product> _componentInventory;
     private ObservableCollection<ProductLine> _productionList;
     private ObservableCollection<Product> _deliveryrequirementslist;
+    private ObservableCollection<Product> _daysUsedcomponents;
     private decimal _profit;
     public EndpointNode()
     {
@@ -30,6 +32,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         _componentInventory = new ObservableCollection<Product>();
         _productionList = new ObservableCollection<ProductLine>();
         _deliveryrequirementslist = new ObservableCollection<Product>();
+        _daysUsedcomponents = new ObservableCollection<Product>();
     }
     public string Name { 
         get => _name; 
@@ -87,10 +90,14 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             OnPropertyChanged(nameof(Balance));
         }
     }
-
+    public ObservableCollection<Product> DaysUsedComponents
+    {
+        get => _daysUsedcomponents;
+    }
 
     public void ProduceProduct()
     {
+        _daysUsedcomponents = new ObservableCollection<Product>();
         //For every component set to make a given product:
         foreach( var pl in _productionList)
         {
@@ -112,6 +119,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                                 && inventorycomponent.Quantity >= component.Quantity)
                             {
                                 inventorycomponent.Quantity -= component.Quantity;
+                                saveUsedComponent(component);
                                 CanProceed = true;
                                 break;
                             }
@@ -141,6 +149,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                                 && inventorycomponent.Quantity >= component.Quantity)
                             {
                                 inventorycomponent.Quantity -= component.Quantity;
+                                saveUsedComponent(component);
                                 CanProceed = true;
                                 break;
                             }
@@ -172,6 +181,20 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         OnPropertyChanged(nameof(ProductInventory));
     }
 
+    private void saveUsedComponent(Product component)
+    {
+        var existingProd = _daysUsedcomponents.FirstOrDefault(p => p.ProductName == component.ProductName);
+        if (existingProd != null)
+        {
+            existingProd.Quantity += component.Quantity;
+        }
+        else
+        {
+            Product usedComponent = CopyMaker.makeShallowCopyProduct(component);
+            _daysUsedcomponents.Add(usedComponent);
+        }
+        OnPropertyChanged(nameof(DaysUsedComponents));
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged(string propertyName)

@@ -1,12 +1,12 @@
-﻿using FactorySADEfficiencyOptimizer.Models;
+﻿using FactorSADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
 using System.Collections.ObjectModel;
 
 namespace FactorSADEfficiencyOptimizer.ViewModel;
 
-public class CopyMaker
+public static class CopyMaker
 {
-
 	public static EndpointUIValues makeShallowCopyEndpoint(EndpointUIValues endpoint)
 	{
 		EndpointUIValues end = new EndpointUIValues();
@@ -67,5 +67,18 @@ public class CopyMaker
             newLines.Add(nl);
         }
         return newLines;
+    }
+    public static ProductionTarget makeShallowCopyProductionTarget(ProductionTarget target)
+    {
+        ProductionTarget targCopy = new ProductionTarget();
+        targCopy.ProductTarget = CopyMaker.makeShallowCopyProduct(target.ProductTarget ?? new Product());
+        targCopy.CurrentAmount = target.CurrentAmount;
+        targCopy.DueDate = target.DueDate;
+        targCopy.TargetQuantity = target.TargetQuantity;
+        targCopy.CurrentAmount = target.CurrentAmount;
+        targCopy.Status = target.Status;
+        targCopy.DayCompleted = target.DayCompleted;
+        targCopy.IsTargetEnabled = target.IsTargetEnabled;
+        return targCopy;
     }
 }
