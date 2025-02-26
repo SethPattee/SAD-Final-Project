@@ -491,7 +491,19 @@ public class AnalizorModel : INotifyPropertyChanged
 
 	public List<ProductionTarget?> ExtractProductionTargetChanges(string name)
 	{
-		return Snapshots.Select(x => x.Targets.Find(y => (y.ProductTarget ?? throw new ArgumentNullException("Product target list is null!")).ProductName == name)).ToList();
+		var targetlist = new List<ProductionTarget?>();
+		foreach(var snapshot in Snapshots)
+		{
+			foreach(var target in snapshot.Targets)
+			{
+				if(target.ProductTarget!.ProductName == name)
+					targetlist.Add(target);
+			}
+		}
+		
+		return targetlist;
+
+		//return Snapshots.ToList((x => x.Targets.Find(y => (y.ProductTarget ?? throw new ArgumentNullException("Product target list is null!")).ProductName == name)).ToList();
 	}
 
 	public double GetDayCompletedFor(string product_name)

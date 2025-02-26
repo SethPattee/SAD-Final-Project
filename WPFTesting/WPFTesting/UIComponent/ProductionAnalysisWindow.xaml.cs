@@ -2,28 +2,18 @@
 using FactorSADEfficiencyOptimizer.Models;
 using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using InteractiveDataDisplay.WPF;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using FactorySADEfficiencyOptimizer.Data;
-using FactorySADEfficiencyOptimizer.Models;
-using FactorySADEfficiencyOptimizer.ViewModel;
-using System.Globalization;
-using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 
 namespace FactorySADEfficiencyOptimizer.UIComponent
 {
@@ -266,6 +256,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 var product_target = (ProductionTarget)m.DataContext;
                 var product_name = product_target.ProductTarget!.ProductName;
                 IndividualTargetWindow individualTarget = MakeNewIndividualTargetWindow(product_target, product_name);
+
                 individualTarget.ItemModel.Issues = GetAllIssues(product_name);
                 individualTarget.Owner = this;
                 individualTarget.Show();
@@ -302,17 +293,24 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
         private IndividualTargetWindow MakeNewIndividualTargetWindow(ProductionTarget pt, string product_name)
         {
-            return new IndividualTargetWindow()
+            //var idwt = simModel.ExtractProductionTargetChanges(product_name)!;
+            //double[] targetQuantityOverDays = new double[idwt.Count];
+            double[] targetQuantityOverDays = simModel.ExtractProductionTargetChanges(product_name).Select<ProductionTarget?, double>(x => (double)x!.CurrentAmount).ToArray();
+
+            var newVM = new IndividualTargetModel()
             {
-                ItemModel = new IndividualTargetModel()
-                {
-                    TargetItem = pt,
-                    DaysRun = simModel.GetQuantityPerDayForGraph(product_name),
-                    TargetOverDays = new ObservableCollection<ProductionTarget>(simModel.ExtractProductionTargetChanges(product_name)!),
-                    Issues = new ObservableCollection<string>(),
-                    DayCompleted = simModel.GetDayCompletedFor(product_name)
-                }
+                TargetItem = pt,
+                DaysRun = simModel.GetQuantityPerDayForGraph(product_name),
+                TargetOverDays = targetQuantityOverDays,
+                Issues = new ObservableCollection<string>(),
+                DayCompleted = simModel.GetDayCompletedFor(product_name)
             };
+            var newITW = new IndividualTargetWindow();
+            newITW.ItemModel = newVM;
+            newITW.DataContext = newITW.ItemModel;
+            newITW.GenerateGraphDetails();
+            return newITW;
+
         }
 
         private ProductionTarget _selectedTarget;
