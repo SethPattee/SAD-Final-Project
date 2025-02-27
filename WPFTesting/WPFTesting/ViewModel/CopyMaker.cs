@@ -76,7 +76,23 @@ public static class CopyMaker
         targCopy.DueDate = target.DueDate;
         targCopy.TargetQuantity = target.TargetQuantity;
         targCopy.CurrentAmount = target.CurrentAmount;
-        targCopy.Status = target.Status;
+        StatusEnum temStatus;
+        switch (target.Status)
+        {
+            case (StatusEnum.Success):
+                temStatus = StatusEnum.Success;
+                break;
+            case (StatusEnum.Failure):
+                temStatus = StatusEnum.Failure;
+                break;
+            case (StatusEnum.Warning):
+                temStatus = StatusEnum.Warning;
+                break;
+            default:
+                temStatus = StatusEnum.NotDone;
+                break;
+        }
+        targCopy.Status = temStatus;
         targCopy.DayCompleted = target.DayCompleted;
         targCopy.IsTargetEnabled = target.IsTargetEnabled;
         return targCopy;
