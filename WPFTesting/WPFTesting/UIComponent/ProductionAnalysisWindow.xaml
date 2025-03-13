@@ -96,6 +96,7 @@
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="4*"></ColumnDefinition>
                                         <ColumnDefinition Width="6*"></ColumnDefinition>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <CheckBox Grid.Column="0" IsChecked="{Binding IsTargetEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
                                               Margin="0 0 4 0" HorizontalAlignment="Center"></CheckBox>
@@ -115,6 +116,8 @@
                                             </Image.Source>
                                         </Image>
                                     </StackPanel>
+                                    <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
+                                        Grid.Column="7" Click="DeleteProductionTargetButton_Click" Height="24"></Button>
 
                                     <Grid.ContextMenu>
                                         <ContextMenu StaysOpen="true">
