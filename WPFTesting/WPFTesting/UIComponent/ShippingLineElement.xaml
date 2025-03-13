@@ -16,14 +16,5 @@
         <Line Stroke="Black" Panel.ZIndex="-10" 
               StrokeThickness="5" X1="0" X2="100" Y1="0" Y2="100" x:Name="ourShippingLine"
               MouseDown="MouseDown_LineClicked"/>
-
-        <!-- TextBlock to show label -->
-        <TextBlock Text="{Binding Label}" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Top" 
-                   FontSize="16" 
-                   FontWeight="Bold"
-                   Foreground="Black" 
-                   Margin="0,10,0,0"/>
     </Grid>
 </UserControl>
