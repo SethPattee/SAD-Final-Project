@@ -4,6 +4,7 @@ using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
+using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using InteractiveDataDisplay.WPF;
 using System.Collections.ObjectModel;
@@ -42,19 +43,19 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             simModel = new AnalizorModel(model);
             this.DataContext = this;
             simModel.DaysToRun = 1;
-            double[] x = new double[200];
-            for (int i = 0; i < x.Length; i++)
-                x[i] = 3.1415 * i / (x.Length - 1);
+            //double[] x = new double[200];
+            //for (int i = 0; i < x.Length; i++)
+            //    x[i] = 3.1415 * i / (x.Length - 1);
 
-            for (int i = 0; i < 25; i++)
-            {
-                var lg = new LineGraph();
-                lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
-                lg.Description = String.Format("Data series {0}", i + 1);
-                lg.StrokeThickness = 2;
-                linegraph.Children.Add(lg);
-                lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
-            }
+            //for (int i = 0; i < 25; i++)
+            //{
+            //    var lg = new LineGraph();
+            //    lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
+            //    lg.Description = String.Format("Data series {0}", i + 1);
+            //    lg.StrokeThickness = 2;
+            //    linegraph.Children.Add(lg);
+            //    lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
+            //}
             //UpdatePlot();
         }
 
@@ -168,10 +169,10 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             double[] BalancePerDay = simModel.GetBalancePerDayForGraph();
             var lg = new LineGraph();
             lg.Stroke = GetIteratedLineColor();
-            lg.Description = "Financial State";
-            lg.StrokeThickness = 1;
+            lg.Description = "Balance per Day";
+            lg.StrokeThickness = 3;
             plotter.BottomTitle = "Day";
-            plotter.LeftTitle = "Balance (in dollars)";
+            plotter.LeftTitle = "Balance (in 1000 $s)";
             plotter.Title = "Balance-Per-Day during production.";
             plotter.PlotOriginX = 1;
             plotter.PlotOriginY = BalancePerDay.Min();
@@ -359,6 +360,16 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             return component_use;
         }
 
+        //private void PersistChangesToGraphButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ShipmentListMouseButtonEventArgs s = new();
+
+        //    s.AssignList(simModel.ShipmentList);
+
+        //    SaveChangesToShipmentsEvent?.Invoke(this, s);
+        //}
+
+        //public EventHandler? SaveChangesToShipmentsEvent;
 
         //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         //{
