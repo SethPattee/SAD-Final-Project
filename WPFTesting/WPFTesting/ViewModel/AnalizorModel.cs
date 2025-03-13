@@ -239,6 +239,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	public void PassTimeUntilDuration(double duration)
 	{
 		ResetStatetoFirstSnapShot();
+		OnlyEnableProductlinesWithProductTargets();
 		OrderMissingComponents();
 		for (double i = 0; i < duration; i++)
 		{
@@ -250,7 +251,26 @@ public class AnalizorModel : INotifyPropertyChanged
 		}
 		UpdateProducitonTargets(isLastGo: true);
 	}
-    private void ResetStatetoFirstSnapShot()
+	private void OnlyEnableProductlinesWithProductTargets()
+	{
+		foreach (var endpoint in EndpointList)
+		{
+			foreach (var productline in ((EndpointNode)endpoint.supplier).ProductionList)
+			{
+				
+				string Pname = productline.ResultingProduct.ProductName;
+				ProductionTarget? prodT = ProductionTargets.FirstOrDefault(pt => pt.ProductTarget?.ProductName == Pname);
+				if (prodT != null) {
+					productline.IsEnabled = true;
+				}
+				else
+				{
+					productline.IsEnabled = false;
+				}
+			}
+		}
+	}
+	private void ResetStatetoFirstSnapShot()
     {
         Snapshot initValues = Snapshots[0];
         EndpointList.Clear();
