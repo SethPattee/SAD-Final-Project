@@ -173,6 +173,7 @@ namespace YourNamespace
 		private void Save_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.updateFileSave();
+            FileMenuPopup.IsOpen = false;
         }
 
         private void UpdateLinePosition(ShippingLine line1, INodeElement box1, INodeElement box2)
