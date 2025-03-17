@@ -190,7 +190,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         }
         else
         {
-            Product usedComponent = CopyMaker.makeShallowCopyProduct(component);
+            Product usedComponent = component.ShallowCopy();
             _daysUsedcomponents.Add(usedComponent);
         }
         OnPropertyChanged(nameof(DaysUsedComponents));

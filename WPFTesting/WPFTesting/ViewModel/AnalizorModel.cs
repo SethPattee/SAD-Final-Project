@@ -118,12 +118,12 @@ public class AnalizorModel : INotifyPropertyChanged
 		ShortestPath = "";
 		foreach (var supplier in model.SupplierList)
 		{
-			SupplierUIValues sup = CopyMaker.makeShallowCopySupplier(supplier);
+			SupplierUIValues sup = supplier.ShallowCopy();
 			AddSupplier(sup);
 		}
 		foreach (EndpointUIValues endpoint in model.EndpointList)
 		{
-			EndpointUIValues end = CopyMaker.makeShallowCopyEndpoint(endpoint);
+			EndpointUIValues end = endpoint.ShallowCopy();
 			foreach (ProductLine pl in ((EndpointNode)end.supplier).ProductionList)
 			{
 				if (pl.IsEnabled)
@@ -134,7 +134,7 @@ public class AnalizorModel : INotifyPropertyChanged
 							DueDate = 1,
 							IsTargetEnabled = true,
 							TargetQuantity = pl.ResultingProduct.Quantity,
-							ProductTarget = CopyMaker.makeShallowCopyProduct(pl.ResultingProduct),
+							ProductTarget = pl.ResultingProduct.ShallowCopy(),
 							CurrentAmount = (end.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == pl.ResultingProduct.ProductName) ?? new Product()).Quantity,
 							Status = StatusEnum.NotDone
 						}
@@ -162,12 +162,12 @@ public class AnalizorModel : INotifyPropertyChanged
 		Snapshot snapshot = new Snapshot();
 		foreach (var supplier in SupplierList)
 		{
-			SupplierUIValues sup = CopyMaker.makeShallowCopySupplier(supplier);
+			SupplierUIValues sup = supplier.ShallowCopy();
 			snapshot.Suppliers.Add(supplier);
 		}
 		foreach (EndpointUIValues endpoint in EndpointList)
 		{
-			EndpointUIValues end = CopyMaker.makeShallowCopyEndpoint(endpoint);
+			EndpointUIValues end = endpoint.ShallowCopy();
 			snapshot.Endpoints.Add(end);
 		}
 		foreach (Shipment shipment in ShipmentList)
@@ -180,7 +180,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		}
 		foreach (ProductionTarget target in ProductionTargets)
         {
-            ProductionTarget targCopy = CopyMaker.makeShallowCopyProductionTarget(target);
+			ProductionTarget targCopy = target.ShallowCopy();
             snapshot.Targets.Add(targCopy);
         }
         snapshot.ComponentsUsed = CopyMaker.makeShallowCopyOfProductColection(_daysUsedComponents).ToList();
@@ -276,12 +276,12 @@ public class AnalizorModel : INotifyPropertyChanged
         EndpointList.Clear();
         foreach (var end in initValues.Endpoints)
         {
-            EndpointList.Add(CopyMaker.makeShallowCopyEndpoint(end));
+            EndpointList.Add(end.ShallowCopy());
         }
         SupplierList.Clear();
         foreach (var sup in initValues.Suppliers)
         {
-            SupplierList.Add(CopyMaker.makeShallowCopySupplier(sup));
+            SupplierList.Add(sup.ShallowCopy());
         }
         ShipmentList.Clear();
         foreach (var shipment in initValues.Shipments)
@@ -401,7 +401,7 @@ public class AnalizorModel : INotifyPropertyChanged
 									Action = ActionEnum.addedShipment,
 									neededProduct = toOrder,
 								},
-								ProductionTarget = CopyMaker.makeShallowCopyProductionTarget(target)
+								ProductionTarget = target.ShallowCopy()
 							};
 							IssueLog.Add(issue);
 							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });

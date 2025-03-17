@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
 
 namespace FactorSADEfficiencyOptimizer.Models
@@ -86,6 +87,36 @@ namespace FactorSADEfficiencyOptimizer.Models
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public ProductionTarget ShallowCopy()
+        {
+            ProductionTarget targCopy = new ProductionTarget();
+            targCopy.ProductTarget = this.ProductTarget?.ShallowCopy() ?? new Product();
+            targCopy.CurrentAmount = this.CurrentAmount;
+            targCopy.DueDate = this.DueDate;
+            targCopy.TargetQuantity = this.TargetQuantity;
+            targCopy.CurrentAmount = this.CurrentAmount;
+            StatusEnum temStatus;
+            switch (this.Status)
+            {
+                case (StatusEnum.Success):
+                    temStatus = StatusEnum.Success;
+                    break;
+                case (StatusEnum.Failure):
+                    temStatus = StatusEnum.Failure;
+                    break;
+                case (StatusEnum.Warning):
+                    temStatus = StatusEnum.Warning;
+                    break;
+                default:
+                    temStatus = StatusEnum.NotDone;
+                    break;
+            }
+            targCopy.Status = temStatus;
+            targCopy.DayCompleted = this.DayCompleted;
+            targCopy.IsTargetEnabled = this.IsTargetEnabled;
+            return targCopy;
         }
     }
 }

@@ -56,5 +56,14 @@ namespace FactorySADEfficiencyOptimizer.Models
             set { _price = value; OnPropertyChanged(nameof(Price)); }
         }
 
+        public Product ShallowCopy()
+        {
+            Product p = new Product();
+            p.ProductName = this.ProductName;
+            p.Price = this.Price;
+            p.Quantity = this.Quantity;
+            p.Units = this.Units;
+            return p;
+        }
     }
 }
