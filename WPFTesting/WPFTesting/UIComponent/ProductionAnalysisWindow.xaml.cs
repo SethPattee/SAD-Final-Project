@@ -5,6 +5,7 @@ using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
+using FactorySADEfficiencyOptimizer.Shapes;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using InteractiveDataDisplay.WPF;
 using System.Collections.ObjectModel;
@@ -371,30 +372,40 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
         //public EventHandler? SaveChangesToShipmentsEvent;
 
-        //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        //{
-        //    ResizeAnyProductionTargetRows();
-        //}
 
-        //private void ResizeAnyProductionTargetRows()
-        //{
-        //    ProdTargetListWidth = ProdTargetList.ActualWidth - 16;
-        //    OnPropertyChanged(nameof(ProdTargetListWidth));
-        //}
+		private void DeleteProductionTargetButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (sender is Button b)
+			{
+                ProductionTarget targ = simModel.ProductionTargets.First(s => s == (ProductionTarget)b.DataContext);
+                simModel.ProductionTargets.Remove(targ);
+			}
+		}
 
-        //private void UpdatePlot()
-        //{
-        //    if (linegraph == null) return;
+		//private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+		//{
+		//    ResizeAnyProductionTargetRows();
+		//}
 
-        //    int xData = TargetProductionTarget.DueDate;
-        //    int yData = (int)Math.Round(TargetProductionTarget.InitAmount);
+		//private void ResizeAnyProductionTargetRows()
+		//{
+		//    ProdTargetListWidth = ProdTargetList.ActualWidth - 16;
+		//    OnPropertyChanged(nameof(ProdTargetListWidth));
+		//}
 
-        //    linegraph.Plot(xData, yData);
-        //    linegraph.Description = "Production Target Over Time";
-        //}
+		//private void UpdatePlot()
+		//{
+		//    if (linegraph == null) return;
+
+		//    int xData = TargetProductionTarget.DueDate;
+		//    int yData = (int)Math.Round(TargetProductionTarget.InitAmount);
+
+		//    linegraph.Plot(xData, yData);
+		//    linegraph.Description = "Production Target Over Time";
+		//}
 
 
-    }
+	}
     public class StatusToTextConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

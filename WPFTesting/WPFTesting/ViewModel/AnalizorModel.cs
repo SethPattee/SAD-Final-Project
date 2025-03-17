@@ -205,37 +205,6 @@ public class AnalizorModel : INotifyPropertyChanged
 		return ship;
 	}
 
-	public static ObservableCollection<ProductionTarget> makeShallowCopyColectionOfProductionTargets(ObservableCollection<ProductionTarget> targets)
-    {
-        var newTargets = new ObservableCollection<ProductionTarget>();
-        foreach (var target in targets)
-        {
-            var newtarg = new ProductionTarget();
-            newtarg.ProductTarget = CopyMaker.makeShallowCopyProduct(target.ProductTarget ?? new Product());
-            newtarg.CurrentAmount = target.CurrentAmount;
-            newtarg.DueDate = target.DueDate;
-            StatusEnum temStatus;
-            switch (target.Status)
-            {
-                case (StatusEnum.Success):
-                    temStatus = StatusEnum.Success;
-                    break;
-                case (StatusEnum.Failure):
-                    temStatus = StatusEnum.Failure;
-                    break;
-                case (StatusEnum.Warning):
-                    temStatus = StatusEnum.Warning;
-                    break;
-                default:
-                    temStatus = StatusEnum.NotDone;
-                    break;
-            }
-            newtarg.Status = temStatus;
-            newtarg.IsTargetEnabled = target.IsTargetEnabled;
-        }
-        return newTargets;
-    }
-
 	protected void OnPropertyChanged(string? name = null)
 	{
 		if (name is not null)
@@ -270,6 +239,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	public void PassTimeUntilDuration(double duration)
 	{
 		ResetStatetoFirstSnapShot();
+		OnlyEnableProductlinesWithProductTargets();
 		OrderMissingComponents();
 		for (double i = 0; i < duration; i++)
 		{
@@ -281,7 +251,26 @@ public class AnalizorModel : INotifyPropertyChanged
 		}
 		UpdateProducitonTargets(isLastGo: true);
 	}
-    private void ResetStatetoFirstSnapShot()
+	private void OnlyEnableProductlinesWithProductTargets()
+	{
+		foreach (var endpoint in EndpointList)
+		{
+			foreach (var productline in ((EndpointNode)endpoint.supplier).ProductionList)
+			{
+				
+				string Pname = productline.ResultingProduct.ProductName;
+				ProductionTarget? prodT = ProductionTargets.FirstOrDefault(pt => pt.ProductTarget?.ProductName == Pname);
+				if (prodT != null) {
+					productline.IsEnabled = true;
+				}
+				else
+				{
+					productline.IsEnabled = false;
+				}
+			}
+		}
+	}
+	private void ResetStatetoFirstSnapShot()
     {
         Snapshot initValues = Snapshots[0];
         EndpointList.Clear();
