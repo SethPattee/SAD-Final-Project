@@ -53,11 +53,12 @@
                 <Border Background="LightGray" BorderThickness="0" BorderBrush="Transparent">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Days to run:" Margin="5 0 3 0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                   FontSize="16"
-                                    x:Name="AnalysisPeriodTutor" Visibility="Visible"></TextBlock>
-                        <TextBox Text="{Binding DaysToRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Visibility="Visible"
-                                 Margin="5 0 0 0" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" BorderThickness="0" KeyUp="AnalysisPeriodValue_KeyUp" LostFocus="AnalysisPeriodValue_LostFocus"
-                                 Background="Transparent" x:Name="AnalysisPeriodValue"></TextBox>
+                                   FontSize="16" x:Name="AnalysisPeriodTutor" Visibility="Visible"></TextBlock>
+                        <xctk:IntegerUpDown Value="{Binding DaysToRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Left" Visibility="Visible"
+                             Margin="5 0 0 0" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"
+                             BorderThickness="1" Background="LightGray" BorderBrush="DarkGray" x:Name="AnalysisPeriodValue"
+                             KeyUp="AnalysisPeriodValue_KeyUp" LostFocus="AnalysisPeriodValue_LostFocus" />
                     </StackPanel>
                 </Border>
             </DockPanel>
