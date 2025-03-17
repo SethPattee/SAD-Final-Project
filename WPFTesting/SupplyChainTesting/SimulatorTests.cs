@@ -234,4 +234,70 @@ public class SimulatorTests
 		Assert.That(simulation.Snapshots.First().ComponentsUsed, Is.Empty);
 		Assert.That(simulation.Snapshots.Last().ComponentsUsed, Is.Not.Empty);
     }
+
+	[Test]
+	public void GetQuantPerDayWillFindRightSetOfSnapshots()
+    {
+        var model = new AnalizorModel(
+            SimulatorTestsHelpers.setupTest()
+            );
+        model.Snapshots = ProduceFreshSnapshotList();
+
+		var testResult = model.GetQuantityPerDayForGraph("Door");
+
+        Assert.That(testResult.Length > 0);
+    }
+
+    [Test]
+    public void GetBalancePerDayWillGetCorrectSnapshots()
+    {
+        var model = new AnalizorModel(
+            SimulatorTestsHelpers.setupTest()
+            );
+        model.Snapshots = ProduceFreshSnapshotList();
+
+        var testResult = model.GetBalancePerDayForGraph();
+
+        Assert.That(testResult.Length > 0);
+    }
+
+    private static ObservableCollection<Snapshot> ProduceFreshSnapshotList()
+    {
+        return new ObservableCollection<Snapshot>()
+        {
+            new Snapshot()
+            {
+                Targets = new(){
+					new ProductionTarget()
+					{
+						ProductTarget = new()
+						{
+							ProductName = "Door",
+							Price = 10.50M
+						},
+						CurrentAmount = 1,
+						DueDate = 10,
+						DayCompleted = -1,
+						IsTargetEnabled = true,
+						Status = StatusEnum.NotDone,
+						TargetQuantity = 10
+					},
+					new ProductionTarget()
+					{
+						ProductTarget = new()
+						{
+							ProductName = "Boat",
+							Price = 12.50M
+						},
+						CurrentAmount = 1,
+						DueDate = 10,
+						DayCompleted = -1,
+						IsTargetEnabled = true,
+						Status = StatusEnum.NotDone,
+						TargetQuantity = 7
+					}
+				}
+            }
+        };
+    }
 }

@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
+using FactorySADEfficiencyOptimizer.UIComponent;
 
 namespace FactorSADEfficiencyOptimizer.UIComponent;
 
@@ -25,6 +26,35 @@ namespace FactorSADEfficiencyOptimizer.UIComponent;
 /// </summary>
 public partial class ShipmentsScheduled : Window
 {
+    private bool IsCancellingCloseRequest = true;
+    ConfirmCloseScheduledShipmentDialogue? ConfirmPopup = null;
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        if (IsCancellingCloseRequest)
+        {
+            ConfirmPopup = new ConfirmCloseScheduledShipmentDialogue();
+            ConfirmPopup.DialogueConfirmed += DialogueConfirmedByUser;
+            ConfirmPopup.Owner = this;
+            ConfirmPopup.Show();
+        }
+
+        e.Cancel = IsCancellingCloseRequest;
+        base.OnClosing(e);
+    }
+
+    private void DialogueConfirmedByUser(object? sender, EventArgs e)
+    {
+        if(e is CloseScheduledShipmentsEventArgs cssea)
+        {
+            if (cssea.UserSaveChoice)
+            {
+                SaveButton_Click(sender, cssea);
+            }
+            IsCancellingCloseRequest = false;
+            Close();
+        }
+    }
+
     private ObservableCollection<Shipment> _testshipments;
     public Shipment SelectedShipment { get; set; }
     public ObservableCollection<Shipment> Testshipments
@@ -82,7 +112,7 @@ public partial class ShipmentsScheduled : Window
         InitializeComponent();
         ScheduledShipmentsList.DataContext = this;
         SelectedProductList.DataContext = this;
-        Testshipments = simModel.ShipmentList;
+        Testshipments = new ObservableCollection<Shipment>(simModel.ShipmentList);
     }
 
     public void AddNewShipment_Click(object? sender, RoutedEventArgs? e)
@@ -154,7 +184,10 @@ public partial class ShipmentsScheduled : Window
         {
             SavedShipmentList = Testshipments
         };
+
         SaveShipmentDetails?.Invoke(sender, ssea);
+        IsCancellingCloseRequest = false;
+        this.Close();
     }
 
 
@@ -190,12 +223,12 @@ public partial class ShipmentsScheduled : Window
         }
     }
 
-    private void AssignProductList(Shipment s)
+    private void AssignProductList(Shipment SelectedShipment)
     {
-        SelectedShipment = s;
         ProductItems = SelectedShipment.Products;
-
         SelectedProductList.ItemsSource = ProductItems;
     }
+
+   
 
 }

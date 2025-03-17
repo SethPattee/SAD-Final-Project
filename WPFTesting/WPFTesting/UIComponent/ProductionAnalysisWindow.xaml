@@ -131,7 +131,9 @@
                     </ListView>
                 </StackPanel>
             </Border>
-            <Button Padding="12 0 12 0" Height="48" VerticalAlignment="Bottom" Grid.RowSpan="2" HorizontalAlignment="Left"
+            <DockPanel Grid.RowSpan="2" >
+                
+            <Button Padding="12 0 12 0" Height="48" VerticalAlignment="Bottom" HorizontalAlignment="Left"
                     Margin="20" Click="AddTargetButton_Click">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
@@ -158,6 +160,13 @@
                     </DockPanel>
                 </Button.Content>
             </Button>
+                <!--<Button Padding="12 0 12 0" Height="48" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                        Margin="20" Click="PersistChangesToGraphButton_Click">
+                    <TextBlock Text="Save Changes" FontSize="16" FontWeight="SemiBold" Margin="0 0 0 3">
+                        
+                    </TextBlock>
+                </Button>-->
+            </DockPanel>
         </Grid>
 
         <Grid Name="lines" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="4,0,0,108">

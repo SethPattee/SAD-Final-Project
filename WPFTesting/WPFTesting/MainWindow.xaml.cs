@@ -1049,7 +1049,6 @@ namespace YourNamespace
             BillWindow.Show();
         }
 
-        
 
         private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
         {
