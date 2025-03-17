@@ -400,7 +400,8 @@ public class AnalizorModel : INotifyPropertyChanged
 								{
 									Action = ActionEnum.addedShipment,
 									neededProduct = toOrder,
-								}
+								},
+								ProductionTarget = CopyMaker.makeShallowCopyProductionTarget(target)
 							};
 							IssueLog.Add(issue);
 							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });
