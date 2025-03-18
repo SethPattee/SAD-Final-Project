@@ -1,4 +1,5 @@
-﻿using FactorSADEfficiencyOptimizer.ViewModel;
+﻿using FactorSADEfficiencyOptimizer.Models;
+using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.ViewModel;
@@ -35,5 +36,47 @@ public class SimulationWithMultipleProductsTests
 												   // noticable at line 128 of Endpoint node "_productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).First().Quantity += pl.ResultingProduct.Quantity;"
 												   // 
 		//TODO: Fix the apgorithm to work with multiple products made in a day....
+	}
+	[Test]
+	public void ProdutionTargetsCanShareComponentsAndStillOrderEnough()
+	{
+		IInitializedDataProvider data = new DataProvider_FAKE_Version4();
+		SupplyChainViewModel model = new SupplyChainViewModel(data);
+		model.Load();
+
+		var end = model.EndpointList.First();
+		((EndpointNode)end.supplier).ComponentInventory.Add(new Product()
+		{
+			Quantity = 300,
+			ProductName = "Glue"
+		});
+		var prodList = ((EndpointNode)end.supplier).ProductionList;
+		Assert.That(prodList.Count, Is.EqualTo(2));
+		var CompList1 = prodList.First().Components;
+		prodList.Last().ResultingProduct.Quantity = 1;
+		var CompList2 = prodList.Last().Components;
+		// both require 10 Wood. first requires 12 Screws, last requires 10 Glue
+		// end starts with only 10 Wood
+		Assert.That(CompList1.Count, Is.EqualTo(2));
+		Assert.That(CompList2.Count, Is.EqualTo(2));
+		model.ShipmentList.Clear();
+		AnalizorModel simulation = new AnalizorModel(model);
+		( simulation.ProductionTargets.First().ProductTarget ?? new Product() ).Quantity = 6;
+		simulation.ProductionTargets.First().TargetQuantity = 6;
+		( simulation.ProductionTargets.Last().ProductTarget ?? new Product() ).Quantity = 6;
+		simulation.ProductionTargets.Last().TargetQuantity = 6;
+		simulation.DaysToRun = 6;
+		simulation.PassTimeUntilDuration(6);
+
+		Assert.That(simulation.ShipmentList.Count, Is.EqualTo(1));
+
+		var product = simulation.ShipmentList.First().Products.First();
+
+		Assert.That(product.ProductName, Is.EqualTo("Wood"));
+		Assert.That(product.Quantity, Is.EqualTo(110));
+
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
+		Assert.That(simulation.ProductionTargets.Last().Status, Is.EqualTo(StatusEnum.Success));
+
 	}
 }

@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using FactorSADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
@@ -370,6 +371,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	}
 	public void OrderMissingComponents()
 	{
+		List<KeyValuePair<EndpointUIValues, Product>> _orderedProducts = new List<KeyValuePair<EndpointUIValues, Product>>();
 		foreach (ProductionTarget target in ProductionTargets)
 		{
 			EndpointNode endpointNode = new EndpointNode();
@@ -405,13 +407,24 @@ public class AnalizorModel : INotifyPropertyChanged
 							};
 							IssueLog.Add(issue);
 							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });
-							PlaceOrderFor(toOrder, endpoint);
+							if (_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).ToList().Count() >= 1)
+							{
+								_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).First().Value.Quantity += toOrder.Quantity += Quant;
+							}
+							else
+							{
+								_orderedProducts.Add(new KeyValuePair<EndpointUIValues, Product>(endpoint, toOrder) );
+							}
 						}
 					}
 					break;
 				}
 			}
 
+		}
+		foreach (var prodToOrder in _orderedProducts)
+		{
+			PlaceOrderFor(prodToOrder.Value, prodToOrder.Key);
 		}
 	}
 	public void PlaceOrderFor(Product product, EndpointUIValues endpoint)
