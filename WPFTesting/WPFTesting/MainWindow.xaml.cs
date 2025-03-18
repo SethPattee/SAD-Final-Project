@@ -545,9 +545,6 @@ namespace YourNamespace
                                       $"Size: {box.Width:F0}x{box.Height:F0}\n" +
                                       $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}\n" +
                                       $"Connected suppliers:";
-            PositionTextBox.Text = $"({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})";
-            SizeTextBox.Text = $"{box.Width:F0}x{box.Height:F0}";
-            ColorTextBox.Text = $"{(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}";
             TitleTextBox.Text = $"{box.BoxTitle.Text}";
 
             // Populate the ProductsListView with products from the box
@@ -582,26 +579,7 @@ namespace YourNamespace
             //    return;
             //}
 
-            // Edit Box position
-            string[] positionParts = PositionTextBox.Text.Trim('(', ')').Split(',');
-            if (positionParts.Length == 2 &&
-                double.TryParse(positionParts[0], out double left) &&
-                double.TryParse(positionParts[1], out double top))
-            {
-                Canvas.SetLeft(box, left);
-                Canvas.SetTop(box, top);
-            }
-
-            // Edit Box size
-            string[] sizeParts = SizeTextBox.Text.Split('x');
-            if (sizeParts.Length == 2 &&
-                double.TryParse(sizeParts[0], out double width) &&
-                double.TryParse(sizeParts[1], out double height))
-            {
-                box.Width = width;
-                box.Height = height;
-            }
-
+            
             // Edit Product
             if (selectedProduct != null)
             {
@@ -634,17 +612,6 @@ namespace YourNamespace
                 }
             }
 
-            // Edit Box color
-            var colorInput = ColorTextBox.Text.Trim();
-            try
-            {
-                var newColor = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(colorInput);
-                box.boxBorder.Background = new System.Windows.Media.SolidColorBrush(newColor);
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("Invalid color format. Please enter a valid color (e.g., #FF0000 or Red).");
-            }
             box.FillProductDisplay();
         }
 
@@ -814,6 +781,7 @@ namespace YourNamespace
                 element.ElementBorder.BorderThickness = new Thickness(4);
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
                 LeftSidebarEndpoint.Visibility = Visibility.Visible;
+                LeftSidebarScrollEndpoints.Visibility = Visibility.Visible;
              }
          }
         private void SetSelectedBoxDisplay(SupplierElement selectedBox)
@@ -822,6 +790,7 @@ namespace YourNamespace
             selectedBox.boxBorder.BorderThickness = new Thickness(3);
             selectedBox.boxBorder.BorderBrush = Brushes.PaleVioletRed;
             LeftSidebarSupplier.Visibility = Visibility.Visible;
+            LeftSidebarScrollSuppliers.Visibility = Visibility.Visible;
         }
 
         private void UnselectAllCanvasElements()
@@ -844,9 +813,9 @@ namespace YourNamespace
                     lineElement.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
                 }
             }
-            LeftSidebarEndpoint.Visibility = Visibility.Hidden;
-            LeftSidebarSupplier.Visibility = Visibility.Hidden;
-            LeftSidebarLineDetails.Visibility = Visibility.Hidden;
+            LeftSidebarEndpoint.Visibility = Visibility.Collapsed;
+            LeftSidebarSupplier.Visibility = Visibility.Collapsed;
+            LeftSidebarLineDetails.Visibility = Visibility.Collapsed;
         }
 
         private void AddProductToEndpoint_Click(object sender, RoutedEventArgs e)
@@ -976,6 +945,7 @@ namespace YourNamespace
             l.ourShippingLine.StrokeThickness = 5;
             l.ourShippingLine.Stroke = new SolidColorBrush(Colors.PaleVioletRed);
             LeftSidebarLineDetails.Visibility = Visibility.Visible;
+            LeftSidebarScrollShipments.Visibility = Visibility.Visible;
         }
 
         private void LineSelectedFromWindow_Click(object? sender, EventArgs e)
@@ -991,6 +961,7 @@ namespace YourNamespace
                 {
                     if(line.OwnShipment == ViewModel.SelectedShipment)
                     {
+                        UnselectAllCanvasElements();
                         SetSelectedShippingLine(line);
                     }
                 }
