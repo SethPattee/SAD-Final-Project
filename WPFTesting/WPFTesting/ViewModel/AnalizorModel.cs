@@ -416,21 +416,12 @@ public class AnalizorModel : INotifyPropertyChanged
 								_orderedProducts.Add(new KeyValuePair<EndpointUIValues, Product>(endpoint, toOrder) );
 							}
 						}
-						//else
-						//{
-						//	product.Quantity -= Quant;
-						//}
 					}
 					break;
 				}
 			}
 
 		}
-		//EndpointList.Clear();
-		//foreach (var endpoint in Snapshots.Last().Endpoints)
-		//{
-		//	EndpointList.Add(endpoint.ShallowCopy());
-		//}
 		foreach (var prodToOrder in _orderedProducts)
 		{
 			PlaceOrderFor(prodToOrder.Value, prodToOrder.Key);
