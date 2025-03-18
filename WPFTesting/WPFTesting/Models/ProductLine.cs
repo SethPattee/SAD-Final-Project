@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace FactorySADEfficiencyOptimizer.Models
 {
@@ -71,6 +72,16 @@ namespace FactorySADEfficiencyOptimizer.Models
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public ProductLine ShallowCopy()
+        {
+            var nl = new ProductLine();
+            nl.ResultingProduct = this.ResultingProduct.ShallowCopy();
+            nl.ProductLineId = this.ProductLineId;
+            nl.IsEnabled = this.IsEnabled;
+            nl.Components = FactorSADEfficiencyOptimizer.ViewModel.CopyMaker.makeShallowCopyOfProductColection(this.Components);
+            return nl;
         }
     }
 }
