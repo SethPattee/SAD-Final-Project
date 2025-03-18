@@ -409,7 +409,7 @@ public class AnalizorModel : INotifyPropertyChanged
 							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });
 							if (_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).ToList().Count() >= 1)
 							{
-								_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).First().Value.Quantity += toOrder.Quantity += product.Quantity;
+								_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).First().Value.Quantity += toOrder.Quantity += Quant;
 							}
 							else
 							{
