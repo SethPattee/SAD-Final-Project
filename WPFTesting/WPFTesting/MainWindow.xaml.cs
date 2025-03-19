@@ -30,8 +30,8 @@ namespace YourNamespace
     {
         private ObservableCollection<string> boxList = new ObservableCollection<string>();
         public SupplyChainViewModel ViewModel { get; set; }
-        private SupplierElement selectedBoxForRemoval = null;
-        private SupplierElement firstSelectedBox = null;
+        private SupplierElement? selectedBoxForRemoval = null;
+        private SupplierElement? firstSelectedBox = null;
         private Popup? connectionSelectionPopup;
         private bool isRemovingConnection = false;
         private bool isAddingConnection = false;
@@ -55,6 +55,7 @@ namespace YourNamespace
             Initialize();
             //sideBar.BoxList.ItemsSource = boxList;
             this.KeyDown += MainWindow_KeyDown;
+            selectedProduct = new Product();
         }
 
         private void Initialize()
@@ -179,8 +180,12 @@ namespace YourNamespace
             FileMenuPopup.IsOpen = false;
         }
 
-        private void UpdateLinePosition(ShippingLine line1, INodeElement box1, INodeElement box2)
+        private void UpdateLinePosition(ShippingLine line1, INodeElement? box1, INodeElement? box2)
         {
+            if (box1 == null || box2 == null)
+            {
+                return;
+            }
             Point startpoint;
             Point endpoint;
             if (box1.GetType() == typeof(SupplierElement))
@@ -328,7 +333,7 @@ namespace YourNamespace
             }
         }
 
-        private void ReleaseMouseCapture()
+        private new void ReleaseMouseCapture()
         {
             if (MouseIsCaptured)
             {
@@ -436,7 +441,7 @@ namespace YourNamespace
 
         private void FinishConnection_Click(object? sender, EventArgs? e)
         {
-            if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
+            if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching && targetShipingLine != null)
 			{
 				Point LineAnchorOffset = GetLineOffset(lineTarget);
 				if (targetShipingLine.OwnShipment.Receiver is not null && targetShipingLine.OwnShipment.Receiver.GetType() == typeof(EndpointNode))
@@ -460,7 +465,7 @@ namespace YourNamespace
 				targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + LineAnchorOffset.Y;
 				FinnishLineMaker();
 			}
-			else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching)
+			else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching && targetShipingLine != null)
             {
                 targetShipingLine.OwnShipment.Receiver = lineTarget_endpoint.NodeUIValues.supplier;
                 double senseX2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth / 2;
@@ -565,11 +570,11 @@ namespace YourNamespace
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            SupplierElement box = selectedElement.Item1;
+            SupplierElement? box = selectedElement.Item1;
 
             // Edit Box title
             string title = TitleTextBox.Text.Trim();
-            if (title.Length > 0)
+            if (title.Length > 0 && box != null)
             {
                 box.BoxTitle.Text = title;
                 this.Title = title;
@@ -613,7 +618,7 @@ namespace YourNamespace
                 }
             }
 
-            box.FillProductDisplay();
+            box?.FillProductDisplay();
         }
 
         private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -628,7 +633,7 @@ namespace YourNamespace
                 PriceTextBox.Text = selectedProduct.Price.ToString();
             }
         }
-        private void Box_Position_Changed(object sender, EventArgs e)
+        private void Box_Position_Changed(object? sender, EventArgs e)
         {
             //this gets called every time you hover over the element after selecting it...
             //Even when you select another... they both call this on hover
@@ -711,7 +716,7 @@ namespace YourNamespace
 				}
 			}
         }
-        public void RemoveSupplier(object sender, EventArgs e)
+        public void RemoveSupplier(object? sender, EventArgs e)
         {
             if (sender is SupplierElement selectedBox)
             {
@@ -773,7 +778,7 @@ namespace YourNamespace
         }
 
 
-        private void SelectEndpoint_Click(object sender, EventArgs e)
+        private void SelectEndpoint_Click(object? sender, EventArgs e)
         {
             UnselectAllCanvasElements();
             if(sender is EndpointElement element)
@@ -849,7 +854,7 @@ namespace YourNamespace
         {
             if(IsViewModelEndpointUsable())
             {
-                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint?.supplier.Id)
                 .supplier).ComponentInventory.Add(CreateNewProduct());
             }
         }
@@ -858,7 +863,7 @@ namespace YourNamespace
         {
             if (IsViewModelEndpointUsable())
             {
-                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint?.supplier.Id)
                 .supplier).DeliveryRequirementsList.Add(CreateNewProduct());
             }
         }
@@ -872,7 +877,7 @@ namespace YourNamespace
         {
             if(IsViewModelEndpointUsable())
             {
-                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint?.supplier.Id)
                 .supplier).ProductionList.Add(new ProductLine()
                 {
                     Components = new ObservableCollection<Product>()
@@ -983,7 +988,7 @@ namespace YourNamespace
 
         private void DeleteProductLineButton_Click(object sender, RoutedEventArgs e)
         {
-            if(IsViewModelEndpointUsable() && sender is Button button)
+            if(IsViewModelEndpointUsable() && sender is Button button && ViewModel.SelectedEndpoint != null)
             {
                 ((EndpointNode)ViewModel.SelectedEndpoint.supplier)
                     .ProductionList.Remove((ProductLine)button.DataContext);
@@ -1029,10 +1034,10 @@ namespace YourNamespace
         }
         private void DecrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is null && ViewModel?.SelectedShipment is null)
+            if (ViewModel is null || ViewModel?.SelectedShipment is null)
                 return;
 
-            if (ViewModel?.SelectedShipment?.TimeToDeliver - 1 <= 0)
+            else if (ViewModel.SelectedShipment.TimeToDeliver - 1 <= 0)
                 ViewModel.SelectedShipment.TimeToDeliver = 1;
             else
                 ViewModel.SelectedShipment.TimeToDeliver--;
@@ -1042,7 +1047,7 @@ namespace YourNamespace
         {
             if(sender is Button button)
             {
-                ViewModel.SelectedShipment.Products
+                ViewModel.SelectedShipment?.Products
                     .Remove((Product)button.DataContext);
             }
         }
@@ -1051,14 +1056,14 @@ namespace YourNamespace
         {
             if(sender is Button b)
             {
-                ViewModel.SelectedEndpoint.supplier
+                ViewModel.SelectedEndpoint?.supplier
                     .ProductInventory.Remove((Product)b.DataContext);
             }
         }
 
         private void DeleteDeliveryButton_Click(object sender, RoutedEventArgs e)
         {
-            if(sender is Button b)
+            if(sender is Button b && ViewModel.SelectedEndpoint != null)
             {
                 ((EndpointNode)ViewModel.SelectedEndpoint.supplier)
                     .DeliveryRequirementsList.Remove((Product)b.DataContext);
@@ -1069,7 +1074,7 @@ namespace YourNamespace
         {
             if (sender is Button b)
             {
-                ViewModel.SelectedEndpoint.supplier
+                ViewModel.SelectedEndpoint?.supplier
                     .ComponentInventory.Remove((Product)b.DataContext);
             }
         }
