@@ -12,6 +12,7 @@ namespace FactorSADEfficiencyOptimizer.Models
 {
     public class ProductionTarget : INotifyPropertyChanged
     {
+        public bool PalacedAutoOrderForComponent = false;
         private Product? _productiontarget;
         public Product? ProductTarget
         {

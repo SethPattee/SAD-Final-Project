@@ -75,8 +75,8 @@ public class SimulationWithMultipleProductsTests
 		Assert.That(product.ProductName, Is.EqualTo("Wood"));
 		Assert.That(product.Quantity, Is.EqualTo(110));
 
-		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
-		Assert.That(simulation.ProductionTargets.Last().Status, Is.EqualTo(StatusEnum.Success));
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Warning));
+		Assert.That(simulation.ProductionTargets.Last().Status, Is.EqualTo(StatusEnum.Warning));
 
 	}
 }
