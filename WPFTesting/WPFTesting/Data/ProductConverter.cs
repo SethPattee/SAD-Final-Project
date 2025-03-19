@@ -11,7 +11,7 @@ public class ProductConverter : IValueConverter
         Product productData = (Product)value;
         return productData.ProductName + ", "
             + productData.Quantity.ToString() + " "
-            + productData.Units + " "
+            //+ productData.Units + " "
             + productData.Price.ToString();
     }
 

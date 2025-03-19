@@ -39,7 +39,7 @@ public static class CopyMaker
 		p.ProductName = ep.ProductName;
 		p.Price = ep.Price;
 		p.Quantity = ep.Quantity;
-		p.Units = ep.Units;
+		//p.Units = ep.Units;
 		return p;
 	}
 

@@ -142,7 +142,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                     ProductName = "Target item",
                     Price = 1,
                     Quantity = 1,
-                    Units = ""
+                    //Units = ""
                 },
                 TargetQuantity = 1
             };
@@ -283,7 +283,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                     shipmentaddition = "Critical failure occurred! Could not complete target.";
                 if (issue.Solution.Action == ActionEnum.addedShipment)
                     shipmentaddition = $"Added a shipment: {issue.Solution.neededProduct.Quantity}" +
-                        $" {issue.Solution.neededProduct.Units} {issue.Solution.neededProduct.ProductName}" +
+                        $" {issue.Solution.neededProduct.ProductName}" +
                         $" ordered for ${issue.Solution.neededProduct.Price}.";
 
                 ocs.Add($"Item {product_name} issue on {issue.DayFound}: {issue.Severity.ToString()}" +

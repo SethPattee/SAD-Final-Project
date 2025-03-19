@@ -35,7 +35,7 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 						{
 							Quantity=1000,
 							ProductName="Wood",
-							Units="kg"
+							//Units="kg"
 						}
 					},
 
@@ -60,7 +60,7 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 						{
 							Quantity=1000,
 							ProductName="Screws",
-							Units="kg"
+							//Units="kg"
 						}
 					},
 
@@ -94,7 +94,7 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 						{
 							Quantity=1000,
 							ProductName="Glue",
-							Units="kg"
+							//Units="kg"
 						}
 					},
 					Name="Glue Vendor",
@@ -127,7 +127,7 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 						{
 							Quantity=1000,
 							ProductName="Sawdust",
-							Units="kg"
+							//Units="kg"
 						},
 						new Product()
 						{

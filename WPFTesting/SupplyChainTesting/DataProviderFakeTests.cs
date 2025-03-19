@@ -418,17 +418,17 @@ public class DataProviderFakeTests
             "Supplier positions should have valid non-negative X and Y coordinates.");
     }
 
-    [Test]
-    public void ProductInventory_ShouldContainCorrectUnitsForProducts()
-    {
-        var dataProvider = new DataProvider_FAKE();
-        var suppliers = dataProvider.GetBoxValues();
+    //[Test]
+    //public void ProductInventory_ShouldContainCorrectUnitsForProducts()
+    //{
+    //    var dataProvider = new DataProvider_FAKE();
+    //    var suppliers = dataProvider.GetBoxValues();
 
-        var supplier = suppliers.First();
-        var product = supplier.supplier.ProductInventory.First(p => p.ProductName == "Saw Blade 2-pack");
+    //    var supplier = suppliers.First();
+    //    var product = supplier.supplier.ProductInventory.First(p => p.ProductName == "Saw Blade 2-pack");
 
-        Assert.AreEqual("kg", product.Units, "Expected product 'Saw Blade 2-pack' to have unit 'kg'.");
-    }
+    //    Assert.AreEqual("kg", product.Units, "Expected product 'Saw Blade 2-pack' to have unit 'kg'.");
+    //}
 
     [Test]
     public void Endpoint_ShouldContainCorrectProductionList()

@@ -47,14 +47,14 @@ namespace FactorySADEfficiencyOptimizer.Shapes
                             ProductName = "Wood",
                             Price = (decimal)3.00,
                             Quantity = 40,
-                            Units = "Boards"
+                            //Units = "Boards"
                         },
                         new Product()
                         {
                             ProductName = "Glue",
                             Price = (decimal)0.01,
                             Quantity = (float)3000.0,
-                            Units = "mL"
+                            //Units = "mL"
                         }
                     },
 

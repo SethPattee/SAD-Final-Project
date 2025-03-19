@@ -130,7 +130,7 @@ public partial class ShipmentsScheduled : Window
         Product newprod = new()
         {
             ProductName = "new product",
-            Units = "unit"
+            //Units = "unit"
         };
 
         return newprod;

@@ -60,10 +60,10 @@ namespace FactorSADEfficiencyOptimizer.UIComponent
         {
             List = new ObservableCollection<Product>
             {
-                new Product { ProductName = "Component A", Quantity = 5, Units = "pcs", Price = 15.50M },
-                new Product { ProductName = "Component B", Quantity = 3, Units = "pcs", Price = 22.75M },
-                new Product { ProductName = "Component C", Quantity = 10, Units = "pcs", Price = 8.30M },
-                new Product { ProductName = "Component D", Quantity = 2, Units = "pcs", Price = 50.00M }
+                new Product { ProductName = "Component B", Quantity = 3, Price = 22.75M },
+                new Product { ProductName = "Component A", Quantity = 5, Price = 15.50M },
+                new Product { ProductName = "Component C", Quantity = 10, Price = 8.30M },
+                new Product { ProductName = "Component D", Quantity = 2, Price = 50.00M }
             };
 
             TotalExpenses = List.Sum(p => (float)p.Quantity * (float)p.Price);

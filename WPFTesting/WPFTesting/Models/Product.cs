@@ -13,7 +13,7 @@ namespace FactorySADEfficiencyOptimizer.Models
 
         private Decimal _price;
         private string _name = "";
-        private string _units = "";
+        //private string _units = "";
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
@@ -45,11 +45,11 @@ namespace FactorySADEfficiencyOptimizer.Models
                 OnPropertyChanged(nameof(ProductName));
             }
         }
-        public string Units
-        {
-            get => _units;
-            set { _units = value; OnPropertyChanged(nameof(Units)); }
-        }
+        //public string Units
+        //{
+        //    get => _units;
+        //    set { _units = value; OnPropertyChanged(nameof(Units)); }
+        //}
         public decimal Price
         {
             get => _price;

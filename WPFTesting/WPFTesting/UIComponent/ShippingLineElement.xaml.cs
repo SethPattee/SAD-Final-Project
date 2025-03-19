@@ -50,7 +50,7 @@ public partial class ShippingLine : UserControl
 
         DataContext = this;
         OwnShipment.Products = new ObservableCollection<Product>() { new Product() {Price = 0,
-                    Units = "",
+                    //Units = "",
                     ProductName = "Marbels",
                     Quantity = 7 } };
         Id = id ?? Guid.NewGuid();

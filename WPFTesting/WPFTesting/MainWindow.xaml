@@ -16,7 +16,6 @@
             <Grid>
                 <TextBox Text="{Binding ProductName}"/>
                 <TextBox Text="{Binding Quantity}"/>
-                <TextBox Text="{Binding Units}"/>
                 <TextBox Text="{Binding Price}"/>
             </Grid>
         </DataTemplate>
@@ -126,7 +125,6 @@
                                     <GridView>
                                         <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding ProductName}" />
                                         <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
-                                        <GridViewColumn Header="Units" DisplayMemberBinding="{Binding Units}" />
                                         <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" />
                                     </GridView>
                                 </ListView.View>
@@ -139,9 +137,6 @@
 
                             <TextBlock Text="Quantity:" />
                             <TextBox x:Name="QuantityTextBox" />
-
-                            <TextBlock Text="Units:" />
-                            <TextBox x:Name="UnitsTextBox" />
 
                             <TextBlock Text="Price:" />
                             <TextBox x:Name="PriceTextBox" />
@@ -261,8 +256,6 @@
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
                                                             Grid.Column="4" Click="DeleteProductButton_Click"></Button>
@@ -291,8 +284,6 @@
                                                     <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
@@ -323,8 +314,6 @@
                                                     <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
                                           HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
-                                          HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
                                           HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"

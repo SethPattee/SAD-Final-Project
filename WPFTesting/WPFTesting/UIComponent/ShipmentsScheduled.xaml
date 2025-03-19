@@ -106,13 +106,11 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Margin="10 0 0 0" Text="Item"></TextBlock>
                             <TextBlock Grid.Column="1" Text="Amt."></TextBlock>
-                            <TextBlock Grid.Column="2" Text="Units"></TextBlock>
-                            <TextBlock Grid.Column="3" Text="Price"></TextBlock>
-                            <TextBlock Grid.Column="4" Text="Delete"></TextBlock>
+                            <TextBlock Grid.Column="2" Text="Price"></TextBlock>
+                            <TextBlock Grid.Column="3" Text="Delete"></TextBlock>
                         </Grid>
                     </Border>
                     <ListView x:Name="SelectedProductList"
@@ -126,17 +124,15 @@
                                         <ColumnDefinition Width="2*"></ColumnDefinition>
                                         <ColumnDefinition Width="2*"></ColumnDefinition>
                                         <ColumnDefinition Width="2*"></ColumnDefinition>
-                                        <ColumnDefinition Width="2*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <TextBox Grid.Column="0" Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                     <TextBox Grid.Column="1" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="25"></TextBox>
-                                    <TextBox Grid.Column="2" Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="30"></TextBox>
-                                    <TextBox Grid.Column="3" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=$\{0\}}" MinWidth="30"></TextBox>
-                                    <Border Grid.Column="5" CornerRadius="2" Background="LightSalmon" BorderBrush="Red" BorderThickness="1"
+                                    <TextBox Grid.Column="2" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=$\{0\}}" MinWidth="30"></TextBox>
+                                    <Border Grid.Column="4" CornerRadius="2" Background="LightSalmon" BorderBrush="Red" BorderThickness="1"
                                             Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}" VerticalAlignment="Stretch">
                                         <Button Content="X" Background="Transparent" BorderBrush="Gray" BorderThickness="0"
                                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                                Grid.Column="2" Click="DeleteComponentToShipment_Click"></Button>
+                                                Click="DeleteComponentToShipment_Click"></Button>
                                     </Border>
                                 </Grid>
                             </DataTemplate>

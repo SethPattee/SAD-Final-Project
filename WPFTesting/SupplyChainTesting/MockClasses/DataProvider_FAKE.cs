@@ -31,7 +31,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                         {
                             Quantity=10,
                             ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
 
@@ -56,7 +56,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                         {
                             Quantity=10,
                             ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
 
@@ -90,7 +90,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                         {
                             Quantity=1000,
                             ProductName="sawdust",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
                     Name="Vendor 3",
@@ -139,7 +139,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
                         {
                             Quantity=10,
                             ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
 
@@ -164,7 +164,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
                         {
                             Quantity=10,
                             ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
 
@@ -198,7 +198,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
                         {
                             Quantity=1000,
                             ProductName="sawdust",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
                     Name="Vendor 3",
@@ -247,7 +247,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                         {
                             Quantity=10,
                             ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
 
@@ -272,7 +272,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                         {
                             Quantity=10,
                             ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
 
@@ -306,7 +306,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                         {
                             Quantity=1000,
                             ProductName="sawdust",
-                            Units="kg"
+                            //Units="kg"
                         }
                     },
                     Name="Vendor 3",
@@ -339,7 +339,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                         {
                             Quantity=1000,
                             ProductName="sawdust",
-                            Units="kg"
+                            //Units="kg"
                         },
                         new Product()
                         {
@@ -421,7 +421,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
 						{
 							Quantity=1000,
 							ProductName="sawdust",
-							Units="kg"
+							//Units="kg"
 						}
 					},
 					Name="Vendor 3",

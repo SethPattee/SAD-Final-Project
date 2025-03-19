@@ -32,7 +32,7 @@ public class DataProviderTests
                         {
                             Quantity=5,
                             ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            //Units="kg"
                         }
         };
         model.ShipmentList.Add(s);

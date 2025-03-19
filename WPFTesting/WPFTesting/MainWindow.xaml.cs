@@ -598,7 +598,7 @@ namespace YourNamespace
                 }
 
                 // Update Units
-                selectedProduct.Units = UnitsTextBox.Text.Trim();
+                //selectedProduct.Units = UnitsTextBox.Text.Trim();
 
                 // Update Price
                 if (decimal.TryParse(PriceTextBox.Text, out decimal price))
@@ -623,7 +623,7 @@ namespace YourNamespace
             {
                 ProductNameTextBox.Text = selectedProduct.ProductName;
                 QuantityTextBox.Text = selectedProduct.Quantity.ToString();
-                UnitsTextBox.Text = selectedProduct.Units;
+                //UnitsTextBox.Text = selectedProduct.Units;
                 PriceTextBox.Text = selectedProduct.Price.ToString();
             }
         }
@@ -833,7 +833,7 @@ namespace YourNamespace
                 ViewModel.SelectedShipment.Products.Add(new Product()
                 {
                     Price = 0,
-                    Units = "",
+                    //Units = "",
                     ProductName = "New product",
                     Quantity = 0
                 });
@@ -897,7 +897,7 @@ namespace YourNamespace
             Product product = new Product()
             {
                 Price = 0,
-                Units = "",
+                //Units = "",
                 ProductName = "New product",
                 Quantity = 0
             };
