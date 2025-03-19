@@ -426,7 +426,29 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // Convert back logic (if needed)
+            return Binding.DoNothing;
+        }
+    }
+    public class StatusToImageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is StatusEnum status)
+            {
+                return status switch
+                {
+                    StatusEnum.Warning => new Uri(@"./Resources/MinorFailIcon.png", UriKind.Relative),
+                    StatusEnum.Failure => new Uri(@"./Resources/CriticalFailIcon.png", UriKind.Relative),
+                    StatusEnum.Success => new Uri(@"./Resources/SuccessIcon.png", UriKind.Relative),
+                    StatusEnum.NotDone => new Uri(@"./Resources/UnrunTargetIcon.png", UriKind.Relative),
+                    _ => new Uri(@"./Resources/UnrunTargetIcon.png", UriKind.Relative)
+                };
+            }
+            return new Uri(@"./Resources/UnrunTargetIcon.png", UriKind.Relative);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             return Binding.DoNothing;
         }
     }

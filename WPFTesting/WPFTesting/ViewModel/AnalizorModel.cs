@@ -298,6 +298,7 @@ public class AnalizorModel : INotifyPropertyChanged
         foreach (ProductionTarget targ in ProductionTargets)
         {
             targ.Status = StatusEnum.NotDone;
+			targ.PalacedAutoOrderForComponent = false;
         }
     }
     private void RecordUsedComponents()
