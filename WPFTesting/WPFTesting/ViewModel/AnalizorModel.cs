@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using FactorSADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
@@ -118,12 +119,12 @@ public class AnalizorModel : INotifyPropertyChanged
 		ShortestPath = "";
 		foreach (var supplier in model.SupplierList)
 		{
-			SupplierUIValues sup = CopyMaker.makeShallowCopySupplier(supplier);
+			SupplierUIValues sup = supplier.ShallowCopy();
 			AddSupplier(sup);
 		}
 		foreach (EndpointUIValues endpoint in model.EndpointList)
 		{
-			EndpointUIValues end = CopyMaker.makeShallowCopyEndpoint(endpoint);
+			EndpointUIValues end = endpoint.ShallowCopy();
 			foreach (ProductLine pl in ((EndpointNode)end.supplier).ProductionList)
 			{
 				if (pl.IsEnabled)
@@ -134,7 +135,7 @@ public class AnalizorModel : INotifyPropertyChanged
 							DueDate = 1,
 							IsTargetEnabled = true,
 							TargetQuantity = pl.ResultingProduct.Quantity,
-							ProductTarget = CopyMaker.makeShallowCopyProduct(pl.ResultingProduct),
+							ProductTarget = pl.ResultingProduct.ShallowCopy(),
 							CurrentAmount = (end.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == pl.ResultingProduct.ProductName) ?? new Product()).Quantity,
 							Status = StatusEnum.NotDone
 						}
@@ -162,12 +163,12 @@ public class AnalizorModel : INotifyPropertyChanged
 		Snapshot snapshot = new Snapshot();
 		foreach (var supplier in SupplierList)
 		{
-			SupplierUIValues sup = CopyMaker.makeShallowCopySupplier(supplier);
+			SupplierUIValues sup = supplier.ShallowCopy();
 			snapshot.Suppliers.Add(supplier);
 		}
 		foreach (EndpointUIValues endpoint in EndpointList)
 		{
-			EndpointUIValues end = CopyMaker.makeShallowCopyEndpoint(endpoint);
+			EndpointUIValues end = endpoint.ShallowCopy();
 			snapshot.Endpoints.Add(end);
 		}
 		foreach (Shipment shipment in ShipmentList)
@@ -180,7 +181,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		}
 		foreach (ProductionTarget target in ProductionTargets)
         {
-            ProductionTarget targCopy = CopyMaker.makeShallowCopyProductionTarget(target);
+			ProductionTarget targCopy = target.ShallowCopy();
             snapshot.Targets.Add(targCopy);
         }
         snapshot.ComponentsUsed = CopyMaker.makeShallowCopyOfProductColection(_daysUsedComponents).ToList();
@@ -276,12 +277,12 @@ public class AnalizorModel : INotifyPropertyChanged
         EndpointList.Clear();
         foreach (var end in initValues.Endpoints)
         {
-            EndpointList.Add(CopyMaker.makeShallowCopyEndpoint(end));
+            EndpointList.Add(end.ShallowCopy());
         }
         SupplierList.Clear();
         foreach (var sup in initValues.Suppliers)
         {
-            SupplierList.Add(CopyMaker.makeShallowCopySupplier(sup));
+            SupplierList.Add(sup.ShallowCopy());
         }
         ShipmentList.Clear();
         foreach (var shipment in initValues.Shipments)
@@ -370,6 +371,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	}
 	public void OrderMissingComponents()
 	{
+		List<KeyValuePair<EndpointUIValues, Product>> _orderedProducts = new List<KeyValuePair<EndpointUIValues, Product>>();
 		foreach (ProductionTarget target in ProductionTargets)
 		{
 			EndpointNode endpointNode = new EndpointNode();
@@ -400,17 +402,29 @@ public class AnalizorModel : INotifyPropertyChanged
 								{
 									Action = ActionEnum.addedShipment,
 									neededProduct = toOrder,
-								}
+								},
+								ProductionTarget = target.ShallowCopy()
 							};
 							IssueLog.Add(issue);
 							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });
-							PlaceOrderFor(toOrder, endpoint);
+							if (_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).ToList().Count() >= 1)
+							{
+								_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).First().Value.Quantity += toOrder.Quantity += Quant;
+							}
+							else
+							{
+								_orderedProducts.Add(new KeyValuePair<EndpointUIValues, Product>(endpoint, toOrder) );
+							}
 						}
 					}
 					break;
 				}
 			}
 
+		}
+		foreach (var prodToOrder in _orderedProducts)
+		{
+			PlaceOrderFor(prodToOrder.Value, prodToOrder.Key);
 		}
 	}
 	public void PlaceOrderFor(Product product, EndpointUIValues endpoint)

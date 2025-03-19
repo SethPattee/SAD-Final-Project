@@ -37,7 +37,7 @@
                     <TextBlock><Run Text="File"/></TextBlock>
                 </ToggleButton>
 
-                <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" Width="60">
+                <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" Width="60" StaysOpen="False">
                     <Border BorderThickness="1">
                         <StackPanel>
                             <Button x:Name="FileMenu_New" Content="New" Background="WhiteSmoke"/>
