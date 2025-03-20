@@ -12,7 +12,7 @@ namespace FactorySADEfficiencyOptimizer.Models
         private float _quantity;
 
         private Decimal _price;
-        private string _name = "";
+        private Guid _catalogueKey = Guid.NewGuid();
         private string _units = "";
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
@@ -30,18 +30,26 @@ namespace FactorySADEfficiencyOptimizer.Models
         }
         public string ProductName
         {
-            get => _name;
-            set
-            {
-
-                if (value == "New New New")
+            get {
+				if (ProductCatalog.Products.TryGetValue(_catalogueKey, out GeneralProduct? genProd))
                 {
-                    _name = "Wrong!!!!";
+                    return genProd.ProductName;
                 }
                 else
                 {
-                    _name = value;
+                    return "No Name";
                 }
+            } 
+            set
+            {
+				if (ProductCatalog.Products.TryGetValue(_catalogueKey, out GeneralProduct? genProd))
+				{
+					genProd.ProductName = value;
+				}
+				else
+				{
+				    ProductCatalog.Products[_catalogueKey] = new GeneralProduct() { ProductName = value};
+				}
                 OnPropertyChanged(nameof(ProductName));
             }
         }
