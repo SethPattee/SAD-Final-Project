@@ -26,6 +26,20 @@ namespace FactorSADEfficiencyOptimizer.UIComponent;
 /// </summary>
 public partial class ShipmentsScheduled : Window
 {
+    public ShipmentsScheduled(AnalizorModel simModel)
+    {
+        InitializeComponent();
+        ScheduledShipmentsList.DataContext = this;
+        SelectedProductList.DataContext = this;
+        Testshipments = new ObservableCollection<Shipment>(simModel.ShipmentList);
+        SenderNames = new ObservableCollection<string>();
+        foreach (string a in ProductCatalogNames.ProductNames)
+        {
+            SenderNames.Add(a);
+        }
+
+    }
+    public ObservableCollection<String> SenderNames { get; set; }
     private bool IsCancellingCloseRequest = true;
     ConfirmCloseScheduledShipmentDialogue? ConfirmPopup = null;
     protected override void OnClosing(CancelEventArgs e)
@@ -107,13 +121,6 @@ public partial class ShipmentsScheduled : Window
         }
     }
 
-    public ShipmentsScheduled(AnalizorModel simModel)
-    {
-        InitializeComponent();
-        ScheduledShipmentsList.DataContext = this;
-        SelectedProductList.DataContext = this;
-        Testshipments = new ObservableCollection<Shipment>(simModel.ShipmentList);
-    }
 
     public void AddNewShipment_Click(object? sender, RoutedEventArgs? e)
     {
