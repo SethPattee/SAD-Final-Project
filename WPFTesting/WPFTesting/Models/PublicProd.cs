@@ -22,3 +22,18 @@ public class GeneralProduct // : INotifyPropertyChanged
 	//	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	//}
 }
+public static class ProductCatalogNames
+{
+	public static List<String> ProductNames 
+	{ 
+		get
+		{
+			var list = new List<String>();
+			foreach (GeneralProduct product in ProductCatalog.Products.Values)
+			{
+				list.Add(product.ProductName);
+			}
+			return list;
+		}
+	}
+}

@@ -48,6 +48,18 @@ namespace FactorySADEfficiencyOptimizer.Models
 				}
 				else
 				{
+                    string v = string.Empty;
+                    foreach (Guid Key in ProductCatalog.Products.Keys)
+                    {
+                        if (ProductCatalog.Products.TryGetValue(Key, out GeneralProduct? Prod))
+                        {
+                            if (value == Prod.ProductName)
+                            {
+                                _catalogueKey = Key;
+                                break;
+                            }
+                        }               
+                    }
 				    ProductCatalog.Products[_catalogueKey] = new GeneralProduct() { ProductName = value};
 				}
                 OnPropertyChanged(nameof(ProductName));
