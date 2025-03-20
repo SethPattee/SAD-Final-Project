@@ -247,3 +247,207 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 		throw new NotImplementedException();
 	}
 }
+
+
+public class DataProvider_FAKE_Version5 : IInitializedDataProvider
+{
+	public DataProvider_FAKE_Version5()
+	{
+
+	}
+	public IEnumerable<SupplierUIValues> GetBoxValues()
+	{
+
+		IEnumerable<SupplierUIValues> suppliers = new List<SupplierUIValues>
+		{
+			new SupplierUIValues {
+				supplier = new Supplier()
+				{ ProductInventory =
+					{
+						new Product()
+						{
+							Quantity=20,
+							ProductName="Drill Bit"
+						},
+						new Product()
+						{
+							Quantity=1000,
+							ProductName="Wood",
+							Units="kg"
+						}
+					},
+
+					Name="Wood Vendor",
+					Id = Guid.NewGuid()
+				},
+
+				Position = new System.Drawing.Point(140,140)
+
+			},
+			new SupplierUIValues
+			{
+				supplier = new Supplier()
+				{ ProductInventory =
+					{
+						new Product()
+						{
+							Quantity=20,
+							ProductName="Drill Bit"
+						},
+						new Product()
+						{
+							Quantity=1000,
+							ProductName="Screws",
+							Units="kg"
+						}
+					},
+
+					Name="Screws Vendor",
+					Id = Guid.NewGuid()
+				},
+				Position= new System.Drawing.Point(280,280)
+			},
+			new SupplierUIValues
+			{
+				supplier = new Supplier()
+				{
+					ProductInventory =
+					{
+						new Product()
+						{
+							Quantity = 1,
+							ProductName = "Hammer"
+						},
+						new Product()
+						{
+							Quantity=1,
+							ProductName="10mm socket"
+						},
+						new Product()
+						{
+							Quantity=20,
+							ProductName="Screws"
+						},
+						new Product()
+						{
+							Quantity=1000,
+							ProductName="Glue",
+							Units="kg"
+						}
+					},
+					Name="Glue Vendor",
+					Id=Guid.NewGuid()
+				},
+				Position= new System.Drawing.Point(50,320)
+			},
+			new EndpointUIValues
+			{
+				supplier = new EndpointNode()
+				{
+					ProductInventory =
+					{
+						new Product()
+						{
+							Quantity = 0,
+							ProductName = "Box"
+						}
+					},
+					Name = "Enpoint Name",
+					Id=Guid.NewGuid(),
+					ComponentInventory =
+					{
+						new Product()
+						{
+							Quantity=1000,
+							ProductName="Screws"
+						},
+						new Product()
+						{
+							Quantity=1000,
+							ProductName="Sawdust",
+							Units="kg"
+						},
+						new Product()
+						{
+							Quantity=1000,
+							ProductName= "Wood"
+						},
+						new Product()
+						{
+							Quantity=1000,
+							ProductName = "Glue"
+						}
+					},
+					ProductionList =
+					{
+						   new ProductLine()
+							{
+								ResultingProduct = new Product()
+								{
+									Quantity = 2,
+									ProductName = "Box"
+								},
+								Components = new ObservableCollection<Product>()
+								{
+									new Product()
+									{
+										Quantity=12,
+										ProductName="Screws"
+									},
+									new Product()
+									{
+										Quantity=10,
+										ProductName= "Wood"
+									}
+								},
+								IsEnabled = true,
+							},
+						   new ProductLine()
+							{
+								ResultingProduct = new Product()
+								{
+									Quantity = 1,
+									ProductName = "Door"
+								},
+								Components = new ObservableCollection<Product>()
+								{
+									new Product()
+									{
+										Quantity=10,
+										ProductName="Glue"
+									},
+									new Product()
+									{
+										Quantity=10,
+										ProductName= "Wood"
+									}
+								},
+								IsEnabled = true,
+							}
+					}
+				}
+			}
+		};
+
+		return suppliers;
+	}
+
+	public IEnumerable<Shipment> GetShipments(IEnumerable<EndpointUIValues> endpoints, IEnumerable<SupplierUIValues> suppliers)
+	{
+		var toreturn = new List<Shipment>() {
+			
+	   };
+
+		return toreturn;
+	}
+
+	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)
+	{
+		throw new NotImplementedException();
+	}
+
+	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
+	{
+		throw new NotImplementedException();
+	}
+}

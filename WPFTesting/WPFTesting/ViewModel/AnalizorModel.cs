@@ -298,6 +298,7 @@ public class AnalizorModel : INotifyPropertyChanged
         foreach (ProductionTarget targ in ProductionTargets)
         {
             targ.Status = StatusEnum.NotDone;
+			targ.PalacedAutoOrderForComponent = false;
         }
     }
     private void RecordUsedComponents()
@@ -330,8 +331,15 @@ public class AnalizorModel : INotifyPropertyChanged
 				target.CurrentAmount = prod.Quantity;
 				if (target.CurrentAmount >= target.TargetQuantity)
 				{
-					target.Status = StatusEnum.Success;
-					OnPropertyChanged(nameof(target.Status));
+					if (!target.PalacedAutoOrderForComponent)
+					{
+						target.Status = StatusEnum.Success;
+					}
+					else
+					{
+                        target.Status = StatusEnum.Warning;
+                    }
+                    OnPropertyChanged(nameof(target.Status));
 					var pl = (((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
 					pl.IsEnabled = false;
 					OnPropertyChanged(nameof(pl));
@@ -415,6 +423,7 @@ public class AnalizorModel : INotifyPropertyChanged
 							{
 								_orderedProducts.Add(new KeyValuePair<EndpointUIValues, Product>(endpoint, toOrder) );
 							}
+							target.PalacedAutoOrderForComponent = true;
 						}
 					}
 					break;

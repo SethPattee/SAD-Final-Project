@@ -99,8 +99,9 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
     {
         _daysUsedcomponents = new ObservableCollection<Product>();
         //For every component set to make a given product:
-        foreach( var pl in _productionList)
+        foreach( var p in _productionList)
         {
+            var pl = p.ShallowCopy();
             try
             {
                 if (!pl.IsEnabled)
@@ -134,8 +135,8 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
 
                     if (CanProceed)
                     {
-                        var resultingProd = _productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).First();
-                        resultingProd.Quantity = resultingProd.Quantity + pl.ResultingProduct.Quantity;
+                        var prodInventory = _productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).First();
+                        prodInventory.Quantity = prodInventory.Quantity + pl.ResultingProduct.Quantity;
                         _componentInventory = TransactionalComponentInventory;
                     }
                 }

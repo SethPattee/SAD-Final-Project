@@ -12,6 +12,7 @@ using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
+using NUnit.Framework.Constraints;
 
 namespace SupplyChainTesting;
 
@@ -202,8 +203,9 @@ public class SimulatorTests
 		Assert.That(simulation.IssueLog, Is.Empty);
 		SimulatorTestsHelpers.SetUpModelForChangeLogsTenDaySim(simulation);
 
-		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
-	}
+		Assert.That(simulation.ProductionTargets.First().Status, Is.Not.EqualTo(StatusEnum.Failure));
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Warning));
+    }
 	[Test]
 	public void ModelSetsTargetTofailWhenSimulationCompletesWithoutEnoughProduct()
 	{
@@ -214,16 +216,17 @@ public class SimulatorTests
 		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Failure));
 	}
 	[Test]
-	public void ModelSetsTargetTofailWhenSimulationCompletesWithoutEnoughProductAndThenSuccedsOnTheSecondRun()
+	public void ModelSetsTargetTofailWhenSimulationCompletesWithoutEnoughProductAndThenWarningOnTheSecondRunWhenOrderingMoreComponents()
 	{
 		var model = SimulatorTestsHelpers.setupTest();
+		model.ShipmentList.Clear();
 		AnalizorModel simulation = new AnalizorModel(model);
 		SimulatorTestsHelpers.SetUpModelForChangeLogsFiveDayTenProductFailureSim(simulation);
 		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Failure));
 		simulation.ProductionTargets.First().DueDate = 10;
 		simulation.PassTimeUntilDuration(10);
-		//should be failing
-		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
+		Assert.True(simulation.ShipmentList.Count >= 0);
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Warning));
 	}
 	[Test]
 	public void ModelAddsDalyComponentsToSnapShots()

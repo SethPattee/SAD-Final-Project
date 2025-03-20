@@ -17,25 +17,37 @@ public class SimulationWithMultipleProductsTests
 	[Test]
 	public void TwoProductionTargetsCanCompleteWithShipmentsOrdered()
 	{
-		IInitializedDataProvider data = new DataProvider_FAKE_Version4();
+		IInitializedDataProvider data = new DataProvider_FAKE_Version5();
 		SupplyChainViewModel model = new SupplyChainViewModel(data);
-		model.Load();
+        model.Load();
 
 		AnalizorModel simulation = new AnalizorModel(model);
 		simulation.ProductionTargets.Clear();
 		simulation.ProductionTargets.Add(SimulatorTestsHelpers.MakeProductionTargetBox2(dateDue: 5, targetQuantity: 10));//makes 2 boxes per day
 		simulation.ProductionTargets.Add(SimulatorTestsHelpers.MakeProductionTargetDoor(dateDue: 5, targetQuantity:  5));//makes 1 door per day
+		
+		Product wood = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Wood");
+		Product glue = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Glue");
+		Product screws = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Screws");
+		Assert.That(wood.Quantity, Is.EqualTo(1000));
+		Assert.That(screws.Quantity, Is.EqualTo(1000));
+		Assert.That(glue.Quantity, Is.EqualTo(1000));
+
 		simulation.DaysToRun = 5;
 		simulation.PassTimeUntilDuration(5);
+
+		wood = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Wood");
+		glue = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Glue");
+		screws = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Screws");
+		Assert.That(wood.Quantity, Is.EqualTo(900)); // enough components to make 5 doors and 10 boxes in 5 days
+		Assert.That(screws.Quantity, Is.EqualTo(940));
+		Assert.That(glue.Quantity, Is.EqualTo(950));
+
 
 		Product Door = simulation.EndpointList.First().supplier.ProductInventory.First(p => p.ProductName == "Door"); 
 		Product Box = simulation.EndpointList.First().supplier.ProductInventory.First(p => p.ProductName == "Box");
 		Assert.That(Box.Quantity, Is.EqualTo(10));
-		//Assert.That(Door.Quantity, Is.EqualTo(5)); // Bug, When it has two products to make, it will make the single on just fine, but when there is one that 
-												   // makes 2 a day, it will start to double how many it makes in a day (starting on day 2, it isn't doubling on the first day)
-												   // noticable at line 128 of Endpoint node "_productInventory.Where(x => x.ProductName == pl.ResultingProduct.ProductName).First().Quantity += pl.ResultingProduct.Quantity;"
-												   // 
-		//TODO: Fix the apgorithm to work with multiple products made in a day....
+		Assert.That(Door.Quantity, Is.EqualTo(5)); 
 	}
 	[Test]
 	public void ProdutionTargetsCanShareComponentsAndStillOrderEnough()
@@ -75,8 +87,8 @@ public class SimulationWithMultipleProductsTests
 		Assert.That(product.ProductName, Is.EqualTo("Wood"));
 		Assert.That(product.Quantity, Is.EqualTo(110));
 
-		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Success));
-		Assert.That(simulation.ProductionTargets.Last().Status, Is.EqualTo(StatusEnum.Success));
+		Assert.That(simulation.ProductionTargets.First().Status, Is.EqualTo(StatusEnum.Warning));
+		Assert.That(simulation.ProductionTargets.Last().Status, Is.EqualTo(StatusEnum.Warning));
 
 	}
 }
