@@ -105,14 +105,18 @@ public class SupplyChainViewModel : INotifyPropertyChanged
         }
     }
 
-    public void updateFileSave()
+    public void updateFileSave(string filePath)
     {
         List<SupplierUIValues> endpointsAndSuppliers = new List<SupplierUIValues>();
         endpointsAndSuppliers.AddRange(SupplierList);
         endpointsAndSuppliers.AddRange(EndpointList);
-        _boxProvider.SaveSupplierInfo(endpointsAndSuppliers);
-        _boxProvider.SaveShipmentInfo(ShipmentList);
+
+        // Call the save methods with the selected file path
+        _boxProvider.SaveSupplierInfo(endpointsAndSuppliers, filePath);
+        _boxProvider.SaveShipmentInfo(ShipmentList, filePath);
     }
+
+
 
 
     public void Load()
