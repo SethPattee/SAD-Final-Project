@@ -340,7 +340,7 @@ public class AnalizorModel : INotifyPropertyChanged
                         target.Status = StatusEnum.Warning;
                     }
                     OnPropertyChanged(nameof(target.Status));
-					var pl = (((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
+					var pl = (((EndpointNode)endpoint.Supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
 					pl.IsEnabled = false;
 					OnPropertyChanged(nameof(pl));
 					//TODO: add the profit made from the target here
