@@ -19,7 +19,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
         IEnumerable<SupplierUIValues> suppliers = new List<SupplierUIValues>
         {
             new SupplierUIValues {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 { ProductInventory =
                     {
                         new Product()
@@ -44,7 +44,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
             },
             new SupplierUIValues
             {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 { ProductInventory =
                     {
                         new Product()
@@ -67,7 +67,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
             },
             new SupplierUIValues
             {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 {
                     ProductInventory =
                     {
@@ -127,7 +127,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
         IEnumerable<SupplierUIValues> suppliers = new List<SupplierUIValues>
         {
             new SupplierUIValues {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 { ProductInventory =
                     {
                         new Product()
@@ -152,7 +152,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
             },
             new SupplierUIValues
             {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 { ProductInventory =
                     {
                         new Product()
@@ -175,7 +175,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
             },
             new SupplierUIValues
             {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 {
                     ProductInventory =
                     {
@@ -235,7 +235,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
         IEnumerable<SupplierUIValues> suppliers = new List<SupplierUIValues>
         {
             new SupplierUIValues {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 { ProductInventory =
                     {
                         new Product()
@@ -260,7 +260,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
             },
             new SupplierUIValues
             {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 { ProductInventory =
                     {
                         new Product()
@@ -283,7 +283,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
             },
             new SupplierUIValues
             {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 {
                     ProductInventory =
                     {
@@ -316,7 +316,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
             },
             new EndpointUIValues
             {
-                supplier = new EndpointNode()
+                Supplier = new EndpointNode()
                 {
                     ProductInventory =
                     {

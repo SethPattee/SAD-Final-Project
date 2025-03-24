@@ -16,7 +16,7 @@ public class ForJsonSupplier
     }
     public ForJsonSupplier(SupplierUIValues s)
     {
-        Supplier = s.supplier;
+        Supplier = s.Supplier;
         XPos = s.Position.X;
         YPos = s.Position.Y;
     }
@@ -27,7 +27,7 @@ public class FromJsonSuplier
 
     public FromJsonSuplier( ForJsonSupplier s)
     {
-        _s.supplier = s.Supplier;
+        _s.Supplier = s.Supplier;
         _s.Position = new System.Drawing.Point() { X = s.XPos, Y = s.YPos};
     }
     public SupplierUIValues Supplier { get { return _s; } }

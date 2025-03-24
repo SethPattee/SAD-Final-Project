@@ -9,6 +9,6 @@ namespace FactorySADEfficiencyOptimizer.Components
 {
     public interface INodeElement
     {
-        SupplierUIValues NodeUIValues { get; set; }
+        SupplierUIValues SupplierVM { get; set; }
     }
 }

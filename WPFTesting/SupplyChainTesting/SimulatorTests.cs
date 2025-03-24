@@ -24,13 +24,13 @@ public class SimulatorTests
     {
 		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
-		simulation.SupplierList.First().supplier.Name = "I Don't want to find ThIs:(";
-		simulation.SupplierList.First().supplier.ProductInventory = new ObservableCollection<Product>() { };
+		simulation.SupplierList.First().Supplier.Name = "I Don't want to find ThIs:(";
+		simulation.SupplierList.First().Supplier.ProductInventory = new ObservableCollection<Product>() { };
 
 		foreach (SupplierUIValues supplier in model.SupplierList)
 		{
-			Assert.False(supplier.supplier.Name.Contains("ThIs:("));
-			Assert.That(supplier.supplier.ProductInventory.Count, Is.Not.EqualTo(simulation.SupplierList.First().supplier.ProductInventory.Count));
+			Assert.False(supplier.Supplier.Name.Contains("ThIs:("));
+			Assert.That(supplier.Supplier.ProductInventory.Count, Is.Not.EqualTo(simulation.SupplierList.First().Supplier.ProductInventory.Count));
 		}
     }
 	[Test]
@@ -54,13 +54,13 @@ public class SimulatorTests
 	{
 		var model = SimulatorTestsHelpers.setupTest();
 		AnalizorModel simulation = new AnalizorModel(model);
-		simulation.EndpointList.First().supplier.Name = "I Don't want to find ThIs:(";
-		simulation.EndpointList.First().supplier.ProductInventory = new ObservableCollection<Product>() { };
+		simulation.EndpointList.First().Supplier.Name = "I Don't want to find ThIs:(";
+		simulation.EndpointList.First().Supplier.ProductInventory = new ObservableCollection<Product>() { };
 
 		foreach (EndpointUIValues endpoint in model.EndpointList)
 		{
-			Assert.False(endpoint.supplier.Name.Contains("ThIs:("));
-			Assert.That(endpoint.supplier.ProductInventory.Count, Is.Not.EqualTo(simulation.SupplierList.First().supplier.ProductInventory.Count));
+			Assert.False(endpoint.Supplier.Name.Contains("ThIs:("));
+			Assert.That(endpoint.Supplier.ProductInventory.Count, Is.Not.EqualTo(simulation.SupplierList.First().Supplier.ProductInventory.Count));
 		}
 	}
 	[Test]
@@ -71,17 +71,17 @@ public class SimulatorTests
 		int runTime = 5;
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: runTime, targetQuantity: runTime);
 		simulation.ProductionTargets.Add(newtarg);
-		simulation.EndpointList.First().supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = runTime * 12; //have enough screws to make the product
-		var prodInModel = model.EndpointList.First().supplier.ProductInventory.First();
-		var prodInSimulation = simulation.EndpointList.First().supplier.ProductInventory.First();
+		simulation.EndpointList.First().Supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = runTime * 12; //have enough screws to make the product
+		var prodInModel = model.EndpointList.First().Supplier.ProductInventory.First();
+		var prodInSimulation = simulation.EndpointList.First().Supplier.ProductInventory.First();
 		Assert.That(prodInModel.ProductName, Is.EqualTo(prodInSimulation.ProductName));
 		Assert.That(prodInModel.ProductName, Is.EqualTo("box"));
 		Assert.That(prodInModel.Quantity, Is.EqualTo(prodInSimulation.Quantity));
 		var modelsPrevQuant = prodInModel.Quantity;
 		var simPrevQuant = prodInSimulation.Quantity;
 		simulation.PassTimeUntilDuration(runTime);
-		prodInModel = model.EndpointList.First().supplier.ProductInventory.First();
-		prodInSimulation = simulation.EndpointList.First().supplier.ProductInventory.First();
+		prodInModel = model.EndpointList.First().Supplier.ProductInventory.First();
+		prodInSimulation = simulation.EndpointList.First().Supplier.ProductInventory.First();
 		Assert.That(prodInModel.Quantity, Is.EqualTo(modelsPrevQuant));
 
 
@@ -95,7 +95,7 @@ public class SimulatorTests
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
-		Product product = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
+		Product product = endpoint.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
 		int num = simulation.GetProductsNeededPerDay(newtarg, product);
 		Assert.That(num, Is.EqualTo(1));
 	}
@@ -107,7 +107,7 @@ public class SimulatorTests
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
-		ProductLine productLine = ((EndpointNode)endpoint.supplier).ProductionList.First();
+		ProductLine productLine = ((EndpointNode)endpoint.Supplier).ProductionList.First();
 		ObservableCollection<Product> neededProducts =  simulation.GetNeededComponentQuantitiesForTarget( newtarg, productLine);
 		Assert.That(neededProducts.Count, Is.EqualTo(2));
 		Product wood = neededProducts.FirstOrDefault(p => p.ProductName == "wood") ?? new Product();
@@ -124,7 +124,7 @@ public class SimulatorTests
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(dateDue: 2, targetQuantity: 1);
 		simulation.ProductionTargets.Add(newtarg);
 		EndpointUIValues endpoint = simulation.EndpointList.First();
-		endpoint.supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = 2;
+		endpoint.Supplier.ComponentInventory.First(c => c.ProductName == "screws").Quantity = 2;
 		simulation.OrderMissingComponents();
 		ObservableCollection<Shipment> shipments = simulation.ShipmentList;
 		Assert.That(shipments.Count, Is.EqualTo(2));
@@ -147,7 +147,7 @@ public class SimulatorTests
 		simulation.PlaceOrderFor(product,endpoint);
 		//Assert.That(simulation.ShipmentList.Count, Is.EqualTo(2));
 		Shipment shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault(p => p.ProductName == "Drill Bit") != null) ?? throw new Exception() ;
-		Assert.That(shipment.Receiver.Name, Is.EqualTo(endpoint.supplier.Name));
+		Assert.That(shipment.Receiver.Name, Is.EqualTo(endpoint.Supplier.Name));
 		Assert.That(shipment.Products.Count, Is.EqualTo(1));
 		Assert.That(shipment.Products.FirstOrDefault()?.Quantity, Is.EqualTo(10));
 		Assert.That(shipment.Products.First().ProductName, Is.EqualTo("Drill Bit"));
@@ -162,19 +162,19 @@ public class SimulatorTests
 												// endpoint has 20 screws and 1000 wood
 												// 'Vendor 3'  has screws 
 		(simulation.SupplierList
-			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
-			?.supplier.ProductInventory
+			.FirstOrDefault(s => s.Supplier.Name == "Vendor 3")
+			?.Supplier.ProductInventory
 			.FirstOrDefault(p => p.ProductName == "screws")
 			?? new Product())
 			.Quantity += 120;  //  give it more for the test
 		(((EndpointNode)(simulation.EndpointList.FirstOrDefault() ?? new EndpointUIValues())
-			.supplier ?? new EndpointNode())
+			.Supplier ?? new EndpointNode())
 			.ProductionList.FirstOrDefault() ?? new ProductLine())
 			.IsEnabled = true;
 		// there is one shipment bringing 10 wood and 10 nails from 'Vendor 3' to 'Vendor 2'
 		simulation.ProductionTargets.Add(newtarg);
 		simulation.PassTimeUntilDuration(10);
-		var boxProd = simulation.EndpointList.FirstOrDefault()?.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
+		var boxProd = simulation.EndpointList.FirstOrDefault()?.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "box") ?? new Product();
 		Assert.That(boxProd.Quantity, Is.EqualTo(10));// we make target product amount
 		var shipment = simulation.ShipmentList.FirstOrDefault(s => s.Products.FirstOrDefault()?.ProductName == "screws") ?? new Shipment();
 		var shipmentProd = shipment.Products.FirstOrDefault() ?? new Product();

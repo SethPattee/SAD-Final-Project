@@ -78,8 +78,8 @@ internal static class SimulatorTestsHelpers
 		simulation.ProductionTargets.Clear();
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(targetQuantity: 10, dateDue: 10);
 		(simulation.SupplierList
-			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
-			?.supplier.ProductInventory
+			.FirstOrDefault(s => s.Supplier.Name == "Vendor 3")
+			?.Supplier.ProductInventory
 			.FirstOrDefault(p => p.ProductName == "screws")
 			?? new Product())
 			.Quantity += 200;
@@ -93,8 +93,8 @@ internal static class SimulatorTestsHelpers
 		simulation.ProductionTargets.Clear();
 		ProductionTarget newtarg = SimulatorTestsHelpers.MakeProductionTargetBox(targetQuantity: 10, dateDue: 5);
 		(simulation.SupplierList
-			.FirstOrDefault(s => s.supplier.Name == "Vendor 3")
-			?.supplier.ProductInventory
+			.FirstOrDefault(s => s.Supplier.Name == "Vendor 3")
+			?.Supplier.ProductInventory
 			.FirstOrDefault(p => p.ProductName == "screws")
 			?? new Product())
 			.Quantity += 200;

@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using FactorySADEfficiencyOptimizer.Components;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
+using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.ViewShared;
 
@@ -19,52 +20,42 @@ namespace YourNamespace
         private Point clickPosition;
         private SupplierUIValues _nodeUIValues = new SupplierUIValues()
         {
-            supplier = new Supplier()
+            Supplier = new Supplier()
         }; // Temporary replacement until we get MVVM data binding in place
-        public SupplierUIValues NodeUIValues
+        public SupplierUIValues SupplierVM
         {
-            get => _nodeUIValues;
+            get { return _nodeUIValues; }
             set
             {
                 _nodeUIValues = value;
+                OnPropertyChanged(nameof(SupplierVM));
             }
         }
         public event EventHandler? BoxChanged;
-        public event EventHandler? RadialClicked;
+        public event EventHandler? RadialClickedTop;
+        public event EventHandler? RadialClickedBottom;
         public event EventHandler? BoxDeleted;
         public event PropertyChangedEventHandler PropertyChanged;
-        public List<Product> Products {  get; set; } = new List<Product>();
-        public double X { get; set; }
-        public double Y { get; set; }
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
         public string CornerClicked = "Center";
 
-
+        public void SetBackgroundColor(Color? color)
+        {
+            boxBorder.Background = new SolidColorBrush(color ?? throw new Exception("Color was null for supplier element."));
+        }
         public SupplierElement(SupplierUIValues supplierValues)
         {
             InitializeComponent();
             this._nodeUIValues = supplierValues;
-            //this.BoxTitle.Text = supplierValues.supplier.Name;
-            X = supplierValues.Position.X;
-            Y = supplierValues.Position.Y;
-            this._nodeUIValues.supplier = supplierValues.supplier;
-            if (this._nodeUIValues.supplier.Name == "" || this._nodeUIValues.supplier.Name == null)
-                this._nodeUIValues.supplier.Name = "New Supplier";
-            FillProductDisplay();
-            DataContext = supplierValues;
+            DataContext = SupplierVM;
+            if (this._nodeUIValues.Supplier.Name == "" || this._nodeUIValues.Supplier.Name == null)
+                this._nodeUIValues.Supplier.Name = "New Supplier";
         }
-        public void EmptyProductDisplay()
-        {
-            this.ItemsList.Items.Clear();
-        }
-        public void FillProductDisplay()
-        {
-            this.ItemsList.Items.Clear();
-            foreach (var x in _nodeUIValues.supplier.ProductInventory)
-            {
-                this.ItemsList.Items.Add(x);
-            }
-        }
+
 
         private void Box_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -73,11 +64,19 @@ namespace YourNamespace
             (sender as UIElement).CaptureMouse();
         }
 
-        private void Click_SenseThisRadial(object sender, RoutedEventArgs e)
+        private void BottomRadialButton_Click(object sender, RoutedEventArgs e)
         {
             Button b = (Button)sender;
             this.CornerClicked = b.Name;
-            RadialClicked?.Invoke(this, EventArgs.Empty);
+            RadialClickedBottom?.Invoke(this, new RadialNameRoutedEventArgs(b.Name));
+            this.CornerClicked = "Center";
+        }
+
+        private void TopRadialButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+            this.CornerClicked = b.Name;
+            RadialClickedTop?.Invoke(this, new RadialNameRoutedEventArgs(b.Name));
             this.CornerClicked = "Center";
         }
 

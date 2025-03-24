@@ -52,17 +52,17 @@ public class FromJsonShipment
 		shipment.ToJoiningBoxCorner = _shipment.ToJoiningBoxCorner;
 		foreach (var endpoint in endpoints)
 		{
-			if (endpoint.supplier.Id == _shipment._recieverId)
-				shipment.Receiver = endpoint.supplier;
-			else if (endpoint.supplier.Id == _shipment._senderId)
-				shipment.Sender = endpoint.supplier;
+			if (endpoint.Supplier.Id == _shipment._recieverId)
+				shipment.Receiver = endpoint.Supplier;
+			else if (endpoint.Supplier.Id == _shipment._senderId)
+				shipment.Sender = endpoint.Supplier;
 		}
 		foreach (var supplier in suppliers)
 		{
-			if (supplier.supplier.Id == _shipment._senderId)
-				shipment.Sender = supplier.supplier;
-			else if (supplier.supplier.Id == _shipment._recieverId)
-				shipment.Receiver = supplier.supplier;
+			if (supplier.Supplier.Id == _shipment._senderId)
+				shipment.Sender = supplier.Supplier;
+			else if (supplier.Supplier.Id == _shipment._recieverId)
+				shipment.Receiver = supplier.Supplier;
 		}
 		return shipment;
 	}

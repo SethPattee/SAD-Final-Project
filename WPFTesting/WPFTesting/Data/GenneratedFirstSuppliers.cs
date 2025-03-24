@@ -15,7 +15,7 @@ internal static class GenneratedFirstSuppliers
         return new List<SupplierUIValues>
         {
             new SupplierUIValues {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 { ProductInventory =
                     {
                         new Product()
@@ -38,7 +38,7 @@ internal static class GenneratedFirstSuppliers
             },
             new SupplierUIValues
             {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 { ProductInventory =
                     {
                         new Product()
@@ -60,7 +60,7 @@ internal static class GenneratedFirstSuppliers
             },
             new SupplierUIValues
             {
-                supplier = new Supplier()
+                Supplier = new Supplier()
                 {
                     ProductInventory =
                     {

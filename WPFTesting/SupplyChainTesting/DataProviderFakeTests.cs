@@ -25,7 +25,7 @@ public class DataProviderFakeTests
         var endpointNode = RealEnpointForTest.makeAnEnpointForTest();
         var endpoints = new List<EndpointUIValues>
         {
-            new EndpointUIValues { supplier = endpointNode }
+            new EndpointUIValues { Supplier = endpointNode }
         };
 
         var suppliers = dataProvider.GetBoxValues();
@@ -100,7 +100,7 @@ public class DataProviderFakeTests
         var dataProvider = new DataProvider_FAKE_Version3();
         var endpoints = new List<EndpointUIValues>
         {
-            new EndpointUIValues { supplier = new EndpointNode() }
+            new EndpointUIValues { Supplier = new EndpointNode() }
         };
         var suppliers = dataProvider.GetBoxValues();
 
@@ -127,7 +127,7 @@ public class DataProviderFakeTests
         var dataProvider = new DataProvider_FAKE_Version3();
         var endpoints = new List<EndpointUIValues>
         {
-            new EndpointUIValues { supplier = RealEnpointForTest.makeAnEnpointForTest() }
+            new EndpointUIValues { Supplier = RealEnpointForTest.makeAnEnpointForTest() }
         };
         var suppliers = dataProvider.GetBoxValues();
         var shipment = dataProvider.GetShipments(endpoints, suppliers).First();
@@ -173,9 +173,9 @@ public class DataProviderFakeTests
         var dataProvider = new DataProvider_FAKE_Version2();
         var suppliers = dataProvider.GetBoxValues().ToList();
 
-        Assert.Contains("Vendor 1", suppliers.Select(s => s.supplier.Name).ToList());
-        Assert.Contains("Vendor 2", suppliers.Select(s => s.supplier.Name).ToList());
-        Assert.Contains("Vendor 3", suppliers.Select(s => s.supplier.Name).ToList());
+        Assert.Contains("Vendor 1", suppliers.Select(s => s.Supplier.Name).ToList());
+        Assert.Contains("Vendor 2", suppliers.Select(s => s.Supplier.Name).ToList());
+        Assert.Contains("Vendor 3", suppliers.Select(s => s.Supplier.Name).ToList());
     }
 
     [Test]
@@ -230,7 +230,7 @@ public class DataProviderFakeTests
         var endpointNode = RealEnpointForTest.makeAnEnpointForTest();
         var endpoints = new List<EndpointUIValues>
         {
-            new EndpointUIValues { supplier = endpointNode }
+            new EndpointUIValues { Supplier = endpointNode }
         };
         var suppliers = dataProvider.GetBoxValues();
         var shipments = dataProvider.GetShipments(endpoints, suppliers);
@@ -247,7 +247,7 @@ public class DataProviderFakeTests
         var dataProvider = new DataProvider_FAKE();
         var suppliers = dataProvider.GetBoxValues();
 
-        var uniqueNames = suppliers.Select(s => s.supplier).Distinct();
+        var uniqueNames = suppliers.Select(s => s.Supplier).Distinct();
 
         Assert.AreEqual(suppliers.Count(), uniqueNames.Count(), "Supplier names should be unique.");
     }
@@ -271,7 +271,7 @@ public class DataProviderFakeTests
         var dataProvider = new DataProvider_FAKE_Version3();
         var endpoints = new List<EndpointUIValues>
         {
-            new EndpointUIValues { supplier = RealEnpointForTest.makeAnEnpointForTest() }
+            new EndpointUIValues { Supplier = RealEnpointForTest.makeAnEnpointForTest() }
         };
         var suppliers = dataProvider.GetBoxValues();
         var shipment = dataProvider.GetShipments(endpoints, suppliers).First();
@@ -319,7 +319,7 @@ public class DataProviderFakeTests
         var suppliers = dataProvider.GetBoxValues();
 
         var supplier = suppliers.First();
-        var product = supplier.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "Drill Bit");
+        var product = supplier.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == "Drill Bit");
 
         Assert.IsNotNull(product, "Expected 'Drill Bit' to be in supplier inventory.");
         Assert.AreEqual(20, product.Quantity, "Expected quantity of 'Drill Bit' to be 20.");
@@ -331,7 +331,7 @@ public class DataProviderFakeTests
         var dataProvider = new DataProvider_FAKE_Version3();
         var endpoints = new List<EndpointUIValues>
         {
-            new EndpointUIValues { supplier = RealEnpointForTest.makeAnEnpointForTest() }
+            new EndpointUIValues { Supplier = RealEnpointForTest.makeAnEnpointForTest() }
         };
         var suppliers = dataProvider.GetBoxValues();
         var shipments = dataProvider.GetShipments(endpoints, suppliers);
@@ -348,7 +348,7 @@ public class DataProviderFakeTests
         {
             new SupplierUIValues
             {
-                supplier = new Supplier
+                Supplier = new Supplier
                 {
                     Name = "New Supplier",
                     ProductInventory = new ObservableCollection<Product>
@@ -369,7 +369,7 @@ public class DataProviderFakeTests
         var dataProvider = new DataProvider_FAKE_Version3();
         var endpoints = new List<EndpointUIValues>
         {
-            new EndpointUIValues { supplier = RealEnpointForTest.makeAnEnpointForTest() }
+            new EndpointUIValues { Supplier = RealEnpointForTest.makeAnEnpointForTest() }
         };
         var suppliers = dataProvider.GetBoxValues();
         var shipment = dataProvider.GetShipments(endpoints, suppliers).First();
@@ -425,7 +425,7 @@ public class DataProviderFakeTests
         var suppliers = dataProvider.GetBoxValues();
 
         var supplier = suppliers.First();
-        var product = supplier.supplier.ProductInventory.First(p => p.ProductName == "Saw Blade 2-pack");
+        var product = supplier.Supplier.ProductInventory.First(p => p.ProductName == "Saw Blade 2-pack");
 
         Assert.AreEqual("kg", product.Units, "Expected product 'Saw Blade 2-pack' to have unit 'kg'.");
     }

@@ -37,7 +37,7 @@ public static class ToolsForViewModel
 	{
 		foreach (var e in endpoints)
 		{
-			var end = (EndpointNode)e.supplier;
+			var end = (EndpointNode)e.Supplier;
 			end.ProduceProduct();
 		}
 	}
@@ -45,7 +45,7 @@ public static class ToolsForViewModel
 	{
 		foreach (var v in suppliers)
 		{
-			v.supplier.Process();
+			v.Supplier.Process();
 		}
 	}
 }

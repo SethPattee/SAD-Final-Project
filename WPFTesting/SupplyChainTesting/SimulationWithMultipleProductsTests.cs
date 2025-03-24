@@ -57,12 +57,12 @@ public class SimulationWithMultipleProductsTests
 		model.Load();
 
 		var end = model.EndpointList.First();
-		((EndpointNode)end.supplier).ComponentInventory.Add(new Product()
+		((EndpointNode)end.Supplier).ComponentInventory.Add(new Product()
 		{
 			Quantity = 300,
 			ProductName = "Glue"
 		});
-		var prodList = ((EndpointNode)end.supplier).ProductionList;
+		var prodList = ((EndpointNode)end.Supplier).ProductionList;
 		Assert.That(prodList.Count, Is.EqualTo(2));
 		var CompList1 = prodList.First().Components;
 		prodList.Last().ResultingProduct.Quantity = 1;
