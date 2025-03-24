@@ -20,8 +20,8 @@ internal class AdvanceTimeTests
         SupplyChainViewModel model = new SupplyChainViewModel(data);
         model.Load();
         Shipment s = new Shipment();
-        s.Sender = model.SupplierList[0].supplier;
-        s.Receiver = model.SupplierList[1].supplier;
+        s.Sender = model.SupplierList[0].Supplier;
+        s.Receiver = model.SupplierList[1].Supplier;
         s.Products = new ObservableCollection<Product>() {
             new Product()
                         {
@@ -44,19 +44,19 @@ internal class AdvanceTimeTests
         SupplyChainViewModel model = setupTest();
         //Model has data properly
         Assert.AreEqual(3, model.SupplierList.Count);
-        Assert.AreEqual(20, model.SupplierList[0].supplier.ProductInventory[0].Quantity);
-        Assert.AreEqual(20, model.SupplierList[1].supplier.ProductInventory[0].Quantity);
-        Assert.AreEqual(10, model.SupplierList[0].supplier.ProductInventory[1].Quantity);
-        Assert.AreEqual(10, model.SupplierList[1].supplier.ProductInventory[1].Quantity);
+        Assert.AreEqual(20, model.SupplierList[0].Supplier.ProductInventory[0].Quantity);
+        Assert.AreEqual(20, model.SupplierList[1].Supplier.ProductInventory[0].Quantity);
+        Assert.AreEqual(10, model.SupplierList[0].Supplier.ProductInventory[1].Quantity);
+        Assert.AreEqual(10, model.SupplierList[1].Supplier.ProductInventory[1].Quantity);
     }
     [Test]
     public void AdvanceTime_Moves_only_products_in_sender()
     {
         SupplyChainViewModel model = setupTest();
-        model.ShipmentList.First().Sender = model.SupplierList[2].supplier;
+        model.ShipmentList.First().Sender = model.SupplierList[2].Supplier;
         //Sender doesn't have Drill Bit or Saw Blade 2-pack
         model.AdvanceTime();
-        var reciverInventory = model.SupplierList[1].supplier.ProductInventory;
+        var reciverInventory = model.SupplierList[1].Supplier.ProductInventory;
         var reciver_first_product = reciverInventory[0];
         var reciver_second_product = reciverInventory[1];
 
@@ -71,7 +71,7 @@ internal class AdvanceTimeTests
         });
 
         model.AdvanceTime();
-        reciverInventory = model.SupplierList[1].supplier.ProductInventory;
+        reciverInventory = model.SupplierList[1].Supplier.ProductInventory;
         reciver_first_product = reciverInventory[0];
         reciver_second_product = reciverInventory[1];
         var reciver_third_product = reciverInventory[2];
@@ -88,8 +88,8 @@ internal class AdvanceTimeTests
         SupplyChainViewModel model = setupTest();
         //Sender only has 20 Drill Bit or 10 Saw Blade 2-pack
         model.ShipmentList.First().Products.First().Quantity = 200;
-        var reciverInventory = model.SupplierList[1].supplier.ProductInventory ?? new();
-        var suplierInventory = model.SupplierList[0].supplier.ProductInventory;
+        var reciverInventory = model.SupplierList[1].Supplier.ProductInventory ?? new();
+        var suplierInventory = model.SupplierList[0].Supplier.ProductInventory;
         var reciver_first_product = reciverInventory[0];
         var suplier_first_product = suplierInventory[0];
         var suplier_second_product = suplierInventory[1];
@@ -103,8 +103,8 @@ internal class AdvanceTimeTests
         Assert.AreEqual(2, reciverInventory.Count);
 
         model.AdvanceTime();
-        reciverInventory = model.SupplierList[1].supplier.ProductInventory ?? new();
-        suplierInventory = model.SupplierList[0].supplier.ProductInventory;
+        reciverInventory = model.SupplierList[1].Supplier.ProductInventory ?? new();
+        suplierInventory = model.SupplierList[0].Supplier.ProductInventory;
         reciver_first_product = reciverInventory[0];
         suplier_first_product = suplierInventory[0];
         reciver_second_product = reciverInventory[1];
@@ -124,10 +124,10 @@ internal class AdvanceTimeTests
         SupplyChainViewModel model = setupTest();
 
         model.AdvanceTime();
-        var giver_first_product = model.SupplierList[0].supplier.ProductInventory[0];
-        var reciver_first_product = model.SupplierList[1].supplier.ProductInventory[0];
-        var giver_second_product = model.SupplierList[0].supplier.ProductInventory[1];
-        var reciver_second_product = model.SupplierList[1].supplier.ProductInventory[1];
+        var giver_first_product = model.SupplierList[0].Supplier.ProductInventory[0];
+        var reciver_first_product = model.SupplierList[1].Supplier.ProductInventory[0];
+        var giver_second_product = model.SupplierList[0].Supplier.ProductInventory[1];
+        var reciver_second_product = model.SupplierList[1].Supplier.ProductInventory[1];
         // supplier loses 10 
         Assert.AreEqual(10, giver_first_product.Quantity);
         Assert.AreEqual(5, giver_second_product.Quantity);
@@ -141,19 +141,19 @@ internal class AdvanceTimeTests
     {
         SupplyChainViewModel model = setupTest();
         //swap reciver to supplier with no drill bits (sender is sending drill bits)
-        model.ShipmentList.First().Receiver = model.SupplierList[2].supplier;
+        model.ShipmentList.First().Receiver = model.SupplierList[2].Supplier;
         Assert.AreEqual(4, model.ShipmentList[0].Receiver.ProductInventory.Count);
 
         model.AdvanceTime();
         var first_product = model.ShipmentList[0].Products[0];
-        var giver_first_product = model.SupplierList[0].supplier.ProductInventory
+        var giver_first_product = model.SupplierList[0].Supplier.ProductInventory
                 .FirstOrDefault(p => p.ProductName == first_product.ProductName);
-        var reciver_first_product = model.SupplierList[2].supplier.ProductInventory
+        var reciver_first_product = model.SupplierList[2].Supplier.ProductInventory
                 .FirstOrDefault(p => p.ProductName == first_product.ProductName);
         var second_product = model.ShipmentList[0].Products[1];
-        var giver_second_product = model.SupplierList[0].supplier.ProductInventory
+        var giver_second_product = model.SupplierList[0].Supplier.ProductInventory
                 .FirstOrDefault(p => p.ProductName == second_product.ProductName);
-        var reciver_second_product = model.SupplierList[2].supplier.ProductInventory
+        var reciver_second_product = model.SupplierList[2].Supplier.ProductInventory
                 .FirstOrDefault(p => p.ProductName == second_product.ProductName);
         // supplier loses 10 
         Assert.AreEqual(10, giver_first_product.Quantity);
@@ -196,11 +196,11 @@ internal class AdvanceTimeTests
         // there has been a bug where calling advance time will increase the quantity of the products in the shipment. 
         // we want the quantity to remain the same for repeated shipments
         SupplyChainViewModel model = setupTest();
-        model.ShipmentList.First().Receiver = model.SupplierList[2].supplier;
+        model.ShipmentList.First().Receiver = model.SupplierList[2].Supplier;
         var first_product = model.ShipmentList.First().Products.First();
         model.ShipmentList.First().Sender.ProductInventory.First(p => p.ProductName == first_product.ProductName).Quantity = 1000;
         model.AdvanceTime();
-        var reciver_first_product = model.SupplierList[2].supplier.ProductInventory
+        var reciver_first_product = model.SupplierList[2].Supplier.ProductInventory
                 .FirstOrDefault(p => p.ProductName == first_product.ProductName);
         Assert.AreEqual(10, first_product.Quantity);
         Assert.AreEqual(10, reciver_first_product.Quantity);
@@ -304,7 +304,7 @@ internal class AdvanceTimeTests
         SupplyChainViewModel model = setupTest();
         EndpointNode endpointTest = RealEnpointForTest.makeAnEnpointForTest();
         EndpointUIValues endpointUIValues = new EndpointUIValues();
-        endpointUIValues.supplier = endpointTest;
+        endpointUIValues.Supplier = endpointTest;
         model.EndpointList.Clear();
         model.EndpointList.Add(endpointUIValues);
         model.AdvanceTime();

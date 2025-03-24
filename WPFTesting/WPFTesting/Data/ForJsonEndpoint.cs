@@ -21,7 +21,7 @@ public class ForJsonEndpoint
     }
     public ForJsonEndpoint(EndpointUIValues s)
     {
-        Supplier = (EndpointNode)s.supplier;
+        Supplier = (EndpointNode)s.Supplier;
         XPos = s.Position.X;
         YPos = s.Position.Y;
     }
@@ -32,7 +32,7 @@ public class FromJsonEndpoint
 
     public FromJsonEndpoint(ForJsonEndpoint e)
     {
-        _e.supplier = e.Supplier;
+        _e.Supplier = e.Supplier;
         _e.Position = new System.Drawing.Point() { X = e.XPos, Y = e.YPos };
     }
     public EndpointUIValues Supplier { get { return _e; } }

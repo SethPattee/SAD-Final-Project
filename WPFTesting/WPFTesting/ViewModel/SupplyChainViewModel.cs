@@ -34,6 +34,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(SelectedEndpoint));
         }
     }
+
     private ProductLine _selectedComponentLine;
     public ProductLine SelectedComponentLine
     {

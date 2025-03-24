@@ -82,6 +82,10 @@ public partial class ShippingLine : UserControl
         ShippmentDeleted?.Invoke(this, EventArgs.Empty);
     }
 
+    private void MouseDown_LineClicked(object sender, MouseButtonEventArgs e)
+    {
+
+    }
 }
 //public class ShippingDetails
 //{

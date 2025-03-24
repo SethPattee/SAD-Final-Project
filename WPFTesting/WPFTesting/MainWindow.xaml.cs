@@ -77,8 +77,10 @@ namespace YourNamespace
 
                     dBox.MouseDown += Box_MouseDown;
                     dBox.BoxChanged += Box_Position_Changed;
-                    dBox.RadialClicked += StartConnection_Click;
-                    dBox.RadialClicked += FinishConnection_Click;
+                    dBox.RadialClickedTop += StartConnection_Click;
+                    dBox.RadialClickedTop += FinishConnection_Click;
+                    dBox.RadialClickedBottom += StartConnection_Click;
+                    dBox.RadialClickedBottom += FinishConnection_Click;
                     dBox.BoxDeleted += RemoveSupplier;
 
                     AddBoxToTracker(dBox);
@@ -109,17 +111,17 @@ namespace YourNamespace
                 {
                     if (child is SupplierElement supplierElement)
                     {
-                        if (supplierElement.NodeUIValues.supplier.Id == shipment.Sender.Id)
+                        if (supplierElement.SupplierVM.Supplier.Id == shipment.Sender.Id)
                         {
                             sender = supplierElement;
                         }
-                        else if (supplierElement.NodeUIValues.supplier.Id == shipment.Receiver.Id)
+                        else if (supplierElement.SupplierVM.Supplier.Id == shipment.Receiver.Id)
                         {
                             receiver = supplierElement;
                         }
                     }
                     else if (child is EndpointElement endpoint) {
-						if (endpoint.NodeUIValues.supplier.Id == shipment.Receiver.Id)
+						if (endpoint.SupplierVM.Supplier.Id == shipment.Receiver.Id)
 						{
 							receiver = endpoint;
 						}
@@ -160,7 +162,7 @@ namespace YourNamespace
 		private void AddEndpointToCanvas(EndpointUIValues EUIV)
 		{
 			EndpointElement element = new EndpointElement(EUIV);
-			element.Id = EUIV.supplier.Id;
+			element.Id = EUIV.Supplier.Id;
 			element.DataContext = ViewModel;
 			element.PopulateElementLists();
 			element.ElementMoved += Box_Position_Changed;
@@ -229,7 +231,7 @@ namespace YourNamespace
             SupplierUIValues b = new SupplierUIValues()
             {
                 Position = new System.Drawing.Point(50, 50),
-                supplier = new Supplier
+                Supplier = new Supplier
                 {
                     Id = Guid.NewGuid(),
                     Name = "New Box",
@@ -249,8 +251,8 @@ namespace YourNamespace
             newBox.Height = 50;
             newBox.MouseDown += Box_MouseDown;
             newBox.BoxChanged += Box_Position_Changed;
-            newBox.RadialClicked += StartConnection_Click;
-            newBox.RadialClicked += FinishConnection_Click;
+            newBox.RadialClickedTop += StartConnection_Click;
+            newBox.RadialClickedTop += FinishConnection_Click;
             newBox.BoxDeleted += RemoveSupplier;
 
             AddBoxToTracker(newBox);
@@ -278,34 +280,48 @@ namespace YourNamespace
             }
         }
 
+
+
         private void StartConnection_Click(object? sender, EventArgs? e)
         {
             if (MouseIsCaptured) return; // Prevent multiple captures
 
-            if (sender is SupplierElement lineTarget)
+            if (IsDestinationSearching) return;
+            
+            if(e is RadialNameRoutedEventArgs rnr && sender is UIElement uie)
             {
                 ShippingLine shippingLine = new ShippingLine();
-                shippingLine.OwnShipment.Sender = lineTarget.NodeUIValues.supplier;
-                shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
-                shippingLine.Source = lineTarget;
+                Point pos = GetLineOffset(uie);
 
-                Point pos = GetLineOffset(lineTarget);
+                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(uie) + pos.X;
+                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(uie) + pos.Y;
 
-                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget) + pos.X;
-                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget) + pos.Y;
 
-                shippingLine = FinishSettingUpLine(shippingLine);
-            }
-            else if (sender is EndpointElement lineTarget_endpoint)
-            {
-                ShippingLine shippingLine = new ShippingLine();
-                EndpointUIValues euiv = ViewModel.EndpointList.First(x => x.supplier.Id == lineTarget_endpoint.Id);
-                shippingLine.OwnShipment.Receiver = euiv.supplier;
-                shippingLine.ourShippingLine.X1 = Canvas.GetLeft(lineTarget_endpoint);
-                shippingLine.ourShippingLine.Y1 = Canvas.GetTop(lineTarget_endpoint);
-                shippingLine.Destination = lineTarget_endpoint;
+                if (sender is SupplierElement lineTarget)
+                {
+                    if (rnr.Radial_Name.ToLower() == "s_radial")
+                    {
+                        shippingLine.Source = lineTarget;
+                        shippingLine.OwnShipment.Sender = lineTarget.SupplierVM.Supplier;
+                        shippingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
+                    } 
+                    else if (rnr.Radial_Name.ToLower() == "n_radial")
+                    {
+                        shippingLine.Destination = lineTarget;
+                        shippingLine.OwnShipment.Receiver = lineTarget.SupplierVM.Supplier;
+                        shippingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
+                    }
 
-                shippingLine = FinishSettingUpLine(shippingLine);
+                    shippingLine = FinishSettingUpLine(shippingLine);
+                }
+                else if (sender is EndpointElement lineTarget_endpoint)
+                {
+                    EndpointUIValues euiv = ViewModel.EndpointList.First(x => x.Supplier.Id == lineTarget_endpoint.Id);
+                    shippingLine.OwnShipment.Receiver = euiv.Supplier;
+                    shippingLine.Destination = lineTarget_endpoint;
+
+                    shippingLine = FinishSettingUpLine(shippingLine);
+                }
             }
         }
 
@@ -385,107 +401,164 @@ namespace YourNamespace
             }
         }
 
-        public Point GetLineOffset(SupplierElement lineTarget)
+        public Point GetLineOffset(UIElement lineTarget)
         {
-            if (lineTarget is SupplierElement)
-            {
-
             double lineXOffset = 0;
             double lineYOffset = 0;
-            switch (lineTarget.CornerClicked.ToLower())
+            if(lineTarget is SupplierElement s)
             {
-                case "n_radial":
-                    {
-                        lineXOffset = lineTarget.Width / 2;
-                        break;
-                    }
-                case "ne_radial":
-                    {
-                        lineXOffset = lineTarget.Width;
-                        break;
-                    }
-                case "e_radial":
-                    {
-                        lineXOffset = lineTarget.Width;
-                        lineYOffset = lineTarget.Height / 2;
-                        break;
-                    }
-                case "se_radial":
-                    {
-                        lineXOffset = lineTarget.Width;
-                        lineYOffset = lineTarget.Height;
-                        break;
-                    }
-                case "s_radial":
-                    {
-                        lineXOffset = lineTarget.Width / 2;
-                        lineYOffset = lineTarget.Height;
-                        break;
-                    }
-                case "sw_radial":
-                    {
-                        lineYOffset = lineTarget.Height;
-                        break;
-                    }
-                case "w_radial":
-                    {
-                        lineYOffset = lineTarget.Height / 2;
-                        break;
-                    }
+                if(s.CornerClicked.ToLower() == "n_radial")
+                {
+                    lineXOffset = s.Width / 2;
+                    
+                }
+                if(s.CornerClicked.ToLower() == "s_radial")
+                {
+                    lineXOffset = s.Width / 2;
+                    lineYOffset = s.Height;
+                }
+            }
+            if(lineTarget is EndpointElement e)
+            {
+                lineXOffset = e.RadialOffsetColumn.ActualWidth;
+                lineYOffset = 18;
             }
 
             return new Point(lineXOffset, lineYOffset);
-            }
-            return new Point(10, 10);
         }
 
-        private void FinishConnection_Click(object? sender, EventArgs? e)
+        public void AssignSourceToTargetLine( SupplierElement se)
         {
-            if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching && targetShipingLine != null)
-			{
-				Point LineAnchorOffset = GetLineOffset(lineTarget);
-				if (targetShipingLine.OwnShipment.Receiver is not null && targetShipingLine.OwnShipment.Receiver.GetType() == typeof(EndpointNode))
-				{
-					targetShipingLine.OwnShipment.Sender = lineTarget.NodeUIValues.supplier;
-					targetShipingLine.Source = lineTarget;
-				}
-				else
-				{
-					targetShipingLine.OwnShipment.Receiver = lineTarget.NodeUIValues.supplier;
-					targetShipingLine.Destination = lineTarget;
-				}
+            if (targetShipingLine == null)
+                return;
 
-				targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
-				if (targetShipingLine.FromJoiningBoxCorner is null)
-				{
-					targetShipingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
-				}
+            targetShipingLine.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
+            targetShipingLine.Source = se;
+            targetShipingLine.OwnShipment.Sender = se.SupplierVM.Supplier;
+            targetShipingLine.FromJoiningBoxCorner = "S_Radial";
+        }
+        
+        public void AssignDestinationToTargetLine(SupplierElement se)
+        {
+            if (targetShipingLine == null)
+                return;
 
-				targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + LineAnchorOffset.X;
-				targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + LineAnchorOffset.Y;
-				FinnishLineMaker();
-			}
-			else if (sender is EndpointElement lineTarget_endpoint && MouseIsCaptured && IsDestinationSearching && targetShipingLine != null)
-            {
-                targetShipingLine.OwnShipment.Receiver = lineTarget_endpoint.NodeUIValues.supplier;
-                double senseX2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth / 2;
-                double senseY2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight / 2;
-                targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth/2;
-                targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight/2;
-                targetShipingLine.Destination = lineTarget_endpoint;
+            targetShipingLine.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
+            targetShipingLine.Destination = se;
+            targetShipingLine.OwnShipment.Receiver = se.SupplierVM.Supplier;
+        }
 
-				FinnishLineMaker();
-			}
-			else if (sender is not null && sender is not SupplierElement && IsDestinationSearching)
-            {
-                DiagramCanvas.Children.Remove(targetShipingLine);
-                targetShipingLine = null;
-                IsDestinationSearching = false;
-            }
-            else
+        public void FinishConnection_Click(object? sender, EventArgs e)
+        {
+            if (!MouseIsCaptured)
+                return;
+
+            if(!IsDestinationSearching)
             {
                 IsDestinationSearching = true;
+                return;
             }
+
+            if(e is RadialNameRoutedEventArgs rnr)
+            {
+                if(rnr.Radial_Name.ToLower() == "n_radial")
+                {
+                    
+                    var lineTarget = (SupplierElement)sender;
+                    if (lineTarget == targetShipingLine.Source || lineTarget == targetShipingLine.Destination)
+                        return;
+
+                    if (targetShipingLine.Destination != null)
+                        return;
+
+                    else if(targetShipingLine.Source != null)
+                    {
+                        AssignDestinationToTargetLine(lineTarget);
+                        targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
+                    }
+                }
+                if(rnr.Radial_Name.ToLower() == "s_radial")
+                {
+                    var lineTarget = (SupplierElement)sender;
+                    if (lineTarget == targetShipingLine.Source || lineTarget == targetShipingLine.Destination)
+                        return;
+
+                    if (targetShipingLine.Destination != null)
+                    {
+                        AssignSourceToTargetLine(lineTarget);
+                        targetShipingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
+                    }
+                    else if (targetShipingLine.Source != null)
+                    {
+                        AssignDestinationToTargetLine(lineTarget);
+                        targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
+                    }
+                }
+                if (rnr.Radial_Name.ToLower() == "endpointradial")
+                {
+                    var lineTarget = (EndpointElement)sender;
+                    if(targetShipingLine.Destination != null)
+                    {
+                        targetShipingLine.Source = targetShipingLine.Destination;
+                        targetShipingLine.Destination = lineTarget;
+                        targetShipingLine.OwnShipment.Sender = targetShipingLine.Source.SupplierVM.Supplier;
+                        targetShipingLine.OwnShipment.Receiver = lineTarget.SupplierVM.Supplier;
+                    }
+                    else
+                    {
+                        targetShipingLine.Destination = lineTarget;
+                        targetShipingLine.OwnShipment.Receiver = lineTarget.SupplierVM.Supplier;
+                    }
+                }
+
+                FinnishLineMaker();
+            }
+
+
+   //         if (sender is SupplierElement lineTarget && MouseIsCaptured && IsDestinationSearching)
+			//{
+			//	Point LineAnchorOffset = GetLineOffset(lineTarget);
+			//	if (targetShipingLine.OwnShipment.Receiver is not null && targetShipingLine.OwnShipment.Receiver.GetType() == typeof(EndpointNode))
+			//	{
+					
+			//	}
+			//	else
+			//	{
+			//		targetShipingLine.OwnShipment.Receiver = lineTarget.NodeUIValues.supplier;
+			//		targetShipingLine.Destination = lineTarget;
+			//	}
+
+			//	targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
+			//	if (targetShipingLine.FromJoiningBoxCorner is null)
+			//	{
+			//		targetShipingLine.FromJoiningBoxCorner = lineTarget.CornerClicked;
+			//	}
+
+			//	targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget) + LineAnchorOffset.X;
+			//	targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget) + LineAnchorOffset.Y;
+			//	FinnishLineMaker();
+			//}
+			//else if ()
+   //         {
+   //             //targetShipingLine.OwnShipment.Receiver = lineTarget_endpoint.NodeUIValues.supplier;
+   //             //double senseX2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth / 2;
+   //             //double senseY2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight / 2;
+   //             //targetShipingLine.ourShippingLine.X2 = Canvas.GetLeft(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualWidth/2;
+   //             //targetShipingLine.ourShippingLine.Y2 = Canvas.GetTop(lineTarget_endpoint) + lineTarget_endpoint.EndpointRadial.ActualHeight/2;
+   //             //targetShipingLine.Destination = lineTarget_endpoint;
+
+			//	FinnishLineMaker();
+			//}
+			//else if (sender is not null && sender is not SupplierElement && IsDestinationSearching)
+   //         {
+   //             DiagramCanvas.Children.Remove(targetShipingLine);
+   //             targetShipingLine = null;
+   //             IsDestinationSearching = false;
+   //         }
+            //else
+            //{
+            //    IsDestinationSearching = true;
+            //}
         }
 		private void FinnishLineMaker()
 		{
@@ -496,8 +569,10 @@ namespace YourNamespace
 			    targetShipingLine.LineSelected += Line_MouseDown;
                 targetShipingLine.OwnShipment.FromJoiningBoxCorner = targetShipingLine.FromJoiningBoxCorner;
                 targetShipingLine.OwnShipment.ToJoiningBoxCorner = targetShipingLine.ToJoiningBoxCorner;
+                targetShipingLine.ourShippingLine.StrokeThickness = 2;
 			    ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
 			    ShipmentList.Add(targetShipingLine);
+
             }
 		}
 
@@ -505,6 +580,7 @@ namespace YourNamespace
         {
             if (sender is SupplierElement selectedBox)
             {
+                ViewModel.SelectedSupplier = selectedBox.SupplierVM;
                 SetSelectedBoxDisplay(selectedBox);
                 if (isRemovingConnection)
                 {
@@ -515,13 +591,11 @@ namespace YourNamespace
                     if (firstSelectedBox == null)
                     {
                         firstSelectedBox = selectedBox;
-                        SelectedBoxDetails.Text = "Select the second box to connect";
                     }
                     else if (firstSelectedBox != selectedBox)
                     {
                         isAddingConnection = false;
                         firstSelectedBox = null;
-                        SelectedBoxDetails.Text = "Connection created";
                         Mouse.OverrideCursor = null;
 
                         var addConnectionButton = FindName("AddConnectionButton") as Button;
@@ -531,7 +605,6 @@ namespace YourNamespace
                         }
                         else
                         {
-                            SelectedBoxDetails.Text = "Cannot connect a box to itself. Select a different box.";
                         }
                     }
                 }
@@ -547,91 +620,93 @@ namespace YourNamespace
             Guid boxId;
             selectedElement.Item1 = box;
             Guid.TryParse(box.Name, out boxId);
-            SelectedBoxDetails.Text = $"Position: ({Canvas.GetLeft(box):F0}, {Canvas.GetTop(box):F0})\n" +
-                                      $"Size: {box.Width:F0}x{box.Height:F0}\n" +
-                                      $"Color: {(box.boxBorder.Background as System.Windows.Media.SolidColorBrush)?.Color}\n" +
-                                      $"Connected suppliers:";
-            TitleTextBox.Text = $"{box.BoxTitle.Text}";
-
-            // Populate the ProductsListView with products from the box
-            if (box.NodeUIValues?.supplier?.ProductInventory != null)
-            {
-                ProductsListView.ItemsSource = box.NodeUIValues.supplier.ProductInventory;
-            }
-            else
-            {
-                ProductsListView.ItemsSource = null;
-            }
         }
 
         private void Box_Changed(object sender, EventArgs e)
         { 
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        private void SaveSupplierDetails(object sender, EventArgs e)
         {
-            SupplierElement? box = selectedElement.Item1;
-
-            // Edit Box title
-            string title = TitleTextBox.Text.Trim();
-            if (title.Length > 0 && box != null)
+            if(e is SaveSupplierEventArgs s)
             {
-                box.BoxTitle.Text = title;
-                this.Title = title;
-            }
-            //else
-            //{
-            //    MessageBox.Show("Invalid Title. Please enter a Title.");
-            //    return;
-            //}
-
-            
-            // Edit Product
-            if (selectedProduct != null)
-            {
-                // Update ProductName
-                selectedProduct.ProductName = ProductNameTextBox.Text.Trim();
-
-                // Update Quantity
-                if (float.TryParse(QuantityTextBox.Text, out float quantity))
+                try
                 {
-                    selectedProduct.Quantity = quantity;
+                    ViewModel.SupplierList.FirstOrDefault(x => x.Supplier.Id == s.supplier!.Id)!.Supplier = s.supplier!;
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Invalid quantity. Please enter a valid number.");
-                    return;
-                }
-
-                // Update Units
-                selectedProduct.Units = UnitsTextBox.Text.Trim();
-
-                // Update Price
-                if (decimal.TryParse(PriceTextBox.Text, out decimal price))
-                {
-                    selectedProduct.Price = price;
-                }
-                else
-                {
-                    MessageBox.Show("Invalid price. Please enter a valid number.");
-                    return;
+                    Console.WriteLine(ex.Message);
                 }
             }
-
-            box?.FillProductDisplay();
         }
+
+        private void OpenSupplierInventory_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button s)
+            {
+                SupplierInventoryWindow DetailsWindow = new SupplierInventoryWindow().WithViewModel(((Supplier)((SupplyChainViewModel)s.DataContext).SelectedSupplier.Supplier));
+                DetailsWindow.Owner = this;
+                DetailsWindow.SaveSupplierHandler += SaveSupplierDetails;
+                DetailsWindow.Show();
+            }
+
+        }
+
+        //private void EditButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SupplierElement box = selectedElement.Item1;
+
+        //    // Edit Box title
+        //    string title = TitleTextBox.Text.Trim();
+        //    if (title.Length > 0)
+        //    {
+        //        box.BoxTitle.Text = title;
+        //        this.Title = title;
+        //    }
+        //    //else
+        //    //{
+        //    //    MessageBox.Show("Invalid Title. Please enter a Title.");
+        //    //    return;
+        //    //}
+
+
+        //    // Edit Product
+        //    if (selectedProduct != null)
+        //    {
+        //        // Update ProductName
+
+        //        // Update Quantity
+        //        if (float.TryParse(QuantityTextBox.Text, out float quantity))
+        //        {
+        //            selectedProduct.Quantity = quantity;
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Invalid quantity. Please enter a valid number.");
+        //            return;
+        //        }
+
+        //        // Update Units
+        //        selectedProduct.Units = UnitsTextBox.Text.Trim();
+
+        //        // Update Price
+        //        if (decimal.TryParse(PriceTextBox.Text, out decimal price))
+        //        {
+        //            selectedProduct.Price = price;
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Invalid price. Please enter a valid number.");
+        //            return;
+        //        }
+        //    }
+
+        //    box.FillProductDisplay();
+        //}
 
         private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            selectedProduct = (Product)ProductsListView.SelectedItem;
-
-            if (selectedProduct != null)
-            {
-                ProductNameTextBox.Text = selectedProduct.ProductName;
-                QuantityTextBox.Text = selectedProduct.Quantity.ToString();
-                UnitsTextBox.Text = selectedProduct.Units;
-                PriceTextBox.Text = selectedProduct.Price.ToString();
-            }
         }
         private void Box_Position_Changed(object? sender, EventArgs e)
         {
@@ -684,21 +759,21 @@ namespace YourNamespace
         {
             if (sender is EndpointElement element)
             {
-				Guid EndpointId = element.NodeUIValues.supplier.Id;
-				var Endpoint = ViewModel.EndpointList.FirstOrDefault(s => s.supplier.Id == EndpointId);
+				Guid EndpointId = element.SupplierVM.Supplier.Id;
+				var Endpoint = ViewModel.EndpointList.FirstOrDefault(s => s.Supplier.Id == EndpointId);
                 if (Endpoint != null) {
 					List<Shipment> Shippments = new List<Shipment>();
 					List<ShippingLine> lines = new();
 					foreach (var s in ViewModel.ShipmentList)
 					{
-						if (s.Sender == Endpoint.supplier || s.Receiver == Endpoint.supplier)
+						if (s.Sender == Endpoint.Supplier || s.Receiver == Endpoint.Supplier)
 						{
 							Shippments.Add(s);
 							foreach (var child in DiagramCanvas.Children)
 							{
 								if (child is ShippingLine l)
 								{
-									if (l.OwnShipment.Sender == Endpoint.supplier || l.OwnShipment.Receiver == Endpoint.supplier)
+									if (l.OwnShipment.Sender == Endpoint.Supplier || l.OwnShipment.Receiver == Endpoint.Supplier)
 									{ lines.Add(l); }
 								}
 							}
@@ -720,22 +795,22 @@ namespace YourNamespace
         {
             if (sender is SupplierElement selectedBox)
             {
-                Guid SupplierId = selectedBox.NodeUIValues.supplier.Id;
-                var supplier = ViewModel.SupplierList.FirstOrDefault(s => s.supplier.Id == SupplierId);
+                Guid SupplierId = selectedBox.SupplierVM.Supplier.Id;
+                var supplier = ViewModel.SupplierList.FirstOrDefault(s => s.Supplier.Id == SupplierId);
                 if (supplier != null)
                 {
                     List<Shipment> Shippments = new List<Shipment>();
                     List<ShippingLine> lines = new();
                     foreach (var s in ViewModel.ShipmentList)
                     {
-                        if (s.Sender == supplier.supplier || s.Receiver == supplier.supplier)
+                        if (s.Sender == supplier.Supplier || s.Receiver == supplier.Supplier)
                         {
                             Shippments.Add(s);
                             foreach (var child in DiagramCanvas.Children)
                             {
                                 if (child is ShippingLine l)
                                 {
-                                    if (l.OwnShipment.Sender == supplier.supplier || l.OwnShipment.Receiver == supplier.supplier)
+                                    if (l.OwnShipment.Sender == supplier.Supplier || l.OwnShipment.Receiver == supplier.Supplier)
                                     { lines.Add(l); }
                                 }
                             }
@@ -762,13 +837,6 @@ namespace YourNamespace
         private void AdvanceTime_Click(object sender, EventArgs e)
         {
             ViewModel.AdvanceTime();
-            foreach (var element in DiagramCanvas.Children)
-            {
-                if (element is SupplierElement supplier && element is not EndpointElement)
-                {
-                    supplier.FillProductDisplay();
-                }
-            }
             RefreshEndpointElementDisplay();
         }
 
@@ -783,7 +851,7 @@ namespace YourNamespace
             UnselectAllCanvasElements();
             if(sender is EndpointElement element)
             {
-                ViewModel.SelectedEndpoint = (EndpointUIValues)element.NodeUIValues;
+                ViewModel.SelectedEndpoint = (EndpointUIValues)element.SupplierVM;
                 element.ElementBorder.BorderThickness = new Thickness(4);
                 element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
                 LeftSidebarEndpoint.Visibility = Visibility.Visible;
@@ -828,8 +896,8 @@ namespace YourNamespace
         {
             if (ViewModel.SupplierList is not null && ViewModel.SelectedEndpoint is not null)
             {
-                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
-                .supplier).ProductInventory.Add(CreateNewProduct());
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.Supplier.Id == ViewModel.SelectedEndpoint.Supplier.Id)
+                .Supplier).ProductInventory.Add(CreateNewProduct());
             }
         }
         private void AddProductToShipment_Click(object sender, RoutedEventArgs e)
@@ -854,8 +922,8 @@ namespace YourNamespace
         {
             if(IsViewModelEndpointUsable())
             {
-                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint?.supplier.Id)
-                .supplier).ComponentInventory.Add(CreateNewProduct());
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.Supplier.Id == ViewModel.SelectedEndpoint.Supplier.Id)
+                .Supplier).ComponentInventory.Add(CreateNewProduct());
             }
         }
 
@@ -863,8 +931,8 @@ namespace YourNamespace
         {
             if (IsViewModelEndpointUsable())
             {
-                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint?.supplier.Id)
-                .supplier).DeliveryRequirementsList.Add(CreateNewProduct());
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.Supplier.Id == ViewModel.SelectedEndpoint.Supplier.Id)
+                .Supplier).DeliveryRequirementsList.Add(CreateNewProduct());
             }
         }
 
@@ -877,8 +945,8 @@ namespace YourNamespace
         {
             if(IsViewModelEndpointUsable())
             {
-                ((EndpointNode)ViewModel.EndpointList.First(x => x.supplier.Id == ViewModel.SelectedEndpoint?.supplier.Id)
-                .supplier).ProductionList.Add(new ProductLine()
+                ((EndpointNode)ViewModel.EndpointList.First(x => x.Supplier.Id == ViewModel.SelectedEndpoint.Supplier.Id)
+                .Supplier).ProductionList.Add(new ProductLine()
                 {
                     Components = new ObservableCollection<Product>()
                     {
@@ -924,7 +992,7 @@ namespace YourNamespace
             {
                 if (item is EndpointElement eitem)
                 {
-                    if (eitem.NodeUIValues.supplier.Id == ViewModel.SelectedEndpoint.supplier.Id)
+                    if (eitem.SupplierVM.Supplier.Id == ViewModel.SelectedEndpoint.Supplier.Id)
                     {
                         // Until we can get a better binding model for the dynamically created elements,
                         // We're forcibly re-updating them with the save button. 
@@ -990,7 +1058,7 @@ namespace YourNamespace
         {
             if(IsViewModelEndpointUsable() && sender is Button button && ViewModel.SelectedEndpoint != null)
             {
-                ((EndpointNode)ViewModel.SelectedEndpoint.supplier)
+                ((EndpointNode)ViewModel.SelectedEndpoint.Supplier)
                     .ProductionList.Remove((ProductLine)button.DataContext);
             }
         }
@@ -1056,7 +1124,7 @@ namespace YourNamespace
         {
             if(sender is Button b)
             {
-                ViewModel.SelectedEndpoint?.supplier
+                ViewModel.SelectedEndpoint.Supplier
                     .ProductInventory.Remove((Product)b.DataContext);
             }
         }
@@ -1065,7 +1133,7 @@ namespace YourNamespace
         {
             if(sender is Button b && ViewModel.SelectedEndpoint != null)
             {
-                ((EndpointNode)ViewModel.SelectedEndpoint.supplier)
+                ((EndpointNode)ViewModel.SelectedEndpoint.Supplier)
                     .DeliveryRequirementsList.Remove((Product)b.DataContext);
             }
         }
@@ -1074,7 +1142,7 @@ namespace YourNamespace
         {
             if (sender is Button b)
             {
-                ViewModel.SelectedEndpoint?.supplier
+                ViewModel.SelectedEndpoint.Supplier
                     .ComponentInventory.Remove((Product)b.DataContext);
             }
         }
@@ -1086,6 +1154,16 @@ namespace YourNamespace
                 endpoint.SetBackgroundColor(e.NewValue ?? throw new Exception("Color was null in main window color picker for Endpoint! Ya dingus!"));
             }
             
+        }
+
+        private void ClrPckr_Background_Supplier_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            DiagramCanvas.Children
+                .OfType<SupplierElement>()
+                .FirstOrDefault(x => x.SupplierVM.Supplier.Id == ViewModel.SelectedSupplier.Supplier.Id)
+                .SetBackgroundColor(e.NewValue);
+
+
         }
     }
 }

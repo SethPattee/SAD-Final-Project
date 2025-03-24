@@ -209,16 +209,16 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 {
                     foreach(var supp in simModel.SupplierList)
                     {
-                        if (shipment.Sender.Name == supp.supplier.Name)
-                            shipment.Sender = supp.supplier;
-                        else if(shipment.Receiver.Name == supp.supplier.Name)
-                            shipment.Receiver = supp.supplier;
+                        if (shipment.Sender.Name == supp.Supplier.Name)
+                            shipment.Sender = supp.Supplier;
+                        else if(shipment.Receiver.Name == supp.Supplier.Name)
+                            shipment.Receiver = supp.Supplier;
                     }
 
                     foreach(var supp in simModel.EndpointList)
                     {
-                        if(shipment.Receiver.Name == supp.supplier.Name)
-                            shipment.Receiver = supp.supplier;
+                        if(shipment.Receiver.Name == supp.Supplier.Name)
+                            shipment.Receiver = supp.Supplier;
                     }
                     convertedShipments.Add(shipment);
                 }

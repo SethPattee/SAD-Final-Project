@@ -16,6 +16,7 @@ using FactorySADEfficiencyOptimizer.Components;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
+using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using YourNamespace;
 
@@ -37,7 +38,7 @@ namespace FactorySADEfficiencyOptimizer
 
         private bool isDragging = false;
 
-        public SupplierUIValues NodeUIValues
+        public SupplierUIValues SupplierVM
         {
             get => _nodeUIValues;
             set
@@ -49,10 +50,10 @@ namespace FactorySADEfficiencyOptimizer
 
         public void PopulateElementLists()
         {
-            EndpointTitle.Text = NodeUIValues.supplier.Name;
-            ProfitTracker.Text = ((EndpointNode)(NodeUIValues.supplier)).Balance.ToString();
+            EndpointTitle.Text = SupplierVM.Supplier.Name;
+            ProfitTracker.Text = ((EndpointNode)(SupplierVM.Supplier)).Balance.ToString();
 
-            if(((EndpointNode)(NodeUIValues.supplier)).Balance < 0)
+            if(((EndpointNode)(SupplierVM.Supplier)).Balance < 0)
             {
                 ProfitTracker.Foreground = Brushes.Red;
                 ProfitTrackerDollarSign.Foreground = Brushes.Red;
@@ -64,13 +65,13 @@ namespace FactorySADEfficiencyOptimizer
             }
 
             this.ComponentsList.Items.Clear();
-            foreach (var x in ((EndpointNode)_nodeUIValues.supplier).ComponentInventory)
+            foreach (var x in ((EndpointNode)_nodeUIValues.Supplier).ComponentInventory)
             {
                 this.ComponentsList.Items.Add(x);
             }
 
             this.ProductsList.Items.Clear();
-            foreach (var x in ((EndpointNode)_nodeUIValues.supplier).ProductInventory)
+            foreach (var x in ((EndpointNode)_nodeUIValues.Supplier).ProductInventory)
             {
                 this.ProductsList.Items.Add(x);
             }
@@ -92,7 +93,8 @@ namespace FactorySADEfficiencyOptimizer
 
         public void Click_SenseThisRadial(object sender, RoutedEventArgs e)
         {
-            RadialClicked?.Invoke(this, e);
+            Button b = (Button)sender;
+            RadialClicked?.Invoke(this, new RadialNameRoutedEventArgs(b.Name));
         }
 
         private void Box_MouseDown(object sender, MouseButtonEventArgs e)

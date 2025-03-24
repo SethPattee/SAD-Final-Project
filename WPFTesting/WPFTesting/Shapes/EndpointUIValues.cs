@@ -16,22 +16,22 @@ public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
 {
     public decimal Profit
     {
-        get => ((EndpointNode)supplier).Balance;
+        get => ((EndpointNode)Supplier).Balance;
         set
         {
-            ((EndpointNode)supplier).Balance = value;
-            OnPropertyChanged(nameof(supplier));
+            ((EndpointNode)Supplier).Balance = value;
+            OnPropertyChanged(nameof(Supplier));
         }
     }
     public EndpointUIValues()
     {
-        supplier = new EndpointNode();
+        Supplier = new EndpointNode();
         SetDefaultValues();
     }
     public void SetDefaultValues()
     {
         Position = new System.Drawing.Point(120, 120);
-        supplier = new EndpointNode()
+        Supplier = new EndpointNode()
         {
             Id = Guid.NewGuid(),
             Balance = 1000,
@@ -114,15 +114,15 @@ public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
     public new EndpointUIValues ShallowCopy()
     {
         EndpointUIValues end = new EndpointUIValues();
-        end.supplier = new EndpointNode();
-        end.supplier.Name = supplier.Name;
-        end.supplier.ComponentInventory = CopyMaker.makeShallowCopyOfProductColection(supplier.ComponentInventory);
-        end.supplier.ProductInventory = CopyMaker.makeShallowCopyOfProductColection(supplier.ProductInventory);
-        end.supplier.Id = supplier.Id;
+        end.Supplier = new EndpointNode();
+        end.Supplier.Name = Supplier.Name;
+        end.Supplier.ComponentInventory = CopyMaker.makeShallowCopyOfProductColection(Supplier.ComponentInventory);
+        end.Supplier.ProductInventory = CopyMaker.makeShallowCopyOfProductColection(Supplier.ProductInventory);
+        end.Supplier.Id = Supplier.Id;
         end.Position = new System.Drawing.Point();
-        ((EndpointNode)end.supplier).DeliveryRequirementsList = CopyMaker.makeShallowCopyOfProductColection(((EndpointNode)supplier).DeliveryRequirementsList);
-        ((EndpointNode)end.supplier).ProductionList = CopyMaker.makeShalowCopyColectionOfProductionLine(((EndpointNode)supplier).ProductionList);
-        ((EndpointNode)end.supplier).Balance = ((EndpointNode)supplier).Balance;
+        ((EndpointNode)end.Supplier).DeliveryRequirementsList = CopyMaker.makeShallowCopyOfProductColection(((EndpointNode)Supplier).DeliveryRequirementsList);
+        ((EndpointNode)end.Supplier).ProductionList = CopyMaker.makeShalowCopyColectionOfProductionLine(((EndpointNode)Supplier).ProductionList);
+        ((EndpointNode)end.Supplier).Balance = ((EndpointNode)Supplier).Balance;
         return end;
     }
 }

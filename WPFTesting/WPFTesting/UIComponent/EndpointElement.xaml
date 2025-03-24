@@ -17,24 +17,16 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="4*" x:Name="RadialOffsetColumn"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
 
-                <Border BorderBrush="Gray"
-                    BorderThickness="3"
-                    Opacity="0.7"
-                    CornerRadius="10"
-                    Width="20" Height="20"
-                    Grid.Row="0" Margin="-10,-10,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Grid.Column="1" 
-                    Panel.ZIndex="1"
-                    Visibility="Visible"
-                    >
-                    <Button Opacity="0" Margin="-4,-4,-2,-2" Click="Click_SenseThisRadial" Name="EndpointRadial" />
+                <Border BorderBrush="Gray" BorderThickness="3" Opacity="0.7" CornerRadius="10"
+                    Width="20" Height="20" Grid.Row="0" Margin="-10,-10,0,0" HorizontalAlignment="Left"
+                    VerticalAlignment="Top" Grid.Column="1" Panel.ZIndex="1"
+                    Visibility="Visible" >
+                    <Button Opacity="0" Margin="-9" Click="Click_SenseThisRadial" Name="EndpointRadial" />
                 </Border>
                 <Border Background="FloralWhite" x:Name="ElementBackground" Grid.ColumnSpan="2">
                     <Grid>
@@ -62,7 +54,7 @@
 
                                 </TextBlock>
                                 <ListView
-                                    ItemsSource="{Binding _nodeUIValues.supplier.ComponentInventory, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{Binding _nodeUIValues.Supplier.ComponentInventory, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                                     x:Name="ComponentsList"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="gray" BorderThickness="1 1 1 0">
                                     <ListView.View>
@@ -98,7 +90,7 @@
 
                                 </TextBlock>
                                 <ListView
-                                    ItemsSource="{Binding _nodeUIValues.supplier.ProductInventory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{Binding _nodeUIValues.Supplier.ProductInventory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                     x:Name="ProductsList"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="Gray" BorderThickness="1 1 1 0">
                                     <ListView.View>
@@ -130,7 +122,7 @@
                             <Grid>
                                 <StackPanel Orientation="Horizontal" Margin="3 1 0 0">
                                     <TextBlock Text="$" x:Name="ProfitTrackerDollarSign"></TextBlock>
-                                    <TextBlock x:Name="ProfitTracker" Text="{Binding _nodeUIValues.supplier.Profit, Mode=OneWay, StringFormat={}{0}}" HorizontalAlignment="Left" Margin="2 0 0 0" MaxWidth="250"></TextBlock>
+                                    <TextBlock x:Name="ProfitTracker" Text="{Binding _nodeUIValues.Supplier.Profit, Mode=OneWay, StringFormat={}{0}}" HorizontalAlignment="Left" Margin="2 0 0 0" MaxWidth="250"></TextBlock>
                                     
                                 </StackPanel>
                                 <Border BorderBrush="DimGray" Width="18" Height="18" BorderThickness="0 0 2 2" HorizontalAlignment="Right" Margin="0 0 2 0" CornerRadius="1">

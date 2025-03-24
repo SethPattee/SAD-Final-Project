@@ -16,7 +16,10 @@ public class SupplierUIValues : INotifyPropertyChanged
     public Point Position
     {
         get => _position;
-        set => _position = value;
+        set {
+            _position = value;
+            OnPropertyChanged(nameof(Position));
+        }
     }
 
     public SupplierUIValues()
@@ -24,7 +27,16 @@ public class SupplierUIValues : INotifyPropertyChanged
         Position = new Point(50,50);
     }
 
-    public IVendor supplier { get; set; } = new Supplier();
+
+    private IVendor _supplier = new Supplier();
+    public IVendor Supplier {
+        get { return _supplier; } 
+        set
+        {
+            _supplier = value;
+            OnPropertyChanged(nameof(Supplier));
+        }
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged(string name)
@@ -35,11 +47,11 @@ public class SupplierUIValues : INotifyPropertyChanged
     public SupplierUIValues ShallowCopy()
     {
         SupplierUIValues sup = new SupplierUIValues();
-        sup.supplier = new Supplier();
-        sup.supplier.Name = supplier.Name;
-        sup.supplier.ComponentInventory = CopyMaker.makeShallowCopyOfProductColection(supplier.ComponentInventory);
-        sup.supplier.ProductInventory = CopyMaker.makeShallowCopyOfProductColection(supplier.ProductInventory);
-        sup.supplier.Id = supplier.Id;
+        sup.Supplier = new Supplier();
+        sup.Supplier.Name = Supplier.Name;
+        sup.Supplier.ComponentInventory = CopyMaker.makeShallowCopyOfProductColection(Supplier.ComponentInventory);
+        sup.Supplier.ProductInventory = CopyMaker.makeShallowCopyOfProductColection(Supplier.ProductInventory);
+        sup.Supplier.Id = Supplier.Id;
         sup.Position = new System.Drawing.Point();
         return sup;
     }

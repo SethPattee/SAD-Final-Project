@@ -125,7 +125,7 @@ public class AnalizorModel : INotifyPropertyChanged
 		foreach (EndpointUIValues endpoint in model.EndpointList)
 		{
 			EndpointUIValues end = endpoint.ShallowCopy();
-			foreach (ProductLine pl in ((EndpointNode)end.supplier).ProductionList)
+			foreach (ProductLine pl in ((EndpointNode)end.Supplier).ProductionList)
 			{
 				if (pl.IsEnabled)
 				{
@@ -136,7 +136,7 @@ public class AnalizorModel : INotifyPropertyChanged
 							IsTargetEnabled = true,
 							TargetQuantity = pl.ResultingProduct.Quantity,
 							ProductTarget = pl.ResultingProduct.ShallowCopy(),
-							CurrentAmount = (end.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == pl.ResultingProduct.ProductName) ?? new Product()).Quantity,
+							CurrentAmount = (end.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == pl.ResultingProduct.ProductName) ?? new Product()).Quantity,
 							Status = StatusEnum.NotDone
 						}
 					);
@@ -194,14 +194,14 @@ public class AnalizorModel : INotifyPropertyChanged
     private Shipment GetShipmentWithSenderReciver(Shipment shipment)
 	{
 		Shipment ship = new Shipment();
-		ship.Sender = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Sender.Id)?.supplier ?? new Supplier();
+		ship.Sender = SupplierList.FirstOrDefault(s => s.Supplier.Id == shipment.Sender.Id)?.Supplier ?? new Supplier();
 		if (shipment.Receiver is EndpointNode endpoint)
 		{
-			ship.Receiver = EndpointList.FirstOrDefault(e => e.supplier.Id == shipment.Receiver.Id)?.supplier ?? new EndpointNode();
+			ship.Receiver = EndpointList.FirstOrDefault(e => e.Supplier.Id == shipment.Receiver.Id)?.Supplier ?? new EndpointNode();
 		}
 		else
 		{
-			ship.Receiver = SupplierList.FirstOrDefault(s => s.supplier.Id == shipment.Receiver.Id)?.supplier ?? new Supplier();
+			ship.Receiver = SupplierList.FirstOrDefault(s => s.Supplier.Id == shipment.Receiver.Id)?.Supplier ?? new Supplier();
 		}
 		return ship;
 	}
@@ -256,7 +256,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	{
 		foreach (var endpoint in EndpointList)
 		{
-			foreach (var productline in ((EndpointNode)endpoint.supplier).ProductionList)
+			foreach (var productline in ((EndpointNode)endpoint.Supplier).ProductionList)
 			{
 				
 				string Pname = productline.ResultingProduct.ProductName;
@@ -305,7 +305,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	{
 		foreach (EndpointUIValues end in EndpointList)
 		{
-			ObservableCollection<Product> toUse = ((EndpointNode)end.supplier).DaysUsedComponents;
+			ObservableCollection<Product> toUse = ((EndpointNode)end.Supplier).DaysUsedComponents;
 			foreach (var component in toUse)
 			{
                 var existingProd = _daysUsedComponents.FirstOrDefault(p => p.ProductName == component.ProductName);
@@ -324,10 +324,10 @@ public class AnalizorModel : INotifyPropertyChanged
 	{
 		foreach (var target in ProductionTargets)
 		{
-			EndpointUIValues? endpoint = EndpointList.FirstOrDefault(e => e.supplier.ProductInventory.Where(p => p.ProductName == target?.ProductTarget?.ProductName) is not null);
+			EndpointUIValues? endpoint = EndpointList.FirstOrDefault(e => e.Supplier.ProductInventory.Where(p => p.ProductName == target?.ProductTarget?.ProductName) is not null);
 			if (endpoint != null)
 			{
-				Product prod = endpoint.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
+				Product prod = endpoint.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
 				target.CurrentAmount = prod.Quantity;
 				if (target.CurrentAmount >= target.TargetQuantity)
 				{
@@ -340,7 +340,7 @@ public class AnalizorModel : INotifyPropertyChanged
                         target.Status = StatusEnum.Warning;
                     }
                     OnPropertyChanged(nameof(target.Status));
-					var pl = (((EndpointNode)endpoint.supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
+					var pl = (((EndpointNode)endpoint.Supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
 					pl.IsEnabled = false;
 					OnPropertyChanged(nameof(pl));
 					//TODO: add the profit made from the target here
@@ -386,16 +386,16 @@ public class AnalizorModel : INotifyPropertyChanged
 			ProductLine productLine = new ProductLine();
 			foreach (var endpoint in EndpointList)
 			{
-				var posibleLine = ((EndpointNode)endpoint.supplier).ProductionList
+				var posibleLine = ((EndpointNode)endpoint.Supplier).ProductionList
 					.FirstOrDefault(pl => pl.ResultingProduct.ProductName == target.ProductTarget?.ProductName);
 				if (posibleLine is not null)
 				{
-					endpointNode = (EndpointNode)endpoint.supplier;
+					endpointNode = (EndpointNode)endpoint.Supplier;
 					productLine = (ProductLine)posibleLine;
 					List<Product> products = GetNeededComponentQuantitiesForTarget(target, productLine).ToList();
 					foreach (Product product in products)
 					{
-						float Quant = endpoint.supplier.ComponentInventory.FirstOrDefault(p => p.ProductName == product.ProductName)?.Quantity ?? 0;
+						float Quant = endpoint.Supplier.ComponentInventory.FirstOrDefault(p => p.ProductName == product.ProductName)?.Quantity ?? 0;
 						if (!(Quant >= product.Quantity))
 						{
 							Product toOrder = new Product();
@@ -415,9 +415,9 @@ public class AnalizorModel : INotifyPropertyChanged
 							};
 							IssueLog.Add(issue);
 							ChangeLog.Add(new Change() { Action = ActionEnum.addedShipment, neededProduct = toOrder, shipmentReceiver = endpoint });
-							if (_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).ToList().Count() >= 1)
+							if (_orderedProducts.Where(op => op.Key.Supplier.Name == endpoint.Supplier.Name && op.Value.ProductName == toOrder.ProductName).ToList().Count() >= 1)
 							{
-								_orderedProducts.Where(op => op.Key.supplier.Name == endpoint.supplier.Name && op.Value.ProductName == toOrder.ProductName).First().Value.Quantity += toOrder.Quantity += Quant;
+								_orderedProducts.Where(op => op.Key.Supplier.Name == endpoint.Supplier.Name && op.Value.ProductName == toOrder.ProductName).First().Value.Quantity += toOrder.Quantity += Quant;
 							}
 							else
 							{
@@ -440,11 +440,11 @@ public class AnalizorModel : INotifyPropertyChanged
 	{
 		//find a supplier with enough of the product
 		Supplier? supplier =
-			(Supplier?)(SupplierList.FirstOrDefault(s => s.supplier.ProductInventory
+			(Supplier?)(SupplierList.FirstOrDefault(s => s.Supplier.ProductInventory
 				.FirstOrDefault(p =>
 					p.ProductName == product.ProductName
 					&& p.Quantity >= product.Quantity)
-			!= null)?.supplier);
+			!= null)?.Supplier);
 
 		if (supplier != null)
 		{
@@ -452,7 +452,7 @@ public class AnalizorModel : INotifyPropertyChanged
 			Shipment shipment = new Shipment()
 			{
 				Sender = supplier,
-				Receiver = endpoint.supplier,
+				Receiver = endpoint.Supplier,
 				Products = new ObservableCollection<Product>() { product }
 			};
 			ShipmentList.Add(shipment);
@@ -463,13 +463,13 @@ public class AnalizorModel : INotifyPropertyChanged
 			//order as much of the product as we can
 			foreach (SupplierUIValues sup in SupplierList)
 			{
-				Product? productWithSmallQuantity = sup.supplier.ProductInventory.FirstOrDefault(p => p.ProductName == product.ProductName && p.Quantity > 0);
+				Product? productWithSmallQuantity = sup.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == product.ProductName && p.Quantity > 0);
 				if (productWithSmallQuantity != null)
 				{
 					Shipment shipment = new Shipment()
 					{
-						Sender = sup.supplier,
-						Receiver = endpoint.supplier,
+						Sender = sup.Supplier,
+						Receiver = endpoint.Supplier,
 						Products = new ObservableCollection<Product>() { productWithSmallQuantity }
 					};
 					ShipmentList.Add(shipment);
@@ -497,7 +497,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	{
 		return Snapshots.Select<Snapshot, double>(x =>
 		{
-			return (double)x.Endpoints.Sum(item => ((EndpointNode)item.supplier).Balance) / 1000;
+			return (double)x.Endpoints.Sum(item => ((EndpointNode)item.Supplier).Balance) / 1000;
 		}).ToArray();
 	}
 

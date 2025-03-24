@@ -20,8 +20,8 @@ public class DataProviderTests
         SupplyChainViewModel model = new SupplyChainViewModel(data);
         model.Load();
         Shipment s = new Shipment();
-        s.Sender = model.SupplierList[0].supplier;
-        s.Receiver = model.SupplierList[1].supplier;
+        s.Sender = model.SupplierList[0].Supplier;
+        s.Receiver = model.SupplierList[1].Supplier;
         s.Products = new ObservableCollection<Product>() {
             new Product()
                         {
@@ -51,7 +51,7 @@ public class DataProviderTests
     {
         SupplyChainViewModel model = setupTest();
         model.ShipmentList.Remove(model.ShipmentList.First());
-        model.ShipmentList.First().Receiver = model.EndpointList.First().supplier;
+        model.ShipmentList.First().Receiver = model.EndpointList.First().Supplier;
         IVendor supplier = model.ShipmentList[0].Sender;
         EndpointNode endPoint = (EndpointNode)model.ShipmentList[0].Receiver;
         model.AdvanceTime();
@@ -63,7 +63,7 @@ public class DataProviderTests
     public void EnpointFromSaveShouldIncludeProductionLine()
     {
         SupplyChainViewModel model = setupTest();
-        EndpointNode endPoint = (EndpointNode)model.EndpointList.First().supplier;
+        EndpointNode endPoint = (EndpointNode)model.EndpointList.First().Supplier;
         Assert.That(endPoint.ProductionList.Count.Equals(1));
     }
     [Test]
