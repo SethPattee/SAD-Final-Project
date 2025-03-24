@@ -51,8 +51,18 @@
 
         <Border Grid.Column="0" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" 
                 BorderBrush="Black" BorderThickness="0 0 0 1" Margin="10 0 0 0">
-
+            
             <TextBlock Text="Inventory" FontSize="16" FontWeight="SemiBold" Margin="0 0 10 2"></TextBlock>
+        </Border>
+        <Border Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+        BorderBrush="Black" BorderThickness="0 0 0 1" Margin="10 0 0 0">
+
+            <TextBlock Text="Qty." FontSize="16" FontWeight="SemiBold" Margin="0 0 10 2"></TextBlock>
+        </Border>
+        <Border Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" 
+        BorderBrush="Black" BorderThickness="0 0 0 1" Margin="20 0 0 0">
+
+            <TextBlock Text="Cost" FontSize="16" FontWeight="SemiBold" Margin="0 0 10 2"></TextBlock>
         </Border>
         <Button Content="Add Item" HorizontalAlignment="Right" VerticalAlignment="Bottom" Padding="2"
                 Grid.Column="2" Grid.Row="2" Margin="0 0 10 0"

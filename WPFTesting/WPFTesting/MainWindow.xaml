@@ -116,7 +116,9 @@
                             <TextBlock Text="Supplier:" FontSize="24" Margin="10" />
                             <TextBox x:Name="TitleTextBox" Text="{Binding SelectedSupplier.Supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <TextBlock Text="Connected Suppliers:" Margin="0 10 0 0"/>
+                            
+                            
+                            <TextBlock Text="Color:" Margin="0 10 0 0"/>
                             <xctk:ColorPicker x:Name="ClrPckr_Background_Supplier" SelectedColorChanged="ClrPckr_Background_Supplier_SelectedColorChanged"></xctk:ColorPicker>
                             <!--<TextBlock x:Name="SuppliersTextBox" />-->
 
