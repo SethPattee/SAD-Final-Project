@@ -23,6 +23,7 @@ using System.Diagnostics;
 using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
+using System.Threading.Tasks;
 using Microsoft.Win32;
 
 
@@ -178,22 +179,44 @@ namespace YourNamespace
 			DiagramCanvas.Children.Add(element);
 		}
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        public async Task CloseSaveMessage()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-
-            saveFileDialog.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*"; // Customize this filter as needed
-
-            if (saveFileDialog.ShowDialog() == true) 
-            {
-                string filePath = saveFileDialog.FileName;
-
-                ViewModel.updateFileSave(filePath);
-            }
-            FileMenuPopup.IsOpen = false;
+            await Task.Delay(2000);
+            SetPostSaveUIStates(Visibility.Collapsed, Visibility.Collapsed);
         }
 
+		private async Task Save_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
 
+                saveFileDialog.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*"; // Customize this filter as needed
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string filePath = saveFileDialog.FileName;
+
+                    ViewModel.updateFileSave(filePath);
+                }
+
+                SetPostSaveUIStates(Visibility.Visible, Visibility.Collapsed);
+                _ = CloseSaveMessage();
+
+            }
+            catch
+            {
+                SetPostSaveUIStates(Visibility.Collapsed, Visibility.Visible);
+                _ = CloseSaveMessage();
+            }
+        }
+
+        private void SetPostSaveUIStates(Visibility Success_Vis, Visibility Fail_Vis)
+        {
+            FileMenuPopup.IsOpen = false;
+            SuccessfulMessage.Visibility = Success_Vis;
+            UnsuccessfulMessage.Visibility = Fail_Vis;
+        }
 
         private void UpdateLinePosition(ShippingLine line1, INodeElement? box1, INodeElement? box2)
         {

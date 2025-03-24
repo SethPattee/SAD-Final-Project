@@ -27,18 +27,28 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="32"/>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="13*" />
         </Grid.RowDefinitions>
 
         <!-- Tool Ribbon -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,1" BorderBrush="DarkGray" Margin="0,0,0,0">
+        <Border Grid.Row="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,1" BorderBrush="WhiteSmoke" Background="WhiteSmoke" Padding="0 6 0 6">
             <StackPanel x:Name="ToolRibbon" Orientation="Horizontal" Background="WhiteSmoke">
-                <ToggleButton x:Name="FileButton" Width="28" Height="20" Margin="6,0,0,0">
+                <StackPanel.Resources>
+                    <Style TargetType="StackPanel">
+                        <Style.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Padding" Value="2 0 2 5"></Setter>
+                                <Setter Property="FontSize" Value="16"></Setter>
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+                </StackPanel.Resources>
+                <ToggleButton x:Name="FileButton" Margin="6,0,0,0">
                     <TextBlock><Run Text="File"/></TextBlock>
                 </ToggleButton>
 
-                <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" Width="60" StaysOpen="False">
+                <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" StaysOpen="False">
                     <Border BorderThickness="1">
                         <StackPanel>
                             <Button x:Name="FileMenu_New" Content="New" Background="WhiteSmoke"/>
@@ -47,17 +57,17 @@
                         </StackPanel>
                     </Border>
                 </Popup>
-                <ToggleButton x:Name="EditButton" Width="28" Height="20" Margin="6,0,0,0">
+                <ToggleButton x:Name="EditButton" Margin="6,0,0,0">
                     <TextBlock><Run Text="Edit" /></TextBlock>
                 </ToggleButton>
 
-                <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}" Width="60">
+                <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}">
                     <StackPanel>
                         <Button x:Name="EditMenu_Undo" Content="Undo" Background="WhiteSmoke"/>
                         <Button x:Name="EditMenu_Redo" Content="Redo" Background="WhiteSmoke"/>
                     </StackPanel>
                 </Popup>
-                <Button Margin="6 0 0 0" Height="20" Click="Button_ClickForAnalyze">
+                <Button Margin="6 0 0 0" Click="Button_ClickForAnalyze">
                     <Button.Content>
                         <TextBlock Text="Analyze"></TextBlock>
                     </Button.Content>
@@ -65,12 +75,9 @@
                 </Button>
 
 
-                <Button Margin="6 0 0 0" Height="20" Click="Button_ClickForBillofMaterials">
-                    <Button.Content>
-                        <TextBlock Text="BillofMaterial"></TextBlock>
-                    </Button.Content>
-
-                </Button> 
+                <TextBlock Text="Save was successful." Padding="5 2 0 0" x:Name="SuccessfulMessage" Visibility="Collapsed"></TextBlock>
+                <TextBlock Text="Save failed!" Padding="5 2 0 0" x:Name="UnsuccessfulMessage" Visibility="Collapsed"></TextBlock>
+                
             </StackPanel>
         </Border>
 
