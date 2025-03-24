@@ -185,7 +185,7 @@ namespace YourNamespace
             SetPostSaveUIStates(Visibility.Collapsed, Visibility.Collapsed);
         }
 
-		private async Task Save_Click(object sender, RoutedEventArgs e)
+		private void Save_Click(object sender, RoutedEventArgs e)
         {
             try
             {
