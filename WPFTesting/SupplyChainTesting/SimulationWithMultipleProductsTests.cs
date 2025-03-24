@@ -26,9 +26,9 @@ public class SimulationWithMultipleProductsTests
 		simulation.ProductionTargets.Add(SimulatorTestsHelpers.MakeProductionTargetBox2(dateDue: 5, targetQuantity: 10));//makes 2 boxes per day
 		simulation.ProductionTargets.Add(SimulatorTestsHelpers.MakeProductionTargetDoor(dateDue: 5, targetQuantity:  5));//makes 1 door per day
 		
-		Product wood = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Wood");
-		Product glue = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Glue");
-		Product screws = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Screws");
+		Product wood = simulation.EndpointList.First().Supplier.ComponentInventory.First(p => p.ProductName == "Wood");
+		Product glue = simulation.EndpointList.First().Supplier.ComponentInventory.First(p => p.ProductName == "Glue");
+		Product screws = simulation.EndpointList.First().Supplier.ComponentInventory.First(p => p.ProductName == "Screws");
 		Assert.That(wood.Quantity, Is.EqualTo(1000));
 		Assert.That(screws.Quantity, Is.EqualTo(1000));
 		Assert.That(glue.Quantity, Is.EqualTo(1000));
@@ -36,16 +36,16 @@ public class SimulationWithMultipleProductsTests
 		simulation.DaysToRun = 5;
 		simulation.PassTimeUntilDuration(5);
 
-		wood = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Wood");
-		glue = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Glue");
-		screws = simulation.EndpointList.First().supplier.ComponentInventory.First(p => p.ProductName == "Screws");
+		wood = simulation.EndpointList.First().Supplier.ComponentInventory.First(p => p.ProductName == "Wood");
+		glue = simulation.EndpointList.First().Supplier.ComponentInventory.First(p => p.ProductName == "Glue");
+		screws = simulation.EndpointList.First().Supplier.ComponentInventory.First(p => p.ProductName == "Screws");
 		Assert.That(wood.Quantity, Is.EqualTo(900)); // enough components to make 5 doors and 10 boxes in 5 days
 		Assert.That(screws.Quantity, Is.EqualTo(940));
 		Assert.That(glue.Quantity, Is.EqualTo(950));
 
 
-		Product Door = simulation.EndpointList.First().supplier.ProductInventory.First(p => p.ProductName == "Door"); 
-		Product Box = simulation.EndpointList.First().supplier.ProductInventory.First(p => p.ProductName == "Box");
+		Product Door = simulation.EndpointList.First().Supplier.ProductInventory.First(p => p.ProductName == "Door"); 
+		Product Box = simulation.EndpointList.First().Supplier.ProductInventory.First(p => p.ProductName == "Box");
 		Assert.That(Box.Quantity, Is.EqualTo(10));
 		Assert.That(Door.Quantity, Is.EqualTo(5)); 
 	}
