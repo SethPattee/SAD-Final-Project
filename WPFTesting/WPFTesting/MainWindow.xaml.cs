@@ -23,6 +23,8 @@ using System.Diagnostics;
 using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
+using Microsoft.Win32;
+
 
 namespace YourNamespace
 {
@@ -176,11 +178,22 @@ namespace YourNamespace
 			DiagramCanvas.Children.Add(element);
 		}
 
-		private void Save_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.updateFileSave();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*"; // Customize this filter as needed
+
+            if (saveFileDialog.ShowDialog() == true) 
+            {
+                string filePath = saveFileDialog.FileName;
+
+                ViewModel.updateFileSave(filePath);
+            }
             FileMenuPopup.IsOpen = false;
         }
+
+
 
         private void UpdateLinePosition(ShippingLine line1, INodeElement? box1, INodeElement? box2)
         {
