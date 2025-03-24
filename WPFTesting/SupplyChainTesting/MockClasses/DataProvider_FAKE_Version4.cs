@@ -242,10 +242,20 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 		throw new NotImplementedException();
 	}
 
-	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
+    public void SaveShipmentInfo(IEnumerable<Shipment> shipments, string? filepath)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
 	{
 		throw new NotImplementedException();
 	}
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues, string? filepath)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 
@@ -446,8 +456,18 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 		throw new NotImplementedException();
 	}
 
-	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
+    public void SaveShipmentInfo(IEnumerable<Shipment> shipments, string? filepath)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
 	{
 		throw new NotImplementedException();
 	}
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues, string? filepath)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -113,9 +113,19 @@ internal class DataProvider_FAKE : IInitializedDataProvider
         return;
 	}
 
-	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
+    public void SaveShipmentInfo(IEnumerable<Shipment> shipments, string? filepath)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
     {
         return;
+    }
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues, string? filepath)
+    {
+        throw new NotImplementedException();
     }
 }
 
@@ -221,9 +231,19 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
         return;
 	}
 
-	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
+    public void SaveShipmentInfo(IEnumerable<Shipment> shipments, string? filepath)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
     {
         return;
+    }
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues, string? filepath)
+    {
+        throw new NotImplementedException();
     }
 }
 
@@ -463,8 +483,18 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
         return;
 	}
 
-	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
+    public void SaveShipmentInfo(IEnumerable<Shipment> shipments, string? filepath)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
     {
         return;
+    }
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues, string? filepath)
+    {
+        throw new NotImplementedException();
     }
 }
