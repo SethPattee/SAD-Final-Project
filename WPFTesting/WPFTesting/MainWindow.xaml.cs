@@ -582,7 +582,7 @@ namespace YourNamespace
 			    targetShipingLine.LineSelected += Line_MouseDown;
                 targetShipingLine.OwnShipment.FromJoiningBoxCorner = targetShipingLine.FromJoiningBoxCorner;
                 targetShipingLine.OwnShipment.ToJoiningBoxCorner = targetShipingLine.ToJoiningBoxCorner;
-                targetShipingLine.ourShippingLine.StrokeThickness = 2;
+                targetShipingLine.ourShippingLine.StrokeThickness = 6;
 			    ViewModel.ShipmentList.Add(targetShipingLine.OwnShipment);
 			    ShipmentList.Add(targetShipingLine);
 
@@ -896,7 +896,7 @@ namespace YourNamespace
                 }
                 else if (Element is ShippingLine lineElement)
                 {
-                    lineElement.ourShippingLine.StrokeThickness = 3;
+                    lineElement.ourShippingLine.StrokeThickness = 6;
                     lineElement.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
                 }
             }
@@ -1029,7 +1029,7 @@ namespace YourNamespace
         private void SetSelectedShippingLine(ShippingLine l)
         {
             ViewModel.SelectedShipment = l.OwnShipment;
-            l.ourShippingLine.StrokeThickness = 5;
+            l.ourShippingLine.StrokeThickness = 8;
             l.ourShippingLine.Stroke = new SolidColorBrush(Colors.PaleVioletRed);
             LeftSidebarLineDetails.Visibility = Visibility.Visible;
             LeftSidebarScrollShipments.Visibility = Visibility.Visible;

@@ -14,7 +14,7 @@
         </Grid.ContextMenu>
 
         <Line Stroke="Black" Panel.ZIndex="-10" 
-              StrokeThickness="5" X1="0" X2="100" Y1="0" Y2="100" x:Name="ourShippingLine"
+              StrokeThickness="6" X1="0" X2="100" Y1="0" Y2="100" x:Name="ourShippingLine"
               MouseDown="MouseDown_LineClicked"/>
     </Grid>
 </UserControl>
