@@ -245,11 +245,11 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
+                                                    <ComboBox Grid.Column="0"
+                                                          SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          ItemsSource="{Binding CatalogNames}">
+                                                    </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
@@ -276,11 +276,11 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
+                                                    <ComboBox Grid.Column="0"
+                                                              SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                              ItemsSource="{Binding CatalogNames}" MinWidth="40">
+                                                    </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
@@ -308,11 +308,11 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
-                                          HorizontalAlignment="Stretch" MinWidth="40"/>
+                                                    <ComboBox Grid.Column="0"
+                                                          SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          ItemsSource="{Binding CatalogNames}" MinWidth="40">
+                                                    </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
-                                          HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
                                           HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,28 +43,24 @@ namespace FactorySADEfficiencyOptimizer.Models
             } 
             set
             {
-				if (ProductCatalog.Products.TryGetValue(_catalogueKey, out GeneralProduct? genProd))
-				{
-					genProd.ProductName = value;
-				}
-				else
-				{
-                    string v = string.Empty;
-                    foreach (Guid Key in ProductCatalog.Products.Keys)
+                foreach (Guid Key in ProductCatalog.Products.Keys)
+                {
+                    if (ProductCatalog.Products.TryGetValue(Key, out GeneralProduct? Prod))
                     {
-                        if (ProductCatalog.Products.TryGetValue(Key, out GeneralProduct? Prod))
+                        if (value == Prod.ProductName)
                         {
-                            if (value == Prod.ProductName)
-                            {
-                                _catalogueKey = Key;
-                                break;
-                            }
-                        }               
-                    }
-				    ProductCatalog.Products[_catalogueKey] = new GeneralProduct() { ProductName = value};
-				}
+                            _catalogueKey = Key;
+                            break;
+                        }
+                    }               
+                }
+				ProductCatalog.Products[_catalogueKey] = new GeneralProduct() { ProductName = value};
                 OnPropertyChanged(nameof(ProductName));
             }
+        }
+        public List<string> CatalogNames
+        {
+            get => ProductCatalogNames.ProductNames;
         }
         public string Units
         {
