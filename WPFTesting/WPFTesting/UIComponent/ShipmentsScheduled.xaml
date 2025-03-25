@@ -127,7 +127,6 @@
                                         <ColumnDefinition Width="2*"></ColumnDefinition>
                                         <ColumnDefinition Width="2*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <!--<TextBox Grid.Column="0" Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>-->
                                     <ComboBox Grid.Column="0"
                                           SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           ItemsSource="{Binding CatalogNames}">
