@@ -26,8 +26,7 @@ internal static class GenneratedFirstSuppliers
                         new Product()
                         {
                             Quantity=10,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            ProductName="Saw Blade 2-pack"
                         }
                     },
 
@@ -82,8 +81,7 @@ internal static class GenneratedFirstSuppliers
                         new Product()
                         {
                             Quantity=1000,
-                            ProductName="sawdust",
-                            Units="kg"
+                            ProductName="sawdust"
                         }
                     },
                     Name="Lost Hardware",

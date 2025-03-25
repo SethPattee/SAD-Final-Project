@@ -34,8 +34,7 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Wood",
-							Units="kg"
+							ProductName="Wood"
 						}
 					},
 
@@ -59,8 +58,7 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Screws",
-							Units="kg"
+							ProductName="Screws"
 						}
 					},
 
@@ -93,8 +91,7 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Glue",
-							Units="kg"
+							ProductName="Glue"
 						}
 					},
 					Name="Glue Vendor",
@@ -126,8 +123,7 @@ public class DataProvider_FAKE_Version4 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Sawdust",
-							Units="kg"
+							ProductName="Sawdust"
 						},
 						new Product()
 						{
@@ -282,8 +278,7 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Wood",
-							Units="kg"
+							ProductName="Wood"
 						}
 					},
 
@@ -307,8 +302,7 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Screws",
-							Units="kg"
+							ProductName="Screws"
 						}
 					},
 
@@ -341,8 +335,7 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Glue",
-							Units="kg"
+							ProductName="Glue"
 						}
 					},
 					Name="Glue Vendor",
@@ -374,8 +367,7 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Sawdust",
-							Units="kg"
+							ProductName="Sawdust"
 						},
 						new Product()
 						{

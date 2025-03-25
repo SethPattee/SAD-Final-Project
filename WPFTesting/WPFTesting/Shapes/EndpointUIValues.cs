@@ -48,15 +48,13 @@ public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
                     {
                         ProductName = "Wood",
                         Price = (decimal)3.00,
-                        Quantity = 40,
-                        Units = "Boards"
+                        Quantity = 40
                     },
                     new Product()
                     {
                         ProductName = "Glue",
                         Price = (decimal)0.01,
-                        Quantity = (float)3000.0,
-                        Units = "mL"
+                        Quantity = (float)3000.0
                     }
                 },
 

@@ -14,7 +14,6 @@ namespace FactorySADEfficiencyOptimizer.Models
 
         private Decimal _price;
         private Guid _catalogueKey = Guid.NewGuid();
-        private string _units = "";
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
@@ -62,11 +61,6 @@ namespace FactorySADEfficiencyOptimizer.Models
         {
             get => ProductCatalogNames.ProductNames;
         }
-        public string Units
-        {
-            get => _units;
-            set { _units = value; OnPropertyChanged(nameof(Units)); }
-        }
         public decimal Price
         {
             get => _price;
@@ -79,7 +73,6 @@ namespace FactorySADEfficiencyOptimizer.Models
             p.ProductName = this.ProductName;
             p.Price = this.Price;
             p.Quantity = this.Quantity;
-            p.Units = this.Units;
             return p;
         }
     }

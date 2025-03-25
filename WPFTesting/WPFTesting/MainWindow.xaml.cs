@@ -689,59 +689,69 @@ namespace YourNamespace
 
         }
 
-        //private void EditButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    SupplierElement box = selectedElement.Item1;
+        private void OpenCommonProductWindow_Click(object sender, RoutedEventArgs e)
+        {
+			if (sender is Button s)
+			{
+                CommonProductWindow ProductWindow = new CommonProductWindow();
+                ProductWindow.Owner = this;
+                ProductWindow.Show();
+			}
+		}
 
-        //    // Edit Box title
-        //    string title = TitleTextBox.Text.Trim();
-        //    if (title.Length > 0)
-        //    {
-        //        box.BoxTitle.Text = title;
-        //        this.Title = title;
-        //    }
-        //    //else
-        //    //{
-        //    //    MessageBox.Show("Invalid Title. Please enter a Title.");
-        //    //    return;
-        //    //}
+		//private void EditButton_Click(object sender, RoutedEventArgs e)
+		//{
+		//    SupplierElement box = selectedElement.Item1;
+
+		//    // Edit Box title
+		//    string title = TitleTextBox.Text.Trim();
+		//    if (title.Length > 0)
+		//    {
+		//        box.BoxTitle.Text = title;
+		//        this.Title = title;
+		//    }
+		//    //else
+		//    //{
+		//    //    MessageBox.Show("Invalid Title. Please enter a Title.");
+		//    //    return;
+		//    //}
 
 
-        //    // Edit Product
-        //    if (selectedProduct != null)
-        //    {
-        //        // Update ProductName
+		//    // Edit Product
+		//    if (selectedProduct != null)
+		//    {
+		//        // Update ProductName
 
-        //        // Update Quantity
-        //        if (float.TryParse(QuantityTextBox.Text, out float quantity))
-        //        {
-        //            selectedProduct.Quantity = quantity;
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Invalid quantity. Please enter a valid number.");
-        //            return;
-        //        }
+		//        // Update Quantity
+		//        if (float.TryParse(QuantityTextBox.Text, out float quantity))
+		//        {
+		//            selectedProduct.Quantity = quantity;
+		//        }
+		//        else
+		//        {
+		//            MessageBox.Show("Invalid quantity. Please enter a valid number.");
+		//            return;
+		//        }
 
-        //        // Update Units
-        //        selectedProduct.Units = UnitsTextBox.Text.Trim();
+		//        // Update Units
+		//        selectedProduct.Units = UnitsTextBox.Text.Trim();
 
-        //        // Update Price
-        //        if (decimal.TryParse(PriceTextBox.Text, out decimal price))
-        //        {
-        //            selectedProduct.Price = price;
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Invalid price. Please enter a valid number.");
-        //            return;
-        //        }
-        //    }
+		//        // Update Price
+		//        if (decimal.TryParse(PriceTextBox.Text, out decimal price))
+		//        {
+		//            selectedProduct.Price = price;
+		//        }
+		//        else
+		//        {
+		//            MessageBox.Show("Invalid price. Please enter a valid number.");
+		//            return;
+		//        }
+		//    }
 
-        //    box.FillProductDisplay();
-        //}
+		//    box.FillProductDisplay();
+		//}
 
-        private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
         }
         private void Box_Position_Changed(object? sender, EventArgs e)
@@ -943,7 +953,6 @@ namespace YourNamespace
                 ViewModel.SelectedShipment.Products.Add(new Product()
                 {
                     Price = 0,
-                    Units = "",
                     ProductName = "New product",
                     Quantity = 0
                 });
@@ -1007,7 +1016,6 @@ namespace YourNamespace
             Product product = new Product()
             {
                 Price = 0,
-                Units = "",
                 ProductName = "New product",
                 Quantity = 0
             };
