@@ -943,7 +943,6 @@ namespace YourNamespace
                 ViewModel.SelectedShipment.Products.Add(new Product()
                 {
                     Price = 0,
-                    Units = "",
                     ProductName = "New product",
                     Quantity = 0
                 });
@@ -1007,7 +1006,6 @@ namespace YourNamespace
             Product product = new Product()
             {
                 Price = 0,
-                Units = "",
                 ProductName = "New product",
                 Quantity = 0
             };

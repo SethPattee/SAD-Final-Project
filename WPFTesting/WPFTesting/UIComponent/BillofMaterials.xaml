@@ -33,7 +33,6 @@
                         <GridView>
                             <GridViewColumn Header="Components" DisplayMemberBinding="{Binding ProductName}" />
                             <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
-                            <GridViewColumn Header="Units" DisplayMemberBinding="{Binding Units}" />
                             <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Price}" />
                         </GridView>
                     </ListView.View>

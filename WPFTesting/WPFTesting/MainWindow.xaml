@@ -16,7 +16,6 @@
             <Grid>
                 <TextBox Text="{Binding ProductName}"/>
                 <TextBox Text="{Binding Quantity}"/>
-                <TextBox Text="{Binding Units}"/>
                 <TextBox Text="{Binding Price}"/>
             </Grid>
         </DataTemplate>
