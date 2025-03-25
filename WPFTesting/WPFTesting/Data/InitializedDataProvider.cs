@@ -72,27 +72,36 @@ public class InitializedDataProvider : IInitializedDataProvider
 		return shipments;
 	}
 
-	public void SaveShipmentInfo(IEnumerable<Shipment> shipments)
-	{
-		List<ForJsonShipment> shipments1 = new List<ForJsonShipment>();
-        foreach (var shipment in shipments) {
+    public void SaveShipmentInfo(IEnumerable<Shipment> shipments, string filePath)
+    {
+        List<ForJsonShipment> shipments1 = new List<ForJsonShipment>();
+        foreach (var shipment in shipments)
+        {
             shipments1.Add(new ForJsonShipment(shipment));
         }
-		var jString = System.Text.Json.JsonSerializer.Serialize(shipments1);
+
+        var jString = System.Text.Json.JsonSerializer.Serialize(shipments1);
+
         try
         {
-            File.WriteAllText("Shipments.json", jString);
+            // Save to the provided file path
+            File.WriteAllText(filePath, jString);
         }
-        catch (Exception E) { Console.WriteLine(E.Message); }
-	}
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message); // Handle the error, could also show a message to the user
+        }
+    }
 
-	public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues)
+
+    public void SaveSupplierInfo(IEnumerable<SupplierUIValues> supplierUIValues, string filePath)
     {
         List<ForJsonSupplier> forJsonSupliers = new List<ForJsonSupplier>();
         List<ForJsonEndpoint> forJsonEndpoints = new List<ForJsonEndpoint>();
-        foreach(var value in supplierUIValues)
-        {     
-            if( !(value.GetType() == typeof(EndpointUIValues)))
+
+        foreach (var value in supplierUIValues)
+        {
+            if (!(value.GetType() == typeof(EndpointUIValues)))
             {
                 forJsonSupliers.Add(new ForJsonSupplier(value));
             }
@@ -101,21 +110,23 @@ public class InitializedDataProvider : IInitializedDataProvider
                 forJsonEndpoints.Add(new ForJsonEndpoint(endpoint));
             }
         }
+
         var jString = System.Text.Json.JsonSerializer.Serialize(forJsonSupliers);
         var jString_endpoint = System.Text.Json.JsonSerializer.Serialize(forJsonEndpoints);
-        //var jString_endpoint = System.Text.Json.JsonSerializer.Serialize(endpoints);
-		try
+
+        try
         {
-            //TODO: NEED an environment variable that has the path, or be happy diving into the bin/debug/.... stuff every time. 
-            // for now, it is saving down SAD-Final-Project\WPFTesting\WPFTesting\bin\Debug\net8.0-windows7.0\Suppliers.json
-            File.WriteAllText("Suppliers.json", jString);
-            File.WriteAllText("Endpoints.json", jString_endpoint);
+            // Save to the provided file path for suppliers and endpoints
+            File.WriteAllText(filePath, jString);
+            File.WriteAllText(filePath.Replace("Suppliers.json", "Endpoints.json"), jString_endpoint);
         }
-        catch (Exception ex) { 
-            Console.WriteLine(ex.Message);
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message); 
         }
     }
 
-    
+
+
 }
 
