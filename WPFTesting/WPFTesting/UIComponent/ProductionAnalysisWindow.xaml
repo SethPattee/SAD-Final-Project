@@ -179,7 +179,6 @@
         <Grid Name="lines" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="4,0,0,108">
             <Border Background="LightGray" BorderBrush="DarkGray" BorderThickness="1" Margin="10">
                 <d3:Chart x:Name="plotter" BottomTitle="Bottom" LeftTitle="Left">
-                    <d3:LineGraph x:Name="linegraph" Stroke="RoyalBlue" StrokeThickness="3"/>
                 </d3:Chart>
             </Border>
         </Grid>

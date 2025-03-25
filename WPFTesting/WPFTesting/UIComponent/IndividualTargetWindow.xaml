@@ -91,8 +91,6 @@
         </Border>
         <Border x:Name="IndividualTargetGraph" Grid.Column="3" Grid.Row="2">
             <d3:Chart x:Name="IT_PlotSpace" BottomTitle="Bottom" LeftTitle="Left" Margin="10 0 20 20">
-                <d3:LineGraph x:Name="IndividualTargetLine" Padding="0 0 0 0"
-                              Stroke="RoyalBlue" StrokeThickness="3"/>
             </d3:Chart>
         </Border>
     </Grid>
