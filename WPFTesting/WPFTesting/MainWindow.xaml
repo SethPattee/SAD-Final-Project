@@ -58,15 +58,14 @@
                         </StackPanel>
                     </Border>
                 </Popup>
-                
+
                 <ToggleButton x:Name="EditButton" Margin="6,0,0,0" VerticalAlignment="Center">
                     <TextBlock><Run Text="Edit" /></TextBlock>
                 </ToggleButton>
 
                 <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}">
                     <StackPanel>
-                        <Button x:Name="EditMenu_Undo" Content="Undo" Background="WhiteSmoke"/>
-                        <Button x:Name="EditMenu_Redo" Content="Redo" Background="WhiteSmoke"/>
+                        <Button x:Name="EditMenu_Products" Content="Products" Background="WhiteSmoke" Click="OpenCommonProductWindow_Click"/>
                     </StackPanel>
                 </Popup>
                 
