@@ -49,6 +49,7 @@ namespace FactorySADEfficiencyOptimizer.Models
                         if (value == Prod.ProductName)
                         {
                             _catalogueKey = Key;
+                            OnPropertyChanged(nameof(ProductName));
                             break;
                         }
                     }               

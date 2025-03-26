@@ -696,7 +696,8 @@ namespace YourNamespace
                 CommonProductWindow ProductWindow = new CommonProductWindow();
                 ProductWindow.Owner = this;
                 ProductWindow.Show();
-			}
+
+            }
 		}
 
 		//private void EditButton_Click(object sender, RoutedEventArgs e)

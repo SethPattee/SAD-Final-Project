@@ -52,8 +52,6 @@
                 <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" StaysOpen="False">
                     <Border BorderThickness="1">
                         <StackPanel>
-                            <Button x:Name="FileMenu_New" Content="New" Background="WhiteSmoke"/>
-                            <Button x:Name="FileMenu_Open" Content="Open" Background="WhiteSmoke"/>
                             <Button x:Name="FileMenu_Save" Content="Save" Background="WhiteSmoke" Click="Save_Click"/>
                         </StackPanel>
                     </Border>
@@ -63,7 +61,7 @@
                     <TextBlock><Run Text="Edit" /></TextBlock>
                 </ToggleButton>
 
-                <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}">
+                <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}" StaysOpen="False">
                     <StackPanel>
                         <Button x:Name="EditMenu_Products" Content="Products" Background="WhiteSmoke" Click="OpenCommonProductWindow_Click"/>
                     </StackPanel>
@@ -192,8 +190,10 @@
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
-                                                    HorizontalAlignment="Stretch" MinWidth="40"/>
+                                                <ComboBox Grid.Column="0"
+                                                      SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      ItemsSource="{Binding CatalogNames}">
+                                                </ComboBox>
                                                 <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                                                     HorizontalAlignment="Stretch" MinWidth="40">
                                                 </TextBox>
