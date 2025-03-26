@@ -45,6 +45,13 @@ public partial class CommonProductWindow : Window, INotifyPropertyChanged
 	//}
 	public void AddNewProduct_Click(object sender, RoutedEventArgs e)
 	{
+		GeneralProduct newProduct = new GeneralProduct() { ProductName = "NEW PRODUCT" };
+		ProductCatalog.Products[Guid.NewGuid()] = newProduct;
+        var collectionView = (CollectionView)CollectionViewSource.GetDefaultView(ProductCatalog.Products.Values);
+        collectionView.Refresh();
 
-	}
+        // Scroll to the newly added product
+        ProductList.SelectedItem = newProduct;
+        ProductList.ScrollIntoView(newProduct);
+    }
 }
