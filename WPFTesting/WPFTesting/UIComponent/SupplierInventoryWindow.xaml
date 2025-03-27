@@ -97,7 +97,8 @@
                             </Grid.Style>
                             <ComboBox
                                     SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    ItemsSource="{Binding CatalogNames}">
+                                    ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                    FontSize="16" Background="White" FontWeight="Bold">
                             </ComboBox>
                             <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Stretch"></TextBox>
                             <TextBox Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}" Grid.Column="2" HorizontalAlignment="Stretch"></TextBox>

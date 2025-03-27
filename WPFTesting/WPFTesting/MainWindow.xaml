@@ -190,9 +190,10 @@
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
-                                                <ComboBox Grid.Column="0"
-                                                      SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                      ItemsSource="{Binding CatalogNames}">
+                                                <ComboBox
+                                                        SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                                        FontSize="16" Background="White" FontWeight="Bold" Grid.Column="0" MinWidth="40">
                                                 </ComboBox>
                                                 <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                                                     HorizontalAlignment="Stretch" MinWidth="40">
@@ -243,9 +244,10 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ComboBox Grid.Column="0"
-                                                          SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                          ItemsSource="{Binding CatalogNames}">
+                                                    <ComboBox
+                                                        SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                                        FontSize="16" Background="White" FontWeight="Bold" MinWidth="40" Grid.Column="0">
                                                     </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
@@ -274,9 +276,10 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ComboBox Grid.Column="0"
-                                                              SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                              ItemsSource="{Binding CatalogNames}" MinWidth="40">
+                                                    <ComboBox
+                                                        SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                                        FontSize="16" Background="White" FontWeight="Bold" MinWidth="40" Grid.Column="0">
                                                     </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
@@ -298,7 +301,7 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid>
-                                            
+
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="4*"/>
                                                         <ColumnDefinition Width="*"/>
@@ -306,9 +309,10 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ComboBox Grid.Column="0"
-                                                          SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                          ItemsSource="{Binding CatalogNames}" MinWidth="40">
+                                                    <ComboBox
+                                                        SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                                        FontSize="16" Background="White" FontWeight="Bold" MinWidth="40" Grid.Column="0">
                                                     </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                                           HorizontalAlignment="Stretch" MinWidth="40"/>
