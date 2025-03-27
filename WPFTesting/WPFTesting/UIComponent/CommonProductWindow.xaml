@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FactorySADEfficiencyOptimizer.UIComponent"
         xmlns:converter="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent.Converters"
         mc:Ignorable="d" DataContext="{Binding ProductCatalog.Products.Values}"
-        Title="CommonProductWindow" Height="450" Width="800"
+        Title="CommonProductWindow" Height="500" Width="450"
         Background="DarkGray">
     <Window.Resources>
         <converter:MarginConverter x:Key="marginConverter"></converter:MarginConverter>
@@ -51,15 +51,13 @@
             <ListView Margin="10 4 10 0" Background="DarkGray" BorderThickness="0"
                ItemsSource="{Binding ., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       x:Name="ProductList">
-               <!--SelectedItem="{Binding ProductName}"--> 
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                        Background="LightGray" Width="{Binding ElementName=CommonProductList,Path=ActualWidth,
                      Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource marginConverter}}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="4*"></ColumnDefinition>
-                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Grid.Style>
                                 <Style TargetType="Grid">
@@ -68,15 +66,12 @@
                                             <Setter Property="Padding" Value="6"></Setter>
                                             <Setter Property="FontSize" Value="16"></Setter>
                                             <Setter Property="FontWeight" Value="SemiBold"></Setter>
-                                            <Setter Property="Margin" Value="0 10 0 10"></Setter>
+                                            <Setter Property="Margin" Value="10"></Setter>
                                         </Style>
                                     </Style.Resources>
                                 </Style>
                             </Grid.Style>
-                            <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" HorizontalAlignment="Stretch"></TextBox>
-                            <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Stretch"
-                             Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                             Grid.Column="1" Click="DeleteProductButton_Click" VerticalAlignment="Center"></Button>
+                            <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" HorizontalAlignment="Stretch" MinWidth="400"></TextBox>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
