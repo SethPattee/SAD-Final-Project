@@ -69,9 +69,9 @@ public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
                         Quantity = 2
                     }
                 },
-            DeliveryRequirementsList = new ObservableCollection<Product>()
+            ActiveDeliveryLines = new ObservableCollection<DeliveryLine>()
             {
-                new Product() { ProductName = "Door", Quantity = 1, Price = (decimal)300 }
+                new(new Product() { ProductName = "Door", Quantity = 1, Price = (decimal)300 }, true, true)
             },
 
             ProductionList = new ObservableCollection<ProductLine>()
@@ -120,7 +120,7 @@ public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
         end.Supplier.ProductInventory = CopyMaker.makeShallowCopyOfProductColection(Supplier.ProductInventory);
         end.Supplier.Id = Supplier.Id;
         end.Position = new System.Drawing.Point();
-        ((EndpointNode)end.Supplier).DeliveryRequirementsList = CopyMaker.makeShallowCopyOfProductColection(((EndpointNode)Supplier).DeliveryRequirementsList);
+        ((EndpointNode)end.Supplier).ActiveDeliveryLines = CopyMaker.makeShallowCopyOfDLCollection(((EndpointNode)Supplier).ActiveDeliveryLines);
         ((EndpointNode)end.Supplier).ProductionList = CopyMaker.makeShalowCopyColectionOfProductionLine(((EndpointNode)Supplier).ProductionList);
         ((EndpointNode)end.Supplier).Balance = ((EndpointNode)Supplier).Balance;
         return end;

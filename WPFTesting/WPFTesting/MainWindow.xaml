@@ -32,8 +32,8 @@
         </Grid.RowDefinitions>
 
         <!-- Tool Ribbon -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,1" BorderBrush="WhiteSmoke" Background="WhiteSmoke" Padding="0 6 0 6">
-            <StackPanel x:Name="ToolRibbon" Orientation="Horizontal" Background="WhiteSmoke">
+        <Border Grid.Row="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,2" BorderBrush="WhiteSmoke" Background="DarkGray" Padding="0 6 0 6">
+            <StackPanel x:Name="ToolRibbon" Orientation="Horizontal" Background="DarkGray">
                 <StackPanel.Resources>
                     <Style TargetType="StackPanel">
                         <Style.Resources>
@@ -128,7 +128,7 @@
 
                             
                             
-                            <TextBlock Text="Color:" Margin="0 10 0 0"/>
+                            <TextBlock Text="Company Color:" Margin="0 10 0 0"/>
                             <xctk:ColorPicker x:Name="ClrPckr_Background_Supplier" SelectedColorChanged="ClrPckr_Background_Supplier_SelectedColorChanged"></xctk:ColorPicker>
                             <!--<TextBlock x:Name="SuppliersTextBox" />-->
 
@@ -220,17 +220,14 @@
                             <TextBox Text="{Binding SelectedEndpoint.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <Button Content="Save" HorizontalAlignment="Center" Width="50" Click="SaveEndpointElementData_Click"/>
 
-                            <TextBlock Text="Position:"  Margin="5 0 0 0"/>
-                            <TextBlock Text="{Binding SelectedEndpoint.Position, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-                            <TextBlock Text="Color:"  Margin="5 0 0 0"/>
+                            <TextBlock Text="Company Color:"  Margin="5 0 0 0"/>
                             <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"></xctk:ColorPicker>
 
                             <TextBlock Text="Profit: " Margin="5 0 0 0"/>
                             <TextBox Text="{Binding SelectedEndpoint.Profit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=$\{0\}}"/>
 
-                            <Border>
-                                <StackPanel>
+                            <Button Content="Production Details" Click="OpenEndpointDetailsWindowButton_Click">
+                                <!--<StackPanel>
                                     <TextBlock Text="{Binding SelectedEndpoint.supplier.Name, Mode=OneWay, StringFormat=\{0\} products}" Margin="5 0 0 0 "/>
                                     <ListView x:Name="EndpointProductList" Background="DarkGray" BorderThickness="0"
                                               ItemsSource="{Binding SelectedEndpoint.supplier.ProductInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -369,11 +366,11 @@
                                                         <ListView.ItemTemplate>
                                                             <DataTemplate>
                                                                 <DockPanel>
-                                                                    <!--<Grid.ColumnDefinitions>
+                                                                    --><!--<Grid.ColumnDefinitions>
                                                                         <ColumnDefinition Width="4*"></ColumnDefinition>
                                                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                                                         <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                    </Grid.ColumnDefinitions>-->
+                                                                    </Grid.ColumnDefinitions>--><!--
                                                                     <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="0"
                                                                             HorizontalAlignment="Stretch" MinWidth="40" TextWrapping="Wrap"></TextBox>
                                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0"
@@ -416,8 +413,8 @@
                                     </ListView>
                                     <Button Content="New Production Line" Click="AddProductLineToEndpoint_Click"
                                             Grid.ColumnSpan="2" Grid.Row="2"/>
-                                </Grid>
-                            </Border>
+                                </Grid>-->
+                            </Button>
                     </StackPanel>
                     </ScrollViewer>
                 </StackPanel >

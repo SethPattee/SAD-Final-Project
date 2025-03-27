@@ -968,7 +968,7 @@ namespace YourNamespace
             if (IsViewModelEndpointUsable())
             {
                 ((EndpointNode)ViewModel.EndpointList.First(x => x.Supplier.Id == ViewModel.SelectedEndpoint.Supplier.Id)
-                .Supplier).DeliveryRequirementsList.Add(CreateNewProduct());
+                .Supplier).ActiveDeliveryLines.Add(new());
             }
         }
 
@@ -1130,6 +1130,19 @@ namespace YourNamespace
             BillWindow.Show();
         }
 
+        private void OpenEndpointDetailsWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            var EndpointDetails = new EndpointDetailsWindow(((EndpointNode)ViewModel.SelectedEndpoint.Supplier));
+
+            EndpointDetails.EndpointVM.ProductInventory = ViewModel.SelectedEndpoint.Supplier.ProductInventory;
+            EndpointDetails.EndpointVM.ComponentInventory = ViewModel.SelectedEndpoint.Supplier.ComponentInventory;
+            EndpointDetails.EndpointVM.ProductionList = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ProductionList;
+            EndpointDetails.EndpointVM.ActiveDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ActiveDeliveryLines;
+            EndpointDetails.EndpointVM.PastDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).PastDeliveryLines;
+
+            EndpointDetails.Owner = this;
+            EndpointDetails.Show();
+        }
 
         private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
         {
@@ -1156,32 +1169,32 @@ namespace YourNamespace
             }
         }
 
-        private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(sender is Button b)
-            {
-                ViewModel.SelectedEndpoint.Supplier
-                    .ProductInventory.Remove((Product)b.DataContext);
-            }
-        }
+        //private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if(sender is Button b)
+        //    {
+        //        ViewModel.SelectedEndpoint.Supplier
+        //            .ProductInventory.Remove((Product)b.DataContext);
+        //    }
+        //}
 
-        private void DeleteDeliveryButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(sender is Button b && ViewModel.SelectedEndpoint != null)
-            {
-                ((EndpointNode)ViewModel.SelectedEndpoint.Supplier)
-                    .DeliveryRequirementsList.Remove((Product)b.DataContext);
-            }
-        }
+        //private void DeleteDeliveryButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if(sender is Button b && ViewModel.SelectedEndpoint != null)
+        //    {
+        //        ((EndpointNode)ViewModel.SelectedEndpoint.Supplier)
+        //            .DeliveryRequirementsList.Remove();
+        //    }
+        //}
 
-        private void DeleteEndpointComponentInventoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button b)
-            {
-                ViewModel.SelectedEndpoint.Supplier
-                    .ComponentInventory.Remove((Product)b.DataContext);
-            }
-        }
+        //private void DeleteEndpointComponentInventoryButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is Button b)
+        //    {
+        //        ViewModel.SelectedEndpoint.Supplier
+        //            .ComponentInventory.Remove((Product)b.DataContext);
+        //    }
+        //}
 
         private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
