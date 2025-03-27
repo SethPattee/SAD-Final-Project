@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
@@ -23,7 +24,20 @@ namespace FactorSADEfficiencyOptimizer.Models
                 OnPropertyChanged(nameof(ProductionTarget));
             }
         }
-        private float _targetQuantity;
+		private ObservableCollection<string> _posibleNames = new ObservableCollection<string>();
+		public ObservableCollection<string> PosibleTargetNames
+		{
+			set
+			{
+				_posibleNames = value;
+				OnPropertyChanged(nameof(PosibleTargetNames));
+			}
+			get
+			{
+				return _posibleNames;
+			}
+		}
+		private float _targetQuantity;
         public float TargetQuantity { 
             get => _targetQuantity; 
             set

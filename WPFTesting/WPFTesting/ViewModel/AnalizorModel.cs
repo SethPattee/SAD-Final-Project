@@ -117,6 +117,7 @@ public class AnalizorModel : INotifyPropertyChanged
 	public AnalizorModel(SupplyChainViewModel model)
 	{
 		ShortestPath = "";
+		ObservableCollection<string> _PosibletargetNames = new();
 		foreach (var supplier in model.SupplierList)
 		{
 			SupplierUIValues sup = supplier.ShallowCopy();
@@ -129,24 +130,28 @@ public class AnalizorModel : INotifyPropertyChanged
 			{
 				if (pl.IsEnabled)
 				{
-					ProductionTargets.Add(
-						new ProductionTarget()
-						{
-							DueDate = 1,
-							IsTargetEnabled = true,
-							TargetQuantity = pl.ResultingProduct.Quantity,
-							ProductTarget = pl.ResultingProduct.ShallowCopy(),
-							CurrentAmount = (end.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == pl.ResultingProduct.ProductName) ?? new Product()).Quantity,
-							Status = StatusEnum.NotDone
-						}
-					);
+					ProductionTarget toAdd = new ProductionTarget()
+					{
+						DueDate = 1,
+						IsTargetEnabled = true,
+						TargetQuantity = pl.ResultingProduct.Quantity,
+						ProductTarget = pl.ResultingProduct.ShallowCopy(),
+						CurrentAmount = (end.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == pl.ResultingProduct.ProductName) ?? new Product()).Quantity,
+						Status = StatusEnum.NotDone
+					};
+					ProductionTargets.Add(toAdd);
+					_PosibletargetNames.Add(pl.ResultingProduct.ProductName);
 				}
 			}
-			AddEndpoint(end);
+				AddEndpoint(end);
 		}
 		foreach (Shipment shipment in model.ShipmentList) {
             Shipment ship = makeShallowCopyShipment(shipment);
             AddShipment(ship);
+		}
+		foreach (ProductionTarget targ in ProductionTargets)
+		{
+			targ.PosibleTargetNames = _PosibletargetNames;
 		}
 		Snapshots.Add(MakeCurrentSnapShot());
 	}
