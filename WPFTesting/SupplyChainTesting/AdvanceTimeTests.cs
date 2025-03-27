@@ -281,20 +281,30 @@ internal class AdvanceTimeTests
                     Quantity = 10000
                 }
             },
-            Balance = 10000
+            Balance = 10000,
+            ActiveDeliveryLines = new()
+            {
+                new DeliveryLine(
+                    new Product()
+                    {
+                        ProductName = "Swedish fish",
+                        Price = (decimal)5.99,
+                        Quantity = 100
+                    },
+                    true,
+                    true)
+            }
         };
         List<Product> testOrder = new List<Product>()
         {
             new Product() {
-                ProductName = "Swedish fish",
-                Price = (decimal)5.99,
-                Quantity = 100
+                ProductName = "Swedish fish"
             }
         };
 
         endpointTest.ShipOrder(testOrder);
 
-        Assert.That(endpointTest.Balance, Is.EqualTo(10005.99));
+        Assert.That(endpointTest.Balance, Is.EqualTo(10599M));
         Assert.That(endpointTest.ProductInventory.FirstOrDefault(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(9900));
         }
     [Test]

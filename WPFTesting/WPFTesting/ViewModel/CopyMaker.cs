@@ -19,6 +19,24 @@ public static class CopyMaker
 	return prods;
 }
 
+    public static ObservableCollection<DeliveryLine> makeShallowCopyOfDLCollection(ObservableCollection<DeliveryLine> dl)
+    {
+        var newDLs = new ObservableCollection<DeliveryLine>();
+        foreach(var edl in dl)
+        {
+            DeliveryLine newDL = new()
+            {
+                DeliveryItem = edl.DeliveryItem,
+                IsFulfilled = edl.IsFulfilled,
+                IsRecurring = edl.IsRecurring,
+                TotalPrice = edl.TotalPrice
+            };
+            newDLs.Add(newDL);
+        }
+
+        return newDLs;
+    }
+
     public static ObservableCollection<ProductLine> makeShalowCopyColectionOfProductionLine(ObservableCollection<ProductLine> Lines)
     {
         var newLines = new ObservableCollection<ProductLine>();

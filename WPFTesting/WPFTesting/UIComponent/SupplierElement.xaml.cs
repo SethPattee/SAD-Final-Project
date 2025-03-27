@@ -21,7 +21,7 @@ namespace YourNamespace
         private SupplierUIValues _nodeUIValues = new SupplierUIValues()
         {
             Supplier = new Supplier()
-        }; // Temporary replacement until we get MVVM data binding in place
+        };
         public SupplierUIValues SupplierVM
         {
             get { return _nodeUIValues; }

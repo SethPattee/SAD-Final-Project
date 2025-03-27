@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using FactorSADEfficiencyOptimizer.ViewModel;
@@ -19,7 +21,8 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
     private ObservableCollection<Product> _productInventory;
     private ObservableCollection<Product> _componentInventory;
     private ObservableCollection<ProductLine> _productionList;
-    private ObservableCollection<Product> _deliveryrequirementslist;
+    private ObservableCollection<DeliveryLine> _pastDLs;
+    private ObservableCollection<DeliveryLine> _activeDLs;
     private ObservableCollection<Product> _daysUsedcomponents;
     private decimal _profit;
     public EndpointNode()
@@ -31,7 +34,8 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         _productInventory = new ObservableCollection<Product>();
         _componentInventory = new ObservableCollection<Product>();
         _productionList = new ObservableCollection<ProductLine>();
-        _deliveryrequirementslist = new ObservableCollection<Product>();
+        _activeDLs = new ObservableCollection<DeliveryLine>();
+        _pastDLs = new ObservableCollection<DeliveryLine>();
         _daysUsedcomponents = new ObservableCollection<Product>();
     }
     public string Name { 
@@ -72,13 +76,22 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
             OnPropertyChanged(nameof(ProductionList));
         }
     }
-    public ObservableCollection<Product> DeliveryRequirementsList
+    public ObservableCollection<DeliveryLine> ActiveDeliveryLines
     {
-        get => _deliveryrequirementslist;
+        get => _activeDLs;
         set
         {
-            _deliveryrequirementslist = value;
-            OnPropertyChanged(nameof(DeliveryRequirementsList));
+            _activeDLs = value;
+            OnPropertyChanged(nameof(ActiveDeliveryLines));
+        }
+    }
+    public ObservableCollection<DeliveryLine> PastDeliveryLines
+    {
+        get => _pastDLs;
+        set
+        {
+            _pastDLs = value;
+            OnPropertyChanged(nameof(PastDeliveryLines));
         }
     }
     public decimal Balance
@@ -224,22 +237,50 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
 
     public ObservableCollection<Product> ShipOrder(List<Product> p)
     {
-
-        p.ForEach(pitem =>
+        ObservableCollection<Product> productsThatWereFulfilled = new();
+        foreach(var pitem in p)
         {
-            var targetindex = ProductInventory.ToList().FindIndex(x => x.ProductName == pitem.ProductName);
-            if(ProductInventory[targetindex].Quantity - pitem.Quantity >= 0) {
-                ProductInventory[targetindex].Quantity -= pitem.Quantity;
-                Balance += (decimal)pitem.Quantity * ProductInventory[targetindex].Price;
-            } 
-            else {
-                Balance += (decimal)ProductInventory[targetindex].Quantity * ProductInventory[targetindex].Price;
-                ProductInventory[targetindex].Quantity = 0;
+            // If we aren't even delivering this type of item, ignore it and try the next one.
+            if (!ActiveDeliveryLines.ToList().Exists(x => x.DeliveryItem.ProductName == pitem.ProductName))
+                continue;
+
+            var copyOfDeliverables = new ObservableCollection<DeliveryLine>(ActiveDeliveryLines);
+            foreach (var i in copyOfDeliverables)
+            {
+
+                // see if there is an item of that name. If duplicate, use first.
+                var item = ProductInventory.FirstOrDefault(x => x.ProductName == pitem.ProductName);
+
+                // make sure item exists
+                if (item is null)
+                    continue;
+
+                // We can only fulfill orders we have enough items for.
+                if (item.Quantity >= i.DeliveryItem.Quantity)
+                {
+                    (ProductInventory.FirstOrDefault(x => x.ProductName == pitem.ProductName)
+                    ?? throw new ArgumentOutOfRangeException("Could not find specified item."))
+                    .Quantity -= i.DeliveryItem.Quantity;
+                    
+                    Balance += i.TotalPrice;
+                    productsThatWereFulfilled.Add(pitem);
+
+                    // If the delivery line is supposed to be fulfilled by this shipping action:
+                    // Move the delivery line from active record to past record.
+                    if (!i.IsRecurring)
+                        i.IsFulfilled = true;
+
+                    if (i.IsFulfilled)
+                    {
+                        ActiveDeliveryLines.Remove(i);
+                        PastDeliveryLines.Add(i);
+                    }
+                }
             }
-        });
+        }
 
 
-        return _deliveryrequirementslist;
+        return productsThatWereFulfilled;
     }
 
     public void Process()
