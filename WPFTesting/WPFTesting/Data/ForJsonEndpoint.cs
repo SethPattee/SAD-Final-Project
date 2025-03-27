@@ -22,7 +22,7 @@ public class ForJsonEndpoint
     public ForJsonEndpoint(EndpointUIValues s)
     {
         Supplier = (EndpointNode)s.Supplier;
-        XPos = s.Position.X;
+		XPos = s.Position.X;
         YPos = s.Position.Y;
     }
 }

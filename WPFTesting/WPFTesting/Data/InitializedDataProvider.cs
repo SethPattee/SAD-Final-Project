@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using YourNamespace;
 using FactorSADEfficiencyOptimizer.Data;
+using Microsoft.Win32;
 
 namespace FactorySADEfficiencyOptimizer.Data;
 
@@ -86,8 +87,11 @@ public class InitializedDataProvider : IInitializedDataProvider
         {
             // Save to the provided file path
             File.WriteAllText(filePath, jString);
-        }
-        catch (Exception e)
+			// Save to the path read from on start up
+			File.WriteAllText("Shipments.json", jString);
+
+		}
+		catch (Exception e)
         {
             Console.WriteLine(e.Message); // Handle the error, could also show a message to the user
         }
@@ -117,9 +121,15 @@ public class InitializedDataProvider : IInitializedDataProvider
         try
         {
             // Save to the provided file path for suppliers and endpoints
-            File.WriteAllText(filePath, jString);
-            File.WriteAllText(filePath.Replace("Suppliers.json", "Endpoints.json"), jString_endpoint);
-        }
+            string path = Path.GetDirectoryName(filePath) ?? "";
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+
+			File.WriteAllText(Path.Combine(path, fileName + "_Suppliers.json"), jString);
+			File.WriteAllText(Path.Combine(path, fileName + "_Endpoints.json"), jString_endpoint);
+			// Save to the path read from on Start up. ( could be the same path)
+			File.WriteAllText("Suppliers.json", jString);
+			File.WriteAllText("Endpoints.json", jString_endpoint);
+		}
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message); 
