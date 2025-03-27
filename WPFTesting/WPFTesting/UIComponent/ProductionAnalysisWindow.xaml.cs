@@ -44,20 +44,6 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             simModel = new AnalizorModel(model);
             this.DataContext = this;
             simModel.DaysToRun = 1;
-            //double[] x = new double[200];
-            //for (int i = 0; i < x.Length; i++)
-            //    x[i] = 3.1415 * i / (x.Length - 1);
-
-            //for (int i = 0; i < 25; i++)
-            //{
-            //    var lg = new LineGraph();
-            //    lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
-            //    lg.Description = String.Format("Data series {0}", i + 1);
-            //    lg.StrokeThickness = 2;
-            //    linegraph.Children.Add(lg);
-            //    lg.Plot(x, x.Select(v => Math.Sin(v + i / 10.0)).ToArray());
-            //}
-            //UpdatePlot();
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -141,8 +127,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 {
                     ProductName = "Target item",
                     Price = 1,
-                    Quantity = 1,
-                    Units = ""
+                    Quantity = 1
                 },
                 TargetQuantity = 1
             };
@@ -263,8 +248,32 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 individualTarget.Owner = this;
                 individualTarget.Show();
             }
-        }
+            else if (sender is Button b)
+            {
+                if (b.DataContext is null || ((ProductionTarget)b.DataContext).ProductTarget is null)
+                    return;
 
+                var product_target = (ProductionTarget)b.DataContext;
+                var product_name = product_target.ProductTarget!.ProductName;
+                IndividualTargetWindow individualTarget = MakeNewIndividualTargetWindow(product_target, product_name);
+
+                individualTarget.ItemModel.Issues = GetAllIssues(product_name);
+                individualTarget.Owner = this;
+                individualTarget.Show();
+            }
+        }
+        private void Icon_Click(object sender, RoutedEventArgs e)
+        {
+            //if (sender is Button b)
+            //{
+            //    System.Windows.Controls.StackPanel a = (System.Windows.Controls.StackPanel)b.Parent;
+            //    var c = a.Parent;
+            //    Grid_MouseRightButtonDown(c, null);
+            //}
+            ProdTargetList_Click(sender, e);
+            //OpenBillOfMaterials_Click(sender, e);
+        }
+        
         private ObservableCollection<string> GetAllIssues(string product_name)
         {
             var ocs = new ObservableCollection<string>();
@@ -283,7 +292,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                     shipmentaddition = "Critical failure occurred! Could not complete target.";
                 if (issue.Solution.Action == ActionEnum.addedShipment)
                     shipmentaddition = $"Added a shipment: {issue.Solution.neededProduct.Quantity}" +
-                        $" {issue.Solution.neededProduct.Units} {issue.Solution.neededProduct.ProductName}" +
+                        $" {issue.Solution.neededProduct.ProductName}" +
                         $" ordered for ${issue.Solution.neededProduct.Price}.";
 
                 ocs.Add($"Item {product_name} issue on {issue.DayFound}: {issue.Severity.ToString()}" +
@@ -317,7 +326,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
         private ProductionTarget _selectedTarget;
 
-        private void Grid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void Grid_MouseRightButtonDown(object sender, MouseButtonEventArgs? e)
         {
             if(sender is Grid g)
             {
@@ -328,7 +337,17 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         private void OpenBillOfMaterials_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedTarget is null)
+            {
+                BillofMaterials bil = new BillofMaterials();
+                bil.TotalExpenses = simModel.Snapshots.Sum(x => x.todaysSpending);
+                bil.TargetName = "All Targets";
+                Dictionary<string, Product> components_used = ExtractUsedComponents();
+                bil.List = new ObservableCollection<Product>(components_used.Values);
+
+                bil.Owner = this;
+                bil.Show();
                 return;
+            }
 
             if (simModel.ProductionTargets.Any(x => x.Status == StatusEnum.NotDone))
                 return;

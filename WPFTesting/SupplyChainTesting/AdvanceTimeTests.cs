@@ -31,8 +31,7 @@ internal class AdvanceTimeTests
                         new Product()
                         {
                             Quantity=5,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            ProductName="Saw Blade 2-pack"
                         }
         };
         model.ShipmentList.Add(s);

@@ -30,8 +30,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=10,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            ProductName="Saw Blade 2-pack"
                         }
                     },
 
@@ -55,8 +54,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=10,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            ProductName="Saw Blade 2-pack"
                         }
                     },
 
@@ -89,8 +87,7 @@ internal class DataProvider_FAKE : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=1000,
-                            ProductName="sawdust",
-                            Units="kg"
+                            ProductName="sawdust"
                         }
                     },
                     Name="Vendor 3",
@@ -148,8 +145,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=10,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            ProductName="Saw Blade 2-pack"
                         }
                     },
 
@@ -173,8 +169,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=10,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            ProductName="Saw Blade 2-pack"
                         }
                     },
 
@@ -207,8 +202,7 @@ internal class DataProvider_FAKE_Version2 : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=1000,
-                            ProductName="sawdust",
-                            Units="kg"
+                            ProductName="sawdust"
                         }
                     },
                     Name="Vendor 3",
@@ -266,8 +260,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=10,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            ProductName="Saw Blade 2-pack"
                         }
                     },
 
@@ -291,8 +284,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=10,
-                            ProductName="Saw Blade 2-pack",
-                            Units="kg"
+                            ProductName="Saw Blade 2-pack"
                         }
                     },
 
@@ -325,8 +317,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=1000,
-                            ProductName="sawdust",
-                            Units="kg"
+                            ProductName="sawdust"
                         }
                     },
                     Name="Vendor 3",
@@ -358,8 +349,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
                         new Product()
                         {
                             Quantity=1000,
-                            ProductName="sawdust",
-                            Units="kg"
+                            ProductName="sawdust"
                         },
                         new Product()
                         {
@@ -440,8 +430,7 @@ internal class DataProvider_FAKE_Version3 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="sawdust",
-							Units="kg"
+							ProductName="sawdust"
 						}
 					},
 					Name="Vendor 3",

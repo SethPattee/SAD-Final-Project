@@ -28,8 +28,7 @@ public static EndpointNode makeAnEnpointForTest()
                 {
                     Price = (decimal)5.99,
                     ProductName = "glue",
-                    Quantity = 10,
-                    Units = "ml"
+                    Quantity = 10
                 },
                 new Product()
                 {

@@ -419,18 +419,6 @@ public class DataProviderFakeTests
     }
 
     [Test]
-    public void ProductInventory_ShouldContainCorrectUnitsForProducts()
-    {
-        var dataProvider = new DataProvider_FAKE();
-        var suppliers = dataProvider.GetBoxValues();
-
-        var supplier = suppliers.First();
-        var product = supplier.Supplier.ProductInventory.First(p => p.ProductName == "Saw Blade 2-pack");
-
-        Assert.AreEqual("kg", product.Units, "Expected product 'Saw Blade 2-pack' to have unit 'kg'.");
-    }
-
-    [Test]
     public void Endpoint_ShouldContainCorrectProductionList()
     {
         var endpoint = RealEnpointForTest.makeAnEnpointForTest();

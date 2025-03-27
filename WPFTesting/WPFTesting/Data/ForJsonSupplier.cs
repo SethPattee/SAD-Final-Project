@@ -15,7 +15,7 @@ public class ForJsonSupplier
         YPos = 10;
     }
     public ForJsonSupplier(SupplierUIValues s)
-    {
+    { 
         Supplier = s.Supplier;
         XPos = s.Position.X;
         YPos = s.Position.Y;

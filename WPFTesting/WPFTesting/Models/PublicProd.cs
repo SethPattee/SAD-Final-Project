@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -12,15 +14,24 @@ public static class ProductCatalog
 	public static Dictionary<Guid, GeneralProduct> Products { get; set; } = new () { };
 
 }
-public class GeneralProduct // : INotifyPropertyChanged
+public class GeneralProduct : INotifyPropertyChanged
 {
-	public string ProductName { get; set; } = "";
+	private string _productName = "";
+	public string ProductName {
 
-	//public event PropertyChangedEventHandler? PropertyChanged;
-	//protected void OnPropertyChanged(string propertyName)
-	//{
-	//	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	//}
+		get => _productName;
+		set
+		{
+			_productName = value;
+			OnPropertyChanged(nameof(ProductName));
+		}
+	}
+
+	public event PropertyChangedEventHandler? PropertyChanged;
+	protected void OnPropertyChanged(string propertyName)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
 }
 public static class ProductCatalogNames
 {

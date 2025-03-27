@@ -16,7 +16,6 @@
             <Grid>
                 <TextBox Text="{Binding ProductName}"/>
                 <TextBox Text="{Binding Quantity}"/>
-                <TextBox Text="{Binding Units}"/>
                 <TextBox Text="{Binding Price}"/>
             </Grid>
         </DataTemplate>
@@ -53,21 +52,18 @@
                 <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" StaysOpen="False">
                     <Border BorderThickness="1">
                         <StackPanel>
-                            <Button x:Name="FileMenu_New" Content="New" Background="WhiteSmoke"/>
-                            <Button x:Name="FileMenu_Open" Content="Open" Background="WhiteSmoke"/>
                             <Button x:Name="FileMenu_Save" Content="Save" Background="WhiteSmoke" Click="Save_Click"/>
                         </StackPanel>
                     </Border>
                 </Popup>
-                
+
                 <ToggleButton x:Name="EditButton" Margin="6,0,0,0" VerticalAlignment="Center">
                     <TextBlock><Run Text="Edit" /></TextBlock>
                 </ToggleButton>
 
-                <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}">
+                <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}" StaysOpen="False">
                     <StackPanel>
-                        <Button x:Name="EditMenu_Undo" Content="Undo" Background="WhiteSmoke"/>
-                        <Button x:Name="EditMenu_Redo" Content="Redo" Background="WhiteSmoke"/>
+                        <Button x:Name="EditMenu_Products" Content="Products" Background="WhiteSmoke" Click="OpenCommonProductWindow_Click"/>
                     </StackPanel>
                 </Popup>
                 
@@ -194,8 +190,11 @@
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
-                                                    HorizontalAlignment="Stretch" MinWidth="40"/>
+                                                <ComboBox
+                                                        SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                                        FontSize="16" Background="White" FontWeight="Bold" Grid.Column="0" MinWidth="40">
+                                                </ComboBox>
                                                 <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
                                                     HorizontalAlignment="Stretch" MinWidth="40">
                                                 </TextBox>
@@ -242,11 +241,12 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
+                                                    <ComboBox
+                                                        SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                                        FontSize="16" Background="White" FontWeight="Bold" MinWidth="40" Grid.Column="0">
+                                                    </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
@@ -273,11 +273,12 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
+                                                    <ComboBox
+                                                        SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                                        FontSize="16" Background="White" FontWeight="Bold" MinWidth="40" Grid.Column="0">
+                                                    </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
-                                                              HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
                                                               HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
@@ -297,7 +298,7 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid>
-                                            
+
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="4*"/>
                                                         <ColumnDefinition Width="*"/>
@@ -305,11 +306,12 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBox Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
-                                          HorizontalAlignment="Stretch" MinWidth="40"/>
+                                                    <ComboBox
+                                                        SelectedItem="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 10 10" VerticalContentAlignment="Center"
+                                                        FontSize="16" Background="White" FontWeight="Bold" MinWidth="40" Grid.Column="0">
+                                                    </ComboBox>
                                                     <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"
-                                          HorizontalAlignment="Stretch" MinWidth="40"/>
-                                                    <TextBox Text="{Binding Units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"
                                           HorizontalAlignment="Stretch" MinWidth="40"/>
                                                     <TextBox Text="{Binding Price, Mode=TwoWay, StringFormat=$\{0\}, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="40" HorizontalAlignment="Stretch"/>
                                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
