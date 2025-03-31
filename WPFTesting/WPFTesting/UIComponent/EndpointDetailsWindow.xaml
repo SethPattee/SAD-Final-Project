@@ -282,8 +282,12 @@
                                         </Grid.Style>
 
                                         <CheckBox Margin="10 0 0 0" IsChecked="{Binding IsRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                                        <TextBox Grid.Column="1" Text="{Binding DeliveryItem.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                        <TextBox Grid.Column="2" Text="{Binding DeliveryItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                            <ComboBox SelectedItem="{Binding DeliveryItem.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      ItemsSource="{Binding DeliveryItem.CatalogNames}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+                                                      FontSize="16" Background="White" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Center"
+                                                      Padding="11">
+                                            </ComboBox>
+                                            <TextBox Grid.Column="2" Text="{Binding DeliveryItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                         <TextBox Grid.Column="3" Text="{Binding DeliveryItem.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}"></TextBox>
                                         <TextBlock Grid.Column="4" Text="{Binding TotalPrice, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                                         <Border CornerRadius="5" Grid.Column="5">
@@ -366,8 +370,12 @@
                                                 </Grid.Style>
 
                                                 <CheckBox IsChecked="{Binding IsRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                                                <TextBox Grid.Column="1" Text="{Binding DeliveryItem.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                                <TextBox Grid.Column="2" Text="{Binding DeliveryItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                            <ComboBox SelectedItem="{Binding DeliveryItem.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      ItemsSource="{Binding DeliveryItem.CatalogNames}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+                                                      FontSize="16" Background="White" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Center"
+                                                      Padding="11">
+                                            </ComboBox>
+                                            <TextBox Grid.Column="2" Text="{Binding DeliveryItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                                 <TextBox Grid.Column="3" Text="{Binding DeliveryItem.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}"></TextBox>
                                                 <TextBlock Grid.Column="4" Text="{Binding TotalPrice, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                                                 <Button Grid.Column="5" Content="Reset" HorizontalAlignment="Center" VerticalAlignment="Center"
