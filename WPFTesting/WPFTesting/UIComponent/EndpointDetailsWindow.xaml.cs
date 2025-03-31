@@ -36,6 +36,121 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             DataContext = EndpointVM;
         }
 
+        public void AddProductToEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            EndpointVM.ProductInventory.Add(new Product());
+        }
+
+        public void AddComponentToEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            EndpointVM.ComponentInventory.Add(new Product());
+        }
+
+        public void AddProductLineToEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            EndpointVM.ProductionList.Add(new ProductLine()
+            {
+                ResultingProduct = new Product(),
+                Components = new ObservableCollection<Product>()
+                {
+                    new Product()
+                }
+            });
+        }
+
+        public void AddComponentToProductLineInEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button b)
+            {
+                ((ProductLine)b.DataContext).Components.Add(new Product());
+            }
+        }
+
+        public void AddActiveDeliveryLineToEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            EndpointVM.ActiveDeliveryLines.Add(new DeliveryLine()
+            {
+                DeliveryItem = new Product()
+            });
+        }
+
+        public void AddPastDeliveryLineToEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            EndpointVM.PastDeliveryLines.Add(new DeliveryLine()
+            {
+                DeliveryItem = new Product()
+            });
+        }
+
+
+        public void MoveDeliveryLineToActive_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button b)
+            {
+                EndpointVM.ActiveDeliveryLines.Add((DeliveryLine)b.DataContext);
+                EndpointVM.PastDeliveryLines.Remove((DeliveryLine)b.DataContext);
+            }
+        }
+
+        public void MoveDeliveryLineToPast_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button b)
+            {
+                EndpointVM.PastDeliveryLines.Add((DeliveryLine)b.DataContext);
+                EndpointVM.ActiveDeliveryLines.Remove((DeliveryLine)b.DataContext);
+            }
+        }
+
+        public void DeleteProductFromEndpointInventory_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b)
+            {
+                EndpointVM.ProductInventory.Remove((Product)b.DataContext);
+            }
+        }
+
+        public void DeleteComponentFromEndpointInventory_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b)
+            {
+                EndpointVM.ComponentInventory.Remove((Product)b.DataContext);
+            }
+        }
+
+        public void DeleteComponentFromEndpointProductLine_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b)
+            {
+                var plContextTarget = GetAncestorOfType(VisualTreeHelper.GetParent(b));
+
+                ((ProductLine)plContextTarget.DataContext).Components.Remove((Product)b.DataContext);
+            }
+        }
+
+
+        private ListView GetAncestorOfType(DependencyObject element)
+        {
+            var parent = VisualTreeHelper.GetParent(element);
+            if (parent is null)
+                return null;
+
+            if (parent.GetType() == typeof(ListView))
+                return (ListView)parent;
+            else
+            {
+                return (ListView)GetAncestorOfType((DependencyObject)parent);
+            }
+        }
+
+        public void DeleteProductLineFromEndpoint_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button b)
+            {
+                EndpointVM.ProductionList.Remove((ProductLine)b.DataContext);
+            }
+        }
+
+
         public void DeletePastDeliveryButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button b)
@@ -70,6 +185,8 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     
+
+
         //public class EndpointDetailsModel : INotifyPropertyChanged
         //{
         //    public EndpointDetailsModel()
