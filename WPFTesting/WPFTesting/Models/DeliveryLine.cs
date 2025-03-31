@@ -8,22 +8,21 @@ using System.Threading.Tasks;
 
 namespace FactorySADEfficiencyOptimizer.Models
 {
-    public class DeliveryLine: INotifyPropertyChanged
+    public class DeliveryLine : INotifyPropertyChanged
     {
         public DeliveryLine()
         {
             _deliveryItem = new();
-            IsRecurring = false;
-            IsFulfilled = false;
+            _isRecurring = false;
+            _isFulfilled = false;
             TotalPrice = 0;
         }
 
         public DeliveryLine(Product p, bool recurring, bool fulfilled)
         {
-            DeliveryItem = p;
-            IsRecurring = recurring;
-            IsFulfilled = fulfilled;
-
+            _deliveryItem = p;
+            _isRecurring = recurring;
+            _isFulfilled = fulfilled;
             TotalPrice = DeliveryItem.Price * (decimal)DeliveryItem.Quantity;
         }
 
@@ -73,7 +72,7 @@ namespace FactorySADEfficiencyOptimizer.Models
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

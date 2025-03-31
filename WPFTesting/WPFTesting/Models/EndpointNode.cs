@@ -235,6 +235,9 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         }
     }
 
+
+    // Return type of ObservableCollecton<Product> as of version 3-31-2025
+    // Return type is meant for testing purposes - this method is a command method, not a query.
     public ObservableCollection<Product> ShipOrder(List<Product> p)
     {
         ObservableCollection<Product> productsThatWereFulfilled = new();
@@ -283,8 +286,22 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
         return productsThatWereFulfilled;
     }
 
+    public List<Product> GetAllProductsToDeliver()
+    {
+        List<Product> Deliveries = new();
+
+        foreach(var item in ActiveDeliveryLines)
+        {
+            Deliveries.Add(item.DeliveryItem);
+        }
+
+        return Deliveries;
+    }
+
     public void Process()
     {
         ProduceProduct();
+        List<Product> Deliveries = GetAllProductsToDeliver();
+        ShipOrder(Deliveries);
     }
 }
