@@ -235,8 +235,10 @@ public class AnalizorModel : INotifyPropertyChanged
 		ShipmentList.Add(shipment);
 		OnPropertyChanged(nameof(ShipmentList));
 	}
-	public void AdvanceTime()
+
+    public void AdvanceTime()
 	{
+		ToolsForViewModel.FillCurrentPriceInShipments(SupplierList, ShipmentList);
 		ToolsForViewModel.AdvanceTimeforShipmentList(ShipmentList);
 		ToolsForViewModel.AdvancetimeForSupplierList(SupplierList);
 		ToolsForViewModel.AdvanceTimeForEndpointList(EndpointList);

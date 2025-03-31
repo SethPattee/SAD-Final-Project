@@ -231,7 +231,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                 toAdd.Quantity = product.Quantity;
                 ComponentInventory.Add(toAdd);
             }
-            Balance -= product.Price;
+            Balance -= product.Price * (decimal)product.Quantity;
         }
     }
 
