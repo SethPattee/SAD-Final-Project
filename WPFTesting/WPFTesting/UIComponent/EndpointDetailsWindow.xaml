@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FactorySADEfficiencyOptimizer.UIComponent"
-        mc:Ignorable="d" Background="DarkGray"
+        mc:Ignorable="d" Background="DarkGray" DataContext="{Binding EndpointVM}"
         Title="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat=Endpoint: {0}}" Height="450" Width="800">
     <ScrollViewer Padding="20 10">
         <StackPanel>
@@ -51,7 +51,11 @@
                     <RowDefinition x:Name="InventoryRow"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Product Inventory" Grid.Column="2" Grid.Row="0"></TextBlock>
+                <DockPanel Grid.Column="2" Grid.Row="0">
+                    <TextBlock Text="Product Inventory"></TextBlock>
+                    <Button Content="+Add" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                            Margin="0 0 0 0" Padding="4 2" Click="AddProductToEndpoint_Click"></Button>
+                </DockPanel>
                 <ScrollViewer VerticalScrollBarVisibility="Disabled" Grid.Column="2" Grid.Row="1" VerticalAlignment="Top">
                     <ListView x:Name="ProductInventoryList" ItemsSource="{Binding ProductInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding Product}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Top"
@@ -72,15 +76,19 @@
                                     <TextBox Grid.Column="1" Margin="0 10" Padding="9" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                     <TextBox Grid.Column="2" Margin="0 10" Padding="9" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}"></TextBox>
                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
-                                            Grid.Column="9" Height="24"></Button>
+                                            Grid.Column="9" Height="24" Click="DeleteProductFromEndpointInventory_Click"></Button>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 </ScrollViewer>
 
-                <TextBlock Text="Component Inventory"></TextBlock>
-                <ScrollViewer VerticalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1">
+                <DockPanel>
+                    <TextBlock Text="Component Inventory"></TextBlock>
+                    <Button Content="+Add" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                            Margin="0 0 0 0" Padding="4 2" Click="AddComponentToEndpoint_Click"></Button>
+                </DockPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Disabled" Grid.Column="0" Grid.Row="1" VerticalAlignment="Top">
                     <ListView x:Name="ComponentInventoryList" ItemsSource="{Binding ComponentInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding Product}" HorizontalContentAlignment="Stretch">
                         <ListView.ItemTemplate>
@@ -96,7 +104,7 @@
                                     <TextBox Grid.Column="1" Padding="9" Margin="0 10 0 10" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                     <TextBox Grid.Column="2" Padding="9" Margin="0 10 0 10" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}"></TextBox>
                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
-                                            Grid.Column="9" Height="24" Margin="0"></Button>
+                                            Grid.Column="9" Height="24" Margin="0" Click="DeleteComponentFromEndpointInventory_Click"></Button>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -104,11 +112,11 @@
                 </ScrollViewer>
             </Grid>
 
-            <DockPanel>
-                <TextBlock Text="Production Lines" Margin="0 10 0 0"></TextBlock>
-                <Button Content="+Add" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="0 0 0 0" Padding="4 2"></Button>
-            </DockPanel>
+        <DockPanel>
+            <TextBlock Text="Production Lines" Margin="0 10 0 0"></TextBlock>
+            <Button Content="+Add" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Margin="0 0 0 0" Padding="4 2" Click="AddProductLineToEndpoint_Click"></Button>
+        </DockPanel>
             
         <ScrollViewer>
             <ListView x:Name="ProductionLineList" HorizontalContentAlignment="Stretch"
@@ -143,7 +151,7 @@
                                               SelectedItem="{Binding Product}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid Background="LightGray" Margin="0 2">
+                                                <Grid Background="LightGray">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="2*"></ColumnDefinition>
                                                             <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -156,31 +164,33 @@
                                                     <TextBox Grid.Column="1" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              Margin="0 10 0 10" Padding="9" TextAlignment="Left" VerticalAlignment="Center"></TextBox>
                                                         <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
-                                                                Grid.Column="9" Height="24"></Button>
+                                                                Grid.Column="9" Height="24" Click="DeleteComponentFromEndpointProductLine_Click"></Button>
                                                     </Grid>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>
                                 </ScrollViewer>
                                 <TextBlock Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" Text="Makes:" Margin="10 0 0 0" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Bottom"></TextBlock>
-                                <Border Grid.Row="2" Grid.Column="3" Background="LightGray" Margin="10 0 0 0">
+                                <Border Grid.Row="2" Grid.Column="3" Background="LightGray" Margin="10 0 0 0"
+                                        VerticalAlignment="Center">
                                     <ComboBox
-                                        SelectedItem="{Binding ResultingProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding CatalogNames}" Margin=" 10 10 0 10" VerticalContentAlignment="Center"
-                                        FontSize="16" Background="White" FontWeight="Bold" Grid.Column="0">
+                                        SelectedItem="{Binding ResultingProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
+                                        ItemsSource="{Binding ResultingProduct.CatalogNames}" Margin=" 15 15 0 15"  Padding="10"
+                                        FontSize="16" Background="White" FontWeight="Bold" Grid.Column="0" VerticalContentAlignment="Center">
                                     </ComboBox>
 
                                 </Border>
-                                <Border Grid.Row="2" Grid.Column="4" Background="LightGray">
-                                    <TextBox  Margin="0 10 10 10"  Padding="9"
+                                <Border Grid.Row="2" Grid.Column="4" Background="LightGray" VerticalAlignment="Center">
+                                    <TextBox  Margin="0 15 15 15"  Padding="9 9 9 9"
                                               Text="{Binding ResultingProduct.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                     
                                 </Border>
                                 <StackPanel Grid.Column="3" Grid.Row="3" Orientation="Horizontal" Margin="0 10 0 10">
-                                    <Button  Margin="10 0 0 0" Content="Add Component" FontSize="16" FontWeight="SemiBold"
-                                            HorizontalAlignment="Right" Padding="10 4" x:Name="AddComponentToPLButton"></Button>
+                                    <Button Margin="10 0 0 0" Content="Add Component" FontSize="16" FontWeight="SemiBold"
+                                            HorizontalAlignment="Right" Padding="10 10" x:Name="AddComponentToPLButton"
+                                            Click="AddComponentToProductLineInEndpoint_Click"  VerticalAlignment="Center"></Button>
                                     <Button Content="X" FontSize="16" Foreground="Maroon" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" 
-                                            Width="24" Height="24" HorizontalAlignment="Right" Margin="5 0 0 0"></Button>
+                                            Width="24" Height="24" HorizontalAlignment="Right" Margin="5 0 0 0" Click="DeleteProductLineFromEndpoint_Click"></Button>
                                 </StackPanel>
                                 <StackPanel Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="3" VerticalAlignment="Center"
                                             Margin="10 10 0 10" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -193,68 +203,195 @@
                     </ListView.ItemTemplate>
             </ListView>
         </ScrollViewer>
+            <ScrollViewer Margin="0 10 0 10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="10"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="27"></RowDefinition>
+                        <RowDefinition x:Name="DeliveryRow"></RowDefinition>
+                    </Grid.RowDefinitions>
 
-            <TextBlock FontSize="16" FontWeight="SemiBold" Text="Past Deliveries"
-                       Margin="0 10 0 0"></TextBlock>
-            <ScrollViewer >
-                <ListView x:Name="ActiveDeliveryLineList"
-                          ItemsSource="{Binding ActiveDeliveryLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding DeliveryLine}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
+                    <DockPanel Grid.Column="0" Grid.Row="0" >
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Text="Active Deliveries"
+                                    ></TextBlock>
+                        <Button Content="+Add" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                Margin="0 0 0 0" Padding="4 2" Click="AddActiveDeliveryLineToEndpoint_Click"></Button>
+                    </DockPanel>
+                    <ScrollViewer Grid.Row="1" Margin="0 10 0 0" VerticalAlignment="Top">
+                        <StackPanel HorizontalAlignment="Stretch">
+
+                            <Grid Margin="0 0 0 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="3*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox IsChecked="{Binding IsRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                                <TextBox Grid.Column="1" Text="{Binding DeliveryItem.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                <TextBox Grid.Column="2" Text="{Binding DeliveryItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                <TextBox Grid.Column="3" Text="{Binding DeliveryItem.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}"></TextBox>
-                                <TextBlock Grid.Column="4" Text="{Binding TotalPrice, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                                <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
-                                        Grid.Column="9" Click="DeleteActiveDeliveryButton_Click" Height="24"></Button>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </ScrollViewer>
 
-            <TextBlock FontSize="16" FontWeight="SemiBold" Text="Past Deliveries"
-                       Margin="0 10 0 0"></TextBlock>
-            <ScrollViewer>
-                <ListView x:Name="PastDeliveryLineList"
-                          ItemsSource="{Binding PastDeliveryLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding DeliveryLine}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
+                                <TextBlock Text="Repeat" Grid.ColumnSpan="2" Margin="0 0 0 0"></TextBlock>
+                                <TextBlock Text="Item" Grid.Column="1" Margin="20 0 0 0" HorizontalAlignment="Left"></TextBlock>
+                                <TextBlock Text="Qty." Grid.Column="2" HorizontalAlignment="Center" Margin="-10 0 0 0"></TextBlock>
+                                <TextBlock Text="Price" Grid.Column="3" HorizontalAlignment="Center" Margin="-10 0 0 0"></TextBlock>
+                                <TextBlock Text="Total" Grid.Column="4" HorizontalAlignment="Center" Margin="-4 0 0 0"></TextBlock>
+                                <TextBlock Text="Move" Grid.Column="5" HorizontalAlignment="Center"></TextBlock>
+                            </Grid>
+                        <ListView x:Name="ActiveDeliveryLineList" HorizontalContentAlignment="Stretch"
+                                    ItemsSource="{Binding ActiveDeliveryLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    SelectedItem="{Binding DeliveryLine}"  HorizontalAlignment="Stretch" VerticalContentAlignment="Center">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="LightGray" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Style.Resources>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="FontSize" Value="16"></Setter>
+                                                        <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                                        <Setter Property="TextAlignment" Value="Center"></Setter>
+                                                        <Setter Property="Padding" Value="9"></Setter>
+                                                        <Setter Property="Margin" Value="10"></Setter>
+                                                    </Style>
+                                                    <Style TargetType="TextBox">
+                                                        <Setter Property="FontSize" Value="16"></Setter>
+                                                        <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                                        <Setter Property="Padding" Value="9"></Setter>
+                                                    </Style>
+                                                    <Style TargetType="CheckBox">
+                                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                                    </Style>
+                                                </Style.Resources>
+                                            </Style>
+                                        </Grid.Style>
+
+                                        <CheckBox Margin="10 0 0 0" IsChecked="{Binding IsRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                                            <ComboBox SelectedItem="{Binding DeliveryItem.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      ItemsSource="{Binding DeliveryItem.CatalogNames}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+                                                      FontSize="16" Background="White" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Center"
+                                                      Padding="11">
+                                            </ComboBox>
+                                            <TextBox Grid.Column="2" Text="{Binding DeliveryItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                        <TextBox Grid.Column="3" Text="{Binding DeliveryItem.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}"></TextBox>
+                                        <TextBlock Grid.Column="4" Text="{Binding TotalPrice, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                        <Border CornerRadius="5" Grid.Column="5">
+                                            <Button Content=">" Width="36" Height="36" FontWeight="Bold" FontSize="16" Padding="0 0 0 1"
+                                                    Click="MoveDeliveryLineToPast_Click"></Button>
+                                        </Border>
+                                        
+                                        <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
+                                                Grid.Column="9" Click="DeleteActiveDeliveryButton_Click" Height="24"></Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <DockPanel Grid.Column="2" Grid.Row="0">
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Text="Past Deliveries"
+                                Margin="0 10 0 0"></TextBlock>
+                        <Button Content="+Add" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                Margin="0 0 0 0" Padding="4 2" Click="AddPastDeliveryLineToEndpoint_Click"></Button>
+                    </DockPanel>
+                    <ScrollViewer  Grid.Column="2" Grid.Row="1"  Margin="0 10 0 0" VerticalAlignment="Top">
+                    <StackPanel>
+                            <Grid Margin="0 0 0 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="3*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox IsChecked="{Binding IsRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                                <TextBox Grid.Column="1" Text="{Binding DeliveryItem.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                <TextBox Grid.Column="2" Text="{Binding DeliveryItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                <TextBox Grid.Column="3" Text="{Binding DeliveryItem.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}"></TextBox>
-                                <TextBlock Grid.Column="4" Text="{Binding TotalPrice, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                                <Button Grid.Column="5" Content="Reschedule"></Button>
-                                <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
-                                    Grid.Column="9" Click="DeletePastDeliveryButton_Click" Height="24"></Button>
+
+                                <TextBlock Text="Repeat" Grid.ColumnSpan="2" Margin="0 0 0 0"></TextBlock>
+                                <TextBlock Text="Item" Grid.Column="1" Margin="20 0 0 0" HorizontalAlignment="Left"></TextBlock>
+                                <TextBlock Text="Qty." Grid.Column="2" HorizontalAlignment="Center" Margin="-10 0 0 0"></TextBlock>
+                                <TextBlock Text="Price" Grid.Column="3" HorizontalAlignment="Center" Margin="-10 0 0 0"></TextBlock>
+                                <TextBlock Text="Total" Grid.Column="4" HorizontalAlignment="Center" Margin="-4 0 0 0"></TextBlock>
+                                <TextBlock Text="Move" Grid.Column="5" HorizontalAlignment="Center" Margin="0"></TextBlock>
                             </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                            <ListView x:Name="PastDeliveryLineList" HorizontalContentAlignment="Stretch"
+                                        ItemsSource="{Binding PastDeliveryLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        SelectedItem="{Binding DeliveryLine}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Background="LightGray" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Style.Resources>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="FontSize" Value="16"></Setter>
+                                                                <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                                                                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                                                <Setter Property="TextAlignment" Value="Center"></Setter>
+                                                                <Setter Property="Padding" Value="9"></Setter>
+                                                                <Setter Property="Margin" Value="10"></Setter>
+                                                            </Style>
+                                                            <Style TargetType="TextBox">
+                                                                <Setter Property="FontSize" Value="16"></Setter>
+                                                                <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                                                                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                                                <Setter Property="Padding" Value="9"></Setter>
+                                                            </Style>
+                                                            <Style TargetType="CheckBox">
+                                                                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                                            </Style>
+                                                        </Style.Resources>
+                                                    </Style>
+                                                </Grid.Style>
+
+                                                <CheckBox IsChecked="{Binding IsRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                                            <ComboBox SelectedItem="{Binding DeliveryItem.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      ItemsSource="{Binding DeliveryItem.CatalogNames}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+                                                      FontSize="16" Background="White" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Center"
+                                                      Padding="11">
+                                            </ComboBox>
+                                            <TextBox Grid.Column="2" Text="{Binding DeliveryItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                                <TextBox Grid.Column="3" Text="{Binding DeliveryItem.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=${0}}"></TextBox>
+                                                <TextBlock Grid.Column="4" Text="{Binding TotalPrice, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                                <Button Grid.Column="5" Content="Reset" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                        Padding="9 0" Height="36" FontSize="16" FontWeight="SemiBold"
+                                                        Click="MoveDeliveryLineToActive_Click"></Button>
+                                                <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
+                                                Grid.Column="9" Click="DeletePastDeliveryButton_Click" Height="24"></Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
             </ScrollViewer>
+
 
         </StackPanel>
     </ScrollViewer>

@@ -24,7 +24,7 @@ namespace FactorySADEfficiencyOptimizer.Models
             set
             {
                 _isEnabled = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsEnabled));
             }
         }
         //public bool IsSelected
@@ -39,7 +39,11 @@ namespace FactorySADEfficiencyOptimizer.Models
         public ObservableCollection<Product> Components
         {
             get => _components ?? (new ObservableCollection<Product>());
-            set => _components = value;
+
+            set {
+                _components = value;
+                OnPropertyChanged(nameof(Components));
+            }
         }
 
         public Product ResultingProduct
@@ -50,14 +54,17 @@ namespace FactorySADEfficiencyOptimizer.Models
                 Price = 0,
                 ProductName = "Duck"
             });
-            set => _product = value;
+            set {
+                _product = value;
+                OnPropertyChanged(nameof(ResultingProduct));
+            }
         }
         public Guid ProductLineId
         {
             get => _id;
             set {
                 _id = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ProductLineId));
             }
         }   
 
