@@ -153,7 +153,7 @@ public MainWindow()
     private void MakeNewEndpoint()
 		{
 			EndpointUIValues EUIV = new EndpointUIValues();
-			EUIV.SetDefaultValues();
+			//EUIV.SetDefaultValues();
 			AddEndpointToCanvas(EUIV);
 			ViewModel.AddEndpointToChain(EUIV);
 		}
