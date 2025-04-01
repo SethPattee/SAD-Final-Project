@@ -151,29 +151,28 @@ public MainWindow()
         }
     }
     private void MakeNewEndpoint()
-		{
-			EndpointUIValues EUIV = new EndpointUIValues();
-			EUIV.SetDefaultValues();
-			AddEndpointToCanvas(EUIV);
-			ViewModel.AddEndpointToChain(EUIV);
-		}
+	{
+		EndpointUIValues EUIV = new EndpointUIValues();
+		EUIV.SetDefaultValues();
+		AddEndpointToCanvas(EUIV);
+		ViewModel.AddEndpointToChain(EUIV);
+	}
 
-		private void AddEndpointToCanvas(EndpointUIValues EUIV)
-		{
-			EndpointElement element = new EndpointElement(EUIV);
-			element.Id = EUIV.Supplier.Id;
-			element.DataContext = ViewModel;
-			element.PopulateElementLists();
-			element.ElementMoved += Box_Position_Changed;
-			element.RadialClicked += StartConnection_Click;
-			element.RadialClicked += FinishConnection_Click;
-			element.ElementClicked += SelectEndpoint_Click;
+	private void AddEndpointToCanvas(EndpointUIValues EUIV)
+	{
+		EndpointElement element = new EndpointElement(EUIV);
+		element.Id = EUIV.Supplier.Id;
+	    //element.PopulateElementLists();
+		element.ElementMoved += Box_Position_Changed;
+		element.RadialClicked += StartConnection_Click;
+		element.RadialClicked += FinishConnection_Click;
+		element.ElementClicked += SelectEndpoint_Click;
         element.EndpointDeleted += RemoveEndpoint;
 
-			Canvas.SetLeft(element, EUIV.Position.X);
-			Canvas.SetTop(element, EUIV.Position.Y);
-			DiagramCanvas.Children.Add(element);
-		}
+		Canvas.SetLeft(element, EUIV.Position.X);
+		Canvas.SetTop(element, EUIV.Position.Y);
+		DiagramCanvas.Children.Add(element);
+	}
 
     public async Task CloseSaveMessage()
     {
