@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,28 +26,53 @@ namespace FactorySADEfficiencyOptimizer
     /// <summary>
     /// Interaction logic for EndpointElement.xaml
     /// </summary>
-    public partial class EndpointElement : UserControl, INodeElement
+    public partial class EndpointElement : UserControl, INodeElement, INotifyPropertyChanged
     {
         private Point clickPosition;
+        private bool isDragging = false;
         public event EventHandler? RadialClicked;
         public event EventHandler? ElementMoved;
         public event EventHandler? ElementClicked;
 		public event EventHandler? EndpointDeleted;
-		public Guid Id { get; set; }
-
         private SupplierUIValues _nodeUIValues = new EndpointUIValues();
+		public Guid Id
+        {
+            get => _nodeUIValues.Supplier.Id;
+            set
+            {
+                _nodeUIValues.Supplier.Id = value;
+                OnPropertyChanged(nameof(Id));
+            }
+        }
 
-        private bool isDragging = false;
-
+        public EndpointElement(EndpointUIValues endpointUIValues)
+        {
+            InitializeComponent();
+            this._nodeUIValues = endpointUIValues;
+            //add products
+            //PopulateElementLists();
+            DataContext = EndpointVM;
+        }
         public SupplierUIValues SupplierVM
         {
             get => _nodeUIValues;
             set
             {
                 _nodeUIValues = value;
-                
+                OnPropertyChanged(nameof(SupplierVM));
+
             }
         }
+        public EndpointUIValues EndpointVM
+        {
+            get => (EndpointUIValues)_nodeUIValues;
+            set
+            {
+                _nodeUIValues = value;
+                OnPropertyChanged(nameof(EndpointVM));
+            }
+        }
+        
 
         public void PopulateElementLists()
         {
@@ -77,18 +103,11 @@ namespace FactorySADEfficiencyOptimizer
             }
         }
 
-        public EndpointElement(EndpointUIValues endpointUIValues)
-        {
-            InitializeComponent();
-            this._nodeUIValues = endpointUIValues;
-            //add products
-            PopulateElementLists();
-            DataContext = endpointUIValues;
-        }
 
-        public void ResizeGrip_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void Click_SenseThisRadial(object sender, RoutedEventArgs e)
