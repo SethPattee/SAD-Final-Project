@@ -48,4 +48,20 @@ public static class ToolsForViewModel
 			v.Supplier.Process();
 		}
 	}
+
+    public static void FillCurrentPriceInShipments(ObservableCollection<SupplierUIValues> suppliers, ObservableCollection<Shipment> Shipments)
+    {
+        foreach (Shipment shipment in Shipments)
+        {
+            foreach (Product product in shipment.Products)
+            {
+                product.Price = ((suppliers
+                    .FirstOrDefault(s => s.Supplier.Id == shipment.Sender.Id) ?? new SupplierUIValues())
+                    .Supplier.ProductInventory
+                    .FirstOrDefault(p => p.ProductName == product.ProductName) ?? new Product())
+                    .Price; //new products default to price 0
+                product.Price = product.Price;
+            }
+        }
+    }
 }

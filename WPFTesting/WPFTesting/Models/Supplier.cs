@@ -64,7 +64,11 @@ namespace FactorySADEfficiencyOptimizer.Models
                     var targetIndex = ProductInventory.ToList().FindIndex(x => x.ProductName == p.ProductName);
                     if (ProductInventory[targetIndex].Quantity-p.Quantity < 0)
                     {
-                        Product product = new Product() { ProductName = ProductInventory[targetIndex].ProductName, Quantity = ProductInventory[targetIndex].Quantity };
+                        Product product = new Product() { 
+                            ProductName = ProductInventory[targetIndex].ProductName, 
+                            Quantity = ProductInventory[targetIndex].Quantity,
+                            Price = ProductInventory[targetIndex].Price
+                        };
                         OrderLine.Add(product);
                         ProductInventory[targetIndex].Quantity = 0;
                     }
