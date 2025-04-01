@@ -159,6 +159,7 @@ public class SupplyChainViewModel : INotifyPropertyChanged
 
     public void AdvanceTime()
     {
+        ToolsForViewModel.FillCurrentPriceInShipments(SupplierList, ShipmentList);
         ToolsForViewModel.AdvanceTimeforShipmentList(ShipmentList);
         ToolsForViewModel.AdvancetimeForSupplierList(SupplierList);
         ToolsForViewModel.AdvanceTimeForEndpointList(EndpointList);

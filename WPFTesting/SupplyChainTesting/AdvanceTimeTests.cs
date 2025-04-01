@@ -263,7 +263,7 @@ internal class AdvanceTimeTests
         Assert.That(endpointTest.ComponentInventory.Count, Is.GreaterThan(0));
         Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(100));
         Assert.That(endpointTest.ComponentInventory.First(x => x.ProductName == "wood").Quantity, Is.EqualTo(100));
-        Assert.That(endpointTest.Balance, Is.EqualTo(9894.01));
+        Assert.That(endpointTest.Balance, Is.EqualTo(10000 - (5.99 * 100 + 100 * 100)));
     }
 
     [Test]
