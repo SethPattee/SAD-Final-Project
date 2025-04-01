@@ -49,21 +49,23 @@
                     <TextBlock><Run Text="File"/></TextBlock>
                 </ToggleButton>
 
-                <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" StaysOpen="False">
+                <Popup x:Name="FileMenuPopup" IsOpen="{Binding IsChecked, ElementName=FileButton}" Placement="Mouse" StaysOpen="False">
                     <Border BorderThickness="1">
                         <StackPanel>
-                            <Button x:Name="FileMenu_Save" Content="Save" Background="WhiteSmoke" Click="Save_Click"/>
+                            <Button x:Name="FileMenu_Save" Content="Save" Background="WhiteSmoke" Click="Save_Click"
+                                    FontSize="16" FontWeight="SemiBold" Padding="9"/>
                         </StackPanel>
                     </Border>
                 </Popup>
 
                 <ToggleButton x:Name="EditButton" Margin="6,0,0,0" VerticalAlignment="Center">
-                    <TextBlock><Run Text="Edit" /></TextBlock>
+                    <TextBlock><Run Text="Data" /></TextBlock>
                 </ToggleButton>
 
-                <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}" StaysOpen="False">
+                <Popup x:Name="EditMenuPopup" IsOpen="{Binding IsChecked, ElementName=EditButton}" Placement="Mouse" StaysOpen="False">
                     <StackPanel>
-                        <Button x:Name="EditMenu_Products" Content="Products" Background="WhiteSmoke" Click="OpenCommonProductWindow_Click"/>
+                        <Button x:Name="EditMenu_Products" Content="Product Catalog" Background="WhiteSmoke" Padding="9"
+                                FontSize="16" FontWeight="SemiBold" Click="OpenCommonProductWindow_Click"/>
                     </StackPanel>
                 </Popup>
                 
@@ -215,8 +217,8 @@
                     
                     <ScrollViewer x:Name="LeftSidebarScrollEndpoints" VerticalScrollBarVisibility="Auto" CanContentScroll="True" VirtualizingPanel.ScrollUnit="Pixel" >
                             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"  Margin="10" >
-                            <TextBlock Text="Element Details" FontWeight="Bold" Margin="10 0 5 0"/>
-                            <TextBox Text="{Binding SelectedEndpoint.supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="Producer Name" FontWeight="Bold" Margin="10 0 5 0"/>
+                            <TextBox Text="{Binding SelectedEndpoint.Supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <Button Content="Save" HorizontalAlignment="Center" Width="50" Click="SaveEndpointElementData_Click"/>
 
                             <TextBlock Text="Company Color:"  Margin="5 0 0 0"/>
@@ -225,7 +227,7 @@
                             <TextBlock Text="Profit: " Margin="5 0 0 0"/>
                             <TextBox Text="{Binding SelectedEndpoint.Profit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=$\{0\}}"/>
 
-                            <Button Content="Production Details" Click="OpenEndpointDetailsWindowButton_Click">
+                            <Button Content="{Binding SelectedEndpoint.Supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="Details for {0}" Click="OpenEndpointDetailsWindowButton_Click">
                                 <!--<StackPanel>
                                     <TextBlock Text="{Binding SelectedEndpoint.supplier.Name, Mode=OneWay, StringFormat=\{0\} products}" Margin="5 0 0 0 "/>
                                     <ListView x:Name="EndpointProductList" Background="DarkGray" BorderThickness="0"

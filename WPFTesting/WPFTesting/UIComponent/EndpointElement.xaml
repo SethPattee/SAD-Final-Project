@@ -4,9 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FactorySADEfficiencyOptimizer"
-             mc:Ignorable="d" 
-             d:DesignHeight="360" d:DesignWidth="560"
-             DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+             mc:Ignorable="d" DataContext="{Binding EndpointVM, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+             d:DesignHeight="360" d:DesignWidth="560">
     <Grid Width="530" Height="330" MinWidth="400">
         <Border x:Name="ElementBorder"  BorderBrush="Gray" BorderThickness="1" MouseDown="Box_MouseDown" PreviewMouseDown="Click_SelectElement" MouseMove="Box_MouseMove" MouseUp="Box_MouseUp">
             <Border.ContextMenu>
@@ -23,10 +22,10 @@
 
 
                 <Border BorderBrush="Gray" BorderThickness="3" Opacity="0.7" CornerRadius="10"
-                    Width="20" Height="20" Grid.Row="0" Margin="-10,-10,0,0" HorizontalAlignment="Left"
+                    Width="20" Height="20" Grid.Row="0" Margin="-10,-13, 0,0" HorizontalAlignment="Left"
                     VerticalAlignment="Top" Grid.Column="1" Panel.ZIndex="1"
                     Visibility="Visible" >
-                    <Button Opacity="0" Margin="-9" Click="Click_SenseThisRadial" Name="EndpointRadial" />
+                    <Button Opacity="0" Margin="-9,-9,-9,-9" Click="Click_SenseThisRadial" Name="EndpointRadial" />
                 </Border>
                 <Border Background="FloralWhite" x:Name="ElementBackground" Grid.ColumnSpan="2">
                     <Grid>
@@ -38,9 +37,11 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="24"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="-5, -13, 0, 0"
-                            HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" BorderThickness="1" BorderBrush="Gray" Panel.ZIndex="1" Width="330">
-                            <TextBlock x:Name="EndpointTitle" Padding="4,2,0,0" DataContext="{Binding NodeUIValues, BindsDirectlyToSource=True}" Text="{Binding supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" VerticalAlignment="Stretch" TextAlignment="Left" HorizontalAlignment="Stretch"></TextBlock>
+                        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="-8, -16, 0, 0" Background="White" 
+                            HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="Gray" Panel.ZIndex="1" Width="330">
+                            <TextBlock x:Name="EndpointTitle" Padding="0" Text="{Binding Supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       VerticalAlignment="Stretch" TextAlignment="Left" HorizontalAlignment="Stretch"
+                                       Margin="10 0 0 0" FontSize="16" FontWeight="SemiBold"></TextBlock>
                         </Border> <!-- {Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" HorizontalAlignment="Stretch"-->
                         <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Gray" Margin="0 0 2 0">
                             <Grid>
@@ -50,12 +51,13 @@
 
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Text="Component Inventory" x:Name="ComponentTextBox" Grid.Row="0" Margin="6 9 0 0">
+                                <TextBlock Text="Component Inventory" x:Name="ComponentTextBox" Grid.Row="0" Margin="6 9 0 0"
+                                            FontSize="12" FontWeight="SemiBold">
 
                                 </TextBlock>
                                 <ListView
-                                    ItemsSource="{Binding _nodeUIValues.Supplier.ComponentInventory, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                                    x:Name="ComponentsList"
+                                    ItemsSource="{Binding Supplier.ComponentInventory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    SelectedItem="{Binding Product}" x:Name="ComponentsList"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="gray" BorderThickness="1 1 1 0">
                                     <ListView.View>
                                         <GridView >
@@ -86,12 +88,13 @@
                                     <RowDefinition Height="6*" MaxHeight="2000"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Text="Product Inventory" x:Name="ProductTextBox" Grid.Row="0" Margin="6 9 0 0 ">
+                                <TextBlock Text="Product Inventory" x:Name="ProductTextBox" Grid.Row="0" Margin="6 9 0 0 "
+                                            FontSize="12" FontWeight="SemiBold">
 
                                 </TextBlock>
                                 <ListView
-                                    ItemsSource="{Binding _nodeUIValues.Supplier.ProductInventory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                    x:Name="ProductsList"
+                                    ItemsSource="{Binding Supplier.ProductInventory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    SelectedItem="{Binding Product}" x:Name="ProductsList"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="Gray" BorderThickness="1 1 1 0">
                                     <ListView.View>
                                         <GridView >
@@ -108,9 +111,12 @@
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox Padding="10 5 10 5" Grid.Column="0" HorizontalAlignment="Stretch" Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                                <TextBox Padding="10 5 10 5" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                                <TextBox Padding="10 5 10 5" Grid.Column="2" HorizontalAlignment="Stretch" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                                <TextBox Padding="10 5 10 5" Grid.Column="0" HorizontalAlignment="Stretch"
+                                                         Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                                <TextBox Padding="10 5 10 5" Grid.Column="1" HorizontalAlignment="Stretch" 
+                                                         Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                                <TextBox Padding="10 5 10 5" Grid.Column="2" HorizontalAlignment="Stretch"
+                                                         Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                             </Grid>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -122,11 +128,11 @@
                             <Grid>
                                 <StackPanel Orientation="Horizontal" Margin="3 1 0 0">
                                     <TextBlock Text="Company Savings: $" x:Name="ProfitTrackerDollarSign"></TextBlock>
-                                    <TextBlock x:Name="ProfitTracker" Text="{Binding _nodeUIValues.Supplier.Profit, Mode=OneWay, StringFormat={}{0}}" HorizontalAlignment="Left" Margin="1 0 0 0" MaxWidth="250"></TextBlock>
+                                    <TextBlock x:Name="ProfitTracker" Text="{Binding Supplier.Profit, Mode=OneWay, StringFormat={}{0}}" HorizontalAlignment="Left" Margin="1 0 0 0" MaxWidth="250"></TextBlock>
                                     
                                 </StackPanel>
                                 <Border BorderBrush="DimGray" Width="18" Height="18" BorderThickness="0 0 2 2" HorizontalAlignment="Right" Margin="0 0 2 0" CornerRadius="1">
-                                    <Button MouseLeftButtonDown="ResizeGrip_MouseLeftButtonDown" BorderThickness="0">
+                                    <Button BorderThickness="0">
                                         
                                     </Button>
                                 </Border>
