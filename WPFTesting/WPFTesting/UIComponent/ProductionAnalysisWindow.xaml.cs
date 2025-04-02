@@ -148,7 +148,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         private void RenderLineResults()
         {
             double[] GraphDays = new double[(int)simModel.DaysToRun + 1];
-            for (int i = 0; i < simModel.DaysToRun; i++)
+            for (int i = 0; i <= simModel.DaysToRun; i++)
             {
                 GraphDays[i] = i;
             }
