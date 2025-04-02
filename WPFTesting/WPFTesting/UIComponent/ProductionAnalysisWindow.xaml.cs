@@ -160,9 +160,10 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             plotter.BottomTitle = "Day";
             plotter.LeftTitle = "Balance (in 1000 $s)";
             plotter.Title = "Balance-Per-Day during production.";
-            plotter.PlotOriginX = 1;
-            plotter.PlotOriginY = BalancePerDay.Min();
+            plotter.PlotOriginX = 0; // 1;
+            plotter.PlotOriginY = 0; // BalancePerDay.Min();
             linegraph.IsAutoFitEnabled = true;
+            //linegraph.IsAutoFitEnabled = false;
             lg.Plot(GraphDays, BalancePerDay);
             linegraph.Children.Add(lg);
         }

@@ -879,7 +879,6 @@ public MainWindow()
     private void AdvanceTime_Click(object sender, EventArgs e)
     {
         ViewModel.AdvanceTime();
-        RefreshEndpointElementDisplay();
     }
 
     private void AddEndpointElement_Click(object sender, RoutedEventArgs e)
@@ -1019,30 +1018,9 @@ public MainWindow()
         return product;
     }
 
-    private void SaveEndpointElementData_Click(object sender, RoutedEventArgs e)
-    {
-        RefreshEndpointElementDisplay();
-    }
 
-    private void RefreshEndpointElementDisplay()
-    {
-        if (ViewModel.SelectedEndpoint is null)
-            return;
-        foreach (var item in DiagramCanvas.Children)
-        {
-            if (item is EndpointElement eitem)
-            {
-                if (eitem.SupplierVM.Supplier.Id == ViewModel.SelectedEndpoint.Supplier.Id)
-                {
-                    // Until we can get a better binding model for the dynamically created elements,
-                    // We're forcibly re-updating them with the save button. 
-                    // That way those elements are always up to date.
-                    eitem.PopulateElementLists();
-                }
 
-            }
-        };
-    }
+    
 
     private void Line_MouseDown(object? sender, EventArgs? e)
     {
