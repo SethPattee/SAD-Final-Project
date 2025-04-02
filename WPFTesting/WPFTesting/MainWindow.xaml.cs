@@ -147,7 +147,7 @@ public MainWindow()
     private void MakeNewEndpoint()
 	{
 		EndpointUIValues EUIV = new EndpointUIValues();
-		EUIV.SetDefaultValues();
+		//EUIV.SetDefaultValues();
 		AddEndpointToCanvas(EUIV);
 		ViewModel.AddEndpointToChain(EUIV);
 	}
@@ -162,6 +162,7 @@ public MainWindow()
 		element.RadialClicked += FinishConnection_Click;
 		element.ElementClicked += SelectEndpoint_Click;
         element.EndpointDeleted += RemoveEndpoint;
+        element.InventoryItemClicked += OpenEndpointDetails_SubElement_Event;
 
 		Canvas.SetLeft(element, EUIV.Position.X);
 		Canvas.SetTop(element, EUIV.Position.Y);
@@ -673,6 +674,11 @@ public MainWindow()
         }
     }
 
+    private void OpenEndpointDetails_SubElement_Event(object? sender, EventArgs e)
+    {
+        OpenEndpointDetails();
+    }
+
     private void OpenSupplierInventory_Click(object sender, RoutedEventArgs e)
     {
         if(sender is Button s)
@@ -1146,21 +1152,26 @@ public MainWindow()
         BillWindow.Show();
     }
 
-        private void OpenEndpointDetailsWindowButton_Click(object sender, RoutedEventArgs e)
-        {
-            var EndpointDetails = new EndpointDetailsWindow(((EndpointNode)ViewModel.SelectedEndpoint.Supplier));
+    private void OpenEndpointDetailsWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenEndpointDetails();
+    }
 
-            //EndpointDetails.EndpointVM.ProductInventory = ViewModel.SelectedEndpoint.Supplier.ProductInventory;
-            //EndpointDetails.EndpointVM.ComponentInventory = ViewModel.SelectedEndpoint.Supplier.ComponentInventory;
-            //EndpointDetails.EndpointVM.ProductionList = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ProductionList;
-            //EndpointDetails.EndpointVM.ActiveDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ActiveDeliveryLines;
-            //EndpointDetails.EndpointVM.PastDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).PastDeliveryLines;
+    private void OpenEndpointDetails()
+    {
+        var EndpointDetails = new EndpointDetailsWindow(((EndpointNode)ViewModel.SelectedEndpoint.Supplier));
 
-            EndpointDetails.Owner = this;
-            EndpointDetails.Show();
-        }
+        //EndpointDetails.EndpointVM.ProductInventory = ViewModel.SelectedEndpoint.Supplier.ProductInventory;
+        //EndpointDetails.EndpointVM.ComponentInventory = ViewModel.SelectedEndpoint.Supplier.ComponentInventory;
+        //EndpointDetails.EndpointVM.ProductionList = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ProductionList;
+        //EndpointDetails.EndpointVM.ActiveDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ActiveDeliveryLines;
+        //EndpointDetails.EndpointVM.PastDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).PastDeliveryLines;
 
-        private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
+        EndpointDetails.Owner = this;
+        EndpointDetails.Show();
+    }
+
+    private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
         {
             if(ViewModel is not null && ViewModel.SelectedShipment is not null)
                 ViewModel.SelectedShipment.TimeToDeliver++;

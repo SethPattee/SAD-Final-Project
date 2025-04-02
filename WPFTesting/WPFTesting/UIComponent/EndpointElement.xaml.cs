@@ -180,5 +180,24 @@ namespace FactorySADEfficiencyOptimizer
 
             ElementBackground.Background = new SolidColorBrush(newValue);
         }
+
+        public event EventHandler? InventoryItemClicked;
+        private void OpenDetails_PreviewMouseUp(object? sender, MouseButtonEventArgs e)
+        {
+            OpenDetails();
+        }
+
+        private void OpenDetails()
+        {
+            InventoryItemClicked?.Invoke(this, new SendEndpointDetailsEventArgs()
+            {
+                EndpointModel = (EndpointNode)EndpointVM.Supplier
+            });
+        }
+
+        private void OpenDetails_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
+        {
+            OpenDetails();
+        }
     }
 }
