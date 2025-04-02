@@ -320,6 +320,11 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             newITW.ItemModel = newVM;
             newITW.DataContext = newITW.ItemModel;
             newITW.GenerateGraphDetails();
+            if(newVM.DayCompleted == 0)
+            {
+                newITW.CompletedNumber.Visibility = Visibility.Collapsed;
+                newITW.Completed.Visibility = Visibility.Collapsed;
+            }
             return newITW;
 
         }
