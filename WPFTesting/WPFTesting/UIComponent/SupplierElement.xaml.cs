@@ -155,6 +155,19 @@ namespace YourNamespace
         {
             base.OnRender(drawingContext);
         }
+
+        public event EventHandler? InventoryItemClicked;
+        private void OpenInventory_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var SuppEventArgs = new SaveSupplierEventArgs() { supplier = (Supplier)_nodeUIValues.Supplier };
+            InventoryItemClicked?.Invoke(this, SuppEventArgs);
+        }
+        private void OpenInventory_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var SuppEventArgs = new SaveSupplierEventArgs() { supplier = (Supplier)_nodeUIValues.Supplier };
+            InventoryItemClicked?.Invoke(this, SuppEventArgs);
+        }
+
     }
 
     public class BoxConnection : BoxConnectionBase

@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              xmlns:viewmodel="clr-namespace:FactorySADEfficiencyOptimizer.ViewModel" 
+             MinWidth="160" MinHeight="200"
              Width="200" Height="200" DataContext="{Binding SupplierVM}">
     <Grid ClipToBounds="False" x:Name="SupplierPrimaryGrid">
         <Grid.RowDefinitions>
@@ -80,7 +81,7 @@
                         </StackPanel>
                     </ItemsControl>-->
                     <ListView ItemsSource="{Binding Supplier.ProductInventory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedItem="{Binding Product}"
+                              SelectedItem="{Binding Product}" PreviewMouseUp="OpenInventory_PreviewMouseUp" MouseDoubleClick="OpenInventory_MouseDoubleClick"
                               x:Name="ItemsList" Grid.Row="1">
                         <ListView.View>
                             <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Product Information">

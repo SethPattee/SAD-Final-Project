@@ -57,7 +57,8 @@
                                 </TextBlock>
                                 <ListView
                                     ItemsSource="{Binding Supplier.ComponentInventory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                    SelectedItem="{Binding Product}" x:Name="ComponentsList"
+                                    SelectedItem="{Binding Product}" x:Name="ComponentsList" PreviewMouseUp="OpenDetails_PreviewMouseUp"
+                                    MouseDoubleClick="OpenDetails_MouseDoubleClick" VerticalAlignment="Stretch"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="gray" BorderThickness="1 1 1 0">
                                     <ListView.View>
                                         <GridView >
@@ -94,7 +95,8 @@
                                 </TextBlock>
                                 <ListView
                                     ItemsSource="{Binding Supplier.ProductInventory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                    SelectedItem="{Binding Product}" x:Name="ProductsList"
+                                    SelectedItem="{Binding Product}" x:Name="ProductsList"  PreviewMouseUp="OpenDetails_PreviewMouseUp"
+                                    MouseDoubleClick="OpenDetails_MouseDoubleClick" VerticalAlignment="Stretch"
                                     Grid.Row="1" Margin="-1 0 -1 0" BorderBrush="Gray" BorderThickness="1 1 1 0">
                                     <ListView.View>
                                         <GridView >
@@ -128,7 +130,7 @@
                             <Grid>
                                 <StackPanel Orientation="Horizontal" Margin="3 1 0 0">
                                     <TextBlock Text="Company Savings: $" x:Name="ProfitTrackerDollarSign"></TextBlock>
-                                    <TextBlock x:Name="ProfitTracker" Text="{Binding Supplier.Profit, Mode=OneWay, StringFormat={}{0}}" HorizontalAlignment="Left" Margin="1 0 0 0" MaxWidth="250"></TextBlock>
+                                    <TextBlock x:Name="ProfitTracker" Text="{Binding Profit, Mode=OneWay, StringFormat={}{0}}" HorizontalAlignment="Left" Margin="1 0 0 0" MaxWidth="250"></TextBlock>
                                     
                                 </StackPanel>
                                 <Border BorderBrush="DimGray" Width="18" Height="18" BorderThickness="0 0 2 2" HorizontalAlignment="Right" Margin="0 0 2 0" CornerRadius="1">
