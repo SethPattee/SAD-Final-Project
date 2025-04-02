@@ -128,7 +128,7 @@
                             <Grid>
                                 <StackPanel Orientation="Horizontal" Margin="3 1 0 0">
                                     <TextBlock Text="Company Savings: $" x:Name="ProfitTrackerDollarSign"></TextBlock>
-                                    <TextBlock x:Name="ProfitTracker" Text="{Binding Supplier.Profit, Mode=OneWay, StringFormat={}{0}}" HorizontalAlignment="Left" Margin="1 0 0 0" MaxWidth="250"></TextBlock>
+                                    <TextBlock x:Name="ProfitTracker" Text="{Binding Profit, Mode=OneWay, StringFormat={}{0}}" HorizontalAlignment="Left" Margin="1 0 0 0" MaxWidth="250"></TextBlock>
                                     
                                 </StackPanel>
                                 <Border BorderBrush="DimGray" Width="18" Height="18" BorderThickness="0 0 2 2" HorizontalAlignment="Right" Margin="0 0 2 0" CornerRadius="1">
