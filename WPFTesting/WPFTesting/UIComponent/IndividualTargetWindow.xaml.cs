@@ -69,7 +69,12 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 dr = ItemModel.DaysRun.Max();
             IT_PlotSpace.Title = $"Amount of {lg.Description}s per day for {dr.ToString()} day period";
             IndividualTargetLine.IsAutoFitEnabled = true;
-            lg.Plot(ItemModel.DaysRun, ItemModel.TargetOverDays);
+            double[] x = new double[ItemModel.TargetOverDays.Length];
+            for ( int i = 0; i < x.Length; i++)
+            {
+                x[i] = i;
+            }
+            lg.Plot(x, ItemModel.TargetOverDays);
             IndividualTargetLine.Children.Add(lg);
         }
 

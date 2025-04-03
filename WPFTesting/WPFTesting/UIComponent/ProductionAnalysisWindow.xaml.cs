@@ -148,7 +148,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         private void RenderLineResults()
         {
             double[] GraphDays = new double[(int)simModel.DaysToRun + 1];
-            for (int i = 0; i < simModel.DaysToRun; i++)
+            for (int i = 0; i <= simModel.DaysToRun; i++)
             {
                 GraphDays[i] = i;
             }
@@ -160,9 +160,10 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             plotter.BottomTitle = "Day";
             plotter.LeftTitle = "Balance (in 1000 $s)";
             plotter.Title = "Balance-Per-Day during production.";
-            plotter.PlotOriginX = 1;
-            plotter.PlotOriginY = BalancePerDay.Min();
+            plotter.PlotOriginX = 0; // 1;
+            plotter.PlotOriginY = 0; // BalancePerDay.Min();
             linegraph.IsAutoFitEnabled = true;
+            //linegraph.IsAutoFitEnabled = false;
             lg.Plot(GraphDays, BalancePerDay);
             linegraph.Children.Add(lg);
         }
