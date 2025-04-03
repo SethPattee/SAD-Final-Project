@@ -38,7 +38,7 @@ public static class ToolsForViewModel
 		foreach (var e in endpoints)
 		{
 			var end = (EndpointNode)e.Supplier;
-			end.ProduceProduct();
+			end.Process();
 		}
 	}
 	public static void AdvancetimeForSupplierList(IEnumerable<SupplierUIValues> suppliers)

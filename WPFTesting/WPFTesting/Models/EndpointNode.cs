@@ -265,7 +265,7 @@ public class EndpointNode : IVendor, INotifyPropertyChanged
                     ?? throw new ArgumentOutOfRangeException("Could not find specified item."))
                     .Quantity -= i.DeliveryItem.Quantity;
                     
-                    Balance += i.TotalPrice;
+                    Balance += i.DeliveryItem.Price;
                     productsThatWereFulfilled.Add(pitem);
 
                     // If the delivery line is supposed to be fulfilled by this shipping action:

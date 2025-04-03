@@ -302,10 +302,9 @@ internal class AdvanceTimeTests
             }
         };
 
-        endpointTest.ShipOrder(testOrder);
-
-        Assert.That(endpointTest.Balance, Is.EqualTo(10599M));
-        Assert.That(endpointTest.ProductInventory.FirstOrDefault(x => x.ProductName == "Swedish fish").Quantity, Is.EqualTo(9900));
+        endpointTest.ShipOrder(testOrder); // only ships one order
+        Assert.That(endpointTest.Balance, Is.EqualTo(10005.99M));
+		Assert.That(endpointTest.ProductInventory.FirstOrDefault(x => x.ProductName == "Swedish fish")?.Quantity, Is.EqualTo(9900));
         }
     [Test]
     public void EndpointWillProccessProductionLineWhenViewModelCallAddvanceTime()
