@@ -338,7 +338,7 @@ public class AnalizorModel : INotifyPropertyChanged
 				target.CurrentAmount = prod.Quantity;
 				if (target.CurrentAmount >= target.TargetQuantity)
 				{
-                    if (target.Status == StatusEnum.Success || target.Status == StatusEnum.Warning)
+                    if (target.Status == StatusEnum.NotDone || target.Status == StatusEnum.Failure)
                     {
                         target.DayCompleted = CurrentDay;
                     }
