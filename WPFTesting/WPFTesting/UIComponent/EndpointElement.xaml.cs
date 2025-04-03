@@ -74,35 +74,6 @@ namespace FactorySADEfficiencyOptimizer
         }
         
 
-        public void PopulateElementLists()
-        {
-            EndpointTitle.Text = SupplierVM.Supplier.Name;
-            ProfitTracker.Text = ((EndpointNode)(SupplierVM.Supplier)).Balance.ToString();
-
-            if(((EndpointNode)(SupplierVM.Supplier)).Balance < 0)
-            {
-                ProfitTracker.Foreground = Brushes.Red;
-                ProfitTrackerDollarSign.Foreground = Brushes.Red;
-            }
-            else
-            {
-                ProfitTracker.Foreground = Brushes.LimeGreen;
-                ProfitTrackerDollarSign.Foreground = Brushes.LimeGreen;
-            }
-
-            this.ComponentsList.Items.Clear();
-            foreach (var x in ((EndpointNode)_nodeUIValues.Supplier).ComponentInventory)
-            {
-                this.ComponentsList.Items.Add(x);
-            }
-
-            this.ProductsList.Items.Clear();
-            foreach (var x in ((EndpointNode)_nodeUIValues.Supplier).ProductInventory)
-            {
-                this.ProductsList.Items.Add(x);
-            }
-        }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
@@ -179,6 +150,25 @@ namespace FactorySADEfficiencyOptimizer
             }
 
             ElementBackground.Background = new SolidColorBrush(newValue);
+        }
+
+        public event EventHandler? InventoryItemClicked;
+        private void OpenDetails_PreviewMouseUp(object? sender, MouseButtonEventArgs e)
+        {
+            OpenDetails();
+        }
+
+        private void OpenDetails()
+        {
+            InventoryItemClicked?.Invoke(this, new SendEndpointDetailsEventArgs()
+            {
+                EndpointModel = (EndpointNode)EndpointVM.Supplier
+            });
+        }
+
+        private void OpenDetails_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
+        {
+            OpenDetails();
         }
     }
 }

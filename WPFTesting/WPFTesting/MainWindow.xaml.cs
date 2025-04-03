@@ -88,13 +88,7 @@ public MainWindow()
                 Canvas.SetLeft(dBox, box.Position.X);
                 Canvas.SetTop(dBox, box.Position.Y);
 
-                dBox.MouseDown += Box_MouseDown;
-                dBox.BoxChanged += Box_Position_Changed;
-                dBox.RadialClickedTop += StartConnection_Click;
-                dBox.RadialClickedTop += FinishConnection_Click;
-                dBox.RadialClickedBottom += StartConnection_Click;
-                dBox.RadialClickedBottom += FinishConnection_Click;
-                dBox.BoxDeleted += RemoveSupplier;
+                dBox = AssignEventsToSupplier(dBox);
 
                 AddBoxToTracker(dBox);
 
@@ -153,7 +147,7 @@ public MainWindow()
     private void MakeNewEndpoint()
 	{
 		EndpointUIValues EUIV = new EndpointUIValues();
-		EUIV.SetDefaultValues();
+		//EUIV.SetDefaultValues();
 		AddEndpointToCanvas(EUIV);
 		ViewModel.AddEndpointToChain(EUIV);
 	}
@@ -168,6 +162,7 @@ public MainWindow()
 		element.RadialClicked += FinishConnection_Click;
 		element.ElementClicked += SelectEndpoint_Click;
         element.EndpointDeleted += RemoveEndpoint;
+        element.InventoryItemClicked += OpenEndpointDetails_SubElement_Event;
 
 		Canvas.SetLeft(element, EUIV.Position.X);
 		Canvas.SetTop(element, EUIV.Position.Y);
@@ -278,18 +273,25 @@ public MainWindow()
         SupplierElement newBox = new SupplierElement(b);
         Canvas.SetLeft(newBox, b.Position.X);
         Canvas.SetTop(newBox, b.Position.Y);
-        newBox.Width = 100;
-        newBox.Height = 50;
-        newBox.MouseDown += Box_MouseDown;
-        newBox.BoxChanged += Box_Position_Changed;
-        newBox.RadialClickedTop += StartConnection_Click;
-        newBox.RadialClickedTop += FinishConnection_Click;
-        newBox.BoxDeleted += RemoveSupplier;
+        newBox = AssignEventsToSupplier(newBox);
 
         AddBoxToTracker(newBox);
 
         ViewModel.AddSupplierToChain(b); // // // // //
         DiagramCanvas.Children.Add(newBox);
+    }
+
+    public SupplierElement AssignEventsToSupplier(SupplierElement supplier)
+    {
+        supplier.MouseDown += Box_MouseDown;
+        supplier.BoxChanged += Box_Position_Changed;
+        supplier.RadialClickedTop += StartConnection_Click;
+        supplier.RadialClickedTop += FinishConnection_Click;
+        supplier.RadialClickedBottom += StartConnection_Click;
+        supplier.RadialClickedBottom += FinishConnection_Click;
+        supplier.InventoryItemClicked += OpenSupplierInventory_SubElement_Event;
+        supplier.BoxDeleted += RemoveSupplier;
+        return supplier;
     }
 
     private void AddBoxToTracker(SupplierElement box)
@@ -672,16 +674,32 @@ public MainWindow()
         }
     }
 
+    private void OpenEndpointDetails_SubElement_Event(object? sender, EventArgs e)
+    {
+        OpenEndpointDetails();
+    }
+
     private void OpenSupplierInventory_Click(object sender, RoutedEventArgs e)
     {
         if(sender is Button s)
         {
-            SupplierInventoryWindow DetailsWindow = new SupplierInventoryWindow().WithViewModel(((Supplier)((SupplyChainViewModel)s.DataContext).SelectedSupplier.Supplier));
-            DetailsWindow.Owner = this;
-            DetailsWindow.SaveSupplierHandler += SaveSupplierDetails;
-            DetailsWindow.Show();
+            OpenSupplierInventory((Supplier)((SupplyChainViewModel)s.DataContext).SelectedSupplier!.Supplier);
         }
+    }
 
+    private void OpenSupplierInventory_SubElement_Event(object? sender, EventArgs e)
+    {
+        if(e is SaveSupplierEventArgs s)
+        OpenSupplierInventory(s.supplier!);
+    }
+
+    public void OpenSupplierInventory(Supplier supp)
+    {
+        SupplierInventoryWindow DetailsWindow = new SupplierInventoryWindow()
+            .WithViewModel(supp);
+        DetailsWindow.Owner = this;
+        DetailsWindow.SaveSupplierHandler += SaveSupplierDetails;
+        DetailsWindow.Show();
     }
 
     private void OpenCommonProductWindow_Click(object sender, RoutedEventArgs e)
@@ -879,7 +897,6 @@ public MainWindow()
     private void AdvanceTime_Click(object sender, EventArgs e)
     {
         ViewModel.AdvanceTime();
-        RefreshEndpointElementDisplay();
     }
 
     private void AddEndpointElement_Click(object sender, RoutedEventArgs e)
@@ -1019,30 +1036,9 @@ public MainWindow()
         return product;
     }
 
-    private void SaveEndpointElementData_Click(object sender, RoutedEventArgs e)
-    {
-        RefreshEndpointElementDisplay();
-    }
 
-    private void RefreshEndpointElementDisplay()
-    {
-        if (ViewModel.SelectedEndpoint is null)
-            return;
-        foreach (var item in DiagramCanvas.Children)
-        {
-            if (item is EndpointElement eitem)
-            {
-                if (eitem.SupplierVM.Supplier.Id == ViewModel.SelectedEndpoint.Supplier.Id)
-                {
-                    // Until we can get a better binding model for the dynamically created elements,
-                    // We're forcibly re-updating them with the save button. 
-                    // That way those elements are always up to date.
-                    eitem.PopulateElementLists();
-                }
 
-            }
-        };
-    }
+    
 
     private void Line_MouseDown(object? sender, EventArgs? e)
     {
@@ -1134,21 +1130,26 @@ public MainWindow()
         BillWindow.Show();
     }
 
-        private void OpenEndpointDetailsWindowButton_Click(object sender, RoutedEventArgs e)
-        {
-            var EndpointDetails = new EndpointDetailsWindow(((EndpointNode)ViewModel.SelectedEndpoint.Supplier));
+    private void OpenEndpointDetailsWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenEndpointDetails();
+    }
 
-            EndpointDetails.EndpointVM.ProductInventory = ViewModel.SelectedEndpoint.Supplier.ProductInventory;
-            EndpointDetails.EndpointVM.ComponentInventory = ViewModel.SelectedEndpoint.Supplier.ComponentInventory;
-            EndpointDetails.EndpointVM.ProductionList = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ProductionList;
-            EndpointDetails.EndpointVM.ActiveDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ActiveDeliveryLines;
-            EndpointDetails.EndpointVM.PastDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).PastDeliveryLines;
+    private void OpenEndpointDetails()
+    {
+        var EndpointDetails = new EndpointDetailsWindow(((EndpointNode)ViewModel.SelectedEndpoint.Supplier));
 
-            EndpointDetails.Owner = this;
-            EndpointDetails.Show();
-        }
+        //EndpointDetails.EndpointVM.ProductInventory = ViewModel.SelectedEndpoint.Supplier.ProductInventory;
+        //EndpointDetails.EndpointVM.ComponentInventory = ViewModel.SelectedEndpoint.Supplier.ComponentInventory;
+        //EndpointDetails.EndpointVM.ProductionList = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ProductionList;
+        //EndpointDetails.EndpointVM.ActiveDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).ActiveDeliveryLines;
+        //EndpointDetails.EndpointVM.PastDeliveryLines = ((EndpointNode)ViewModel.SelectedEndpoint.Supplier).PastDeliveryLines;
 
-        private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
+        EndpointDetails.Owner = this;
+        EndpointDetails.Show();
+    }
+
+    private void IncrementShipmentDeliveryTime_Click(object sender, RoutedEventArgs e)
         {
             if(ViewModel is not null && ViewModel.SelectedShipment is not null)
                 ViewModel.SelectedShipment.TimeToDeliver++;

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FactorySADEfficiencyOptimizer.UIComponent"
         xmlns:converter="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent.Converters"
         mc:Ignorable="d" DataContext="{Binding SupplierVM}"
-        Title="SupplierInventoryWindow" Height="300" Width="400"
+        Title="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Height="300" Width="400"
         Background="DarkGray">
     <Window.Resources>
         <converter:MarginConverter x:Key="marginConverter"></converter:MarginConverter>
