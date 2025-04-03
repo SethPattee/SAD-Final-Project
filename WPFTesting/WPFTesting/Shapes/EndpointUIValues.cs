@@ -26,7 +26,7 @@ public class EndpointUIValues : SupplierUIValues, INotifyPropertyChanged
     public EndpointUIValues()
     {
         Supplier = new EndpointNode();
-        SetDefaultValues();
+       // SetDefaultValues();
     }
     public void SetDefaultValues()
     {
