@@ -171,7 +171,7 @@ public MainWindow()
 
     public async Task CloseSaveMessage()
     {
-        await Task.Delay(2000);
+        await Task.Delay(4000);
         SetPostSaveUIStates(Visibility.Collapsed, Visibility.Collapsed);
     }
 
@@ -189,8 +189,12 @@ public MainWindow()
 
                 ViewModel.updateFileSave(filePath);
             }
+            else
+            {
+                throw new Exception("File dialogue was closed prematurely.");
+            }
 
-            SetPostSaveUIStates(Visibility.Visible, Visibility.Collapsed);
+                SetPostSaveUIStates(Visibility.Visible, Visibility.Collapsed);
             _ = CloseSaveMessage();
 
         }
@@ -850,6 +854,10 @@ public MainWindow()
 					}
 				}
 			}
+        if(ViewModel.EndpointList.Count == 0 || DiagramCanvas.Children.OfType<EndpointElement>().Count() == 0)
+        {
+            AddEndpointFallbackButton.Visibility = Visibility.Visible;
+        }    
     }
     public void RemoveSupplier(object? sender, EventArgs e)
     {
@@ -902,6 +910,7 @@ public MainWindow()
     private void AddEndpointElement_Click(object sender, RoutedEventArgs e)
     {
         MakeNewEndpoint();
+        AddEndpointFallbackButton.Visibility = Visibility.Collapsed;
     }
 
 
