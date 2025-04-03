@@ -338,7 +338,11 @@ public class AnalizorModel : INotifyPropertyChanged
 				target.CurrentAmount = prod.Quantity;
 				if (target.CurrentAmount >= target.TargetQuantity)
 				{
-					if (!target.PalacedAutoOrderForComponent)
+                    if (target.Status == StatusEnum.NotDone || target.Status == StatusEnum.Failure)
+                    {
+                        target.DayCompleted = CurrentDay;
+                    }
+                    if (!target.PalacedAutoOrderForComponent)
 					{
 						target.Status = StatusEnum.Success;
 					}
@@ -346,6 +350,7 @@ public class AnalizorModel : INotifyPropertyChanged
 					{
                         target.Status = StatusEnum.Warning;
                     }
+					
                     OnPropertyChanged(nameof(target.Status));
 					var pl = (((EndpointNode)endpoint.Supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
 					pl.IsEnabled = false;
@@ -529,8 +534,11 @@ public class AnalizorModel : INotifyPropertyChanged
 	{
 		try
 		{
-			var item = Snapshots?.Where(x => x.Targets.Exists(x => x.ProductTarget?.ProductName == product_name)).LastOrDefault()?.Targets.FirstOrDefault()?.DayCompleted;
-			return (double)item!;
+			var item = Snapshots?.Where(x => x.Targets.Exists(x => x.ProductTarget?.ProductName == product_name));
+
+            var item2 = item.LastOrDefault()?.Targets.FirstOrDefault()?.DayCompleted;
+
+			return (double)item2!;
 		}
 		catch (Exception ex)
 		{
