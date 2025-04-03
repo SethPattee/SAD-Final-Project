@@ -189,7 +189,8 @@
         <Border Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
             <DockPanel>
                 <TextBlock Text="Pick a line color:" Margin="0 2 10 0"></TextBlock>
-                <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"></xctk:ColorPicker>
+                <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"
+                                  MinWidth="80"></xctk:ColorPicker>
             </DockPanel>
         </Border>
         
