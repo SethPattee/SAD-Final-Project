@@ -59,8 +59,9 @@
                     <DockPanel>
                         <TextBlock Text="Target Date: " FontSize="24"></TextBlock>
                         <TextBlock Text="{Binding TargetItem.DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Margin="0 0 30 0"></TextBlock>
-                        <TextBlock Text="Completed: " FontSize="24"></TextBlock>
-                        <TextBlock Text="{Binding DayCompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="24"></TextBlock>
+                        <TextBlock Text="Completed: " FontSize="24" x:Name="CompletedLabel"></TextBlock>
+                        <TextBlock Text="{Binding DayCompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   FontSize="24" x:Name="CompletedText"></TextBlock>
                     </DockPanel>
                 </Border>
                 <Border BorderBrush="Black" BorderThickness="0 0 0 1" Margin="0 10 0 0">
