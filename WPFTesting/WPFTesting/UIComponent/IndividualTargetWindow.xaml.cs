@@ -40,6 +40,15 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             InitializeComponent();
             ItemModel = new();
             DataContext = ItemModel;
+            SetCompletedVisibility(Visibility.Collapsed);
+        }
+
+        public void DidCompleteProduction(bool IsTargetCompletable)
+        {
+            if (IsTargetCompletable)
+                SetCompletedVisibility(Visibility.Visible);
+            else
+                SetCompletedVisibility(Visibility.Collapsed);
         }
 
         public IndividualTargetWindow(IndividualTargetModel im)
@@ -47,7 +56,14 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             InitializeComponent();
             _itemmodel = im;
             DataContext = ItemModel;
+            SetCompletedVisibility(Visibility.Collapsed);
             //SetGraphDetails();
+        }
+
+        public void SetCompletedVisibility(Visibility value)
+        {
+            CompletedLabel.Visibility = value;
+            CompletedLabel.Visibility = value;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -80,7 +96,6 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 
         private void Issue_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -317,10 +317,22 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
                 Issues = new ObservableCollection<string>(),
                 DayCompleted = simModel.GetDayCompletedFor(product_name)
             };
+
             var newITW = new IndividualTargetWindow();
             newITW.ItemModel = newVM;
             newITW.DataContext = newITW.ItemModel;
-            newITW.GenerateGraphDetails();
+            
+            var failureIssue = simModel.IssueLog.FirstOrDefault(x => x.ProductionTarget == pt);
+            if(failureIssue is not null && failureIssue.Severity == StatusEnum.Failure)
+            {
+                newITW.SetCompletedVisibility(Visibility.Collapsed);
+            }
+            else
+            {
+                newITW.SetCompletedVisibility(Visibility.Visible);
+            }
+
+                newITW.GenerateGraphDetails();
             return newITW;
 
         }
