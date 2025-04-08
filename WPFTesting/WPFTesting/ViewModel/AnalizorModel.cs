@@ -336,6 +336,7 @@ public class AnalizorModel : INotifyPropertyChanged
 			{
 				Product prod = endpoint.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
 				target.AddToProducedQuantity(prod.RecentlyAddedQuantity);
+				target.CurrentAmount = prod.Quantity;
 				if (target.ProducedSoFar >= target.TargetQuantity)
 				{
                     if (target.Status == StatusEnum.NotDone || target.Status == StatusEnum.Failure)

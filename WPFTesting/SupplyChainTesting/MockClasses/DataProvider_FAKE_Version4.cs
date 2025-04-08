@@ -273,12 +273,14 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=20,
-							ProductName="Drill Bit"
+							ProductName="Drill Bit",
+							Price = 1,
 						},
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Wood"
+							ProductName="Wood",
+							Price = 1,
 						}
 					},
 
@@ -297,12 +299,14 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity=20,
-							ProductName="Drill Bit"
+							ProductName="Drill Bit",
+							Price = 1,
 						},
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Screws"
+							ProductName="Screws",
+							Price = 1,
 						}
 					},
 
@@ -320,22 +324,26 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity = 1,
-							ProductName = "Hammer"
+							ProductName = "Hammer",
+							Price = 1,
 						},
 						new Product()
 						{
 							Quantity=1,
-							ProductName="10mm socket"
+							ProductName="10mm socket",
+							Price = 1,
 						},
 						new Product()
 						{
 							Quantity=20,
-							ProductName="Screws"
+							ProductName="Screws",
+							Price = 1,
 						},
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Glue"
+							ProductName="Glue",
+							Price = 1,
 						}
 					},
 					Name="Glue Vendor",
@@ -352,32 +360,38 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 						new Product()
 						{
 							Quantity = 0,
-							ProductName = "Box"
+							ProductName = "Box",
+							Price = 10,
 						}
 					},
 					Name = "Enpoint Name",
 					Id=Guid.NewGuid(),
+					Balance = 1000,
 					ComponentInventory =
 					{
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Screws"
+							ProductName="Screws",
+							Price = 1,
 						},
 						new Product()
 						{
 							Quantity=1000,
-							ProductName="Sawdust"
+							ProductName="Sawdust",
+							Price = 1,
 						},
 						new Product()
 						{
 							Quantity=1000,
-							ProductName= "Wood"
+							ProductName= "Wood",
+							Price = 1,
 						},
 						new Product()
 						{
 							Quantity=1000,
-							ProductName = "Glue"
+							ProductName = "Glue",
+							Price = 1,
 						}
 					},
 					ProductionList =
@@ -387,19 +401,22 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 								ResultingProduct = new Product()
 								{
 									Quantity = 2,
-									ProductName = "Box"
+									ProductName = "Box",
+									Price = 10,
 								},
 								Components = new ObservableCollection<Product>()
 								{
 									new Product()
 									{
 										Quantity=12,
-										ProductName="Screws"
+										ProductName="Screws",
+										Price = 1,
 									},
 									new Product()
 									{
 										Quantity=10,
-										ProductName= "Wood"
+										ProductName= "Wood",
+										Price = 1,
 									}
 								},
 								IsEnabled = true,
@@ -409,19 +426,22 @@ public class DataProvider_FAKE_Version5 : IInitializedDataProvider
 								ResultingProduct = new Product()
 								{
 									Quantity = 1,
-									ProductName = "Door"
+									ProductName = "Door",
+									Price = 10,
 								},
 								Components = new ObservableCollection<Product>()
 								{
 									new Product()
 									{
 										Quantity=10,
-										ProductName="Glue"
+										ProductName="Glue",
+										Price = 1,
 									},
 									new Product()
 									{
 										Quantity=10,
-										ProductName= "Wood"
+										ProductName= "Wood",
+										Price = 1,
 									}
 								},
 								IsEnabled = true,

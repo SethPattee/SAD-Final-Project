@@ -36,7 +36,12 @@ namespace FactorySADEfficiencyOptimizer.Models
         }
         public float RecentlyAddedQuantity
         {
-            get => _recenlytAddedQuantity;
+            get
+            {
+                var toReturn = _recenlytAddedQuantity;
+                _recenlytAddedQuantity = 0;
+                return toReturn;
+            }
         }
         public string ProductName
         {

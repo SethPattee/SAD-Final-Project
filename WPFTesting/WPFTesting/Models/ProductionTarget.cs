@@ -99,7 +99,10 @@ namespace FactorSADEfficiencyOptimizer.Models
         private double _countProduced = 0;
         public double ProducedSoFar
         {
-            get => _countProduced;
+            get
+            {
+                return _countProduced;
+            }
         }
         public void AddToProducedQuantity(double addiitonalCompletedCount)
         {

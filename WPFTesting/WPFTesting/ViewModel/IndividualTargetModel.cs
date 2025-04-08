@@ -28,7 +28,17 @@ namespace FactorySADEfficiencyOptimizer.ViewModel
                     OnPropertyChanged(nameof(TargetOverDays));
                 }
         }
-        private double[] _daysrun;
+		private double[] _targetProducedoverdays;
+		public double[] TargetProducedOverDays
+		{
+			get => _targetProducedoverdays;
+			set
+			{
+				_targetProducedoverdays = value;
+				OnPropertyChanged(nameof(TargetProducedOverDays));
+			}
+		}
+		private double[] _daysrun;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -67,6 +77,7 @@ namespace FactorySADEfficiencyOptimizer.ViewModel
         {
             TargetItem = new ProductionTarget();
             TargetOverDays = Array.Empty<double>();
+            TargetProducedOverDays = Array.Empty<double>();
             DaysRun = Array.Empty<double>();
             DayCompleted = -1;
             Issues = new ObservableCollection<string>();
