@@ -306,6 +306,7 @@ public class AnalizorModel : INotifyPropertyChanged
         {
             targ.Status = StatusEnum.NotDone;
 			targ.PalacedAutoOrderForComponent = false;
+			targ.AddToProducedQuantity(-targ.ProducedSoFar);
         }
     }
     private void RecordUsedComponents()
