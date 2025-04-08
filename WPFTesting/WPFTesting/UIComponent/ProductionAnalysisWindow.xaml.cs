@@ -328,7 +328,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
            //     newITW.Completed.Visibility = Visibility.Collapsed;
            // }
 
-            var failureIssue = simModel.IssueLog.FirstOrDefault(x => x.ProductionTarget == pt);
+            var failureIssue = simModel.IssueLog.FirstOrDefault(x => x.ProductionTarget.ProductTarget.ProductName == pt.ProductTarget.ProductName);
             if(failureIssue is not null && failureIssue.Severity == StatusEnum.Failure)
             {
                 newITW.SetCompletedVisibility(Visibility.Collapsed);

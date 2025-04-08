@@ -37,13 +37,13 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="24"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="-8, -16, 0, 0" Background="White" 
+                        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="-8, -16, 0, 0" Background="White" PreviewMouseDown="EndpointRadial_MouseDown"
                             HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="Gray" Panel.ZIndex="1" Width="330">
                             <TextBlock x:Name="EndpointTitle" Padding="0" Text="{Binding Supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                        VerticalAlignment="Stretch" TextAlignment="Left" HorizontalAlignment="Stretch"
                                        Margin="10 0 0 0" FontSize="16" FontWeight="SemiBold"></TextBlock>
                         </Border> <!-- {Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" HorizontalAlignment="Stretch"-->
-                        <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Gray" Margin="0 0 2 0">
+                        <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Gray" Margin="0 0 2 0" PreviewMouseDown="EndpointRadial_MouseDown">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" MaxHeight="300"/>
@@ -90,10 +90,10 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Text="Product Inventory" x:Name="ProductTextBox" Grid.Row="0" Margin="6 9 0 0 "
-                                            FontSize="12" FontWeight="SemiBold">
+                                            FontSize="12" FontWeight="SemiBold" PreviewMouseDown="EndpointRadial_MouseDown">
 
                                 </TextBlock>
-                                <ListView
+                                <ListView PreviewMouseDown="EndpointRadial_MouseDown"
                                     ItemsSource="{Binding Supplier.ProductInventory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                     SelectedItem="{Binding Product}" x:Name="ProductsList"  PreviewMouseUp="OpenDetails_PreviewMouseUp"
                                     MouseDoubleClick="OpenDetails_MouseDoubleClick" VerticalAlignment="Stretch"
@@ -126,7 +126,8 @@
                             </Grid>
 
                         </Border>
-                        <Border Grid.ColumnSpan="2" Grid.Row="1" BorderThickness="1" BorderBrush="Gray" Background="Gainsboro">
+                        <Border Grid.ColumnSpan="2" Grid.Row="1" BorderThickness="1" BorderBrush="Gray" Background="Gainsboro"
+                                PreviewMouseDown="EndpointRadial_MouseDown">
                             <Grid>
                                 <StackPanel Orientation="Horizontal" Margin="3 1 0 0">
                                     <TextBlock Text="Company Savings: $" x:Name="ProfitTrackerDollarSign"></TextBlock>
