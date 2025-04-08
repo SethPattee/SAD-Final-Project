@@ -34,58 +34,65 @@
         </Border>
 
 
-        <Border Grid.Column="0" Grid.Row="2" Margin="20,0,10,20" Grid.ColumnSpan="2">
-            <StackPanel>
-                <!--<StackPanel.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="Margin" Value="{StaticResource ResultsBannerItemMargin}" />
-                    </Style>
-                </StackPanel.Resources>-->
-                <Border BorderBrush="Black" BorderThickness="0 0 0 1" Height="34">
-                    <DockPanel>
-                        <TextBlock Text="Item: " FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-                        <TextBlock Text="{Binding TargetItem.ProductTarget.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="24"></TextBlock>
-                    </DockPanel>
-                </Border>
-                <Border BorderBrush="Black" BorderThickness="0 0 0 1" Height="34" Margin="0 10 0 0">
-                    <DockPanel>
-                        <TextBlock Text="Target: " HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24"></TextBlock>
-                        <TextBlock Text="{Binding TargetItem.TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
-                        <TextBlock Text="Total: " HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24" Margin="30 0 0 0"></TextBlock>
-                        <TextBlock Text="{Binding TargetItem.CurrentAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24"></TextBlock>
-                    </DockPanel>
-                </Border>
-                <Border BorderBrush="Black" BorderThickness="0 0 0 1" Margin="0 10 0 0">
-                    <DockPanel>
-                        <TextBlock Text="Target Date: " FontSize="24"></TextBlock>
-                        <TextBlock Text="{Binding TargetItem.DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Margin="0 0 30 0"></TextBlock>
-                        <TextBlock Text="Completed: " FontSize="24" x:Name="CompletedLabel"></TextBlock>
-                        <TextBlock Text="{Binding DayCompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                   FontSize="24" x:Name="CompletedText"></TextBlock>
-                    </DockPanel>
-                </Border>
-                <Border BorderBrush="Black" BorderThickness="0 0 0 1" Margin="0 10 0 0">
-                    <DockPanel>
-                        <TextBlock Text="Status: " FontSize="24"></TextBlock>
-                        <TextBlock Text="{Binding TargetItem.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                   FontSize="24"></TextBlock>
-                    </DockPanel>
-                </Border>
-                <Border BorderBrush="Black" BorderThickness="0 0 0 1" Margin="0 10 0 0">
-                    <StackPanel>
-                        <TextBlock Text="Warnings:" FontSize="24"></TextBlock>
-                        <ListView HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="DarkGray"
-                                  ItemsSource="{Binding Issues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  x:Name="Issue_list" SelectionChanged="Issue_list_SelectionChanged">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding }" FontSize="20" HorizontalAlignment="Left"></TextBlock>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
+        <Border Grid.Column="0" Grid.Row="2" Margin="20,0,10,20" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="WhiteSmoke" Padding="5 0 0 0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!--<StackPanel.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="Margin" Value="{StaticResource ResultsBannerItemMargin}" />
+                        </Style>
+                    </StackPanel.Resources>-->
+                    <Border BorderBrush="Black" BorderThickness="0 0 0 1" Height="34">
+                        <DockPanel>
+                            <TextBlock Text="Item: " FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Text="{Binding TargetItem.ProductTarget.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="24"></TextBlock>
+                        </DockPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0 0 0 1" Height="34" Margin="0 10 0 0">
+                        <DockPanel>
+                            <TextBlock Text="Target: " HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24"></TextBlock>
+                            <TextBlock Text="{Binding TargetItem.TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                            <TextBlock Text="Total: " HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24" Margin="30 0 0 0"></TextBlock>
+                            <TextBlock Text="{Binding TargetItem.CurrentAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24"></TextBlock>
+                        </DockPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0 0 0 1" Margin="0 10 0 0">
+                        <DockPanel>
+                            <TextBlock Text="Target Date: " FontSize="24"></TextBlock>
+                            <TextBlock Text="{Binding TargetItem.DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Margin="0 0 30 0"></TextBlock>
+                            <TextBlock Text="Completed: " FontSize="24" x:Name="CompletedLabel"></TextBlock>
+                            <TextBlock Text="{Binding DayCompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       FontSize="24" x:Name="CompletedText"></TextBlock>
+                        </DockPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="0 0 0 1" Margin="0 10 0 0">
+                        <DockPanel>
+                            <TextBlock Text="Status: " FontSize="24"></TextBlock>
+                            <TextBlock Text="{Binding TargetItem.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       FontSize="24"></TextBlock>
+                        </DockPanel>
+                    </Border>
+                    <Border Margin="0 10 0 0">
+                            <StackPanel>
+                                <Border BorderBrush="Black" BorderThickness="0 0 0 1" HorizontalAlignment="Left">
+                                    <TextBlock Text="Warnings:" FontSize="24"></TextBlock>
+                                </Border>
+                                <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+                                    <ListView HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="DarkGray"
+                                              ItemsSource="{Binding Issues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              x:Name="Issue_list" SelectionChanged="Issue_list_SelectionChanged">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding }" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="{Binding ElementName=Issue_list, Path=ActualWidth, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                                           TextWrapping="WrapWithOverflow"></TextBlock>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </ScrollViewer>
+                            </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
         </Border>
         <Border Grid.Column="3" Grid.Row="0">
             <TextBlock Text=""></TextBlock>

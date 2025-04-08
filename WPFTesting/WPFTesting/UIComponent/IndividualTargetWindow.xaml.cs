@@ -63,7 +63,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         public void SetCompletedVisibility(Visibility value)
         {
             CompletedLabel.Visibility = value;
-            CompletedLabel.Visibility = value;
+            CompletedText.Visibility = value;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
