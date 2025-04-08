@@ -14,6 +14,7 @@ namespace FactorySADEfficiencyOptimizer.Models
 
         private Decimal _price;
         private Guid _catalogueKey = Guid.NewGuid();
+        private float _recenlytAddedQuantity = 0;
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
@@ -25,8 +26,17 @@ namespace FactorySADEfficiencyOptimizer.Models
             get => _quantity; 
             set
             {
-                _quantity = value; OnPropertyChanged(nameof(Quantity));
+                if (value > _quantity)
+                {
+                    _recenlytAddedQuantity = value - _quantity;
+                }
+                _quantity = value;
+                OnPropertyChanged(nameof(Quantity));
             }
+        }
+        public float RecentlyAddedQuantity
+        {
+            get => _recenlytAddedQuantity;
         }
         public string ProductName
         {

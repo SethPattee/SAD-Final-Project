@@ -335,8 +335,8 @@ public class AnalizorModel : INotifyPropertyChanged
 			if (endpoint != null)
 			{
 				Product prod = endpoint.Supplier.ProductInventory.FirstOrDefault(p => p.ProductName == target?.ProductTarget?.ProductName) ?? new Product();
-				target.CurrentAmount = prod.Quantity;
-				if (target.CurrentAmount >= target.TargetQuantity)
+				target.AddToProducedQuantity(prod.RecentlyAddedQuantity);
+				if (target.ProducedSoFar >= target.TargetQuantity)
 				{
                     if (target.Status == StatusEnum.NotDone || target.Status == StatusEnum.Failure)
                     {
@@ -355,7 +355,6 @@ public class AnalizorModel : INotifyPropertyChanged
 					var pl = (((EndpointNode)endpoint.Supplier).ProductionList.FirstOrDefault(pl => pl.ResultingProduct.ProductName == prod.ProductName) ?? new ProductLine());
 					pl.IsEnabled = false;
 					OnPropertyChanged(nameof(pl));
-					//TODO: add the profit made from the target here
 				}
 				else if (isLastGo)
 				{

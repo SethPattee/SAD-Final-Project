@@ -96,7 +96,16 @@ namespace FactorSADEfficiencyOptimizer.Models
                 OnPropertyChanged(nameof(DayCompleted));
             }
         }
-
+        private double _countProduced = 0;
+        public double ProducedSoFar
+        {
+            get => _countProduced;
+        }
+        public void AddToProducedQuantity(double addiitonalCompletedCount)
+        {
+            _countProduced = _countProduced + addiitonalCompletedCount;
+            OnPropertyChanged(nameof(ProducedSoFar));
+        }
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
@@ -131,6 +140,7 @@ namespace FactorSADEfficiencyOptimizer.Models
             targCopy.Status = temStatus;
             targCopy.DayCompleted = this.DayCompleted;
             targCopy.IsTargetEnabled = this.IsTargetEnabled;
+            targCopy.AddToProducedQuantity(this._countProduced);
             return targCopy;
         }
     }
