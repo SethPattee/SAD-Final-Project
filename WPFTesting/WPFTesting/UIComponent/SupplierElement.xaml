@@ -48,7 +48,7 @@
                     </ContextMenu>
                 </Border.ContextMenu>
 
-                <Grid>
+                <Grid PreviewMouseDown="SupplierPrimaryGrid_PreviewMouseDown">
                     <!-- Define rows to position elements -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
