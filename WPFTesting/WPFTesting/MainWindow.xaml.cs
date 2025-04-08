@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -383,6 +383,11 @@ public MainWindow()
         if (e.Key == Key.Escape)
         {
             ReleaseMouseCapture();
+        }
+        if (e.Key == Key.Delete)
+        {
+            DiagramCanvas.Children.Remove(selectedElement.Item1);
+
         }
     }
 
