@@ -16,6 +16,7 @@ namespace YourNamespace
 {
     public partial class SupplierElement : UserControl, INodeElement
     {
+        private const string RadialValueForBox = "SupplierBody";
         private bool isDragging = false;
         private Point clickPosition;
         private SupplierUIValues _nodeUIValues = new SupplierUIValues()
@@ -78,6 +79,12 @@ namespace YourNamespace
             this.CornerClicked = b.Name;
             RadialClickedTop?.Invoke(this, new RadialNameRoutedEventArgs(b.Name));
             this.CornerClicked = "Center";
+        }
+
+        private void SupplierPrimaryGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.CornerClicked = S_Radial.Name;
+            RadialClickedBottom?.Invoke(this, new RadialNameRoutedEventArgs(RadialValueForBox));
         }
 
         private void Box_MouseMove(object sender, MouseEventArgs e) // Marked for Change
@@ -167,6 +174,7 @@ namespace YourNamespace
             var SuppEventArgs = new SaveSupplierEventArgs() { supplier = (Supplier)_nodeUIValues.Supplier };
             InventoryItemClicked?.Invoke(this, SuppEventArgs);
         }
+
 
     }
 

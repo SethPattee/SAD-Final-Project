@@ -308,12 +308,13 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             //var idwt = simModel.ExtractProductionTargetChanges(product_name)!;
             //double[] targetQuantityOverDays = new double[idwt.Count];
             double[] targetQuantityOverDays = simModel.ExtractProductionTargetChanges(product_name).Select<ProductionTarget?, double>(x => (double)x!.CurrentAmount).ToArray();
-
+            double[] targetProducedOverDays = simModel.ExtractProductionTargetChanges(product_name).Select<ProductionTarget?, double>(x => (double)x!.ProducedSoFar).ToArray();
             var newVM = new IndividualTargetModel()
             {
                 TargetItem = pt,
                 DaysRun = simModel.GetQuantityPerDayForGraph(product_name),
                 TargetOverDays = targetQuantityOverDays,
+                TargetProducedOverDays = targetProducedOverDays,
                 Issues = new ObservableCollection<string>(),
                 DayCompleted = simModel.GetDayCompletedFor(product_name)
             };
@@ -327,7 +328,7 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
            //     newITW.Completed.Visibility = Visibility.Collapsed;
            // }
 
-            var failureIssue = simModel.IssueLog.FirstOrDefault(x => x.ProductionTarget == pt);
+            var failureIssue = simModel.IssueLog.FirstOrDefault(x => x.ProductionTarget.ProductTarget.ProductName == pt.ProductTarget.ProductName);
             if(failureIssue is not null && failureIssue.Severity == StatusEnum.Failure)
             {
                 newITW.SetCompletedVisibility(Visibility.Collapsed);

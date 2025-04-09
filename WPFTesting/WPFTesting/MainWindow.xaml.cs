@@ -239,9 +239,8 @@ public MainWindow()
         }
         else if (box2.GetType() == typeof(EndpointElement))
         {
-            endpoint = new Point(Canvas.GetLeft(((EndpointElement)box2)) + ((EndpointElement)box2).EndpointRadial.ActualWidth,
-                Canvas.GetTop(((EndpointElement)box2)) + ((EndpointElement)box2).EndpointRadial.ActualHeight);
-
+            endpoint = new Point(Canvas.GetLeft(((EndpointElement)box2)) + 424,
+                Canvas.GetTop(((EndpointElement)box2)) + 2);
         }
 
 
@@ -324,9 +323,12 @@ public MainWindow()
         if (MouseIsCaptured) return; // Prevent multiple captures
 
         if (IsDestinationSearching) return;
-        
+
         if(e is RadialNameRoutedEventArgs rnr && sender is UIElement uie)
         {
+            if (!rnr.Radial_Name.ToLower().Contains("radial"))
+                return;
+
             ShippingLine shippingLine = new ShippingLine();
             Point pos = GetLineOffset(uie);
 
@@ -437,8 +439,16 @@ public MainWindow()
             //DiagramCanvas.Children.Remove(targetShipment);
             Point p1 = DiagramCanvas.TransformToAncestor(this).Transform(new Point(0, 0));
             //System.Diagnostics.Debug.WriteLine(xWidth);
-            targetShipingLine.ourShippingLine.X2 = mousepos.X - p1.X;
-            targetShipingLine.ourShippingLine.Y2 = mousepos.Y - p1.Y;
+            if (targetShipingLine.Source is not null)
+            {
+                targetShipingLine.ourShippingLine.X2 = mousepos.X - p1.X;
+                targetShipingLine.ourShippingLine.Y2 = mousepos.Y - p1.Y;
+            }
+            if (targetShipingLine.Destination is not null)
+            {
+                targetShipingLine.ourShippingLine.X1 = mousepos.X - p1.X;
+                targetShipingLine.ourShippingLine.Y1 = mousepos.Y - p1.Y;
+            }
             //DiagramCanvas.Children.Add(targetShipment);
         }
     }
@@ -536,15 +546,28 @@ public MainWindow()
                     targetShipingLine.ToJoiningBoxCorner = lineTarget.CornerClicked;
                 }
             }
-            if (rnr.Radial_Name.ToLower() == "endpointradial")
+            if (rnr.Radial_Name.ToLower().Contains("endpoint"))
             {
                 EndpointElement lineTarget = (EndpointElement)sender;
+                
+
                 if(targetShipingLine.Destination != null)
                 {
+                    if (targetShipingLine.Destination.SupplierVM.Supplier.Id == lineTarget.SupplierVM.Supplier.Id)
+                        return;
+
                     targetShipingLine.Source = targetShipingLine.Destination;
                     targetShipingLine.Destination = lineTarget;
                     targetShipingLine.OwnShipment.Sender = targetShipingLine.Source.SupplierVM.Supplier;
                     targetShipingLine.OwnShipment.Receiver = lineTarget.SupplierVM.Supplier;
+                    targetShipingLine.FromJoiningBoxCorner = targetShipingLine.ToJoiningBoxCorner;
+                    targetShipingLine.ToJoiningBoxCorner = "EndpointRadial";
+                    if (targetShipingLine.FromJoiningBoxCorner.ToLower() == "n_radial")
+                    {
+                        targetShipingLine.FromJoiningBoxCorner = "S_Radial";
+                        targetShipingLine.OwnShipment.ToJoiningBoxCorner = targetShipingLine.ToJoiningBoxCorner;
+                        targetShipingLine.OwnShipment.FromJoiningBoxCorner = targetShipingLine.FromJoiningBoxCorner;
+                    }
                 }
                 else
                 {
@@ -554,6 +577,9 @@ public MainWindow()
             }
 
             FinnishLineMaker();
+            UpdateLinePosition(targetShipingLine, targetShipingLine.Source, targetShipingLine.Destination);
+
+            targetShipingLine = null;
         }
 
 

@@ -35,7 +35,9 @@ namespace FactorySADEfficiencyOptimizer
         public event EventHandler? ElementClicked;
 		public event EventHandler? EndpointDeleted;
         private SupplierUIValues _nodeUIValues = new EndpointUIValues();
-		public Guid Id
+        private string RadialName = "Endpoint";
+
+        public Guid Id
         {
             get => _nodeUIValues.Supplier.Id;
             set
@@ -169,6 +171,11 @@ namespace FactorySADEfficiencyOptimizer
         private void OpenDetails_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
         {
             OpenDetails();
+        }
+
+        private void EndpointRadial_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            RadialClicked?.Invoke(this, new RadialNameRoutedEventArgs(RadialName));
         }
     }
 }
