@@ -77,8 +77,8 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             var lg = new LineGraph();
             var dr = 2d;
             lg.Stroke = new SolidColorBrush(Colors.Gold);
-            lg.StrokeThickness = 2;
-            lg.Description = ItemModel.TargetItem.ProductTarget?.ProductName;
+            lg.StrokeThickness = 2.5;
+            lg.Description = ItemModel.TargetItem.ProductTarget?.ProductName + "s in stock";
             IT_PlotSpace.BottomTitle = "Days";
             IT_PlotSpace.LeftTitle = $"{lg.Description}s";
             if (ItemModel.DaysRun.Count() > 0)
@@ -90,11 +90,23 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             {
                 x[i] = i;
             }
+
             lg.Plot(x, ItemModel.TargetOverDays);
             IndividualTargetLine.Children.Add(lg);
-        }
+			var lg2 = new LineGraph();
+			lg2.Stroke = new SolidColorBrush(Colors.DarkRed);
+			lg2.StrokeThickness = 1.5;
+			lg2.Description = ItemModel.TargetItem.ProductTarget?.ProductName + "s Produced";
+			lg2.Plot(x, ItemModel.TargetProducedOverDays);
+			var polyline = lg2.Children.OfType<Polyline>().FirstOrDefault();
+			if (polyline != null)
+			{
+				polyline.StrokeDashArray = new DoubleCollection { 4, 2 };
+			}
+			IndividualTargetLine.Children.Add(lg2);
+		}
 
-        private void Issue_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void Issue_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
         }
 
