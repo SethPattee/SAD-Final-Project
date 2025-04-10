@@ -321,9 +321,9 @@ public MainWindow()
 
     private void StartConnection_Click(object? sender, EventArgs? e)
     {
-        if (MouseIsCaptured) return; // Prevent multiple captures
+        if (MouseIsCaptured) { UnselectAllCanvasElements(); return; } // Prevent multiple captures
 
-        if (IsDestinationSearching) return;
+        if (IsDestinationSearching) { UnselectAllCanvasElements(); return; }
 
         if(e is RadialNameRoutedEventArgs rnr && sender is UIElement uie)
         {
@@ -386,6 +386,7 @@ public MainWindow()
         if (e.Key == Key.Escape)
         {
             ReleaseMouseCapture();
+            UnselectAllCanvasElements();    
         }
         if (e.Key == Key.Delete)
         {
@@ -1001,6 +1002,7 @@ public MainWindow()
                 lineElement.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
             }
         }
+        selectedElement = (null, null, null);
         LeftSidebarEndpoint.Visibility = Visibility.Collapsed;
         LeftSidebarSupplier.Visibility = Visibility.Collapsed;
         LeftSidebarLineDetails.Visibility = Visibility.Collapsed;
