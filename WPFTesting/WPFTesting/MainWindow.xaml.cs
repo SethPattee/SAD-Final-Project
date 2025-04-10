@@ -1,31 +1,20 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Shapes;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer;
-using System.Windows.Documents;
-using System.Windows.Data;
-using System.Reflection;
 using FactorySADEfficiencyOptimizer.Components;
-using System.Net;
-using System.Xml.Linq;
 using FactorySADEfficiencyOptimizer.UIComponent;
-using System.Diagnostics;
 using FactorSADEfficiencyOptimizer.UIComponent;
 using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
-using System.Threading.Tasks;
 using Microsoft.Win32;
-using System.Diagnostics.Eventing.Reader;
 
 
 namespace YourNamespace;
@@ -396,14 +385,14 @@ public MainWindow()
                 selectedBox.DeleteBox_Click(sender, e);
                 RemoveSupplier(sender, e);
                 UpdateBoxTracker();
-                selectedElement = (null, null, null);
+                UnselectAllCanvasElements();
             }
             else if (selectedElement.Item2 is EndpointElement selectedEndpoint)
             {
                 selectedEndpoint.DeleteEndpoint_Click(sender, e);
                 RemoveEndpoint(sender, e);
                 UpdateBoxTracker();
-                selectedElement = (null, null, null);
+                UnselectAllCanvasElements();
             }
 
         }
@@ -971,6 +960,7 @@ public MainWindow()
             element.ElementBorder.BorderBrush = Brushes.PaleVioletRed;
             LeftSidebarEndpoint.Visibility = Visibility.Visible;
             LeftSidebarScrollEndpoints.Visibility = Visibility.Visible;
+            selectedElement.Item2 = element;
          }
      }
     private void SetSelectedBoxDisplay(SupplierElement selectedBox)
