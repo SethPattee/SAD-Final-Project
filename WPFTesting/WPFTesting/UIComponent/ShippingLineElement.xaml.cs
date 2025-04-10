@@ -70,7 +70,7 @@ public partial class ShippingLine : UserControl
     //    ShippingDetails.Add(detail);
     //}
 
-    private void DeleteShipLine_Click(object sender, RoutedEventArgs e)
+    public void DeleteShipLine_Click(object sender, RoutedEventArgs e)
     {
         var canvas = this.Parent as Canvas;
         if (canvas == null)
