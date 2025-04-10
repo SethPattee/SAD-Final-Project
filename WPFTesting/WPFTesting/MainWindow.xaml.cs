@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -25,6 +25,7 @@ using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using System.Diagnostics.Eventing.Reader;
 
 
 namespace YourNamespace;
@@ -320,9 +321,9 @@ public MainWindow()
 
     private void StartConnection_Click(object? sender, EventArgs? e)
     {
-        if (MouseIsCaptured) return; // Prevent multiple captures
+        if (MouseIsCaptured) { UnselectAllCanvasElements(); return; } // Prevent multiple captures
 
-        if (IsDestinationSearching) return;
+        if (IsDestinationSearching) { UnselectAllCanvasElements(); return; }
 
         if(e is RadialNameRoutedEventArgs rnr && sender is UIElement uie)
         {
@@ -385,6 +386,26 @@ public MainWindow()
         if (e.Key == Key.Escape)
         {
             ReleaseMouseCapture();
+            UnselectAllCanvasElements();    
+        }
+        if (e.Key == Key.Delete)
+        {
+
+            if (selectedElement.Item1 is SupplierElement selectedBox)
+            {
+                selectedBox.DeleteBox_Click(sender, e);
+                RemoveSupplier(sender, e);
+                UpdateBoxTracker();
+                selectedElement = (null, null, null);
+            }
+            else if (selectedElement.Item2 is EndpointElement selectedEndpoint)
+            {
+                selectedEndpoint.DeleteEndpoint_Click(sender, e);
+                RemoveEndpoint(sender, e);
+                UpdateBoxTracker();
+                selectedElement = (null, null, null);
+            }
+
         }
     }
 
@@ -981,6 +1002,7 @@ public MainWindow()
                 lineElement.ourShippingLine.Stroke = new SolidColorBrush(Colors.Black);
             }
         }
+        selectedElement = (null, null, null);
         LeftSidebarEndpoint.Visibility = Visibility.Collapsed;
         LeftSidebarSupplier.Visibility = Visibility.Collapsed;
         LeftSidebarLineDetails.Visibility = Visibility.Collapsed;
