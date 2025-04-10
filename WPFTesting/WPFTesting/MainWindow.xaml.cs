@@ -33,7 +33,7 @@ public partial class MainWindow : Window
     private ShippingLine? targetShipingLine = null;
     private List<ShippingLine> ShipmentList = new List<ShippingLine>();
     private Product selectedProduct;
-    public (SupplierElement?, EndpointElement?, Shipment?) selectedElement = new();
+    public (SupplierElement?, EndpointElement?, ShippingLine?) selectedElement = new();
     public event EventHandler? BoxChanged;
     public event EventHandler? LineChanged;
 
@@ -391,6 +391,14 @@ public MainWindow()
             {
                 selectedEndpoint.DeleteEndpoint_Click(sender, e);
                 RemoveEndpoint(sender, e);
+                UpdateBoxTracker();
+                UnselectAllCanvasElements();
+            }
+
+            if (selectedElement.Item3 is ShippingLine selectedline)
+            {
+                selectedline.DeleteShipLine_Click(sender, e);
+                RemoveShipment(sender, e);
                 UpdateBoxTracker();
                 UnselectAllCanvasElements();
             }
@@ -1103,6 +1111,7 @@ public MainWindow()
         l.ourShippingLine.Stroke = new SolidColorBrush(Colors.PaleVioletRed);
         LeftSidebarLineDetails.Visibility = Visibility.Visible;
         LeftSidebarScrollShipments.Visibility = Visibility.Visible;
+        selectedElement.Item3 = l;
     }
 
     private void LineSelectedFromWindow_Click(object? sender, EventArgs e)
