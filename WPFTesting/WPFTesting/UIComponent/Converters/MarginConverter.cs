@@ -8,11 +8,15 @@ using System.Windows.Data;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace FactorSADEfficiencyOptimizer.UIComponent.Converters;
+namespace FactorySADEfficiencyOptimizer.UIComponent.Converters;
 
 [ValueConversion(typeof(ListView), typeof(double))]
 public class MarginConverter : IValueConverter
 {
+    public MarginConverter()
+    {
+        
+    }
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         double width = (double)value;

@@ -1,5 +1,5 @@
-﻿using FactorSADEfficiencyOptimizer.Models;
-using FactorSADEfficiencyOptimizer.ViewModel;
+﻿using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.ViewModel;

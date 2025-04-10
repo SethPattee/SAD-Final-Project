@@ -1,7 +1,7 @@
-﻿using FactorSADEfficiencyOptimizer.Methods;
-using FactorSADEfficiencyOptimizer.Models;
-using FactorSADEfficiencyOptimizer.UIComponent;
-using FactorSADEfficiencyOptimizer.ViewModel;
+﻿using FactorySADEfficiencyOptimizer.Methods;
+using FactorySADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.UIComponent;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
@@ -37,13 +37,16 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         }
         public ProductionTarget TargetProductionTarget { get; set; }
 
-
+        public List<string> ErrorList { get; set; }
+        
         public ProductionAnalysisWindow(SupplyChainViewModel model)
         {
             InitializeComponent();
             simModel = new AnalizorModel(model);
             this.DataContext = this;
             simModel.DaysToRun = 1;
+
+            simModel.CheckProductLinesMissingSuppliers();
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using FactorySADEfficiencyOptimizer.Models;
-namespace FactorSADEfficiencyOptimizer.UIComponent
+namespace FactorySADEfficiencyOptimizer.UIComponent
 {
     public partial class BillofMaterials : Window, INotifyPropertyChanged
     {

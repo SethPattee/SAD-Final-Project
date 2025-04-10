@@ -10,7 +10,7 @@ using System.IO;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using YourNamespace;
-using FactorSADEfficiencyOptimizer.Data;
+using FactorySADEfficiencyOptimizer.Data;
 using Microsoft.Win32;
 
 namespace FactorySADEfficiencyOptimizer.Data;

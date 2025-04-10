@@ -7,7 +7,7 @@
         xmlns:classes="clr-namespace:FactorySADEfficiencyOptimizer.ViewModel"
         xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:converter="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent.Converters"
+        xmlns:converter="clr-namespace:FactorySADEfficiencyOptimizer.UIComponent.Converters"
         mc:Ignorable="d" DataContext="{Binding simModel}"
         Title="ProductionAnalysisWindow"
         Height="522" Width="1000"
@@ -16,7 +16,8 @@
         <SolidColorBrush Color="DarkGray"></SolidColorBrush>
     </Window.Background>
     <Window.Resources>
-        <converter:MarginConverter x:Key="marginConverter"></converter:MarginConverter>
+        <converter:MarginConverter x:Key="marginConverter" />
+        <converter:FulfillmentConditionConverter x:Key="FulfillmentConditionConverter" />
         <local:StatusToTextConverter x:Key="StatusToTextConverter" />
         <local:StatusToImageConverter x:Key="StatusToImageConverter" />
     </Window.Resources>
@@ -124,10 +125,21 @@
                                                 </Image.Source>
                                             </Image>
                                         </Button>
+                                        <Button  Visibility="{Binding CanBeFulfilled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FulfillmentConditionConverter}}">
+                                            <Button.ToolTip>
+                                                <ToolTip>
+                                                    <Border Background="Salmon" BorderBrush="Red" BorderThickness="0 2 0 2" Padding="6 2" >
+                                                        <TextBlock Text="{Binding ProductsNeeded, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                                    </Border>
+                                                </ToolTip>
+                                            </Button.ToolTip>
+                                            <Image Height="48" Width="48">
+                                            </Image>
+                                        </Button>
                                     </StackPanel>
+
                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
                                         Grid.Column="7" Click="DeleteProductionTargetButton_Click" Height="24"></Button>
-
                                     <Grid.ContextMenu>
                                         <ContextMenu StaysOpen="true">
                                             <MenuItem Header="Bill Of Materials" Click="OpenBillOfMaterials_Click"></MenuItem>
@@ -218,5 +230,13 @@
                 </Button.Content>
             </Button>
         </Border>
+
+        <!--<Border Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 20 0" x:Name="WarningBanner"
+                Background="Salmon" BorderBrush="Red" BorderThickness="0 2 0 2" Padding="6 2" Visibility="Visible">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="ERROR: No supplier to provide for target" FontSize="16" Foreground="DarkRed"></TextBlock>
+                <TextBlock Text=""></TextBlock>
+            </StackPanel>
+        </Border>-->
     </Grid>
 </Window>

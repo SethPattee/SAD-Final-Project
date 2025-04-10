@@ -1,5 +1,5 @@
-﻿using FactorSADEfficiencyOptimizer.Methods;
-using FactorSADEfficiencyOptimizer.ViewModel;
+﻿using FactorySADEfficiencyOptimizer.Methods;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +19,7 @@ using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 using FactorySADEfficiencyOptimizer.UIComponent;
 
-namespace FactorSADEfficiencyOptimizer.UIComponent;
+namespace FactorySADEfficiencyOptimizer.UIComponent;
 
 /// <summary>
 /// Interaction logic for ShipmentsScheduled.xaml

@@ -1,4 +1,4 @@
-﻿using FactorSADEfficiencyOptimizer.ViewModel;
+﻿using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;

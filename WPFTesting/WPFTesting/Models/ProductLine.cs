@@ -87,7 +87,7 @@ namespace FactorySADEfficiencyOptimizer.Models
             nl.ResultingProduct = this.ResultingProduct.ShallowCopy();
             nl.ProductLineId = this.ProductLineId;
             nl.IsEnabled = this.IsEnabled;
-            nl.Components = FactorSADEfficiencyOptimizer.ViewModel.CopyMaker.makeShallowCopyOfProductColection(this.Components);
+            nl.Components = FactorySADEfficiencyOptimizer.ViewModel.CopyMaker.makeShallowCopyOfProductColection(this.Components);
             return nl;
         }
     }

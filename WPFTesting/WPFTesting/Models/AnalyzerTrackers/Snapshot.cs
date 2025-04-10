@@ -1,4 +1,4 @@
-﻿using FactorSADEfficiencyOptimizer.Models;
+﻿using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
 using System;
 using System.Collections.Generic;

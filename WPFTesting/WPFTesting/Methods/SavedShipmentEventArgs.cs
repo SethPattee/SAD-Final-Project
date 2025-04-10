@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FactorySADEfficiencyOptimizer.Models;
 
-namespace FactorSADEfficiencyOptimizer.Methods
+namespace FactorySADEfficiencyOptimizer.Methods
 {
     public class SavedShipmentEventArgs : EventArgs
     {

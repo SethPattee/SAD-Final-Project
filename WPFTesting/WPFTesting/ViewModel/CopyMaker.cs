@@ -1,9 +1,9 @@
-﻿using FactorSADEfficiencyOptimizer.Models;
+﻿using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
 using System.Collections.ObjectModel;
 
-namespace FactorSADEfficiencyOptimizer.ViewModel;
+namespace FactorySADEfficiencyOptimizer.ViewModel;
 
 public static class CopyMaker
 {

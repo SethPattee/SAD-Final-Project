@@ -11,8 +11,9 @@ using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer;
 using FactorySADEfficiencyOptimizer.Components;
 using FactorySADEfficiencyOptimizer.UIComponent;
-using FactorSADEfficiencyOptimizer.UIComponent;
-using FactorSADEfficiencyOptimizer.ViewModel;
+using System.Diagnostics;
+using FactorySADEfficiencyOptimizer.UIComponent;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 using Microsoft.Win32;
 

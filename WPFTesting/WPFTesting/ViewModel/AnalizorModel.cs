@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -9,7 +10,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using FactorSADEfficiencyOptimizer.Models;
+using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
@@ -17,7 +18,7 @@ using FactorySADEfficiencyOptimizer.Shapes;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using Microsoft.Extensions.Logging;
 
-namespace FactorSADEfficiencyOptimizer.ViewModel;
+namespace FactorySADEfficiencyOptimizer.ViewModel;
 public class AnalizorModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
@@ -548,5 +549,50 @@ public class AnalizorModel : INotifyPropertyChanged
 			}
 			return -1;
 		}
+	}
+
+	public void CheckProductLinesMissingSuppliers()
+	{
+		foreach(var product in _productionTargets)
+		{
+			if (!product.IsTargetEnabled)
+				continue;
+
+			//filter for productionlists that make this product.
+			var productionListComponents = new List<Product>();
+			foreach(var endpoint in _endpointList)
+			{
+				productionListComponents.AddRange(((EndpointNode)endpoint.Supplier).ProductionList.Where(x =>
+                x.ResultingProduct.ProductName == product.ProductTarget.ProductName).SelectMany(x => x.Components).ToList());
+			}
+
+			//filter for all products covered
+			var availableproducts = new List<Product>();
+			availableproducts = SupplierList.SelectMany(x => x.Supplier.ProductInventory).ToList();
+			availableproducts = availableproducts.DistinctBy(x => x.ProductName).ToList();
+
+			var Missing = productionListComponents.Where(c => !availableproducts.Contains(c)).ToList();
+
+            // if any component in the product lines does not appear in the whole list of supplier products
+            if (Missing.Count() > 0)
+			{
+				product.CanBeFulfilled = false;
+				product.ProductsNeeded = product.ProductsNeeded + ReduceProductsNeededToString(Missing);
+			}
+		}
+	}
+		
+	public string ReduceProductsNeededToString(List<Product> list)
+	{
+		if(list.Count() == 0)
+		{
+			return "";
+		}
+		if(list.Count() == 1)
+		{
+			return list.First().ProductName;
+		}
+
+		return list.First().ProductName + ", " + ReduceProductsNeededToString(list.Slice(1, list.Count() - 1));
 	}
 }

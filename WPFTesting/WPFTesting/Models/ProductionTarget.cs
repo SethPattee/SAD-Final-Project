@@ -6,10 +6,10 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FactorSADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
 
-namespace FactorSADEfficiencyOptimizer.Models
+namespace FactorySADEfficiencyOptimizer.Models
 {
     public class ProductionTarget : INotifyPropertyChanged
     {
@@ -104,6 +104,28 @@ namespace FactorSADEfficiencyOptimizer.Models
                 return _countProduced;
             }
         }
+
+        private bool _canBeFulfilled = true;
+        public bool CanBeFulfilled
+        {
+            get => _canBeFulfilled;
+            set
+            {
+                _canBeFulfilled = value;
+                OnPropertyChanged(nameof(CanBeFulfilled));
+            }
+        }
+        private string _productsNeeded = "";
+        public string ProductsNeeded
+        {
+            get => _productsNeeded;
+            set
+            {
+                _productsNeeded = value;
+                OnPropertyChanged(nameof(ProductsNeeded));
+            }
+        }
+
         public void AddToProducedQuantity(double addiitonalCompletedCount)
         {
             _countProduced = _countProduced + addiitonalCompletedCount;

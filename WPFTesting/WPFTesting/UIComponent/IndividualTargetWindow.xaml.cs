@@ -1,4 +1,4 @@
-﻿using FactorSADEfficiencyOptimizer.Models;
+﻿using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using InteractiveDataDisplay.WPF;
 using System;

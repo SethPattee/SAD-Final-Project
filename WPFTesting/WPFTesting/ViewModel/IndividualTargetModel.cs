@@ -1,4 +1,4 @@
-﻿using FactorSADEfficiencyOptimizer.Models;
+﻿using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Models.AnalyzerTrackers;
 using System;
 using System.Collections.Generic;

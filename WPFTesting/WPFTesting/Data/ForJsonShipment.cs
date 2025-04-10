@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
 
-namespace FactorSADEfficiencyOptimizer.Data;
+namespace FactorySADEfficiencyOptimizer.Data;
 
 public class ForJsonShipment
 {

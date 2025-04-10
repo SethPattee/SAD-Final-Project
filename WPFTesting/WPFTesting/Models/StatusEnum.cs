@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FactorSADEfficiencyOptimizer.Models
+namespace FactorySADEfficiencyOptimizer.Models
 {
     public enum StatusEnum
     {
