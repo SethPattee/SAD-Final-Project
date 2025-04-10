@@ -124,7 +124,7 @@ namespace YourNamespace
             BoxChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void DeleteBox_Click(object sender, RoutedEventArgs e)
+        public void DeleteBox_Click(object sender, RoutedEventArgs e)
         {
             var canvas = this.Parent as Canvas;
             if (canvas == null)

@@ -25,6 +25,7 @@ using FactorSADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.UIComponent.EventArguments;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using System.Diagnostics.Eventing.Reader;
 
 
 namespace YourNamespace;
@@ -388,7 +389,21 @@ public MainWindow()
         }
         if (e.Key == Key.Delete)
         {
-            DiagramCanvas.Children.Remove(selectedElement.Item1);
+
+            if (selectedElement.Item1 is SupplierElement selectedBox)
+            {
+                selectedBox.DeleteBox_Click(sender, e);
+                RemoveSupplier(sender, e);
+                UpdateBoxTracker();
+                selectedElement = (null, null, null);
+            }
+            else if (selectedElement.Item2 is EndpointElement selectedEndpoint)
+            {
+                selectedEndpoint.DeleteEndpoint_Click(sender, e);
+                RemoveEndpoint(sender, e);
+                UpdateBoxTracker();
+                selectedElement = (null, null, null);
+            }
 
         }
     }

@@ -127,7 +127,7 @@ namespace FactorySADEfficiencyOptimizer
             (sender as UIElement).ReleaseMouseCapture();
         }
 
-		private void DeleteEndpoint_Click(object sender, RoutedEventArgs e)
+		public void DeleteEndpoint_Click(object sender, RoutedEventArgs e)
 		{
 			var canvas = this.Parent as Canvas;
 			if (canvas == null)
