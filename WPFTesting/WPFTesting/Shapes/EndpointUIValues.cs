@@ -7,7 +7,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using FactorSADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
 
 namespace FactorySADEfficiencyOptimizer.Shapes;

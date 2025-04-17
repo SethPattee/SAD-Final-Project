@@ -1,5 +1,5 @@
-﻿using FactorSADEfficiencyOptimizer.ViewModel;
-using FactorSADEfficiencyOptimizer.Models;
+﻿using FactorySADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.Models;
 using SupplyChainTesting.MockClasses;
 using System;
 using System.Collections.Generic;

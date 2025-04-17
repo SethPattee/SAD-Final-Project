@@ -6,10 +6,11 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FactorSADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
+using System.Windows;
 
-namespace FactorSADEfficiencyOptimizer.Models
+namespace FactorySADEfficiencyOptimizer.Models
 {
     public class ProductionTarget : INotifyPropertyChanged
     {
@@ -104,6 +105,28 @@ namespace FactorSADEfficiencyOptimizer.Models
                 return _countProduced;
             }
         }
+
+        private bool _cannotBeFulfilled;
+        public bool CannotBeFulfilled
+        {
+            get => _cannotBeFulfilled;
+            set
+            {
+                _cannotBeFulfilled = value;
+                OnPropertyChanged(nameof(CannotBeFulfilled));
+            }
+        }
+        private string _productsNeeded = "";
+        public string ProductsNeeded
+        {
+            get => _productsNeeded;
+            set
+            {
+                _productsNeeded = value;
+                OnPropertyChanged(nameof(ProductsNeeded));
+            }
+        }
+
         public void AddToProducedQuantity(double addiitonalCompletedCount)
         {
             _countProduced = _countProduced + addiitonalCompletedCount;
@@ -124,6 +147,7 @@ namespace FactorSADEfficiencyOptimizer.Models
             targCopy.DueDate = this.DueDate;
             targCopy.TargetQuantity = this.TargetQuantity;
             targCopy.CurrentAmount = this.CurrentAmount;
+            targCopy.CannotBeFulfilled = this.CannotBeFulfilled;
             StatusEnum temStatus;
             switch (this.Status)
             {

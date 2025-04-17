@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
 
-namespace FactorSADEfficiencyOptimizer.ViewModel;
+namespace FactorySADEfficiencyOptimizer.ViewModel;
 
 public static class ToolsForViewModel
 {

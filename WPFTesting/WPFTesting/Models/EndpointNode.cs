@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using FactorSADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using Microsoft.Extensions.Logging;
 
 namespace FactorySADEfficiencyOptimizer.Models;

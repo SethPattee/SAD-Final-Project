@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FactorSADEfficiencyOptimizer.ViewModel;
+using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
 
 namespace FactorySADEfficiencyOptimizer.Shapes;

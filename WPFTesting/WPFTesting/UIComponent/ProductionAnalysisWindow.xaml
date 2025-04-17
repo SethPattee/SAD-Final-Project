@@ -7,7 +7,7 @@
         xmlns:classes="clr-namespace:FactorySADEfficiencyOptimizer.ViewModel"
         xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:converter="clr-namespace:FactorSADEfficiencyOptimizer.UIComponent.Converters"
+        xmlns:converter="clr-namespace:FactorySADEfficiencyOptimizer.UIComponent.Converters"
         mc:Ignorable="d" DataContext="{Binding simModel}"
         Title="ProductionAnalysisWindow"
         Height="522" Width="1000"
@@ -16,7 +16,8 @@
         <SolidColorBrush Color="DarkGray"></SolidColorBrush>
     </Window.Background>
     <Window.Resources>
-        <converter:MarginConverter x:Key="marginConverter"></converter:MarginConverter>
+        <converter:MarginConverter x:Key="marginConverter" />
+        <converter:FulfillmentConditionConverter x:Key="FulfillmentConditionConverter" />
         <local:StatusToTextConverter x:Key="StatusToTextConverter" />
         <local:StatusToImageConverter x:Key="StatusToImageConverter" />
     </Window.Resources>
@@ -86,7 +87,7 @@
                     <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" MouseDoubleClick="ProdTargetList_Click"
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ProdTargetList"
                               ItemsSource="{Binding ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedItem="{Binding TargetProductionTarget}">
+                              SelectedItem="{Binding ProductionTarget}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="LightGray" Height="48"
@@ -113,7 +114,7 @@
                                     </ComboBox>
                                     <TextBox Grid.Column="2" FontSize="16" Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
                                     <TextBox Grid.Column="3" FontSize="16" Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
-                                    <StackPanel Grid.Column="4" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10 0 0 0">
+                                    <StackPanel Grid.Column="4" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="10 0 0 0">
                                         <TextBlock Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}" 
                                             FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0" 
                                             VerticalAlignment="Center"/>
@@ -124,10 +125,35 @@
                                                 </Image.Source>
                                             </Image>
                                         </Button>
+                                        <!--
+                                        Bindings that weren't working, but were meant to be used in warning.
+                                        {Binding CanBeFulfilled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged} - boolean/visibility, makes the warning seen
+                                        {Binding ProductsNeeded, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C} cannot be found in suppliers!} - describes the missing products. -->
+                                        <Button Background="Transparent" BorderBrush="Transparent"
+                                                VerticalAlignment="Center" Margin="10 0 0 0" Padding="0 0 1 0">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding CannotBeFulfilled, Mode=OneWay}" Value="false">
+                                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                            <Button.ToolTip>
+                                                <ToolTip  Background="LightSalmon" BorderBrush="LightSalmon" BorderThickness="1 1 1 1" Padding="6 2">
+                                                    <Border>
+                                                        <TextBlock Text="Some products cannot be found in supplier!"></TextBlock>
+                                                    </Border>
+                                                </ToolTip>
+                                            </Button.ToolTip>
+                                            <Image Height="24" Width="24" Source="../Resources/WarningForMissing.png">
+                                            </Image>
+                                        </Button>
                                     </StackPanel>
+
                                     <Button Content="X" Background="LightSalmon" BorderBrush="Red" BorderThickness="1" Width="24"
                                         Grid.Column="7" Click="DeleteProductionTargetButton_Click" Height="24"></Button>
-
                                     <Grid.ContextMenu>
                                         <ContextMenu StaysOpen="true">
                                             <MenuItem Header="Bill Of Materials" Click="OpenBillOfMaterials_Click"></MenuItem>
@@ -218,5 +244,13 @@
                 </Button.Content>
             </Button>
         </Border>
+
+        <!--<Border Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 20 0" x:Name="WarningBanner"
+                Background="Salmon" BorderBrush="Red" BorderThickness="0 2 0 2" Padding="6 2" Visibility="Visible">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="ERROR: No supplier to provide for target" FontSize="16" Foreground="DarkRed"></TextBlock>
+                <TextBlock Text=""></TextBlock>
+            </StackPanel>
+        </Border>-->
     </Grid>
 </Window>

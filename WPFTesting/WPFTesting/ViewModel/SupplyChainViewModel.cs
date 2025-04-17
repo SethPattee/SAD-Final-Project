@@ -1,4 +1,4 @@
-﻿using FactorSADEfficiencyOptimizer.ViewModel;
+﻿using FactorySADEfficiencyOptimizer.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
