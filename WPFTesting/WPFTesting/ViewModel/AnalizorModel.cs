@@ -553,7 +553,7 @@ public class AnalizorModel : INotifyPropertyChanged
 
 	public void CheckProductLinesMissingSuppliers()
 	{
-		foreach(var product in _productionTargets)
+		foreach(var product in ProductionTargets)
 		{
 			if (!product.IsTargetEnabled)
 				continue;
@@ -563,7 +563,7 @@ public class AnalizorModel : INotifyPropertyChanged
 			foreach(var endpoint in _endpointList)
 			{
 				productionListComponents.AddRange(((EndpointNode)endpoint.Supplier).ProductionList.Where(x =>
-                x.ResultingProduct.ProductName == product.ProductTarget.ProductName).SelectMany(x => x.Components).ToList());
+                x.ResultingProduct.ProductName == product.ProductTarget?.ProductName).SelectMany(x => x.Components).ToList());
 			}
 
 			//filter for all products covered
@@ -571,13 +571,17 @@ public class AnalizorModel : INotifyPropertyChanged
 			availableproducts = SupplierList.SelectMany(x => x.Supplier.ProductInventory).ToList();
 			availableproducts = availableproducts.DistinctBy(x => x.ProductName).ToList();
 
-			var Missing = productionListComponents.Where(c => !availableproducts.Contains(c)).ToList();
+			var Missing = productionListComponents.Where(c => !availableproducts.Exists(x => c.ProductName == x.ProductName)).ToList();
 
             // if any component in the product lines does not appear in the whole list of supplier products
             if (Missing.Count() > 0)
 			{
-				product.CanBeFulfilled = false;
+				product.CannotBeFulfilled = true;
 				product.ProductsNeeded = product.ProductsNeeded + ReduceProductsNeededToString(Missing);
+			}
+			else
+			{
+				product.CannotBeFulfilled = false;
 			}
 		}
 	}

@@ -87,7 +87,7 @@
                     <ListView Background="Transparent" BorderBrush="DarkGray" BorderThickness="1" MouseDoubleClick="ProdTargetList_Click"
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ProdTargetList"
                               ItemsSource="{Binding ProductionTargets, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedItem="{Binding TargetProductionTarget}">
+                              SelectedItem="{Binding ProductionTarget}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="LightGray" Height="48"
@@ -114,7 +114,7 @@
                                     </ComboBox>
                                     <TextBox Grid.Column="2" FontSize="16" Text="{Binding TargetQuantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
                                     <TextBox Grid.Column="3" FontSize="16" Text="{Binding DueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="9"></TextBox>
-                                    <StackPanel Grid.Column="4" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10 0 0 0">
+                                    <StackPanel Grid.Column="4" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="10 0 0 0">
                                         <TextBlock Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}" 
                                             FontSize="16" FontWeight="Bold" Foreground="DimGray" Margin="0 0 5 0" 
                                             VerticalAlignment="Center"/>
@@ -125,15 +125,29 @@
                                                 </Image.Source>
                                             </Image>
                                         </Button>
-                                        <Button  Visibility="{Binding CanBeFulfilled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FulfillmentConditionConverter}}">
+                                        <!--
+                                        Bindings that weren't working, but were meant to be used in warning.
+                                        {Binding CanBeFulfilled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged} - boolean/visibility, makes the warning seen
+                                        {Binding ProductsNeeded, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C} cannot be found in suppliers!} - describes the missing products. -->
+                                        <Button Background="Transparent" BorderBrush="Transparent"
+                                                VerticalAlignment="Center" Margin="10 0 0 0" Padding="0 0 1 0">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding CannotBeFulfilled, Mode=OneWay}" Value="false">
+                                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
                                             <Button.ToolTip>
-                                                <ToolTip>
-                                                    <Border Background="Salmon" BorderBrush="Red" BorderThickness="0 2 0 2" Padding="6 2" >
-                                                        <TextBlock Text="{Binding ProductsNeeded, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                                <ToolTip  Background="LightSalmon" BorderBrush="LightSalmon" BorderThickness="1 1 1 1" Padding="6 2">
+                                                    <Border>
+                                                        <TextBlock Text="Some products cannot be found in supplier!"></TextBlock>
                                                     </Border>
                                                 </ToolTip>
                                             </Button.ToolTip>
-                                            <Image Height="48" Width="48">
+                                            <Image Height="24" Width="24" Source="../Resources/WarningForMissing.png">
                                             </Image>
                                         </Button>
                                     </StackPanel>

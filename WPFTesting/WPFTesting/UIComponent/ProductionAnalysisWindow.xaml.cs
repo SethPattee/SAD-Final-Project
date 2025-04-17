@@ -42,11 +42,11 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
         public ProductionAnalysisWindow(SupplyChainViewModel model)
         {
             InitializeComponent();
-            simModel = new AnalizorModel(model);
-            this.DataContext = this;
-            simModel.DaysToRun = 1;
 
+            simModel = new AnalizorModel(model);
             simModel.CheckProductLinesMissingSuppliers();
+            DataContext = this;
+            simModel.DaysToRun = 1;
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -291,16 +291,14 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
             // Gotta find a better solution, maybe better design, but eh.
             foreach (var issue in simModel.IssueLog.Where(x => x.ProductionTarget.ProductTarget!.ProductName == product_name))
             {
-                string shipmentaddition = "";
+                string shipmentaddition = $"({issue.Severity.ToString()}) ";
                 if (issue.Severity == StatusEnum.Failure)
-                    shipmentaddition = "Critical failure occurred! Could not complete target.";
-                if (issue.Solution.Action == ActionEnum.addedShipment)
-                    shipmentaddition = $"Added a shipment: {issue.Solution.neededProduct.Quantity}" +
-                        $" {issue.Solution.neededProduct.ProductName}" 
-                        //+ $" ordered for ${issue.Solution.neededProduct.Price}."
-                        ;
+                    shipmentaddition = "Critical failure occurred! Could not complete target.\n";
+                else if (issue.Solution.Action == ActionEnum.addedShipment)
+                    shipmentaddition = $"Added a shipment containing {issue.Solution.neededProduct.Quantity} units of " +
+                        $"{issue.Solution.neededProduct.ProductName}. ";
 
-                ocs.Add($"Item {product_name} issue on {issue.DayFound}: {issue.Severity.ToString()}" + shipmentaddition);
+                ocs.Add($"Issue with product \"{product_name}\" occurred on day {issue.DayFound}: " + shipmentaddition);
             }
 
             return ocs;
@@ -423,30 +421,30 @@ namespace FactorySADEfficiencyOptimizer.UIComponent
 			}
 		}
 
-		//private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-		//{
-		//    ResizeAnyProductionTargetRows();
-		//}
+        //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    ResizeAnyProductionTargetRows();
+        //}
 
-		//private void ResizeAnyProductionTargetRows()
-		//{
-		//    ProdTargetListWidth = ProdTargetList.ActualWidth - 16;
-		//    OnPropertyChanged(nameof(ProdTargetListWidth));
-		//}
+        //private void ResizeAnyProductionTargetRows()
+        //{
+        //    ProdTargetListWidth = ProdTargetList.ActualWidth - 16;
+        //    OnPropertyChanged(nameof(ProdTargetListWidth));
+        //}
 
-		//private void UpdatePlot()
-		//{
-		//    if (linegraph == null) return;
+        //private void UpdatePlot()
+        //{
+        //    if (linegraph == null) return;
 
-		//    int xData = TargetProductionTarget.DueDate;
-		//    int yData = (int)Math.Round(TargetProductionTarget.InitAmount);
+        //    int xData = TargetProductionTarget.DueDate;
+        //    int yData = (int)Math.Round(TargetProductionTarget.InitAmount);
 
-		//    linegraph.Plot(xData, yData);
-		//    linegraph.Description = "Production Target Over Time";
-		//}
+        //    linegraph.Plot(xData, yData);
+        //    linegraph.Description = "Production Target Over Time";
+        //}
 
 
-	}
+    }
     public class StatusToTextConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

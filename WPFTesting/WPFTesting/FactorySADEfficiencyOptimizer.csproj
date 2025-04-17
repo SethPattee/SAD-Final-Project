@@ -18,6 +18,7 @@
     <None Remove="Resources\DownArrowGraphic.png" />
     <None Remove="Resources\PackageIcon.png" />
     <None Remove="Resources\UpArrowGraphic.png" />
+    <None Remove="Resources\WarningForMissing.png" />
     <None Remove="UIComponent\Resources\CriticalFailIcon.png" />
     <None Remove="UIComponent\Resources\MinorFailIcon.png" />
     <None Remove="UIComponent\Resources\SuccessIcon.png" />
@@ -44,6 +45,7 @@
     <Resource Include="Resources\DownArrowGraphic.png" />
     <Resource Include="Resources\PackageIcon.png" />
     <Resource Include="Resources\UpArrowGraphic.png" />
+    <Resource Include="Resources\WarningForMissing.png" />
     <Resource Include="UIComponent\Resources\CriticalFailIcon.png" />
     <Resource Include="UIComponent\Resources\MinorFailIcon.png" />
     <Resource Include="UIComponent\Resources\SuccessIcon.png" />

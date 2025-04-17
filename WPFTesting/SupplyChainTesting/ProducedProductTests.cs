@@ -2,13 +2,7 @@
 using FactorySADEfficiencyOptimizer.Data;
 using FactorySADEfficiencyOptimizer.Models;
 using FactorySADEfficiencyOptimizer.Shapes;
-using FactorySADEfficiencyOptimizer.ViewModel;
 using SupplyChainTesting.MockClasses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SupplyChainTesting;
 

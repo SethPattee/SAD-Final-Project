@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FactorySADEfficiencyOptimizer.ViewModel;
 using FactorySADEfficiencyOptimizer.Models;
+using System.Windows;
 
 namespace FactorySADEfficiencyOptimizer.Models
 {
@@ -105,14 +106,14 @@ namespace FactorySADEfficiencyOptimizer.Models
             }
         }
 
-        private bool _canBeFulfilled = true;
-        public bool CanBeFulfilled
+        private bool _cannotBeFulfilled;
+        public bool CannotBeFulfilled
         {
-            get => _canBeFulfilled;
+            get => _cannotBeFulfilled;
             set
             {
-                _canBeFulfilled = value;
-                OnPropertyChanged(nameof(CanBeFulfilled));
+                _cannotBeFulfilled = value;
+                OnPropertyChanged(nameof(CannotBeFulfilled));
             }
         }
         private string _productsNeeded = "";
@@ -146,6 +147,7 @@ namespace FactorySADEfficiencyOptimizer.Models
             targCopy.DueDate = this.DueDate;
             targCopy.TargetQuantity = this.TargetQuantity;
             targCopy.CurrentAmount = this.CurrentAmount;
+            targCopy.CannotBeFulfilled = this.CannotBeFulfilled;
             StatusEnum temStatus;
             switch (this.Status)
             {
